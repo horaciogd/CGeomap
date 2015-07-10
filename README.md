@@ -2,7 +2,7 @@ CGeomap 0.01
 ==============
 
 
-CGEOMAP es una herramienta colaborativa de espacialización de la información en el espacio público. Es un entorno creativo open source, mapa y web-app que permite geolocalizar contenidos audiovisuales y pasearlos desde el smartphone.
+CGEOMAP(http://gpsmuseum.eu/cgeomap/) es una herramienta colaborativa de espacialización de la información en el espacio público. Es un entorno creativo open source, mapa y web-app que permite geolocalizar contenidos audiovisuales y pasearlos desde el smartphone.
 
 CGEOMAP nace de una larga trayectoria de colaboración entre varios colectivos artísticos, explorando el cruce de caminos entre las técnicas de geolocalización de contenidos audiovisuales, la narrativa espacial y el activismo cultural. Entre ellos destacan VHPlab (Horacio González Diéguez) y GPS Museum (Fred Adam and Verónica Perales).
 
