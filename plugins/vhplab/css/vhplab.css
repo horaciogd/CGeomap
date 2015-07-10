@@ -1,0 +1,32 @@
+/*
+ * VHPlab base plugin
+ * lat lng, tags, related articles, related JSON data, extra fields, etc
+ *
+ * Author:
+ * Horacio González
+ * (c) 2015 - Distribuído baixo licencia GNU/GPL
+ *
+ */
+ 
+#vhplab { color: red; }
+
+.cgeomap_cfg, .cgeomap_article { margin: 10px 0; padding: 0; height: 300px; border: 1px solid #b2b2b2; }
+
+/* cgeomap window */
+.cgeomap .window { padding: 10px; border: 1px solid #fff; background: rgba(255,255,255, 0.9); -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); overflow: visible; }
+.cgeomap .window .wrapper { position: relative; }
+.cgeomap .window hgroup { min-height: 29px; }
+.cgeomap .window h2 { }
+.cgeomap .window h3 { }
+.cgeomap .window .content { text-align: justify; }
+.cgeomap .window .close { position: absolute;  top: -2px; right: -2px; background: url('../images/icons/close.png') no-repeat; background-size: 29px 57px; width: 29px; height: 29px; cursor: pointer; background-position: 0px 0px; }
+.cgeomap .window .close:hover, .cgeomap .window .close:active { background-position: 0px -29px; }
+.cgeomap .window .arrow { height: 14px; width: 70px; position: absolute; bottom: -14px; background: url('../images/pix/arrow.png') no-repeat; background-size: 70px 32px; background-position: 0px -18px; }
+
+.mapUiBtn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
+
+#mapZoomControl { width: 56px; height: 74px; margin: 5px 10px; padding: 0; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
+.mapUiZoomButton { width: 56px; height: 37px; position: block; cursor: pointer; overflow: hidden; font-family: Helvetica, Arial, sans-serif; color: #264542; line-height: 37px; vertical-align: middle; font-weight: 100; font-size: 3em; text-align: center; background: rgba(255,255,255, 0.9); border: 1px solid #fff; }
+.mapUiZoomButton:active, .mapUiZoomButton:hover { background-color: rgba(37,250,222, 0.9); border-color: #25fade; }
+#mapZoomIn { margin: auto; margin-right: 0; line-height: 39px; -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; border-top-right-radius: 6px; -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; border-top-left-radius: 6px; border-bottom: none; }
+#mapZoomOut { margin: auto; margin-right: 0; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; font-size: 3.8em; border-top: none; }

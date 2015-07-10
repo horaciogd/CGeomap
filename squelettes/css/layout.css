@@ -1,0 +1,26 @@
+/* --------------------
+   General
+-------------------- */
+
+ * { padding: 0; margin: 0; }
+ li { list-style-type: none; }
+ 
+/* --------------------
+   Navigation
+-------------------- */
+
+ #navigation { position: absolute; top: 0; right: 0; z-index: 3; }
+
+
+/* --------------------
+   Map
+-------------------- */
+
+#cgeomap { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+
+
+/* --------------------
+   Footer
+-------------------- */
+
+footer { position: absolute; bottom: 0; right: 66px; left: 0; z-index: 2; }

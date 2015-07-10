@@ -1,0 +1,8 @@
+#CACHE{0}
+#HTTP_HEADER{Content-type:text/javascript; charset=#CHARSET}
+
+[(#INCLURE{js/vhplab_prototypes.js})]
+
+[(#CONFIG{auto_compress_js}|=={oui}|oui)
+#FILTRE{compacte}
+]

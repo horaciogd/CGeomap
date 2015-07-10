@@ -1,0 +1,38 @@
+<div class="formulaire_spip formulaire_editer #FORM #FORM_#ENV{id_article,nouveau}">
+	<!-- <br class='bugajaxie' /> -->
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+	<form method='post' action='#ENV{action}' enctype='multipart/form-data'>
+		<div>
+			[(#REM) declarer les hidden qui declencheront le service du formulaire 
+			parametre : url d'action ]
+			#ACTION_FORMULAIRE{#ENV{action}}
+			<ul>
+				#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}#SET{obli,'obligatoire'}
+				<li class="editer editer_tags[ (#ENV**{erreurs}|table_valeur{tags}|oui)erreur]">
+					<label for="tags"><:vhplab:tags:></label>
+					[<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{tags})</span>]
+					<input type="text" class="text" name="tags" id="tags" value="" size="35" [(#ENV{editable}|non)readonly="true"]/>
+				</li>
+			</ul>
+			[(#REM) ajouter les saisies supplementaires : extra et autre, a cet endroit ]
+			<!--extra-->
+			[(#ENV{editable}|oui)
+			<p class='boutons'><input type='submit' name="save" class='submit' value='<:bouton_enregistrer:>' /></p>]
+		</div>
+	</form>
+	<script type="text/javascript">
+	(function($){
+		var tags_init = function(){
+			$('.formulaire_tags_article input.submit').hide();
+			$('.formulaire_tags_article #tags').blur(function(){
+				$('.formulaire_tags_article input.submit').show();
+			});
+		};
+		$(function(){
+			tags_init();
+			onAjaxLoad(tags_init);
+		});
+	})(jQuery);
+	</script>
+</div>

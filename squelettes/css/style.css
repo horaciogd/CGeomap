@@ -1,0 +1,55 @@
+/* --------------------
+   General
+-------------------- */
+
+ * { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+a { text-decoration: none; }
+a:hover, a:active { background-color: #25fade; }
+.btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
+
+
+/* --------------------
+   Navigation
+-------------------- */
+
+#navigation { padding: 160px 16px 0 0; width: 380px; }
+#navigation .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 16px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
+
+#navigation hgroup { text-align: center; }
+#navigation hgroup a:hover, #navigation hgroup a:active { background-color: transparent;  }
+#navigation .logo { margin: -160px -160px auto auto; }
+
+#navigation .articles { margin-bottom: 2em; }
+#navigation .articles li { margin: 0.8em 0 0 0.8em; }
+#navigation .articles li a { cursor: pointer; }
+#navigation .articles span { font-size: 0.8em; }
+
+.user .buttons { text-align: center; }
+.user .buttons li { display: inline; padding: 0 10px; }
+.user .buttons a { font-size: 0; display: inline-block; width: 77px; height: 65px; background: url('../images/icons/user-buttons.png') no-repeat; background-size: 383px 129px; }
+.user .buttons .contact { background-position: -306px 0; }
+.user .buttons .contact:hover, .user .buttons .contact:active { background-position: -306px -65px; }
+.user .buttons .presskit { background-position: -77px 0; }
+.user .buttons .presskit:hover, .user .buttons .presskit:active { background-position: -77px -65px; }
+.user .buttons .twitter { background-position: -153px 0; }
+.user .buttons .twitter:hover, .user .buttons .twitter:active { background-position: -153px -65px; }
+.user .buttons .facebook { background-position: -230px 0; }
+.user .buttons .facebook:hover, .user .buttons .facebook:active { background-position: -230px -65px; }
+.user .buttons .login { background-position: 0px 0; }
+.user .buttons .login:hover, .user .buttons .login:active { background-position: 0px -65px; }
+
+
+/* --------------------
+   Map
+-------------------- */
+
+#cgeomap { background: #18c2b1; }
+
+/* --------------------
+   Footer
+-------------------- */
+
+footer { padding: 8px 8px 16px 8px; }
+footer .wrapper { position: relative; min-height: 33px; border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
+footer .credits img { position: absolute; top: 6px; left: 6px; }
+footer .credits p:last-child { padding-left: 100px; font-size: 0.8em; }

@@ -1,0 +1,72 @@
+					<!-- VHPlab plugin spip 3.0 Configurer -->
+					<script type="text/javascript">
+					//<![CDATA[
+					var configurer_map;
+					(function($){
+						var init = function() {
+							configurer_map = new VhplabMap();
+							configurer_map.initialize({
+								id: 'cgeomap',
+								latitude: [(#ENV**{default_latitude}|?{[(#ENV**{default_latitude})], 42.878213})],
+								longitude: [(#ENV**{default_longitude}|?{[(#ENV**{default_longitude})], -8.544844})],
+								zoom: [(#ENV**{default_zoom}|?{[(#ENV**{default_zoom})], 12})],
+								latitudeTag: '#default_latitude',
+								longitudeTag: '#default_longitude',
+								zoomTag: '#default_zoom',
+								formulaire: true,
+							});
+							[configurer_map.clickableMarker.setIcon({
+								url: '(#CHEMIN{images/icons/default_icon.png}|url_absolue)',
+								size: new google.maps.Size(120, 120),
+								scaledSize: new google.maps.Size(60, 60),
+								anchor: new google.maps.Point(30, 60),
+							});]
+						};
+						$(function(){
+							init();
+						});
+					})(jQuery);
+					//]]>
+					</script>
+					<div class="formulaire_spip formulaire_configurer formulaire_#FORM">
+						<h3 class="titrem"><:vhplab:configuration_titre:></h3>
+						[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+						[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+						<form method="post" action="#ENV{action}">
+						#ACTION_FORMULAIRE{#ENV{action}}
+						<div>
+							<ul>
+								<li class="editer editer_api_key">
+									<label for="api_key"><:vhplab:api_key_label:></label>
+									[<span class='erreur'>(#ENV**{erreurs}|table_valeur{api_key})</span>]
+									<input type="text" class="text" name="api_key" id="api_key" value="[(#ENV**{api_key})]" />
+								</li>
+								<li>
+									<div id="cgeomap" class="cgeomap cgeomap_cfg"></div>
+								</li>
+								<li class="editer editer_latitude[ (#ENV**{erreurs}|table_valeur{default_latitude}|oui)erreur]">
+									<label for="latitude"><:vhplab:latitude_label:></label>
+									[<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{default_latitude})</span>]
+									<input type="text" class="text" name="default_latitude" id="default_latitude" value="[(#ENV**{default_latitude})]" size="15"[ (#ENV{editable}|non)readonly="true"]/>
+								</li>
+								<li class="editer editer_longitude[ (#ENV**{erreurs}|table_valeur{default_longitude}|oui)erreur]">
+									<label for="longitude"><:vhplab:longitude_label:></label>
+									[<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{default_longitude})</span>]
+									<input type="text" class="text" name="default_longitude" id="default_longitude" value="[(#ENV**{default_longitude})]" size="15"[ (#ENV{editable}|non)readonly="true"]/>
+								</li>
+								<li class="editer editer_zoom[ (#ENV**{erreurs}|table_valeur{default_zoom}|oui)erreur]">
+									<label for="zoom"><:vhplab:zoom_label:></label>
+									[<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{default_zoom})</span>]
+									<input type="text" class="text" name="default_zoom" id="default_zoom" value="[(#ENV**{default_zoom})]" size="15"[ (#ENV{editable}|non)readonly="true"]/>
+								</li>
+							</ul>
+							<input type="hidden" name="_meta_casier" value="vhplab" />
+							<p class="boutons">
+								<span class="image_loading">&nbsp;</span>
+								<input type='submit' name="cancel" class='submit' value='<:bouton_annuler:>' />
+								<input type='submit' class='submit' value='<:bouton_enregistrer:>' /></p>
+							</p>
+						</div>
+						</form>
+					</div>
+					<!-- VHPlab GIS plugin spip 3.0 Configurer -->

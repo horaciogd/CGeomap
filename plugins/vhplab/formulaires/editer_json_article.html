@@ -1,0 +1,55 @@
+<!-- VHPlab plugin for spip 3.0 editer Json related data -->
+<script type="text/javascript">
+//<![CDATA[
+var editer_json;
+(function($){
+	var init_json = function() {
+		$.getScript("[(#URL_PAGE{vhplab_json.js}|url_absolue)]", function(data) {
+			editer_json = new VhplabJsonSelector();
+			editer_json.initialize({
+				id:'#formulaire_editer_json'
+			});
+		});
+	};
+	$(function(){
+		init_json();
+		onAjaxLoad(init_json);
+	});
+	})(jQuery);
+//]]>
+</script>
+<div class="formulaire_spip formulaire_editer #FORM #FORM_#ENV{id_article,nouveau}" id="formulaire_editer_json">
+	<!-- <br class='bugajaxie' /> -->
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+	<form method='post' action='#ENV{action}' enctype='multipart/form-data'>
+		<div>
+			[(#REM) declarer les hidden qui declencheront le service du formulaire 
+			parametre : url d'action ]
+			#ACTION_FORMULAIRE{#ENV{action}}
+			<ul>
+				#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}#SET{obli,'obligatoire'}
+				[(#SET{vhplab_json,0})]
+				<B_editer_json>
+				<BOUCLE_editer_json(VHPLAB_JSON){id_article}>
+				[(#SET{vhplab_json,#ID_JSON})]
+				</BOUCLE_editer_json>
+				</B_editer_json>
+				<li class="editer editer_json[ (#ENV**{erreurs}|table_valeur{vhplab_json}|oui)erreur]">
+					<label for="vhplab_json"><:vhplab:json:></label>
+					[(#GET{vhplab_json}|!={0}|oui) <span class='value'>#GET{vhplab_json}</span>]
+					[<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{vhplab_json})</span>]
+					<select class="selector[(#GET{json}|!={0}|oui) hidde]" name="vhplab_json" id="vhplab_json"[ (#ENV{editable}|non)readonly="true"]>
+						<option value="0"><:vhplab:json_selector:></option>
+					</select>
+				</li>
+			</ul>
+			[(#REM) ajouter les saisies supplementaires : extra et autre, a cet endroit ]
+			<!--extra-->
+			[(#ENV{editable}|oui)
+			<p class='boutons'><input type='submit' name="save" class='submit' value='<:bouton_enregistrer:>' /></p>]
+			<ul class='info'></ul>
+		</div>
+	</form>
+</div>
+<!-- / editer Json related data -->

@@ -1,0 +1,11 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) Javascript header
+][(#HTTP_HEADER{Content-type:text/javascript; charset=#CHARSET})][
+
+(#REM) Inclure js
+][(#INCLURE{js/vhplab_json.js})][
+
+(#REM) Compacte if desired
+][(#CONFIG{auto_compress_js}|=={oui}|oui)#FILTRE{compacte}]

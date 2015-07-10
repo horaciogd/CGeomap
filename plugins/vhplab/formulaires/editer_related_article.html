@@ -1,0 +1,53 @@
+<!-- VHPlab GIS plugin spip 3.0 editer related article -->
+<script type="text/javascript">
+//<![CDATA[
+var editer_related;
+(function($){
+	var init_related = function() {
+		$.getScript("[(#URL_PAGE{vhplab_related.js}|url_absolue)]", function(data) {
+			editer_related = new VhplabRelatedForm();
+			editer_related.initialize({
+				id:'#formulaire_editer_related'
+			});
+		});
+	};
+	$(function(){
+		init_related();
+		onAjaxLoad(init_related);
+	});
+})(jQuery);
+//]]>
+</script>
+<div id="formulaire_editer_related" class="formulaire_spip formulaire_editer #FORM #FORM_#ENV{id_article,nouveau}">
+	<!-- <br class='bugajaxie' /> -->
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+	<form method='post' action='#ENV{action}' enctype='multipart/form-data'>
+		<div>
+			[(#REM) declarer les hidden qui declencheront le service du formulaire 
+			parametre : url d'action ]
+			#ACTION_FORMULAIRE{#ENV{action}}
+			<ul>
+				#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}#SET{obli,'obligatoire'}
+				<li class="editer editer_tags[ (#ENV**{erreurs}|table_valeur{related}|oui)erreur]">
+					<B_editer_related>
+					<ul class="already">
+					<BOUCLE_editer_related(VHPLAB_RELATED){id_article}{' '}>
+					<li>[<span class='remove_related' data-id_objet_related="#ID_OBJET_RELATED" >#OBJET_RELATED (#ID_OBJET_RELATED)]<BOUCLE_related_titre(ARTICLES){id_article=#ID_OBJET_RELATED}{0,1}>- <a href="#URL_ARTICLE">"#TITRE"</a></span></BOUCLE_related_titre></li>
+					</BOUCLE_editer_related>
+					</ul>
+					</B_editer_related>
+					<label for="related"><:vhplab:related:></label>
+					[<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{related})</span>]
+					<input type="text" class="text" name="related" id="related" value="" size="35" [(#ENV{editable}|non)readonly="true"]/>
+					<input type="hidden" name="delete_related" id="delete_related" value="" />
+				</li>
+			</ul>
+			[(#REM) ajouter les saisies supplementaires : extra et autre, a cet endroit ]
+			<!--extra-->
+			[(#ENV{editable}|oui)
+			<p class='boutons'><input type='submit' name="save" class='submit' value='<:bouton_enregistrer:>' /></p>]
+		</div>
+	</form>
+</div>
+<!-- / editer related article -->

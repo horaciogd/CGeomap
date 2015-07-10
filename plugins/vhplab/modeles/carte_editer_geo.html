@@ -1,0 +1,24 @@
+#CACHE{0}
+[(#SET{width,#ENV{width,100%}})]
+[(#SET{height,#ENV{height,400px}})]
+[(#SET{latitude,#ENV{latitude,#CONFIG**{vhplab/latitude,0}}})]
+[(#SET{longitude,#ENV{longitude,#CONFIG**{vhplab/longitude,0}}})]
+[(#SET{zoom,#ENV{zoom,#CONFIG**{vhplab/zoom,0}}})]
+
+<div id="map_[(#ENV{id_carte_vhplab}|?{[(#ENV{id_carte_vhplab})],editer_geo})]_canvas" class="editer_geo"[(#ENV{style}|!={'non'}|?{' '})style="[(#ENV{attente}|=={1}|oui)z-index: 0; ][width:(#GET{width});][ height:(#GET{height});]"]></div>
+<script type="text/javascript">
+//<![CDATA[
+	var map_[(#ENV{id_carte_vhplab}|?{[(#ENV{id_carte_vhplab})],editer_geo})];
+	$(document).ready(function() {
+		map_[(#ENV{id_carte_vhplab}|?{[(#ENV{id_carte_vhplab})],editer_geo})] = new VhplabMap();
+		map_[(#ENV{id_carte_vhplab}|?{[(#ENV{id_carte_vhplab})],editer_geo})].initialize({[
+			tagId: 'map_(#ENV{id_carte_vhplab}|?{[(#ENV{id_carte_vhplab})],editer_geo})_canvas'][,
+			url: '(#URL_SITE_SPIP)/'][,
+			zoom: (#GET{zoom})][,
+			latitude: (#GET{latitude})][,
+			longitude: (#GET{longitude})][,
+			custom:(#ENV{custom}|!={'non'}|oui)true]
+		});
+	});
+//]]>
+</script>

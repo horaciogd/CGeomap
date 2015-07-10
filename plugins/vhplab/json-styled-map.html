@@ -1,0 +1,58 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) Google Maps API v3 Styled Maps JSON - http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html
+][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)[(#ENV{callback})(]][
+    {	
+    	"featureType": "administrative",
+        "stylers": [
+        	{ "hue": "#00ffe6" },
+            { "gamma": 0.67 },
+            { "saturation": 69 },
+            { "lightness": -46 }
+        ]
+    }, {	
+    	"featureType": "landscape",
+        "stylers": [
+        	{ "hue": "#00ffe6" },
+            { "gamma": 0.67 },
+            { "saturation": 69 },
+            { "lightness": -46 }
+        ]
+    }, {	
+    	"featureType": "poi",
+        "stylers": [
+        	{ "hue": "#00ffe6" },
+            { "gamma": 0.67 },
+            { "saturation": 69 },
+            { "lightness": -46 }
+        ]
+    }, {	
+    	"featureType": "transit",
+        "stylers": [
+        	{ "hue": "#00ffe6" },
+            { "gamma": 0.67 },
+            { "saturation": 69 },
+            { "lightness": -46 }
+        ]
+    }, {	
+    	"featureType": "water",
+        "stylers": [
+        	{ "hue": "#00ffe6" },
+            { "gamma": 0.67 },
+            { "saturation": 69 },
+            { "lightness": -46 }
+        ]
+    }, {
+    	"featureType": "road", 
+    	"stylers": [ 
+    		{ "hue": "#00ffdd" } 
+    	]
+    }
+][);(#ENV{callback}|oui)]

@@ -1,0 +1,48 @@
+<paquet
+	prefix="vhplab"
+	categorie="divers"
+	version="0.0.1"
+	schema="0.0.1"
+	etat="dev"
+	compatibilite="[3.0.0;3.0.*]"
+	logo="images/vhplab.png"
+	documentation="http://www.vhplab.net/"
+>
+
+	<nom>VHPlab</nom>
+	<!-- VHPlab plugin for web development -->
+
+	<auteur lien="http://www.vhplab.net" mail="Horaciogd@gmail.com">Horaciogd</auteur>
+	<copyright>2013</copyright>
+	<licence>GNU/GPL</licence>
+	
+	<pipeline
+		nom="declarer_tables_interfaces"
+		inclure="base/vhplab.php"
+	/>
+	<pipeline
+		nom="declarer_tables_objets_sql"
+		inclure="base/vhplab.php"
+	/>
+	<pipeline
+		nom="declarer_tables_auxiliaires"
+		inclure="base/vhplab.php"
+	/>
+	<pipeline
+		nom="header_prive"
+		inclure="vhplab_pipeline.php"
+	/>
+	<pipeline
+		nom="affiche_milieu"
+		inclure="vhplab_pipeline.php"
+	/>
+	<pipeline
+		nom="affiche_gauche"
+		inclure="vhplab_pipeline.php"
+	/>
+	<pipeline
+		nom="insert_head"
+		inclure="vhplab_pipeline.php"
+	/>
+	
+</paquet>

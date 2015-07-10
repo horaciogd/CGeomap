@@ -1,0 +1,74 @@
+#CACHE{0}
+[(#SET{selected,''})]
+<BOUCLE_editer_icon(MOTS){type='marker_icon'}{id_article}{0,1}>[(#SET{selected,#ID_MOT})]</BOUCLE_editer_icon>
+<script type="text/javascript">
+	function change_icon_existant() {
+		jQuery(".vhplab_gis_icon_logos li img").hide();
+		var selected = jQuery("#vhplab_gis_icon_existant option:selected").attr("value");
+		if (selected=="mot_nouveau") {
+			jQuery(".editer_vhplab_gis_icon").show();
+		} else {
+			jQuery(".editer_vhplab_gis_icon").hide();
+			jQuery("#icon_"+ selected).show();
+		}
+	}
+	//jQuery('.formulaire_#FORM .action .delete').click(function(){jQuery(this).parents('tr').eq(0).animateRemove();});
+	//jQuery('.formulaire_#FORM .append').animateAppend();
+</script>
+<div class='formulaire_spip formulaire_editer formulaire_editer_icon'>
+	<h3 class="titrem">[<img src="(#CHEMIN_IMAGE{default-marker.png})" alt="" class="cadre-icone" height="28" width="15">]<:vhplab:titre_icon:></h3>
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+	[(#ENV{editable})#SET{valider,''}
+	<form method='post' action='#ENV{action}' enctype='multipart/form-data'>
+		<div>
+			[(#REM) declarer les hidden qui declencheront le service du formulaire parametre : url d'action ] #ACTION_FORMULAIRE{#ENV{action}}
+			[(#REM) un submit pour attraper la touche entree]
+	  		<div style="display:none;"><input type='submit' class='submit' value='<:bouton_upload:>' /></div>
+	]
+			<ul>
+				<B_icon_groupe>
+				<li class="editer editer_icon_existant[ (#ENV**{erreurs}|table_valeur{icon_existant}|oui)erreur]">
+					[<input name="vhplab_gis_icon_precedent" id="vhplab_gis_icon_precedent" type="hidden" value="mot_(#GET{selected})" />]
+				<BOUCLE_icon_groupe(GROUPES_MOTS){titre='marker_icon'}{0,1}>
+					<B_icons>
+					<ul class="vhplab_gis_icon_logos">
+						<BOUCLE_icons(MOTS){id_groupe}>
+						[(#GET{selected}|=={#ID_MOT}|?{[<li>(#LOGO_MOT|inserer_attribut{id,icon_mot_#ID_MOT})</li>],[<li>(#LOGO_MOT|inserer_attribut{style,display:none;}|inserer_attribut{id,icon_mot_#ID_MOT})</li>]})]
+						</BOUCLE_icons>
+					</ul>
+					</B_icons>
+					<B_selector>
+					<label for="vhplab_gis_icon_existant"><:vhplab:info_telecharger_existant_icon:></label>
+					<select name="vhplab_gis_icon_existant" id="vhplab_gis_icon_existant" onchange="change_icon_existant();">
+						<option value="">&nbsp;</option>
+						<BOUCLE_selector(MOTS){id_groupe}{par num titre, multi titre}>
+						<option value="mot_#ID_MOT"[(#GET{selected}|=={#ID_MOT}|oui) selected="selected"]>#TITRE</option>
+						</BOUCLE_selector>
+						<option value="mot_nouveau"><:vhplab:info_telecharger_nouveau_icon:></option>
+					</select>
+					</B_selector>
+				</BOUCLE_icon_groupe>
+				</li>
+				</B_icon_groupe>
+				<li class="editer editer_vhplab_gis_icon [ (#ENV**{erreurs}|table_valeur{vhplab_gis_icon}|oui)erreur]" style="display:none;">
+					[(#ENV{vhplab_gis_icon}|oui)
+						[(#INCLURE{fond=formulaires/inc-apercu-icon,env,icon=#ENV{vhplab_gis_icon},quoi=vhplab_gis_icon,editable=#ENV{icon_off}|non|et{#ENV{editable}}})]
+					][(#ENV{editable})
+						[(#ENV{vhplab_gis_icon}|non)
+							<label for="vhplab_gis_icon"><:vhplab:info_telecharger_nouveau_icon:></label>[
+							<span class='erreur_message'>(#ENV**{erreurs}|table_valeur{vhplab_gis_icon})</span>
+							]<input type='file' class='file' name='vhplab_gis_icon' id='vhplab_gis_icon' size="12" value="" />
+							#SET{valider,' '}
+						]
+					]
+				</li>
+			</ul>
+	[(#ENV{editable})
+			[(#GET{valider})
+			<p class="boutons"><input type='submit' class='submit' value='<:bouton_enregistrer:>' /></p>
+			]
+		</div>
+	</form>
+	]
+</div><!--formulaire_editer_icon-->
