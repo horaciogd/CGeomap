@@ -6,7 +6,7 @@ CGEOMAP(http://gpsmuseum.eu/cgeomap/) es una herramienta colaborativa de espacia
 
 CGEOMAP nace de una larga trayectoria de colaboración entre varios colectivos artísticos, explorando el cruce de caminos entre las técnicas de geolocalización de contenidos audiovisuales, la narrativa espacial y el activismo cultural. Entre ellos destacan VHPlab (Horacio González Diéguez) y GPS Museum (Fred Adam and Verónica Perales).
 
-En este repositorio encontrarás el plugin y los esqueletos de Spip que utilizamos de base para crear nuestros proyectos. Encontrarás toda la documentación acerca de como utilizarlo y un ejemplo de su uso aquí: http://www.vhplab.net/cgeomap/
+En este repositorio encontrarás el plugin y los esqueletos de Spip que utilizamos de base para crear nuestros proyectos publicados bajo licencia GNU GENERAL PUBLIC LICENSE. Encontrarás toda la documentación acerca de como utilizarlo y un ejemplo de su uso aquí: http://www.vhplab.net/cgeomap/
 
 Date: Fri Jul 10 2015
 
