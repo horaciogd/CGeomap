@@ -18,8 +18,9 @@
 			"titre": "(#TITRE|supprimer_numero|texte_json)"][,
 			"soustitre": "(#SOUSTITRE|supprimer_numero|texte_json)"]<BOUCLE_gis(VHPLAB_GIS){id_article}>[,
 			"lat": "(#LATITUDE)"][,
-			"lng": "(#LONGITUDE)"]</BOUCLE_gis><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>,
-			"icon": {["url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][, "width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][, "height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]}</BOUCLE_icon>[,
+			"lng": "(#LONGITUDE)"]</BOUCLE_gis><B_icon><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>,
+			"icon": {["url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][, "width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][, "height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]}</BOUCLE_icon></B_icon>
+			"icon": {["url": "(#CHEMIN{images/icons/default_icon.png})"], "width": "120", "height": "120"}<//B_icon>[,
 			"json": "(#URL_PAGE{json-vhplab-geo-article})&id_article=#ID_ARTICLE"]
 		</BOUCLE_item>
 		}</BOUCLE_json>

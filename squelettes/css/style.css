@@ -5,7 +5,7 @@
  * { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
 a { text-decoration: none; }
 a:hover, a:active { background-color: #25fade; }
-a.fancybox:hover, a.fancybox:active { background-color: transparent; }
+a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-color: transparent; }
 .btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
 
 

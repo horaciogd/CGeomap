@@ -13,13 +13,14 @@
 	"link": "(#URL_SITE_SPIP)/",][
 	"description": "(#DESCRIPTIF_SITE_SPIP|replace{\n, })",]
 	<B_json>"markers": [
-		<BOUCLE_json(ARTICLES){id_rubrique ?}{id_secteur ?}{id_mot ?}{id_auteur ?}{recherche ?}{id_article ?}{id_groupe ?}{par date}{inverse}{#GET{offset}, #GET{limit}}{", "}>{<BOUCLE_item(ARTICLES){id_article=#ID_ARTICLE}>[
+		<BOUCLE_json(ARTICLES){id_rubrique ?}{id_secteur ?}{id_mot ?}{id_auteur ?}{recherche ?}{id_article ?}{id_groupe ?}{par num titre}{#GET{offset}, #GET{limit}}{", "}>{<BOUCLE_item(ARTICLES){id_article=#ID_ARTICLE}>[
 			"id": "(#ID_ARTICLE)"][,
 			"titre": "(#TITRE|supprimer_numero|texte_json)"],
 			"soustitre": "<abbr class='published'[ title='(#DATE|date_iso)']>[(#DATE|affdate_jourcourt)]</abbr>[, <:par_auteur:> (#LESAUTEURS|supprimer_tags|extraire_br|attribut_html)]"<BOUCLE_gis(VHPLAB_GIS){id_article}>[,
 			"lat": "(#LATITUDE)"][,
-			"lng": "(#LONGITUDE)"]</BOUCLE_gis><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>,
-			"icon": {["url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][, "width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][, "height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]}</BOUCLE_icon>[,
+			"lng": "(#LONGITUDE)"]</BOUCLE_gis>,<B_icon><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>
+			"icon": {["url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][, "width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][, "height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]}</BOUCLE_icon></B_icon>
+			"icon": {["url": "(#CHEMIN{images/icons/default_icon.png})"], "width": "120", "height": "120"}<//B_icon>[,
 			"json": "(#URL_PAGE{json-vhplab-geo-article})&id_article=#ID_ARTICLE"]
 		</BOUCLE_item>
 		}</BOUCLE_json>
