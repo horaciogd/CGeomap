@@ -23,10 +23,16 @@ VhplabMarker.prototype.openInfoWindow = function() {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
 		open.closeInfoWindow();
 	}
-	$(".cgeomap .window a.fancybox").fancybox();
-	var base_fb_url = $('#navigation .user .facebook').data('base_href');
-	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
-	this.infoWindow.show();
+	this.infoWindow.open(this.map, this.marker);
 	this.open = true;
 	this.parent.open = this.id;
+	var base_fb_url = $('#navigation .user .facebook').data('base_href');
+	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
+};
+InfoBox.prototype.bindActions = function(_content) {
+	$('a.fancybox', this.div_).click(function(){
+		var img = $(this).attr('href');
+		$.fancybox({ 'href' : img });
+		return false;
+	});
 };
