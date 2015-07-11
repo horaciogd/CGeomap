@@ -1,4 +1,5 @@
-[(#CACHE{24*3600})][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]<!DOCTYPE html>
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})]<!DOCTYPE html>
 <html dir="#LANG_DIR" lang="#LANG">
 	<head>
 		[<title>(#NOM_SITE_SPIP|textebrut)[ - (#SLOGAN_SITE_SPIP|textebrut)]</title>]<BOUCLE_keywords(BREVES){titre=keywords}{0,1}>
@@ -12,7 +13,7 @@
 		<INCLURE{fond=inclure/script-geomap-sommaire}{nodo=#ENV{nodo}} />
 		
 	</head>
-	<body class="sommaire">
+	<body class="sommaire phone">
 		<INCLURE{fond=inclure/section-loading} />
 		
 		<INCLURE{fond=inclure/nav-navigation} />

@@ -1,0 +1,28 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})]<!DOCTYPE html>
+<html dir="#LANG_DIR" lang="#LANG">
+	<head>
+		[<title>(#NOM_SITE_SPIP|textebrut)[ - (#SLOGAN_SITE_SPIP|textebrut)]</title>]<BOUCLE_keywords(BREVES){titre=keywords}{0,1}>
+		<meta name="keywords" content="[(#TEXTE||attribut_html)]"></BOUCLE_keywords>[
+		<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
+		<meta name="robots" content="index, follow" />
+		<INCLURE{fond=inclure/head} />
+		
+		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}} />
+		
+		<INCLURE{fond=inclure/script-geomap-sommaire}{nodo=#ENV{nodo}} />
+		
+	</head>
+	<body class="sommaire desktop">
+		<INCLURE{fond=inclure/section-loading} />
+		
+		<INCLURE{fond=inclure/nav-navigation} />
+		
+		<INCLURE{fond=inclure/section-content} />
+		
+		<INCLURE{fond=inclure/section-map} />
+		
+		<INCLURE{fond=inclure/footer} />
+		
+	</body>
+</html>
