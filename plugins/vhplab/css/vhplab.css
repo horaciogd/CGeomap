@@ -16,8 +16,8 @@
 .cgeomap .window { padding: 10px; border: 1px solid #fff; background: rgba(255,255,255, 0.9); -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); overflow: visible; }
 .cgeomap .window .wrapper { position: relative; }
 .cgeomap .window hgroup { min-height: 29px; }
-.cgeomap .window h2 { }
-.cgeomap .window h3 { }
+.cgeomap .window h2 { margin-right: 37px; text-align: left; }
+.cgeomap .window h3 { margin-right: 37px; text-align: left; }
 .cgeomap .window .content { text-align: justify; }
 .cgeomap .window .close { position: absolute;  top: -2px; right: -2px; background: url('../images/icons/close.png') no-repeat; background-size: 29px 57px; width: 29px; height: 29px; cursor: pointer; background-position: 0px 0px; }
 .cgeomap .window .close:hover, .cgeomap .window .close:active { background-position: 0px -29px; }

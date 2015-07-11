@@ -1,0 +1,7 @@
+[(#REM)Modele pour <img>]
+<BOUCLE_tous(DOCUMENTS types_documents){id_document=#ID}{tout}>
+[(#ENV{width}|?{[(#SET{w,[(#ENV{width}|multiplier{2})]})],[(#SET{w,[(#LARGEUR)]})]})]
+[(#SET{src,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{src}|url_absolue)]})]
+[(#SET{h,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{height})]})]
+[<a href="(#URL_DOCUMENT|url_absolue)" rel="fancybox" class="fancybox"[ alt="(#TITRE|attribut_html)]"[ title="(#TITRE|attribut_html)"]>[<img src="(#GET{src})"[ height="(#GET{h}|fracture{2})"][ width="(#GET{w}|fracture{2})"] />]</a>]
+</BOUCLE_tous>

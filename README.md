@@ -13,7 +13,7 @@ Date: Fri Jul 10 2015
 Enjoy the code and drop me a line for comments and questions!
 horaciogd at vhplab dot net
 
-Third Part components: SPIP 3.0 - *Arnaud Martin, Antoine Pitrou, Philippe Riviere, Emmanuel Saint-James*, jQuery v1.11.3 | jQuery UI v1.11.4 - *jQuery Foundation*, Google Maps API v3 and SoundCloud API
+Third Part components: SPIP 3.0 - *Arnaud Martin, Antoine Pitrou, Philippe Riviere, Emmanuel Saint-James*, jQuery v1.11.3 | jQuery UI v1.11.4 - *jQuery Foundation*, Google Maps API v3 and SoundCloud API, FancyBox v2.1.5 - *Janis Skarnelis*
 
 
 How to
