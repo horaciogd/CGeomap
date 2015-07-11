@@ -12,7 +12,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'contacto' => 'Contacta con',
 	
 	// R
-	'recent_articles' => 'Últimas aportaciones al sitio',
+	'recent_articles' => 'Últimas aportaciones',
 	
 );
 

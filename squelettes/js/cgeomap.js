@@ -55,7 +55,7 @@ VhplabInterface.prototype.createNavigationList = function() {
 	var pagination = 0;
 	for (var i=0; i<this.map.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
-		pagination = (num - num%10)/10;
+		pagination = (num - num%6)/6;
 		html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, marker.titre, marker.soustitre);
 		num ++;
 	}
@@ -63,13 +63,25 @@ VhplabInterface.prototype.createNavigationList = function() {
 	$('#navigation .menu .list').append(html);
 	$('#navigation .menu .list').data('pagination', 0);
 	$('#navigation .menu .list').data('last', pagination);
-	this.paginateNavigation(0);
+	if (pagination==0) {
+		$('#navigation .pagination').remove();
+	} else {
+		this.paginateNavigation(0);
+	}
+};
+VhplabInterface.prototype.bindNavigationListActions = function() {
 	var self = this;
 	$("#navigation .menu .list a.article").click(function(){
 		var name = $(this).attr('name');
 		var id = name.split('_');
 		var marker = $(self.map.markers).data('marker_'+id[1]);
 		marker.click();
+	});
+	$("#navigation .pagination .next").click(function(){
+		self.paginateNavigation('next');
+	});
+	$("#navigation .pagination .prev").click(function(){
+		self.paginateNavigation('prev');
 	});
 };
 VhplabInterface.prototype.createNavigationElement = function(_tab, _pagination, _id, _titre, _soustitre) {
@@ -90,12 +102,14 @@ VhplabInterface.prototype.paginateNavigation = function(_dir) {
 		$('#navigation .menu .list li.group_'+ pos).show();
 		$('#navigation .menu .list').data('pagination', pos);
 		if (pos==0) {
-			$("#navigation .menu .prev").addClass('noPrev');
+			$("#navigation .pagination .prev").addClass('noPrev');
+			if (last==1) $("#navigation .pagination .next").removeClass('noNext');
 		} else if (pos==last) {
-			$("#navigation .menu .next").addClass('noNext');
+			$("#navigation .pagination .next").addClass('noNext');
+			if (pos==1) $("#navigation .pagination .prev").removeClass('noPrev');
 		} else {
-			$("#navigation .menu .prev").removeClass('noPrev');
-			$("#navigation .menu .next").removeClass('noNext');
+			$("#navigation .pagination .prev").removeClass('noPrev');
+			$("#navigation .pagination .next").removeClass('noNext');
 		}
 	}
 };

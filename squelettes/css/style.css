@@ -8,6 +8,16 @@ a:hover, a:active { background-color: #25fade; }
 a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-color: transparent; }
 .btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
 
+/* pagination  */
+.pagination .btn { display: block; background-image: url('../images/icons/pagination-buttons.png'); background-repeat: no-repeat; background-size: 120px 60px; width: 30px; height: 30px; cursor: pointer; }
+.pagination .next { background-position: -90px 0; }
+.pagination .next:hover, .pagination .next:active { background-position: -90px -30px; }
+.pagination .noNext { background-position: -60px 0px;  !important; }
+.pagination .noNext:hover, .pagination .noNext:active { background-position: -60px -30px; !important; }
+.pagination .prev { background-position: -30px -30px; }
+.pagination .prev:hover, .pagination .prev:active { background-position: -30px 0; }
+.pagination .noPrev { background-position: 0px -30px;  !important; }
+.pagination .noPrev:hover, .pagination .noPrev:active { background-position: 0 0; !important; }
 
 /* --------------------
    Navigation
@@ -16,12 +26,16 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-col
 #navigation { padding: 160px 16px 0 0; width: 380px; }
 #navigation .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 16px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
 
+#navigation .articles { position: relative; }
+#navigation .pagination { position: absolute; width: 348px; top: 0; }
+#navigation .pagination .btn { float: right; margin-left: 0.4em; }
 #navigation hgroup { text-align: center; }
 #navigation hgroup a:hover, #navigation hgroup a:active { background-color: transparent;  }
 #navigation .logo { margin: -160px -160px auto auto; }
 
 #navigation .articles { margin-bottom: 2em; }
 #navigation .articles li { margin: 0.8em 0 0 0.8em; }
+#navigation .articles li h3 { font-size: 1em; line-height: 1em; }
 #navigation .articles li a { cursor: pointer; }
 #navigation .articles span { font-size: 0.8em; }
 
@@ -49,6 +63,7 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-col
 .cgeomap .window h3 { display: none; }
 .cgeomap .window p { font-size: 1.2em; margin: 1em 0; }
 .cgeomap .window a.fancybox { display: block; margin-top: 1.2em; }
+.cgeomap .window img { margin-top: 1em; }
 
 /* --------------------
    Footer

@@ -4,6 +4,7 @@
 
  * { padding: 0; margin: 0; }
  li { list-style-type: none; }
+ body { overflow: hidden; }
  
 /* --------------------
    Navigation

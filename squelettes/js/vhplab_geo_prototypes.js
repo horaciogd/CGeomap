@@ -12,6 +12,7 @@
 
 VhplabMap.prototype.bindActions = function() {
 	cgeomap.createNavigationList();
+	cgeomap.bindNavigationListActions();
 	if (this.open) {
 		var marker = $(this.markers).data('marker_'+this.open);
 		marker.click();
