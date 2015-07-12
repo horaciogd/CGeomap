@@ -18,6 +18,31 @@ VhplabMap.prototype.bindActions = function() {
 		marker.click();
 	}
 };
+
+VhplabMarker.prototype.click = function() {
+	if(!this.open) {
+		var self = this;
+		if (this.loadded) {
+			cgeomap.slideContent('hide', function() {
+				self.appendContent();
+				cgeomap.slideContent('show');
+				self.openInfoWindow();
+			});
+		} else {
+			cgeomap.slideContent('hide', function() {
+				// get URL via alert(self.json);
+				$.getJSON(self.json, function(data) {
+					$.each(data[0].marker, function(i, marker){
+						self.loadWindowData(marker);
+						self.appendContent();
+						cgeomap.slideContent('show');
+						self.openInfoWindow();
+					});
+				});
+			});
+		}
+	}
+};
 VhplabMarker.prototype.openInfoWindow = function() {
 	if(this.parent.open) {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
@@ -29,6 +54,15 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	var base_fb_url = $('#navigation .user .facebook').data('base_href');
 	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
 };
+VhplabMarker.prototype.appendContent = function() {
+	$('#content .wrapper').empty();
+	$('#content .wrapper').append('<hgroup></hgroup>');
+	$('#content .wrapper hgroup').append('<h1>'+ this.titre +'</h1>');
+	$('#content .wrapper hgroup').append('<h2>'+ $(this.data).data('soustitre') +'</h2>');
+	$('#content .wrapper').append('<div class="texte">'+ $(this.data).data('texte') +'</div>');
+	$('#content .wrapper a.fancybox').fancybox();
+};
+
 InfoBox.prototype.bindActions = function(_content) {
 	$('a.fancybox', this.div_).click(function(){
 		var img = $(this).attr('href');

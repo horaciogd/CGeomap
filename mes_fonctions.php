@@ -13,18 +13,6 @@ function extraire_br($baliza) {
 	$return = str_replace("\"", "'", $return);
 	return $return;
 }
-function ajouter($baliza, $b=1){
-   return $baliza + $b;
-}
-function deduire($baliza, $b=1){
-   return $baliza - $b;
-}
-function multiplier($baliza, $b=1){
-   return $baliza * $b;
-}
-function fracture($baliza, $b=1){
-   return $baliza / $b;
-}
 function device($baliza) {
 	$tablet_browser = 0;
 	$mobile_browser = 0;

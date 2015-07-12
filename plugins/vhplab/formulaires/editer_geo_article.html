@@ -19,8 +19,8 @@ var article_map;
 			[article_map.clickableMarker.setIcon({
 				url: '(#GET{icon})',
 				size: new google.maps.Size([(#GET{width})], [(#GET{height})]),
-				scaledSize: new google.maps.Size([(#GET{width}|fracture{2})], [(#GET{height}|fracture{2})]),
-				anchor: new google.maps.Point([(#GET{width}|fracture{4})], [(#GET{height}|fracture{2})])
+				scaledSize: new google.maps.Size([(#GET{width}|div{2})], [(#GET{height}|div{2})]),
+				anchor: new google.maps.Point([(#GET{width}|div{4})], [(#GET{height}|div{2})])
 			});]						
 		});
 	};

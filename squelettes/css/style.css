@@ -5,8 +5,11 @@
  * { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
 a { text-decoration: none; }
 a:hover, a:active { background-color: #25fade; }
-a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-color: transparent; }
+a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap a:hover, .fancybox-wrap a:active{ background-color: transparent; }
 .btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
+
+.right { text-align: right; }
+.right img, .center img { display: inline-block; padding: 0 10px; }
 
 /* pagination  */
 .pagination .btn { display: block; background-image: url('../images/icons/pagination-buttons.png'); background-repeat: no-repeat; background-size: 120px 60px; width: 30px; height: 30px; cursor: pointer; }
@@ -19,25 +22,24 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-col
 .pagination .noPrev { background-position: 0px -30px;  !important; }
 .pagination .noPrev:hover, .pagination .noPrev:active { background-position: 0 0; !important; }
 
+
 /* --------------------
    Navigation
 -------------------- */
 
-#navigation { padding: 160px 16px 0 0; width: 380px; }
 #navigation .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 16px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
 
-#navigation .articles { position: relative; }
-#navigation .pagination { position: absolute; width: 348px; top: 0; }
-#navigation .pagination .btn { float: right; margin-left: 0.4em; }
 #navigation hgroup { text-align: center; }
 #navigation hgroup a:hover, #navigation hgroup a:active { background-color: transparent;  }
 #navigation .logo { margin: -160px -160px auto auto; }
 
 #navigation .articles { margin-bottom: 2em; }
+#navigation .articles .pagination { position: absolute; width: 348px; top: 0; }
+#navigation .articles .pagination .btn { float: right; margin-left: 0.4em; }
 #navigation .articles li { margin: 0.8em 0 0 0.8em; }
 #navigation .articles li h3 { font-size: 1em; line-height: 1em; }
 #navigation .articles li a { cursor: pointer; }
-#navigation .articles span { font-size: 0.8em; }
+#navigation .articles li span { font-size: 0.8em; }
 
 .user .buttons { text-align: center; }
 .user .buttons li { display: inline; padding: 0 10px; }
@@ -55,6 +57,20 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-col
 
 
 /* --------------------
+   Content
+-------------------- */
+
+#content .toggle { display: block; position: absolute; top: 40px; right: -46px; background: url('../images/icons/toggle-button.png') no-repeat; width: 40px; height: 80px; background-size: 80px 160px; }
+#content .toggle:hover, #content .toggle:active { background-position: 0 -80px; }
+#content .closed { background-position: -40px 0 !important; }
+#content .closed:hover, #content .closed:active  { background-position: -40px -80px !important; }
+
+#content .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
+#content .wrapper p { font-size: 0.9em; margin: 1em 0; text-align: justify; }
+#content .wrapper img { margin: 1em 0; }
+
+
+/* --------------------
    Map
 -------------------- */
 
@@ -63,13 +79,13 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active{ background-col
 .cgeomap .window h3 { display: none; }
 .cgeomap .window p { font-size: 1.2em; margin: 1em 0; }
 .cgeomap .window a.fancybox { display: block; margin-top: 1.2em; }
-.cgeomap .window img { margin-top: 1em; }
+.cgeomap .window img { }
+
 
 /* --------------------
    Footer
 -------------------- */
 
-footer { padding: 8px 8px 16px 8px; }
-footer .wrapper { position: relative; min-height: 33px; border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
+footer .wrapper { min-height: 33px; border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
 footer .credits img { position: absolute; top: 6px; left: 6px; }
 footer .credits p:last-child { padding-left: 100px; font-size: 0.8em; }

@@ -378,7 +378,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts) {
 		self.click();
 	});
 };
-VhplabMarker.prototype.click = function(_k) {
+VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
 		if (this.loadded) {
@@ -425,7 +425,7 @@ function InfoBox(_opts) {
 	// CGeomap options
 	this.id =  _opts.id || null;
 	this.arrowOffset = _opts.arrowOffset || 78;
-	this.width = _opts.arrowOffset || 420;
+	this.width = _opts.width || 380;
 	this.infoBoxClearance_ = _opts.infoBoxClearance || new google.maps.Size(400, 100);
 	if (typeof _opts.visible === "undefined") {
 		if (typeof _opts.isHidden === "undefined") {
@@ -744,7 +744,11 @@ InfoBox.prototype.close = function () {
 	this.setMap(null);
 };
 InfoBox.prototype.bindActions = function(_content) {
-
+	$('a.fancybox', this.div_).click(function(){
+		var img = $(this).attr('href');
+		$.fancybox({ 'href' : img });
+		return false;
+	});
 };
 
 //***********
