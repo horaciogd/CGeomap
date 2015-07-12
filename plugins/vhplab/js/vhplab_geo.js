@@ -425,8 +425,8 @@ function InfoBox(_opts) {
 	// CGeomap options
 	this.id =  _opts.id || null;
 	this.arrowOffset = _opts.arrowOffset || 78;
-	this.width = _opts.arrowOffset || 390;
-	this.infoBoxClearance_ = _opts.infoBoxClearance || new google.maps.Size(1, 1);
+	this.width = _opts.arrowOffset || 420;
+	this.infoBoxClearance_ = _opts.infoBoxClearance || new google.maps.Size(400, 100);
 	if (typeof _opts.visible === "undefined") {
 		if (typeof _opts.isHidden === "undefined") {
 			_opts.visible = true;
