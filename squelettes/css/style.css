@@ -24,6 +24,21 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 
 
 /* --------------------
+   Loading
+-------------------- */
+
+#loading {  background: rgb(255,255,255);  }
+#loading hgroup { color: #767576; text-align: center; }
+#loading hgroup h1 { margin: 0 1em; font-weight: 300; margin-top: 20%; font-size: 1.8em; line-height: 1.2em; }
+/* .font-ok #loading hgroup h1 { font-weight: 200 !important; } */
+#loading hgroup h2 { margin: 0 2.6em; font-size: 1em; font-weight: 200; line-height: 0.9em; }
+/* .font-ok #loading hgroup h2 { font-weight: 300 !important; } */
+#loading hgroup a, #intro hgroup a:active, #intro hgroup a:active { text-decoration: none; color: #767576; }
+#loading hgroup .loading { margin: 1em auto; text-align: center; display: block; width: 60px; height: 60px; background-image: url('../images/icons/em-map-buttons.png'); background-size: 268px 126px; background-position: -68px -65px; background-repeat: no-repeat; position: relative; }
+#loading hgroup .loading img { width: 37px; height: 37px; position: absolute; top: 10px; left: 12px; }
+
+
+/* --------------------
    Navigation
 -------------------- */
 
@@ -65,6 +80,8 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 #content .closed { background-position: -40px 0 !important; }
 #content .closed:hover, #content .closed:active  { background-position: -40px -80px !important; }
 
+#content .loading { display: block; position: absolute; top: 60px; right: -106px; background: url('../images/icons/content-loader.gif') no-repeat; width: 40px; height: 40px; background-size: 40px 40px; }
+
 #content .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
 #content .wrapper p { font-size: 0.9em; margin: 1em 0; text-align: justify; }
 #content .wrapper img { margin: 1em 0; }
@@ -79,7 +96,6 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 .cgeomap .window h3 { display: none; }
 .cgeomap .window p { font-size: 1.2em; margin: 1em 0; }
 .cgeomap .window a.fancybox { display: block; margin-top: 1.2em; }
-.cgeomap .window img { }
 
 
 /* --------------------

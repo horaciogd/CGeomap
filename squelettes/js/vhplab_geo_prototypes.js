@@ -29,9 +29,11 @@ VhplabMarker.prototype.click = function() {
 				self.openInfoWindow();
 			});
 		} else {
+			$('#loading_content').fadeIn();
 			cgeomap.slideContent('hide', function() {
 				// get URL via alert(self.json);
 				$.getJSON(self.json, function(data) {
+					$('#loading_content').fadeOut();
 					$.each(data[0].marker, function(i, marker){
 						self.loadWindowData(marker);
 						self.appendContent();

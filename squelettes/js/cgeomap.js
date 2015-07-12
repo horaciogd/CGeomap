@@ -87,6 +87,7 @@ VhplabInterface.prototype.bindNavigationListActions = function() {
 	$("#navigation .pagination .prev").click(function(){
 		self.paginateNavigation('prev');
 	});
+	$('#loading').fadeOut();
 };
 VhplabInterface.prototype.createNavigationElement = function(_tab, _pagination, _id, _titre, _soustitre) {
 	return _tab +'<li class="group_'+ _pagination +'"><h3><a class="article" name="article_'+ _id +'">'+ _titre +'</a></h3><span>'+ _soustitre +'</span></li>\n';
