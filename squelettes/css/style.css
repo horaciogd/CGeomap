@@ -1,0 +1,55 @@
+/* --------------------
+   General
+-------------------- */
+
+ * { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+a { text-decoration: none; }
+a:hover, a:active { background-color: #25fade; }
+a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap a:hover, .fancybox-wrap a:active{ background-color: transparent; }
+.btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
+
+.right { text-align: right; }
+.right img, .center img { display: inline-block; padding: 0 10px; }
+
+
+/* --------------------
+   Loading
+-------------------- */
+
+#loading {  background: rgb(255,255,255);  }
+#loading hgroup { color: #767576; text-align: center; }
+#loading hgroup h1 { margin: 0 1em; font-weight: 300; margin-top: 20%; font-size: 1.8em; line-height: 1.2em; }
+#loading hgroup h2 { margin: 0 2.6em; font-size: 1em; font-weight: 200; line-height: 0.9em; }
+#loading hgroup a:hover, #loading hgroup a:active { background-color: transparent; }
+#loading hgroup .loading { margin: 1em auto; text-align: center; display: block;width: 50px; height: 50px; background-image: url('../images/icons/map-buttons.png'); background-size: 200px 200px; background-repeat: no-repeat; position: relative; }
+#loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 5px; left: 5px; }
+
+
+/* --------------------
+   Navigation
+-------------------- */
+
+#navigation hgroup { text-align: center; }
+#navigation hgroup a:hover, #navigation hgroup a:active { background-color: transparent;  }
+
+
+/* --------------------
+   Content
+-------------------- */
+
+
+/* --------------------
+   Map
+-------------------- */
+
+#cgeomap { background: #18c2b1; }
+.cgeomap .window h2 { font-size: 2.6em; }
+.cgeomap .window h3 { display: none; }
+.cgeomap .window p { font-size: 1.2em; margin: 1em 0; }
+.cgeomap .window a.fancybox { display: block; margin-top: 1.2em; }
+
+
+/* --------------------
+   Footer
+-------------------- */
+
