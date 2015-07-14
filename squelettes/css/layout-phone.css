@@ -1,44 +1,19 @@
 /* --------------------
-   General
--------------------- */
-
- * { padding: 0; margin: 0; }
- li { list-style-type: none; }
- body { overflow: hidden; }
- 
- /* --------------------
-   Loading
--------------------- */
-
-#loading { z-index: 4; position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
-
-
-/* --------------------
    Navigation
 -------------------- */
 
-#navigation { position: absolute; top: 0; right: 0; z-index: 3; width: 100%; }
-#navigation .wrapper { position: relative; }
+#navigation { top: 0; right: 0; width: 100%; }
 
 
 /* --------------------
    Content
 -------------------- */
 
-#content { position: absolute; top: 47px; bottom: 71px; /* footer height (33) + content wrapper padding x2 (6) + 2 ? */ left: 0; width: 100%; z-index: 1; }
-#content .wrapper { position: relative; height: 100%; overflow-y: auto; overflow-x: hidden; }
-
-
-/* --------------------
-   Map
--------------------- */
-
-#cgeomap { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
-
+#content { top: 47px; bottom: 71px; /* footer height (33) + content wrapper padding x2 (6) + 2 ? */ left: 0; width: 100%; }
+#content .wrapper { overflow-y: scroll; /* has to be scroll, not auto */ -webkit-overflow-scrolling: touch; }
 
 /* --------------------
    Footer
 -------------------- */
 
-footer { position: absolute; bottom: 0; right: 0; left: 0; z-index: 2; width: 100%; }
-footer .wrapper { position: relative; }
+footer { bottom: 0; right: 0; left: 0; width: 100%; }

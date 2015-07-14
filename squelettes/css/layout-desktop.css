@@ -1,0 +1,21 @@
+/* --------------------
+   Navigation
+-------------------- */
+
+#navigation { top: 160px; right: 15px; width: 380px; }
+#navigation .articles { position: relative; }
+
+
+/* --------------------
+   Content
+-------------------- */
+
+#content { top: 15px; bottom: 47px; /* #content margin (15) + .wrapper border x2 (2) + .wrapper padding x2 (30) */ left: 15px; width: 380px; }
+#content .wrapper { padding: 15px; }
+
+
+/* --------------------
+   Footer
+-------------------- */
+
+footer { bottom: 15px; right: 86px; /* #mapZoomControl width (56) + footer margin x2 (30) */ left: 410px /* #content width (380) + #content margin x2 (30) */; }

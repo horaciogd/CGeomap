@@ -2,15 +2,6 @@
    General
 -------------------- */
 
- * { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
-a { text-decoration: none; }
-a:hover, a:active { background-color: #25fade; }
-a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap a:hover, .fancybox-wrap a:active{ background-color: transparent; }
-.btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
-
-.right { text-align: right; }
-.right img, .center img { display: inline-block; padding: 0 10px; }
-
 /* pagination  */
 .pagination .btn { display: block; background-image: url('../images/icons/pagination-buttons.png'); background-repeat: no-repeat; background-size: 120px 60px; width: 30px; height: 30px; cursor: pointer; }
 .pagination .next { background-position: -90px 0; }
@@ -24,26 +15,10 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 
 
 /* --------------------
-   Loading
--------------------- */
-
-#loading {  background: rgb(255,255,255);  }
-#loading hgroup { color: #767576; text-align: center; }
-#loading hgroup h1 { margin: 0 1em; font-weight: 300; margin-top: 20%; font-size: 1.8em; line-height: 1.2em; }
-#loading hgroup h2 { margin: 0 2.6em; font-size: 1em; font-weight: 200; line-height: 0.9em; }
-#loading hgroup a:hover, #loading hgroup a:active { background-color: transparent; }
-#loading hgroup .loading { margin: 1em auto; text-align: center; display: block;width: 50px; height: 50px; background-image: url('../images/icons/map-buttons.png'); background-size: 200px 200px; background-repeat: no-repeat; position: relative; }
-#loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 5px; left: 5px; }
-
-
-/* --------------------
    Navigation
 -------------------- */
 
 #navigation .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 16px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
-
-#navigation hgroup { text-align: center; }
-#navigation hgroup a:hover, #navigation hgroup a:active { background-color: transparent;  }
 #navigation .logo { margin: -160px -160px auto auto; }
 
 #navigation .articles { margin-bottom: 2em; }
@@ -86,20 +61,10 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 
 
 /* --------------------
-   Map
--------------------- */
-
-#cgeomap { background: #18c2b1; }
-.cgeomap .window h2 { font-size: 2.6em; }
-.cgeomap .window h3 { display: none; }
-.cgeomap .window p { font-size: 1.2em; margin: 1em 0; }
-.cgeomap .window a.fancybox { display: block; margin-top: 1.2em; }
-
-
-/* --------------------
    Footer
 -------------------- */
 
 footer .wrapper { min-height: 33px; border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
 footer .credits img { position: absolute; top: 6px; left: 6px; }
 footer .credits p:last-child { padding-left: 100px; font-size: 0.8em; }
+

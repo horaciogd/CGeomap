@@ -18,6 +18,7 @@
 		//<![CDATA[
 		var cgeomap;
 		$(document).ready(function() {
+			document.addEventListener("touchstart", function() {},false);
 			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-phone.js'}|url_absolue)]", function(data) {
 				cgeomap = new VhplabInterface();
 				cgeomap.init({[
