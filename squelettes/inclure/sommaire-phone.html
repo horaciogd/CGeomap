@@ -6,23 +6,23 @@
 		<meta name="keywords" content="[(#TEXTE||attribut_html)]"></BOUCLE_keywords>[
 		<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
 		<meta name="robots" content="index, follow" />
-		<INCLURE{fond=inclure/head} />
+		<INCLURE{fond=inclure/head-phone} />
 		
 		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}} />
 		
-		<INCLURE{fond=inclure/script-geomap-sommaire}{nodo=#ENV{nodo}} />
+		<INCLURE{fond=inclure/script-sommaire-phone}{nodo=#ENV{nodo}} />
 		
 	</head>
 	<body class="sommaire phone">
 		<INCLURE{fond=inclure/section-loading} />
 		
-		<INCLURE{fond=inclure/nav-navigation} />
+		<INCLURE{fond=inclure/nav-navigation-phone} />
 		
-		<INCLURE{fond=inclure/section-content} />
+		<INCLURE{fond=inclure/section-content-phone} />
 		
 		<INCLURE{fond=inclure/section-map} />
 		
-		<INCLURE{fond=inclure/footer} />
+		<INCLURE{fond=inclure/footer-phone} />
 		
 	</body>
 </html>

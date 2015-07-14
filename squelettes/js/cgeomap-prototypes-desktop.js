@@ -1,6 +1,5 @@
 /*
- * VHPlab plugin for Escoitar.org and media localization
- * lat lng
+ * VHPlab plugin for Commons CGEOMAP project and media localization
  *
  * JavaScript document to alter map prototypes
  *

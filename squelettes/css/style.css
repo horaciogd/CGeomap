@@ -30,12 +30,10 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 #loading {  background: rgb(255,255,255);  }
 #loading hgroup { color: #767576; text-align: center; }
 #loading hgroup h1 { margin: 0 1em; font-weight: 300; margin-top: 20%; font-size: 1.8em; line-height: 1.2em; }
-/* .font-ok #loading hgroup h1 { font-weight: 200 !important; } */
 #loading hgroup h2 { margin: 0 2.6em; font-size: 1em; font-weight: 200; line-height: 0.9em; }
-/* .font-ok #loading hgroup h2 { font-weight: 300 !important; } */
-#loading hgroup a, #intro hgroup a:active, #intro hgroup a:active { text-decoration: none; color: #767576; }
-#loading hgroup .loading { margin: 1em auto; text-align: center; display: block; width: 60px; height: 60px; background-image: url('../images/icons/em-map-buttons.png'); background-size: 268px 126px; background-position: -68px -65px; background-repeat: no-repeat; position: relative; }
-#loading hgroup .loading img { width: 37px; height: 37px; position: absolute; top: 10px; left: 12px; }
+#loading hgroup a:hover, #loading hgroup a:active { background-color: transparent; }
+#loading hgroup .loading { margin: 1em auto; text-align: center; display: block;width: 50px; height: 50px; background-image: url('../images/icons/map-buttons.png'); background-size: 200px 200px; background-repeat: no-repeat; position: relative; }
+#loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 5px; left: 5px; }
 
 
 /* --------------------

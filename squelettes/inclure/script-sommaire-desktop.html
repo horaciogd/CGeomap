@@ -14,11 +14,11 @@
 		//<![CDATA[
 		var cgeomap;
 		$(document).ready(function() {
-			$.getScript("[(#URL_PAGE{'cgeomap_prototypes.js'}|url_absolue)]", function(data) {
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {
 				cgeomap = new VhplabInterface();
 				cgeomap.init({[
 					url_site: '(#URL_SITE_SPIP|url_absolue)/',][
-					custom_map_prototypes: '(#URL_PAGE{vhplab_geo_prototypes.js}|url_absolue)',]
+					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-desktop.js}|url_absolue)',]
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
 						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE',</BOUCLE_get_map>
 						limit: 300,

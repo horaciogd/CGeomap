@@ -38,6 +38,12 @@ VhplabInterface.prototype.init = function(_opts) {
 	}
 	this.initContent();
 };
+VhplabInterface.prototype.initContent = function() {
+	var position = $("#content").position();
+	this.toggleContentDist = $("#content").width() + position.left + this.toggleContentOffset;
+	$('#content').css({ left: "-="+this.toggleContentDist });
+	$("#content").data('visible', false);
+};
 VhplabInterface.prototype.ready = function(_opts) {
 	this.map = new VhplabMap();
 	this.map.initialize({
@@ -118,17 +124,11 @@ VhplabInterface.prototype.paginateNavigation = function(_dir) {
 		}
 	}
 };
-VhplabInterface.prototype.initContent = function() {
-	var position = $("#content").position();
-	this.toggleContentDist = $("#content").width() + position.left + this.toggleContentOffset;
-	$('#content').css({ left: "-="+this.toggleContentDist });
-	$("#content").data('visible', false);
-};
 VhplabInterface.prototype.bindToggleContent = function() {
 	self = this;
 	$('#toggle_content').click(function(){ self.toggleContent(); });
 };
-VhplabInterface.prototype.toggleContent = function(_dir) {
+VhplabInterface.prototype.toggleContent = function() {
 	var visible = $("#content").data('visible');
 	if (visible) {
 		$('#content').animate({

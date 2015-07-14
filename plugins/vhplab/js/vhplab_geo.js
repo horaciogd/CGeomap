@@ -164,7 +164,7 @@ VhplabMap.prototype.codeAddress = function(_address) {
 };
 VhplabMap.prototype.addClickListener = function(_opts) {
 	var self = this;
-	google.maps.event.addListener(this.map, 'click', function(e) {
+	this.clickListener = google.maps.event.addListener(this.map, 'click', function(e) {
 		self.clickableMarker.setPosition(e.latLng);
         self.clickableMarker.setVisible(true);
 		self.map.panTo(e.latLng);
@@ -175,7 +175,7 @@ VhplabMap.prototype.addClickListener = function(_opts) {
 };
 VhplabMap.prototype.addZoomListener = function(_opts) {
 	var self = this;
-	google.maps.event.addListener(this.map, 'zoom_changed', function() {
+	this.zoomListener = google.maps.event.addListener(this.map, 'zoom_changed', function(e) {
 		var zoom = self.map.getZoom();
 		$(self.zoomTag).val(zoom);
 	});
@@ -213,6 +213,26 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		$(self.zoomTag).val(this.map.getZoom());
 	}
 };
+VhplabMap.prototype.closeOpenMarker = function() {
+	if(this.open) {
+		var open = $(this.markers).data('marker_'+this.open);
+		open.closeInfoWindow();
+	}
+};
+VhplabMap.prototype.updateDistances = function(lat, lng) {
+	$.each($(this.markers).data(), function(name, marker) {
+		marker.setDistance(lat, lng);
+	});
+	//alert('sort list');
+	var self = this;
+	this.markerList.sort(function(a,b) {
+		var ma = $(self.markers).data('marker_'+a);
+		var mb = $(self.markers).data('marker_'+b);
+		if (ma.distance < mb.distance) return -1;
+		if (ma.distance > mb.distance) return 1;
+		return 0;
+	});
+};
 
 // ************ //
 // Vhplab Marker
@@ -223,6 +243,7 @@ function VhplabMarker() {
 	this.lat = 0.0;
 	this.lng = 0.0;
 	this.zoom = 0;
+	this.distance = null;
 	this.titre = '';
 	this.soustitre ='';
 	this.icon ='';
@@ -407,7 +428,17 @@ VhplabMarker.prototype.closeInfoWindow = function() {
 	if (this.open) {
 		this.infoWindow.close();
 		this.open = false;
+		this.parent.open = false;
 	}
+};
+VhplabMarker.prototype.setDistance = function(refLat, refLng) {
+	var R = 6371; // Radius of the Earth in km
+  	var dLat = (refLat - this.lat) * Math.PI / 180;
+  	var dLon = (refLng - this.lng) * Math.PI / 180;
+  	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(this.lat * Math.PI / 180) * Math.cos(refLat * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  	var d = R * c *1000;
+	this.distance = d;
 };
 
 // ************ //
