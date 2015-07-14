@@ -182,6 +182,7 @@ VhplabMarker.prototype.getData = function(_callback) {
 	} else {
 		var self = this;
 		var width = parseInt($(window).width()-24);
+		if (width>=900) width = 900;
 		// get URL via alert(this.json +'&width='+ width +'&link=false');
 		$.getJSON(this.json +'&width='+ width +'&link=false', function(data) {
 			$.each(data[0].marker, function(i, marker){

@@ -40,20 +40,21 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
    Content
 -------------------- */
 
-#content .wrapper { padding: 6px 6px 6px 0; background: rgba(255,255,255, 0.9); }
+#content .wrapper { padding: 6px 6px 6px 0; background: rgba(255,255,255, 0.9); overflow: auto; overflow-y: scroll; /* has to be scroll, not auto */ -webkit-overflow-scrolling: touch; }
 #content .listado_nodos header hgroup { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 6px; background: #18c2b1; }
 #content .listado_nodos header h2 { font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: #fff; white-space: nowrap; }
 #content .listado_nodos header .distance { display: blocK; position: absolute; top: 6px; right: 6px; font-weight: bold; font-size: 14px; line-height: 40px; height: 40px; vertical-align: middle; color: #fff; padding-left: 40px;
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
-background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(24,194,177,1) 30%, rgba(24,194,177,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(30%,rgba(24,194,177,1)), color-stop(100%,rgba(24,194,177,1))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* IE10+ */
-background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* W3C */
+background: -moz-linear-gradient(left, rgba(24,194,177,0) 0%, rgba(24,194,177,1) 30%, rgba(24,194,177,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(24,194,177,0)), color-stop(30%,rgba(24,194,177,1)), color-stop(100%,rgba(24,194,177,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* IE10+ */
+background: linear-gradient(to right, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* W3C */
 }
 #content .listado_nodos .wrap_article { font-size: 0.9em; margin: 6px 0 6px 6px; text-align: justify; }
-#content .listado_nodos .wrap_article img { margin: 6px; }
+#content .listado_nodos .wrap_article .lien, #content .listado_nodos .wrap_article .fancybox { display: block; text-align: center; margin: 8px auto; }
+#content .listado_nodos .wrap_article img { display: inline;  }
 
 /* --------------------
    Map
