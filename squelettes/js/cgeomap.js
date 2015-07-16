@@ -125,7 +125,7 @@ VhplabInterface.prototype.paginateNavigation = function(_dir) {
 	}
 };
 VhplabInterface.prototype.bindToggleContent = function() {
-	self = this;
+	var self = this;
 	$('#toggle_content').click(function(){ self.toggleContent(); });
 };
 VhplabInterface.prototype.toggleContent = function() {
