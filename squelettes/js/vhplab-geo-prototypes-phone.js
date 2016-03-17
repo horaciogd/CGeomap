@@ -142,6 +142,9 @@ VhplabMap.prototype.addClickListener = function(_opts) {
 	});
 };
 
+// ************ //
+// Vhplab Marker
+// ************ //
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
@@ -195,6 +198,9 @@ VhplabMarker.prototype.getData = function(_callback) {
 	}
 };
 
+// ************ //
+// InfoBox
+// ************ //
 InfoBox.prototype.bindActions = function(_content) {
 	$('a.fancybox', this.div_).click(function(){
 		var img = $(this).attr('href');

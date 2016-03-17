@@ -10,6 +10,9 @@
  *
  */
 
+//***********
+// Vhplab Map
+//***********
 VhplabMap.prototype.bindActions = function() {
 	cgeomap.createNavigationList();
 	cgeomap.bindNavigationListActions();
@@ -19,6 +22,9 @@ VhplabMap.prototype.bindActions = function() {
 	}
 };
 
+// ************ //
+// Vhplab Marker
+// ************ //
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
@@ -65,6 +71,9 @@ VhplabMarker.prototype.appendContent = function() {
 	$('#content .wrapper a.fancybox').fancybox();
 };
 
+// ************ //
+// InfoBox
+// ************ //
 InfoBox.prototype.bindActions = function(_content) {
 	$('a.fancybox', this.div_).click(function(){
 		var img = $(this).attr('href');
