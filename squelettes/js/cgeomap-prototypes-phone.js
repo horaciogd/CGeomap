@@ -9,6 +9,51 @@
  *
  */
 
+VhplabInterface.prototype.bindNavigationListActions = function() {
+	$('#content ul li.article .wrap_article').hide();
+	$('#content ul li.article hgroup .loading').hide();
+	$('#content ul').data('visible','none');
+	$('#content ul li.article header').data('visible', false);
+	$('#content ul li.article header').data('loaded', false);
+	$('footer .loading').hide();
+	var self = this;
+	$("#content li header").click(function(e){
+		self.toggleArticle(this);
+	});
+};
+VhplabInterface.prototype.bindToggleContent = function() {
+	var self = this;
+	$("footer .toggle_map").click(function(){
+		self.toggleContent();
+	});
+};
+VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, _soustitre, _distance) {
+	var html = '';
+	html += _tab +'<li id="article_'+ _id +'" class="article">\n';
+	html += _tab +'\t<header data-id="'+_id+'" class="btn">\n';
+	html +=	_tab +'\t\t<hgroup>\n';
+	var txt_dist = '';
+	_distance - _distance%1000 > 0 ? txt_dist = parseInt((_distance - _distance%1000)/1000) + ' km' : txt_dist = parseInt(_distance) + ' m';
+	html +=	_tab +'\t\t\t<span class="loading"></span>\n';
+	html +=	_tab +'\t\t\t<h2>'+ _titre +'</h2><span class="distance">'+ txt_dist +'</span>\n';
+	html +=	_tab +'\t\t</hgroup>\n';
+	html += _tab +'\t</header>\n';
+	html += _tab +'\t<div class="wrap_article">\n';
+	html += _tab +'\t</div><!-- wrap_article -->\n';
+	html += _tab +'</li>\n';
+	return html;
+};
+VhplabInterface.prototype.createNavigationList = function(_opts) {
+	var html = '\n';
+	var num = 0;
+	for (var i=0; i<this.map.markerList.length; i++) {
+		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
+		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, marker.titre, marker.soustitre, marker.distance);
+		num ++;
+	}
+	$('#content ul').empty();
+	$('#content ul').append(html);
+};
 VhplabInterface.prototype.init = function(_opts) {
 
 	var self = this;
@@ -47,45 +92,6 @@ VhplabInterface.prototype.initContent = function() {
 	$('#content').css({ left: "-=" + this.toggleContentDist });
 	$("#content").data('visible', false);
 };
-VhplabInterface.prototype.createNavigationList = function(_opts) {
-	var html = '\n';
-	var num = 0;
-	for (var i=0; i<this.map.markerList.length; i++) {
-		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
-		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, marker.titre, marker.soustitre, marker.distance);
-		num ++;
-	}
-	$('#content ul').empty();
-	$('#content ul').append(html);
-};
-VhplabInterface.prototype.bindNavigationListActions = function() {
-	$('#content ul li.article .wrap_article').hide();
-	$('#content ul li.article hgroup .loading').hide();
-	$('#content ul').data('visible','none');
-	$('#content ul li.article header').data('visible', false);
-	$('#content ul li.article header').data('loaded', false);
-	$('footer .loading').hide();
-	var self = this;
-	$("#content li header").click(function(e){
-		self.toggleArticle(this);
-	});
-};
-VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, _soustitre, _distance) {
-	var html = '';
-	html += _tab +'<li id="article_'+ _id +'" class="article">\n';
-	html += _tab +'\t<header data-id="'+_id+'" class="btn">\n';
-	html +=	_tab +'\t\t<hgroup>\n';
-	var txt_dist = '';
-	_distance - _distance%1000 > 0 ? txt_dist = parseInt((_distance - _distance%1000)/1000) + ' km' : txt_dist = parseInt(_distance) + ' m';
-	html +=	_tab +'\t\t\t<span class="loading"></span>\n';
-	html +=	_tab +'\t\t\t<h2>'+ _titre +'</h2><span class="distance">'+ txt_dist +'</span>\n';
-	html +=	_tab +'\t\t</hgroup>\n';
-	html += _tab +'\t</header>\n';
-	html += _tab +'\t<div class="wrap_article">\n';
-	html += _tab +'\t</div><!-- wrap_article -->\n';
-	html += _tab +'</li>\n';
-	return html;
-};
 VhplabInterface.prototype.toggleArticle = function(_me) {
 	var visible = $(_me).parent().parent().data('visible');
 	var id = $(_me).data('id');
@@ -119,12 +125,6 @@ VhplabInterface.prototype.toggleArticle = function(_me) {
 			$('#content .wrapper').scrollTo('#article_'+ id);
 		}
 	}
-};
-VhplabInterface.prototype.bindToggleContent = function() {
-	var self = this;
-	$("footer .toggle_map").click(function(){
-		self.toggleContent();
-	});
 };
 VhplabInterface.prototype.toggleContent = function() {
 	var visible = $("#content").data('visible');

@@ -32,6 +32,97 @@ function VhplabMap() {
 	this.longitudeTag = "#vhplab_longitude";
 	this.zoomTag = "#vhplab_zoom";
 };
+VhplabMap.prototype.addClickListener = function(_opts) {
+	var self = this;
+	this.clickListener = google.maps.event.addListener(this.map, 'click', function(e) {
+		self.clickableMarker.setPosition(e.latLng);
+        self.clickableMarker.setVisible(true);
+		self.map.panTo(e.latLng);
+		$(self.latitudeTag).val(e.latLng.lat());
+		$(self.longitudeTag).val(e.latLng.lng());
+		$(self.zoomTag).val(self.map.getZoom());
+	});
+};
+VhplabMap.prototype.addMarker = function(_path, _data) {
+	var marker = new VhplabMarker();
+	marker.loadBasicData(_path, _data, this);
+	marker.setMap(this.map);
+	$(this.markers).data('marker_'+marker.id, marker);
+	this.markerList.push(marker.id);
+};
+VhplabMap.prototype.addMarkers = function(_data, _callback) {
+	var n = this.offset;
+	var self = this;
+	var count = $(_data.markers).length - 1;
+	var path = _data.link;
+	$.each(_data.markers, function(i, marker) {
+		n++;
+		self.addMarker(path, marker);
+		if(i==count) {
+			var loadded = self.markerList.length;
+			self.bindActions();
+			if (_callback) _callback();
+		}
+	});
+};
+VhplabMap.prototype.addZoomListener = function(_opts) {
+	var self = this;
+	this.zoomListener = google.maps.event.addListener(this.map, 'zoom_changed', function(e) {
+		var zoom = self.map.getZoom();
+		$(self.zoomTag).val(zoom);
+	});
+};
+VhplabMap.prototype.bindActions = function() {
+	if (this.open) {
+		var marker = $(this.markers).data('marker_'+this.open);
+		marker.click();
+	}
+};
+VhplabMap.prototype.codeAddress = function(_address) {
+	self = this;
+	this.geocoder.geocode( { 'address': _address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			self.map.setCenter(results[0].geometry.location);
+			self.clickableMarker.setPosition(results[0].geometry.location);
+			$("#Vhplab_latitude").val(results[0].geometry.location.lat());
+			$("#Vhplab_longitude").val(results[0].geometry.location.lng());
+		} else {
+      		alert('Geocode was not successful for the following reason: ' + status);
+		}
+	});
+};
+VhplabMap.prototype.closeOpenMarker = function() {
+	if(this.open) {
+		var open = $(this.markers).data('marker_'+this.open);
+		open.closeInfoWindow();
+	}
+};
+VhplabMap.prototype.createMap = function(_opts) {
+	var mapDiv = document.getElementById(_opts.id);
+	var mapOptions = {
+		zoom: _opts.zoom,
+		center: new google.maps.LatLng(_opts.latitude, _opts.longitude),
+		disableDefaultUI: true,
+		mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'custom_map']
+	};
+	this.map = new google.maps.Map(mapDiv, mapOptions);
+};
+VhplabMap.prototype.createStyle = function(_opts, _data) {
+	var style = new google.maps.StyledMapType(_data, {name: "custom"});
+	this.map.mapTypes.set('custom_map', style);
+	this.map.setMapTypeId('custom_map');
+};
+VhplabMap.prototype.hideMarkers = function(_exception) {
+	if (typeof _exception != "undefined") {
+		$.each($(this.markers).data(),function(i, e) {
+			if (jQuery.inArray(e.id, _exception)<0) e.marker.setVisible(false);
+		});
+	} else {
+		$.each($(this.markers).data(),function(i, e) {
+			e.marker.setVisible(false);
+		});
+	}
+};
 VhplabMap.prototype.initialize = function(_opts) {
 	if (typeof _opts.offset != "undefined") this.offset = _opts.offset;
 	if (typeof _opts.limit != "undefined") this.limit = _opts.limit;
@@ -55,21 +146,6 @@ VhplabMap.prototype.initialize = function(_opts) {
 		this.initMapElements(_opts);
 		if (this.markersURL != '') this.loadMarkers();
 	}
-};
-VhplabMap.prototype.createMap = function(_opts) {
-	var mapDiv = document.getElementById(_opts.id);
-	var mapOptions = {
-		zoom: _opts.zoom,
-		center: new google.maps.LatLng(_opts.latitude, _opts.longitude),
-		disableDefaultUI: true,
-		mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'custom_map']
-	};
-	this.map = new google.maps.Map(mapDiv, mapOptions);
-};
-VhplabMap.prototype.createStyle = function(_opts, _data) {
-	var style = new google.maps.StyledMapType(_data, {name: "custom"});
-	this.map.mapTypes.set('custom_map', style);
-	this.map.setMapTypeId('custom_map');
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
 	// Max Zoom Service
@@ -99,93 +175,12 @@ VhplabMap.prototype.loadMarkers = function() {
 		self.addMarkers(data[0]);
 	});					
 };
-VhplabMap.prototype.addMarkers = function(_data, _callback) {
-	var n = this.offset;
-	var self = this;
-	var count = $(_data.markers).length - 1;
-	var path = _data.link;
-	$.each(_data.markers, function(i, marker) {
-		n++;
-		self.addMarker(path, marker);
-		if(i==count) {
-			var loadded = self.markerList.length;
-			self.bindActions();
-			if (_callback) _callback();
-		}
-	});
-};
-VhplabMap.prototype.addMarker = function(_path, _data) {
-	var marker = new VhplabMarker();
-	marker.loadBasicData(_path, _data, this);
-	marker.setMap(this.map);
-	$(this.markers).data('marker_'+marker.id, marker);
-	this.markerList.push(marker.id);
-};
-VhplabMap.prototype.hideMarkers = function(_exception) {
-	if (typeof _exception != "undefined") {
-		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _exception)<0) e.marker.setVisible(false);
-		});
-	} else {
-		$.each($(this.markers).data(),function(i, e) {
-			e.marker.setVisible(false);
-		});
-	}
-};
-VhplabMap.prototype.showMarkers = function(_exception) {
-	if (typeof _exception != "undefined") {
-		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _exception)>=0) e.marker.setVisible(true);
-		});
-	} else {
-		$.each($(this.markers).data(),function(i, e) {
-			e.marker.setVisible(true);
-		});
-	}
-};
-VhplabMap.prototype.bindActions = function() {
-	if (this.open) {
-		var marker = $(this.markers).data('marker_'+this.open);
-		marker.click();
-	}
-};
-VhplabMap.prototype.codeAddress = function(_address) {
-	self = this;
-	this.geocoder.geocode( { 'address': _address}, function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {
-			self.map.setCenter(results[0].geometry.location);
-			self.clickableMarker.setPosition(results[0].geometry.location);
-			$("#Vhplab_latitude").val(results[0].geometry.location.lat());
-			$("#Vhplab_longitude").val(results[0].geometry.location.lng());
-		} else {
-      		alert('Geocode was not successful for the following reason: ' + status);
-		}
-	});
-};
-VhplabMap.prototype.addClickListener = function(_opts) {
-	var self = this;
-	this.clickListener = google.maps.event.addListener(this.map, 'click', function(e) {
-		self.clickableMarker.setPosition(e.latLng);
-        self.clickableMarker.setVisible(true);
-		self.map.panTo(e.latLng);
-		$(self.latitudeTag).val(e.latLng.lat());
-		$(self.longitudeTag).val(e.latLng.lng());
-		$(self.zoomTag).val(self.map.getZoom());
-	});
-};
-VhplabMap.prototype.addZoomListener = function(_opts) {
-	var self = this;
-	this.zoomListener = google.maps.event.addListener(this.map, 'zoom_changed', function(e) {
-		var zoom = self.map.getZoom();
-		$(self.zoomTag).val(zoom);
-	});
+VhplabMap.prototype.removeClickListener = function(_opts) {
+	google.maps.event.removeListener(this.clickListener);
 };
 VhplabMap.prototype.removeListeners = function() {
 	google.maps.event.removeListener(this.clickListener);
 	google.maps.event.removeListener(this.zoomListener);
-};
-VhplabMap.prototype.removeClickListener = function(_opts) {
-	google.maps.event.removeListener(this.clickListener);
 };
 VhplabMap.prototype.removeZoomListener = function(_opts) {
 	google.maps.event.removeListener(this.zoomListener);
@@ -213,10 +208,15 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		$(self.zoomTag).val(this.map.getZoom());
 	}
 };
-VhplabMap.prototype.closeOpenMarker = function() {
-	if(this.open) {
-		var open = $(this.markers).data('marker_'+this.open);
-		open.closeInfoWindow();
+VhplabMap.prototype.showMarkers = function(_exception) {
+	if (typeof _exception != "undefined") {
+		$.each($(this.markers).data(),function(i, e) {
+			if (jQuery.inArray(e.id, _exception)>=0) e.marker.setVisible(true);
+		});
+	} else {
+		$.each($(this.markers).data(),function(i, e) {
+			e.marker.setVisible(true);
+		});
 	}
 };
 VhplabMap.prototype.updateDistances = function(lat, lng) {
@@ -256,6 +256,59 @@ function VhplabMarker() {
 	this.parent = null;
 	this.clickListener;
 };
+VhplabMarker.prototype.click = function() {
+	if(!this.open) {
+		var self = this;
+		if (this.loadded) {
+			this.openInfoWindow();
+		} else {
+			// get URL via alert(this.json);
+			$.getJSON(this.json, function(data) {
+				$.each(data[0].marker, function(i, marker){
+					self.loadWindowData(marker);
+					self.openInfoWindow();
+				});
+			});
+		}
+	}
+};
+VhplabMarker.prototype.closeInfoWindow = function() {
+	if (this.open) {
+		this.infoWindow.close();
+		this.open = false;
+		this.parent.open = false;
+	}
+};
+VhplabMarker.prototype.initialize = function(_path, _opts) {
+	typeof _opts.id != "undefined" ? this.id = parseInt(_opts.id) : this.id = 0;
+	typeof _opts.json != "undefined" ? this.json = _path + _opts.json : this.json = "";
+	typeof _opts.lat != "undefined" ? this.lat = parseFloat(_opts.lat) : this.lat = 0.0;
+	typeof _opts.lng != "undefined" ? this.lng = parseFloat(_opts.lng) : this.lng = 0.0;
+	typeof _opts.zoom != "undefined" ? this.zoom = parseInt(_opts.zoom) : this.zoom = 0;
+	typeof _opts.titre != "undefined" ? this.titre = _opts.titre : this.titre = "";
+	typeof _opts.soustitre != "undefined" ? this.soustitre = _opts.soustitre : this.soustitre = "";
+	typeof _opts.icon.url != "undefined" ? this.icon = _path + _opts.icon.url : this.icon = false;
+	this.parent = _parent;
+	this.marker.setOptions({
+		position: new google.maps.LatLng(this.lat, this.lng),
+		optimized: false
+	});
+	if (typeof _data.icon != "undefined") {
+		var width, height;
+		typeof _data.icon.width != "undefined" ? width = parseInt(_data.icon.width) : width = 32;
+		typeof _data.icon.height != "undefined" ? height = parseInt(_data.icon.height) : height = 32;
+    	this.marker.setIcon({
+			url: this.icon,
+			size: new google.maps.Size(width, height),
+			scaledSize: new google.maps.Size(width/2, height/2),
+			anchor: new google.maps.Point(width/4, height/2),
+		});
+	}
+	var self = this;
+	this.clickListener = google.maps.event.addListener(this.marker, 'click', function() {
+		self.click();
+	});
+};
 VhplabMarker.prototype.loadBasicData = function(_path, _data, _parent) {
 	typeof _data.id != "undefined" ? this.id = parseInt(_data.id) : this.id = 0;
 	typeof _data.json != "undefined" ? this.json = _path + _data.json : this.json = "";
@@ -287,43 +340,6 @@ VhplabMarker.prototype.loadBasicData = function(_path, _data, _parent) {
 	var self = this;
 	this.clickListener = google.maps.event.addListener(this.marker, 'click', function() {
 		self.click();
-	});
-};
-VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
-	this.data = {};
-	this.loadded = false;
-	this.open = false;
-	this.infoWindow = new InfoBox();
-	typeof _data.lat != "undefined" ? lat = parseFloat(_data.lat) : lat = 0.0;
-	typeof _data.lng != "undefined" ? lng = parseFloat(_data.lng) : lng = 0.0;
-	typeof _data.id != "undefined" ? this.id = parseInt(_data.id) : this.id = 0;
-	typeof _data.json != "undefined" ? this.json = _path + _data.json + '&var_mode=recalcul' : this.json = "";
-	this.parent = _parent;
-	this.marker.setOptions({
-		position: new google.maps.LatLng(lat, lng),
-		optimized: false
-	});
-	// retina icon @2x trick
-    if ((window.devicePixelRatio >= 2)&&(typeof _data.icon2x != "undefined")) {
-    	this.marker.setIcon({
-			url: _path + _data.icon2x,
-			size: new google.maps.Size(80, 80),
-			scaledSize: new google.maps.Size(40, 40),
-			anchor: new google.maps.Point(20, 40),
-		});
-	} else if (typeof _data.icon != "undefined") {
-		this.marker.setIcon({
-			url: _path + _data.icon,
-			size: new google.maps.Size(40, 40),
-			scaledSize: new google.maps.Size(40, 40),
-			anchor: new google.maps.Point(20, 40),
-		});
-	}
-	var self = this;
-	$.getJSON(this.json, function(data) {
-		$.each(data[0].marker, function(i, marker){
-			self.loadWindowData(marker);
-		});
 	});
 };
 VhplabMarker.prototype.loadWindowData = function(_data) {
@@ -365,56 +381,6 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 	});
 	this.loadded = true;
 };
-VhplabMarker.prototype.setMap = function(_map) {
-	this.map = _map;
-	this.marker.setMap(this.map);
-};
-VhplabMarker.prototype.initialize = function(_path, _opts) {
-	typeof _opts.id != "undefined" ? this.id = parseInt(_opts.id) : this.id = 0;
-	typeof _opts.json != "undefined" ? this.json = _path + _opts.json : this.json = "";
-	typeof _opts.lat != "undefined" ? this.lat = parseFloat(_opts.lat) : this.lat = 0.0;
-	typeof _opts.lng != "undefined" ? this.lng = parseFloat(_opts.lng) : this.lng = 0.0;
-	typeof _opts.zoom != "undefined" ? this.zoom = parseInt(_opts.zoom) : this.zoom = 0;
-	typeof _opts.titre != "undefined" ? this.titre = _opts.titre : this.titre = "";
-	typeof _opts.soustitre != "undefined" ? this.soustitre = _opts.soustitre : this.soustitre = "";
-	typeof _opts.icon.url != "undefined" ? this.icon = _path + _opts.icon.url : this.icon = false;
-	this.parent = _parent;
-	this.marker.setOptions({
-		position: new google.maps.LatLng(this.lat, this.lng),
-		optimized: false
-	});
-	if (typeof _data.icon != "undefined") {
-		var width, height;
-		typeof _data.icon.width != "undefined" ? width = parseInt(_data.icon.width) : width = 32;
-		typeof _data.icon.height != "undefined" ? height = parseInt(_data.icon.height) : height = 32;
-    	this.marker.setIcon({
-			url: this.icon,
-			size: new google.maps.Size(width, height),
-			scaledSize: new google.maps.Size(width/2, height/2),
-			anchor: new google.maps.Point(width/4, height/2),
-		});
-	}
-	var self = this;
-	this.clickListener = google.maps.event.addListener(this.marker, 'click', function() {
-		self.click();
-	});
-};
-VhplabMarker.prototype.click = function() {
-	if(!this.open) {
-		var self = this;
-		if (this.loadded) {
-			this.openInfoWindow();
-		} else {
-			// get URL via alert(this.json);
-			$.getJSON(this.json, function(data) {
-				$.each(data[0].marker, function(i, marker){
-					self.loadWindowData(marker);
-					self.openInfoWindow();
-				});
-			});
-		}
-	}
-};
 VhplabMarker.prototype.openInfoWindow = function() {
 	if(this.parent.open) {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
@@ -424,13 +390,6 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	this.open = true;
 	this.parent.open = this.id;
 };
-VhplabMarker.prototype.closeInfoWindow = function() {
-	if (this.open) {
-		this.infoWindow.close();
-		this.open = false;
-		this.parent.open = false;
-	}
-};
 VhplabMarker.prototype.setDistance = function(refLat, refLng) {
 	var R = 6371; // Radius of the Earth in km
   	var dLat = (refLat - this.lat) * Math.PI / 180;
@@ -439,6 +398,47 @@ VhplabMarker.prototype.setDistance = function(refLat, refLng) {
   	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   	var d = R * c *1000;
 	this.distance = d;
+};
+VhplabMarker.prototype.setMap = function(_map) {
+	this.map = _map;
+	this.marker.setMap(this.map);
+};
+VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
+	this.data = {};
+	this.loadded = false;
+	this.open = false;
+	this.infoWindow = new InfoBox();
+	typeof _data.lat != "undefined" ? lat = parseFloat(_data.lat) : lat = 0.0;
+	typeof _data.lng != "undefined" ? lng = parseFloat(_data.lng) : lng = 0.0;
+	typeof _data.id != "undefined" ? this.id = parseInt(_data.id) : this.id = 0;
+	typeof _data.json != "undefined" ? this.json = _path + _data.json + '&var_mode=recalcul' : this.json = "";
+	this.parent = _parent;
+	this.marker.setOptions({
+		position: new google.maps.LatLng(lat, lng),
+		optimized: false
+	});
+	// retina icon @2x trick
+    if ((window.devicePixelRatio >= 2)&&(typeof _data.icon2x != "undefined")) {
+    	this.marker.setIcon({
+			url: _path + _data.icon2x,
+			size: new google.maps.Size(80, 80),
+			scaledSize: new google.maps.Size(40, 40),
+			anchor: new google.maps.Point(20, 40),
+		});
+	} else if (typeof _data.icon != "undefined") {
+		this.marker.setIcon({
+			url: _path + _data.icon,
+			size: new google.maps.Size(40, 40),
+			scaledSize: new google.maps.Size(40, 40),
+			anchor: new google.maps.Point(20, 40),
+		});
+	}
+	var self = this;
+	$.getJSON(this.json, function(data) {
+		$.each(data[0].marker, function(i, marker){
+			self.loadWindowData(marker);
+		});
+	});
 };
 
 // ************ //
@@ -478,6 +478,38 @@ function InfoBox(_opts) {
 	this.fixedWidthSet_ = true;
 }
 InfoBox.prototype = new google.maps.OverlayView();
+InfoBox.prototype.addClickHandler_ = function () {
+	this.closeListener_ = google.maps.event.addDomListener(this.close_, "click", this.getCloseClickHandler_());
+};
+InfoBox.prototype.bindActions = function(_content) {
+	$('a.fancybox', this.div_).click(function(){
+		var img = $(this).attr('href');
+		$.fancybox({ 'href' : img });
+		return false;
+	});
+};
+InfoBox.prototype.close = function () {
+	var i;
+	if (this.closeListener_) {
+		google.maps.event.removeListener(this.closeListener_);
+		this.closeListener_ = null;
+	}
+	if (this.eventListeners_) {
+		for (i = 0; i < this.eventListeners_.length; i++) {
+			google.maps.event.removeListener(this.eventListeners_[i]);
+		}
+		this.eventListeners_ = null;
+	}
+	if (this.moveListener_) {
+		google.maps.event.removeListener(this.moveListener_);
+		this.moveListener_ = null;
+	}
+	if (this.contextListener_) {
+		google.maps.event.removeListener(this.contextListener_);
+		this.contextListener_ = null;
+	}
+	this.setMap(null);
+};
 InfoBox.prototype.createInfoBoxDiv_ = function () {
 	var i;
 	var events;
@@ -544,8 +576,23 @@ InfoBox.prototype.createInfoBoxDiv_ = function () {
 		this.bindActions();
 	}
 };
-InfoBox.prototype.addClickHandler_ = function () {
-	this.closeListener_ = google.maps.event.addDomListener(this.close_, "click", this.getCloseClickHandler_());
+InfoBox.prototype.draw = function () {
+	this.createInfoBoxDiv_();
+	var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
+	this.div_.style.left = (pixPosition.x + this.pixelOffset_.width) + "px";
+	if (this.alignBottom_) {
+		this.div_.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + "px";
+	} else {
+		this.div_.style.top = (pixPosition.y + this.pixelOffset_.height) + "px";
+	}
+	if (this.isHidden_) {
+		this.div_.style.visibility = "hidden";
+	} else {
+		this.div_.style.visibility = "visible";
+	}
+};
+InfoBox.prototype.getArrowOffset = function () {
+	return this.arrowOffset;
 };
 InfoBox.prototype.getCloseClickHandler_ = function () {
 	var me = this;
@@ -561,6 +608,45 @@ InfoBox.prototype.getCloseClickHandler_ = function () {
 		google.maps.event.trigger(me, "closeclick");
 		me.close();
 	};
+};
+InfoBox.prototype.getContent = function () {
+	return this.content_;
+};
+InfoBox.prototype.getPosition = function () {
+	return this.position_;
+};
+InfoBox.prototype.getVisible = function () {
+	var isVisible;
+	if ((typeof this.getMap() === "undefined") || (this.getMap() === null)) {
+		isVisible = false;
+	} else {
+		isVisible = !this.isHidden_;
+	}
+	return isVisible;
+};
+InfoBox.prototype.getZIndex = function () {
+	return this.zIndex_;
+};
+InfoBox.prototype.hide = function () {
+	this.isHidden_ = true;
+	if (this.div_) this.div_.style.visibility = "hidden";
+};
+InfoBox.prototype.onRemove = function () {
+	if (this.div_) {
+		this.div_.parentNode.removeChild(this.div_);
+		this.div_ = null;
+	}
+};
+InfoBox.prototype.open = function (map, anchor) {
+	var me = this;
+	if (anchor) {
+		this.position_ = anchor.getPosition();
+		this.moveListener_ = google.maps.event.addListener(anchor, "position_changed", function () {
+			me.setPosition(this.getPosition());
+		});
+	}
+	this.setMap(map);
+	if (this.div_) this.panBox_();
 };
 InfoBox.prototype.panBox_ = function (disablePan) {
 	var map;
@@ -611,42 +697,8 @@ InfoBox.prototype.panBox_ = function (disablePan) {
 		}
 	}
 };
-InfoBox.prototype.onRemove = function () {
-	if (this.div_) {
-		this.div_.parentNode.removeChild(this.div_);
-		this.div_ = null;
-	}
-};
-InfoBox.prototype.draw = function () {
-	this.createInfoBoxDiv_();
-	var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
-	this.div_.style.left = (pixPosition.x + this.pixelOffset_.width) + "px";
-	if (this.alignBottom_) {
-		this.div_.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + "px";
-	} else {
-		this.div_.style.top = (pixPosition.y + this.pixelOffset_.height) + "px";
-	}
-	if (this.isHidden_) {
-		this.div_.style.visibility = "hidden";
-	} else {
-		this.div_.style.visibility = "visible";
-	}
-};
-InfoBox.prototype.setOptions = function (_opts) {
-	if (typeof _opts.content !== "undefined") this.setContent(_opts.content);
-	if (typeof _opts.width !== "undefined") this.width = _opts.width;
-	if (typeof _opts.arrowOffset != "undefined") this.arrowOffse = _opts.arrowOffset;
-	if (typeof _opts.id != "undefined") this.id = _opts.id;
-	if (typeof _opts.disableAutoPan !== "undefined") this.disableAutoPan_ = _opts.disableAutoPan;
-	if (typeof _opts.pixelOffset !== "undefined") this.pixelOffset_ = _opts.pixelOffset;
-	if (typeof _opts.alignBottom !== "undefined") this.alignBottom_ = _opts.alignBottom;
-	if (typeof _opts.position !== "undefined") this.setPosition(_opts.position);
-	if (typeof _opts.zIndex !== "undefined") this.setZIndex(_opts.zIndex);
-	if (typeof _opts.infoBoxClearance !== "undefined") this.infoBoxClearance_ = _opts.infoBoxClearance;
-	if (typeof _opts.isHidden !== "undefined") this.isHidden_ = _opts.isHidden;
-	if (typeof _opts.visible !== "undefined") this.isHidden_ = !_opts.visible;
-	if (typeof _opts.enableEventPropagation !== "undefined") this.enableEventPropagation_ = _opts.enableEventPropagation;
-	if (this.div_) this.draw();
+InfoBox.prototype.setArrowOffset = function(_offset) {
+	this.arrowOffset = _offset;
 };
 InfoBox.prototype.setContent = function (_content) {
 	this.content_ = _content;
@@ -682,6 +734,22 @@ InfoBox.prototype.setContent = function (_content) {
 	*/
 	google.maps.event.trigger(this, "content_changed");
 };
+InfoBox.prototype.setOptions = function (_opts) {
+	if (typeof _opts.content !== "undefined") this.setContent(_opts.content);
+	if (typeof _opts.width !== "undefined") this.width = _opts.width;
+	if (typeof _opts.arrowOffset != "undefined") this.arrowOffse = _opts.arrowOffset;
+	if (typeof _opts.id != "undefined") this.id = _opts.id;
+	if (typeof _opts.disableAutoPan !== "undefined") this.disableAutoPan_ = _opts.disableAutoPan;
+	if (typeof _opts.pixelOffset !== "undefined") this.pixelOffset_ = _opts.pixelOffset;
+	if (typeof _opts.alignBottom !== "undefined") this.alignBottom_ = _opts.alignBottom;
+	if (typeof _opts.position !== "undefined") this.setPosition(_opts.position);
+	if (typeof _opts.zIndex !== "undefined") this.setZIndex(_opts.zIndex);
+	if (typeof _opts.infoBoxClearance !== "undefined") this.infoBoxClearance_ = _opts.infoBoxClearance;
+	if (typeof _opts.isHidden !== "undefined") this.isHidden_ = _opts.isHidden;
+	if (typeof _opts.visible !== "undefined") this.isHidden_ = !_opts.visible;
+	if (typeof _opts.enableEventPropagation !== "undefined") this.enableEventPropagation_ = _opts.enableEventPropagation;
+	if (this.div_) this.draw();
+};
 InfoBox.prototype.setPosition = function (_latlng) {
 	this.position_ = _latlng;
 	if (this.div_) this.draw();
@@ -691,6 +759,13 @@ InfoBox.prototype.setPosition = function (_latlng) {
 	* @event
 	*/
 	google.maps.event.trigger(this, "position_changed");
+};
+InfoBox.prototype.setVisible = function (_isVisible) {
+	this.isHidden_ = !_isVisible;
+	if (this.div_) this.div_.style.visibility = (this.isHidden_ ? "hidden" : "visible");
+};
+InfoBox.prototype.setWidth = function(_width) {
+	this.width = _width;
 };
 InfoBox.prototype.setZIndex = function (_index) {
 	this.zIndex_ = _index;
@@ -702,84 +777,9 @@ InfoBox.prototype.setZIndex = function (_index) {
 	*/
 	google.maps.event.trigger(this, "zindex_changed");
 };
-InfoBox.prototype.setVisible = function (_isVisible) {
-	this.isHidden_ = !_isVisible;
-	if (this.div_) this.div_.style.visibility = (this.isHidden_ ? "hidden" : "visible");
-};
-InfoBox.prototype.setWidth = function(_width) {
-	this.width = _width;
-};
-InfoBox.prototype.setArrowOffset = function(_offset) {
-	this.arrowOffset = _offset;
-};
-InfoBox.prototype.getContent = function () {
-	return this.content_;
-};
-InfoBox.prototype.getPosition = function () {
-	return this.position_;
-};
-InfoBox.prototype.getZIndex = function () {
-	return this.zIndex_;
-};
-InfoBox.prototype.getVisible = function () {
-	var isVisible;
-	if ((typeof this.getMap() === "undefined") || (this.getMap() === null)) {
-		isVisible = false;
-	} else {
-		isVisible = !this.isHidden_;
-	}
-	return isVisible;
-};
-InfoBox.prototype.getArrowOffset = function () {
-	return this.arrowOffset;
-};
 InfoBox.prototype.show = function () {
 	this.isHidden_ = false;
 	if (this.div_) this.div_.style.visibility = "visible";
-};
-InfoBox.prototype.hide = function () {
-	this.isHidden_ = true;
-	if (this.div_) this.div_.style.visibility = "hidden";
-};
-InfoBox.prototype.open = function (map, anchor) {
-	var me = this;
-	if (anchor) {
-		this.position_ = anchor.getPosition();
-		this.moveListener_ = google.maps.event.addListener(anchor, "position_changed", function () {
-			me.setPosition(this.getPosition());
-		});
-	}
-	this.setMap(map);
-	if (this.div_) this.panBox_();
-};
-InfoBox.prototype.close = function () {
-	var i;
-	if (this.closeListener_) {
-		google.maps.event.removeListener(this.closeListener_);
-		this.closeListener_ = null;
-	}
-	if (this.eventListeners_) {
-		for (i = 0; i < this.eventListeners_.length; i++) {
-			google.maps.event.removeListener(this.eventListeners_[i]);
-		}
-		this.eventListeners_ = null;
-	}
-	if (this.moveListener_) {
-		google.maps.event.removeListener(this.moveListener_);
-		this.moveListener_ = null;
-	}
-	if (this.contextListener_) {
-		google.maps.event.removeListener(this.contextListener_);
-		this.contextListener_ = null;
-	}
-	this.setMap(null);
-};
-InfoBox.prototype.bindActions = function(_content) {
-	$('a.fancybox', this.div_).click(function(){
-		var img = $(this).attr('href');
-		$.fancybox({ 'href' : img });
-		return false;
-	});
 };
 
 //***********
@@ -791,10 +791,6 @@ function VhplabZoomControl() {
 	this.zoomOutButton;
 	this.zoomOutListener;
 	this.zoomInListener;
-};
-VhplabZoomControl.prototype.initialize = function(_map, _service) {
-	var control = this;
-	control.appendTo(_map);
 };
 VhplabZoomControl.prototype.appendTo = function(_map) {
 	var control = this;
@@ -821,6 +817,10 @@ VhplabZoomControl.prototype.appendTo = function(_map) {
 	this.controlUI.appendChild(this.zoomOutButton);
 	this.controlUI.index = 1;
 	_map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.controlUI);
+};
+VhplabZoomControl.prototype.initialize = function(_map, _service) {
+	var control = this;
+	control.appendTo(_map);
 };
 VhplabZoomControl.prototype.zoomIn = function(_map) {
 	_map.setZoom(_map.getZoom() + 1);

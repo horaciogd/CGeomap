@@ -25,6 +25,14 @@ VhplabMap.prototype.bindActions = function() {
 // ************ //
 // Vhplab Marker
 // ************ //
+VhplabMarker.prototype.appendContent = function() {
+	$('#content .wrapper').empty();
+	$('#content .wrapper').append('<hgroup></hgroup>');
+	$('#content .wrapper hgroup').append('<h1>'+ this.titre +'</h1>');
+	$('#content .wrapper hgroup').append('<h2>'+ $(this.data).data('soustitre') +'</h2>');
+	$('#content .wrapper').append('<div class="texte">'+ $(this.data).data('texte') +'</div>');
+	$('#content .wrapper a.fancybox').fancybox();
+};
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
@@ -61,14 +69,6 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	this.parent.open = this.id;
 	var base_fb_url = $('#navigation .user .facebook').data('base_href');
 	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
-};
-VhplabMarker.prototype.appendContent = function() {
-	$('#content .wrapper').empty();
-	$('#content .wrapper').append('<hgroup></hgroup>');
-	$('#content .wrapper hgroup').append('<h1>'+ this.titre +'</h1>');
-	$('#content .wrapper hgroup').append('<h2>'+ $(this.data).data('soustitre') +'</h2>');
-	$('#content .wrapper').append('<div class="texte">'+ $(this.data).data('texte') +'</div>');
-	$('#content .wrapper a.fancybox').fancybox();
 };
 
 // ************ //
