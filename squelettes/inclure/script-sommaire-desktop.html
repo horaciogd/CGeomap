@@ -28,11 +28,12 @@
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
 						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE',</BOUCLE_get_map>
 						limit: 300,
-						id: 'cgeomap',[
-						zoom: (#CONFIG{vhplab/default_zoom}),][
-						latitude: (#CONFIG{vhplab/default_latitude}),][
+						id: 'cgeomap'[,
+						zoom: (#CONFIG{vhplab/default_zoom})][,
+						latitude: (#CONFIG{vhplab/default_latitude})][,
 						longitude: (#CONFIG{vhplab/default_longitude})][,
-						open: (#ENV{nodo}|?{#ENV{nodo},1})]
+						open: (#ENV{nodo}|?{#ENV{nodo},1})][,
+						url_article: '(#URL_PAGE{ajax-content-squelette}|url_absolue)']
 					}
 				});
 			});

@@ -26,12 +26,12 @@ VhplabMap.prototype.bindActions = function() {
 // Vhplab Marker
 // ************ //
 VhplabMarker.prototype.appendContent = function() {
-	$('#content .wrapper').empty();
-	$('#content .wrapper').append('<hgroup></hgroup>');
-	$('#content .wrapper hgroup').append('<h1>'+ $(this.data).data('titre') +'</h1>');
-	$('#content .wrapper hgroup').append('<h2>'+ $(this.data).data('soustitre') +'</h2>');
-	$('#content .wrapper').append('<div class="texte">'+ $(this.data).data('texte') +'</div>');
-	$('#content .wrapper a.fancybox').fancybox();
+	/* title & subtitle */
+	$('#article .titre').html($(this.data).data('titre'));
+	$('#article .soustitre').html($(this.data).data('soustitre'));
+	/* texte */
+	$('#article .texte').html($(this.data).data('texte'));
+	$('#article .texte a.fancybox').fancybox();
 };
 VhplabMarker.prototype.bindPopupActions = function(_content) {
 	$('a.fancybox', _content).click(function(){

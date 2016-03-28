@@ -1,0 +1,15 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})][
+
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+				<article id="article">
+					<header>
+						<hgroup>
+							<h1 class="titre"></h1>
+							<h2 class="soustitre"></h2>
+						</hgroup>
+					</header>
+					<div class="texte">
+					</div><!-- texte -->
+				</article>
