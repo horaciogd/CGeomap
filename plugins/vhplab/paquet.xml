@@ -4,7 +4,7 @@
 	version="0.0.1"
 	schema="0.0.1"
 	etat="dev"
-	compatibilite="[3.0.0;3.0.*]"
+	compatibilite="[3.0.0;3.*]"
 	logo="images/vhplab.png"
 	documentation="http://www.vhplab.net/"
 >
