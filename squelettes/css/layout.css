@@ -10,14 +10,14 @@
    Loading
 -------------------- */
 
-#loading { z-index: 4; position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+#loading { z-index: 11; position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
 
 
 /* --------------------
    Navigation
 -------------------- */
 
-#navigation { position: absolute; z-index: 3; }
+#navigation { position: absolute; z-index: 10; }
 #navigation .wrapper { position: relative; }
 
 
@@ -25,7 +25,7 @@
    Content
 -------------------- */
 
-#content { position: absolute; z-index: 1; }
+#content { position: absolute; z-index: 9; }
 #content .wrapper { position: relative; height: 100%; overflow-x: hidden; }
 
 
@@ -40,5 +40,5 @@
    Footer
 -------------------- */
 
-footer { position: absolute; z-index: 1; }
+footer { position: absolute; z-index: 8; }
 footer .wrapper { position: relative; }

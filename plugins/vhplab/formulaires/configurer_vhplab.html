@@ -12,15 +12,10 @@
 								zoom: [(#ENV**{default_zoom}|?{[(#ENV**{default_zoom})], 12})],
 								latitudeTag: '#default_latitude',
 								longitudeTag: '#default_longitude',
-								zoomTag: '#default_zoom',
+								zoomTag: '#default_zoom'[,
+								default_icon: '(#CHEMIN{images/icons/default_icon.png}|url_absolue)'],
 								formulaire: true,
 							});
-							[configurer_map.clickableMarker.setIcon({
-								url: '(#CHEMIN{images/icons/default_icon.png}|url_absolue)',
-								size: new google.maps.Size(120, 120),
-								scaledSize: new google.maps.Size(60, 60),
-								anchor: new google.maps.Point(30, 60),
-							});]
 						};
 						$(function(){
 							init();

@@ -6,7 +6,7 @@
  *
  * Author:
  * Horacio González
- * (c) 2015 - Distribuído baixo licencia GNU/GPL
+ * (c) 2016 - Distribuído baixo licencia GNU/GPL
  *
  */
 
@@ -28,10 +28,17 @@ VhplabMap.prototype.bindActions = function() {
 VhplabMarker.prototype.appendContent = function() {
 	$('#content .wrapper').empty();
 	$('#content .wrapper').append('<hgroup></hgroup>');
-	$('#content .wrapper hgroup').append('<h1>'+ this.titre +'</h1>');
+	$('#content .wrapper hgroup').append('<h1>'+ $(this.data).data('titre') +'</h1>');
 	$('#content .wrapper hgroup').append('<h2>'+ $(this.data).data('soustitre') +'</h2>');
 	$('#content .wrapper').append('<div class="texte">'+ $(this.data).data('texte') +'</div>');
 	$('#content .wrapper a.fancybox').fancybox();
+};
+VhplabMarker.prototype.bindPopupActions = function(_content) {
+	$('a.fancybox', _content).click(function(){
+		var img = $(this).attr('href');
+		$.fancybox({ 'href' : img });
+		return false;
+	});
 };
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
@@ -64,20 +71,10 @@ VhplabMarker.prototype.openInfoWindow = function() {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
 		open.closeInfoWindow();
 	}
-	this.infoWindow.open(this.map, this.marker);
+	this.parent.map.setView([this.lat, this.lng], this.zoom);
+	this.infoWindow.openOn(this.parent.map);
 	this.open = true;
 	this.parent.open = this.id;
 	var base_fb_url = $('#navigation .user .facebook').data('base_href');
 	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
-};
-
-// ************ //
-// InfoBox
-// ************ //
-InfoBox.prototype.bindActions = function(_content) {
-	$('a.fancybox', this.div_).click(function(){
-		var img = $(this).attr('href');
-		$.fancybox({ 'href' : img });
-		return false;
-	});
 };

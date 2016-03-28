@@ -4,7 +4,7 @@
  *
  * Author:
  * Horacio González
- * (c) 2015 - Distribuído baixo licencia GNU/GPL
+ * (c) 2016 - Distribuído baixo licencia GNU/GPL
  *
  */
 
@@ -20,10 +20,12 @@ function VhplabMap() {
 	this.markers = {};
 	this.open = false;
 	this.totalMarkers = 0;
-	this.clickableMarker = null;
-	this.clickListener = null;
-	this.zoomListener = null;
-	this.msgWindow = new InfoBox();
+	this.clickableMarker = L.marker();
+	this.msgWindow = L.popup({
+		maxWidth: 370,
+		minWidth: 370,
+		offset: [0, -8]
+	});
 	this.baseURL = ''; 
 	this.markersURL = '';
 	this.offset = 0;
@@ -32,21 +34,9 @@ function VhplabMap() {
 	this.longitudeTag = "#vhplab_longitude";
 	this.zoomTag = "#vhplab_zoom";
 };
-VhplabMap.prototype.addClickListener = function(_opts) {
-	var self = this;
-	this.clickListener = google.maps.event.addListener(this.map, 'click', function(e) {
-		self.clickableMarker.setPosition(e.latLng);
-        self.clickableMarker.setVisible(true);
-		self.map.panTo(e.latLng);
-		$(self.latitudeTag).val(e.latLng.lat());
-		$(self.longitudeTag).val(e.latLng.lng());
-		$(self.zoomTag).val(self.map.getZoom());
-	});
-};
 VhplabMap.prototype.addMarker = function(_path, _data) {
 	var marker = new VhplabMarker();
-	marker.loadBasicData(_path, _data, this);
-	marker.setMap(this.map);
+	marker.initialize(_path, _data, this);
 	$(this.markers).data('marker_'+marker.id, marker);
 	this.markerList.push(marker.id);
 };
@@ -55,21 +45,15 @@ VhplabMap.prototype.addMarkers = function(_data, _callback) {
 	var self = this;
 	var count = $(_data.markers).length - 1;
 	var path = _data.link;
+	// Loop through each marker data element
 	$.each(_data.markers, function(i, marker) {
 		n++;
-		self.addMarker(path, marker);
+		self.addMarker(path, marker, n);
 		if(i==count) {
 			var loadded = self.markerList.length;
 			self.bindActions();
 			if (_callback) _callback();
 		}
-	});
-};
-VhplabMap.prototype.addZoomListener = function(_opts) {
-	var self = this;
-	this.zoomListener = google.maps.event.addListener(this.map, 'zoom_changed', function(e) {
-		var zoom = self.map.getZoom();
-		$(self.zoomTag).val(zoom);
 	});
 };
 VhplabMap.prototype.bindActions = function() {
@@ -78,17 +62,28 @@ VhplabMap.prototype.bindActions = function() {
 		marker.click();
 	}
 };
+VhplabMap.prototype.clickListener = function(_e) {
+	this.clickableMarker.setLatLng(_e.latlng);
+	this.clickableMarker.setOpacity(1);
+	this.map.panTo(_e.latlng);
+	$(this.latitudeTag).val(_e.latlng.lat);
+	$(this.longitudeTag).val(_e.latlng.lng);
+	$(this.zoomTag).val(this.map.getZoom());
+};
 VhplabMap.prototype.codeAddress = function(_address) {
-	self = this;
-	this.geocoder.geocode( { 'address': _address}, function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {
+	var self = this;
+	googleGeocodeProvider.GetLocations( _address, function ( data ) {
+  		// in data are your results with x, y, label and bounds (currently availabel for google maps provider only)
+  		/*
+  		if (status == google.maps.GeocoderStatus.OK) {
 			self.map.setCenter(results[0].geometry.location);
 			self.clickableMarker.setPosition(results[0].geometry.location);
-			$("#Vhplab_latitude").val(results[0].geometry.location.lat());
-			$("#Vhplab_longitude").val(results[0].geometry.location.lng());
+			$("#vhplab_latitude").val(results[0].geometry.location.lat());
+			$("#vhplab_longitude").val(results[0].geometry.location.lng());
 		} else {
       		alert('Geocode was not successful for the following reason: ' + status);
 		}
+		*/
 	});
 };
 VhplabMap.prototype.closeOpenMarker = function() {
@@ -98,28 +93,24 @@ VhplabMap.prototype.closeOpenMarker = function() {
 	}
 };
 VhplabMap.prototype.createMap = function(_opts) {
-	var mapDiv = document.getElementById(_opts.id);
-	var mapOptions = {
-		zoom: _opts.zoom,
-		center: new google.maps.LatLng(_opts.latitude, _opts.longitude),
-		disableDefaultUI: true,
-		mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'custom_map']
-	};
-	this.map = new google.maps.Map(mapDiv, mapOptions);
-};
-VhplabMap.prototype.createStyle = function(_opts, _data) {
-	var style = new google.maps.StyledMapType(_data, {name: "custom"});
-	this.map.mapTypes.set('custom_map', style);
-	this.map.setMapTypeId('custom_map');
+	this.lat = _opts.latitude;
+	this.lng = _opts.longitude;
+	this.zoom = _opts.zoom;
+	this.map = L.map(_opts.id, { zoomControl: false }).setView([_opts.latitude, _opts.longitude], _opts.zoom);
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		minZoom: 0,
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(this.map);
 };
 VhplabMap.prototype.hideMarkers = function(_exception) {
 	if (typeof _exception != "undefined") {
 		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _exception)<0) e.marker.setVisible(false);
+			if (jQuery.inArray(e.id, _exception)<0) e.marker.setOpacity(0);
 		});
 	} else {
 		$.each($(this.markers).data(),function(i, e) {
-			e.marker.setVisible(false);
+			e.marker.setOpacity(0);
 		});
 	}
 };
@@ -132,39 +123,32 @@ VhplabMap.prototype.initialize = function(_opts) {
 	if (typeof _opts.longitudeTag != "undefined") this.longitudeTag = _opts.longitudeTag;
 	if (typeof _opts.zoomTag != "undefined") this.zoomTag = _opts.zoomTag;
 	if (typeof _opts.open != "undefined") this.open = _opts.open;
-	if ((typeof _opts.custom != "undefined")&&(_opts.custom)) {
-		var self = this;
-		// ger URL via alert(this.baseURL +'spip.php?page=json-styled-map');
-		$.getJSON(this.baseURL +'spip.php?page=json-styled-map', function(data){
-			self.createMap(_opts);
-			self.createStyle(_opts, data);
-			self.initMapElements(_opts);
-			if (self.markersURL != '')  self.loadMarkers();
-		});
-	} else {
-		this.createMap(_opts);
-		this.initMapElements(_opts);
-		if (this.markersURL != '') this.loadMarkers();
-	}
+	this.createMap(_opts);
+	this.initMapElements(_opts);
+	if (this.markersURL != '') this.loadMarkers();
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
 	// Max Zoom Service
-	this.maxZoomService = new google.maps.MaxZoomService();
+	
 	// Map Zoom Custom Control
-	this.ZoomControl = new VhplabZoomControl();
-	this.ZoomControl.initialize(this.map, this.maxZoomService);
+	this.zoomControl = new vhplabZoomControl();
+	this.zoomControl.setParent(this);
+	this.map.addControl(this.zoomControl);
+	
 	// Geocoder
-	this.geocoder = new google.maps.Geocoder();
+	this.geocoder = new L.GeoSearch.Provider.OpenStreetMap();
+	
 	if ((typeof _opts.formulaire != "undefined")&&(_opts.formulaire==true)) {
 		// Clickable Marker
-		var markerOptions = {
-			visible: false,
-			map: this.map
-		};
-		this.clickableMarker = new google.maps.Marker(markerOptions);
-		this.addClickListener(_opts);
-		this.addZoomListener(_opts);
-		this.setInitialMarker(_opts);
+    	this.setInitialMarker(_opts);
+    	// Listeners
+    	var self = this;
+		this.map.on('click', function(_e){
+			self.clickListener(_e);
+		});
+		this.map.on('zoomend', function(_e){
+			self.zoomListener(_e);
+		});
 	}
 };
 VhplabMap.prototype.loadMarkers = function() {
@@ -175,24 +159,30 @@ VhplabMap.prototype.loadMarkers = function() {
 		self.addMarkers(data[0]);
 	});					
 };
-VhplabMap.prototype.removeClickListener = function(_opts) {
-	google.maps.event.removeListener(this.clickListener);
-};
-VhplabMap.prototype.removeListeners = function() {
-	google.maps.event.removeListener(this.clickListener);
-	google.maps.event.removeListener(this.zoomListener);
-};
-VhplabMap.prototype.removeZoomListener = function(_opts) {
-	google.maps.event.removeListener(this.zoomListener);
+VhplabMap.prototype.panOut = function() {
+	this.map.setView([this.lat, this.lng], this.zoom);
 };
 VhplabMap.prototype.setInitialMarker = function(_opts) {
-	var self = this;
+	var url;
+	if (typeof _opts.default_icon != "undefined") {
+		url = _opts.default_icon;
+	} else if (($("#formulaire .icon").attr("src") != "undefined")&&($("#formulaire .icon").attr("src") != "")) {
+		url = $("#formulaire .icon").attr("src");
+	} else {
+		url = this.baseURL + 'plugins/vhplab/images/icons/default_icon.png';
+	}
+	var icon = L.icon({
+		iconUrl: url,
+    	iconRetinaUrl: url,
+    	iconSize: [60, 60],
+		iconAnchor: [30, 60]
+	});
+	this.clickableMarker.setIcon(icon);
 	if ((navigator.geolocation)&&(_opts.latitude==0.0)&&(_opts.longitude==0.0)) {
+		var self = this;
 		navigator.geolocation.getCurrentPosition(function(position) {
-			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            self.map.setCenter(pos);
-			self.clickableMarker.setPosition(pos);
-        	self.clickableMarker.setVisible(true);
+			self.map.setView([position.coords.latitude, position.coords.longitude], self.zoom);
+			self.clickableMarker.setLatLng([position.coords.latitude, position.coords.longitude]);
 			$(self.latitudeTag).val(pos.lat());
 			$(self.longitudeTag).val(pos.lng());
 			$(self.zoomTag).val(self.map.getZoom());
@@ -201,27 +191,28 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		});
 	} else {
 		var pos = this.map.getCenter();
-		this.clickableMarker.setPosition(pos);
-		this.clickableMarker.setVisible(true);
-		$(self.latitudeTag).val(pos.lat());
-		$(self.longitudeTag).val(pos.lng());
-		$(self.zoomTag).val(this.map.getZoom());
+		this.clickableMarker.setLatLng(pos);
+		$(this.latitudeTag).val(pos.lat);
+		$(this.longitudeTag).val(pos.lng);
+		$(this.zoomTag).val(this.map.getZoom());
 	}
+	this.clickableMarker.addTo(this.map);
+	this.clickableMarker.setOpacity(1);
 };
 VhplabMap.prototype.showMarkers = function(_exception) {
 	if (typeof _exception != "undefined") {
 		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _exception)>=0) e.marker.setVisible(true);
+			if (jQuery.inArray(e.id, _exception)>=0) e.marker.setOpacity(1);
 		});
 	} else {
 		$.each($(this.markers).data(),function(i, e) {
-			e.marker.setVisible(true);
+			e.marker.setOpacity(1);
 		});
 	}
 };
-VhplabMap.prototype.updateDistances = function(lat, lng) {
+VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 	$.each($(this.markers).data(), function(name, marker) {
-		marker.setDistance(lat, lng);
+		marker.setDistance(_lat, _lng);
 	});
 	//alert('sort list');
 	var self = this;
@@ -233,28 +224,37 @@ VhplabMap.prototype.updateDistances = function(lat, lng) {
 		return 0;
 	});
 };
+VhplabMap.prototype.zoomListener = function(_opts) {
+	$(this.zoomTag).val(this.map.getZoom());
+};
+
 
 // ************ //
 // Vhplab Marker
 // ************ //
 function VhplabMarker() {
+	this.lat;
+	this.lng;
+	this.zoom;
 	this.id = null;
 	this.json = null;
-	this.lat = 0.0;
-	this.lng = 0.0;
-	this.zoom = 0;
 	this.distance = null;
-	this.titre = '';
-	this.soustitre ='';
-	this.icon ='';
 	this.data = {};
+	this.content;
 	this.loadded = false;
 	this.open = false;
+	this.num = null;
 	this.map = null;
-	this.infoWindow = new InfoBox();
-	this.marker = new google.maps.Marker();
+	this.infoWindow = L.popup({
+		maxWidth: 370,
+		minWidth: 370,
+		offset: [0, 0]
+	});
+	this.marker = L.marker();
 	this.parent = null;
-	this.clickListener;
+};
+VhplabMarker.prototype.bindPopupActions = function(_content) {
+	
 };
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
@@ -274,77 +274,52 @@ VhplabMarker.prototype.click = function() {
 };
 VhplabMarker.prototype.closeInfoWindow = function() {
 	if (this.open) {
-		this.infoWindow.close();
+		this.parent.map.closePopup();
 		this.open = false;
 		this.parent.open = false;
 	}
 };
-VhplabMarker.prototype.initialize = function(_path, _opts) {
+VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	typeof _opts.id != "undefined" ? this.id = parseInt(_opts.id) : this.id = 0;
 	typeof _opts.json != "undefined" ? this.json = _path + _opts.json : this.json = "";
 	typeof _opts.lat != "undefined" ? this.lat = parseFloat(_opts.lat) : this.lat = 0.0;
 	typeof _opts.lng != "undefined" ? this.lng = parseFloat(_opts.lng) : this.lng = 0.0;
 	typeof _opts.zoom != "undefined" ? this.zoom = parseInt(_opts.zoom) : this.zoom = 0;
-	typeof _opts.titre != "undefined" ? this.titre = _opts.titre : this.titre = "";
-	typeof _opts.soustitre != "undefined" ? this.soustitre = _opts.soustitre : this.soustitre = "";
-	typeof _opts.icon.url != "undefined" ? this.icon = _path + _opts.icon.url : this.icon = false;
+	typeof _opts.titre != "undefined" ? $(this.data).data('titre', _opts.titre) : $(this.data).data('titre', "");
+	typeof _opts.soustitre != "undefined" ? $(this.data).data('soustitre', _opts.soustitre) : $(this.data).data('soustitre', "");
 	this.parent = _parent;
-	this.marker.setOptions({
-		position: new google.maps.LatLng(this.lat, this.lng),
-		optimized: false
-	});
-	if (typeof _data.icon != "undefined") {
-		var width, height;
-		typeof _data.icon.width != "undefined" ? width = parseInt(_data.icon.width) : width = 32;
-		typeof _data.icon.height != "undefined" ? height = parseInt(_data.icon.height) : height = 32;
-    	this.marker.setIcon({
-			url: this.icon,
-			size: new google.maps.Size(width, height),
-			scaledSize: new google.maps.Size(width/2, height/2),
-			anchor: new google.maps.Point(width/4, height/2),
+	
+	this.marker.setLatLng([this.lat, this.lng]);
+	this.infoWindow.setContent('');
+	this.infoWindow.setLatLng([this.lat, this.lng]);
+	
+	if (typeof _opts.icon != "undefined") {
+		var width, height, icon;
+		typeof _opts.icon.width != "undefined" ? width = parseInt(_opts.icon.width) : width = 60;
+		typeof _opts.icon.height != "undefined" ? height = parseInt(_opts.icon.height) : height = 60;
+		typeof _opts.icon.url != "undefined" ? icon = _path + _opts.icon.url : icon = 'plugins/vhplab/images/icons/default_icon.png';
+    	var icon = L.icon({
+			iconUrl: icon,
+    		iconRetinaUrl: icon,
+    		iconSize: [width/2, height/2],
+    		iconAnchor: [width/4, height/2]
+		});
+		this.marker.setIcon(icon);
+		L.setOptions(this.infoWindow, {
+			offset: [0, -height/2]
 		});
 	}
+	
+	this.marker.addTo(this.parent.map);
 	var self = this;
-	this.clickListener = google.maps.event.addListener(this.marker, 'click', function() {
-		self.click();
-	});
-};
-VhplabMarker.prototype.loadBasicData = function(_path, _data, _parent) {
-	typeof _data.id != "undefined" ? this.id = parseInt(_data.id) : this.id = 0;
-	typeof _data.json != "undefined" ? this.json = _path + _data.json : this.json = "";
-	typeof _data.lat != "undefined" ? this.lat = parseFloat(_data.lat) : this.lat = 0.0;
-	typeof _data.lng != "undefined" ? this.lng = parseFloat(_data.lng) : this.lng = 0.0;
-	typeof _data.zoom != "undefined" ? this.zoom = parseInt(_data.zoom) : this.zoom = 0;
-	typeof _data.titre != "undefined" ? this.titre = _data.titre : this.titre = "";
-	typeof _data.soustitre != "undefined" ? this.soustitre = _data.soustitre : this.soustitre = "";
-	typeof _data.icon.url != "undefined" ? this.icon = _path + _data.icon.url : this.icon = _path + "";
-	this.parent = _parent;
-	this.marker.setOptions({
-		position: new google.maps.LatLng(this.lat, this.lng),
-		optimized: false
-	});
-	if (typeof _data.icon != "undefined") {
-		var width, height;
-		typeof _data.icon.width != "undefined" ? width = parseInt(_data.icon.width) : width = 32;
-		typeof _data.icon.height != "undefined" ? height = parseInt(_data.icon.height) : height = 32;
-    	this.marker.setIcon({
-			url: this.icon,
-			size: new google.maps.Size(width, height),
-			scaledSize: new google.maps.Size(width/2, height/2),
-			anchor: new google.maps.Point(width/4, height/2),
-		});
-		this.infoWindow.setOptions({
-			pixelOffset: new google.maps.Size(-width/4-this.infoWindow.getArrowOffset()-6, -height/2-12)
-		});
-	}
-	var self = this;
-	this.clickListener = google.maps.event.addListener(this.marker, 'click', function() {
+	this.marker.on('click', function(e) {
 		self.click();
 	});
 };
 VhplabMarker.prototype.loadWindowData = function(_data) {
 	// alert('loadWindowData: '+ JSON.stringify(_data));
 	typeof _data.id_article != "undefined" ? $(this.data).data('id_article', parseInt(_data.id_article)) : $(this.data).data('id_article', 0);
+	typeof _data.titre != "undefined" ? $(this.data).data('titre', _data.titre) : $(this.data).data('titre', "");
 	typeof _data.soustitre != "undefined" ? $(this.data).data('soustitre', _data.soustitre) : $(this.data).data('soustitre', "");
 	typeof _data.texte != "undefined" ? $(this.data).data('texte', _data.texte) : $(this.data).data('texte', "");
 	typeof _data.descriptif != "undefined" ? $(this.data).data('descriptif', _data.descriptif) : $(this.data).data('descriptif', "");
@@ -373,12 +348,19 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 	$(this.data).data('enclosure', enclosure);
 	typeof _data.tags != "undefined" ? tags = _data.tags.split(",") : tags = false;
 	$(this.data).data('tags', tags);
-	var content = '<hgroup><h2>'+ this.titre +'</h2><h3>'+ this.soustitre +'</h3></hgroup><div>'+ $(this.data).data('descriptif') +'</div>';
-	this.infoWindow.setOptions({
-		id: $(this.data).data('id_article'),
-		content: content,
-		position: this.marker.getPosition()
-	});
+	
+	// set window content
+	this.content = document.createElement("div");
+    this.content.className = "window_wrapper";
+    this.content.id = "window_"+ this.id;
+	this.content.innerHTML = '<hgroup><h2>'+ $(this.data).data('titre') +'</h2><h3>'+ $(this.data).data('soustitre') +'</h3></hgroup><div>'+ $(this.data).data('descriptif') +'</div>';
+    this.bindPopupActions(this.content);
+	this.infoWindow.setContent(this.content);
+	
+	// append article & open Popup
+	this.openInfoWindow();
+	
+	// store is already loadded
 	this.loadded = true;
 };
 VhplabMarker.prototype.openInfoWindow = function() {
@@ -386,22 +368,13 @@ VhplabMarker.prototype.openInfoWindow = function() {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
 		open.closeInfoWindow();
 	}
-	this.infoWindow.open(this.map, this.marker);
+	this.parent.map.setView([this.lat, this.lng], this.zoom);
+	this.infoWindow.openOn(this.parent.map);
 	this.open = true;
 	this.parent.open = this.id;
 };
 VhplabMarker.prototype.setDistance = function(refLat, refLng) {
-	var R = 6371; // Radius of the Earth in km
-  	var dLat = (refLat - this.lat) * Math.PI / 180;
-  	var dLon = (refLng - this.lng) * Math.PI / 180;
-  	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(this.lat * Math.PI / 180) * Math.cos(refLat * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  	var d = R * c *1000;
-	this.distance = d;
-};
-VhplabMarker.prototype.setMap = function(_map) {
-	this.map = _map;
-	this.marker.setMap(this.map);
+	this.distance = L.latLng([this.lat, this.lng]).distanceTo([_refLat, _refLng]);
 };
 VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	this.data = {};
@@ -413,26 +386,16 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	typeof _data.id != "undefined" ? this.id = parseInt(_data.id) : this.id = 0;
 	typeof _data.json != "undefined" ? this.json = _path + _data.json + '&var_mode=recalcul' : this.json = "";
 	this.parent = _parent;
-	this.marker.setOptions({
-		position: new google.maps.LatLng(lat, lng),
-		optimized: false
+	this.marker.setLatLng([this.lat, this.lng]);
+	this.infoWindow.setContent('');
+	this.infoWindow.setLatLng([this.lat, this.lng]);
+	var icon = L.icon({
+		iconUrl: this.icon,
+    	iconRetinaUrl: this.icon,
+    	iconSize: [32, 32],
+    	iconAnchor: [16, 16]
 	});
-	// retina icon @2x trick
-    if ((window.devicePixelRatio >= 2)&&(typeof _data.icon2x != "undefined")) {
-    	this.marker.setIcon({
-			url: _path + _data.icon2x,
-			size: new google.maps.Size(80, 80),
-			scaledSize: new google.maps.Size(40, 40),
-			anchor: new google.maps.Point(20, 40),
-		});
-	} else if (typeof _data.icon != "undefined") {
-		this.marker.setIcon({
-			url: _path + _data.icon,
-			size: new google.maps.Size(40, 40),
-			scaledSize: new google.maps.Size(40, 40),
-			anchor: new google.maps.Point(20, 40),
-		});
-	}
+	this.marker.setIcon(icon);
 	var self = this;
 	$.getJSON(this.json, function(data) {
 		$.each(data[0].marker, function(i, marker){
@@ -441,390 +404,36 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	});
 };
 
-// ************ //
-// InfoBox
-// ************ //
-function InfoBox(_opts) {
-	_opts = _opts || {};
-	google.maps.OverlayView.apply(this, arguments);
-	// Standard options (in common with google.maps.InfoWindow):
-	this.content_ = _opts.content || "";
-	this.disableAutoPan_ = _opts.disableAutoPan || false;
-	this.pixelOffset_ = _opts.pixelOffset || new google.maps.Size(0, 0);
-	this.position_ = _opts.position || new google.maps.LatLng(0, 0);
-	this.zIndex_ = _opts.zIndex || null;
-	// CGeomap options
-	this.id =  _opts.id || null;
-	this.arrowOffset = _opts.arrowOffset || 78;
-	this.width = _opts.width || 380;
-	this.infoBoxClearance_ = _opts.infoBoxClearance || new google.maps.Size(400, 100);
-	if (typeof _opts.visible === "undefined") {
-		if (typeof _opts.isHidden === "undefined") {
-			_opts.visible = true;
-		} else {
-			_opts.visible = !opt_opts.isHidden;
-		}
-	}
-	this.isHidden_ = !_opts.visible;
-	this.alignBottom_ = _opts.alignBottom || true;
-	this.pane_ = _opts.pane || "floatPane";
-	this.enableEventPropagation_ = _opts.enableEventPropagation || false;
-	this.div_ = null;
-	this.close_ = null;
-	this.closeListener_ = null;
-	this.moveListener_ = null;
-	this.contextListener_ = null;
-	this.eventListeners_ = null;
-	this.fixedWidthSet_ = true;
-}
-InfoBox.prototype = new google.maps.OverlayView();
-InfoBox.prototype.addClickHandler_ = function () {
-	this.closeListener_ = google.maps.event.addDomListener(this.close_, "click", this.getCloseClickHandler_());
-};
-InfoBox.prototype.bindActions = function(_content) {
-	$('a.fancybox', this.div_).click(function(){
-		var img = $(this).attr('href');
-		$.fancybox({ 'href' : img });
-		return false;
-	});
-};
-InfoBox.prototype.close = function () {
-	var i;
-	if (this.closeListener_) {
-		google.maps.event.removeListener(this.closeListener_);
-		this.closeListener_ = null;
-	}
-	if (this.eventListeners_) {
-		for (i = 0; i < this.eventListeners_.length; i++) {
-			google.maps.event.removeListener(this.eventListeners_[i]);
-		}
-		this.eventListeners_ = null;
-	}
-	if (this.moveListener_) {
-		google.maps.event.removeListener(this.moveListener_);
-		this.moveListener_ = null;
-	}
-	if (this.contextListener_) {
-		google.maps.event.removeListener(this.contextListener_);
-		this.contextListener_ = null;
-	}
-	this.setMap(null);
-};
-InfoBox.prototype.createInfoBoxDiv_ = function () {
-	var i;
-	var events;
-	var bw;
-	var me = this;
-	// This handler prevents an event in the InfoBox from being passed on to the map.
-	var cancelHandler = function (e) {
-		e.cancelBubble = true;
-		if (e.stopPropagation) e.stopPropagation();
- 	};
-	// This handler ignores the current event in the InfoBox and conditionally prevents
-	// the event from being passed on to the map. It is used for the contextmenu event.
-	var ignoreHandler = function (e) {
-		e.returnValue = false;
-		if (e.preventDefault) e.preventDefault();
-		if (!me.enableEventPropagation_) cancelHandler(e);
-	};
-	if (!this.div_) {
-		this.div_ = document.createElement("div");
-		this.div_.className = "window";
-		this.div_.id = "window_"+ this.id;
-		this.div_.style.position = "absolute";
-		this.div_.style.width = this.width + "px";
-		this.div_.style.visibility = 'hidden';
-		var wrapper = document.createElement("div");
-		wrapper.className = "wrapper";
-		var content = document.createElement("div");
-		content.className = "content";
-		content.innerHTML = this.content_;
-		this.close_ = document.createElement("div");
-		this.close_.className = "close";
-		var arrow = document.createElement("div");
-		arrow.className = "arrow";
-		arrow.style.left = this.arrowOffset+"px";
-		wrapper.appendChild(this.close_);
-		wrapper.appendChild(content);
-		this.div_.appendChild(wrapper);
-		this.div_.appendChild(arrow);
-		// Add the InfoBox DIV to the DOM
-		this.getPanes()[this.pane_].appendChild(this.div_);
-		this.addClickHandler_();
-		this.panBox_(this.disableAutoPan_);
-		if (!this.enableEventPropagation_) {
-			this.eventListeners_ = [];
-			// Cancel event propagation.
-			// Note: mousemove not included (to resolve Issue 152)
-			events = ["mousedown", "mouseover", "mouseout", "mouseup", "click", "dblclick", "touchstart", "touchend", "touchmove"];
-			for (i = 0; i < events.length; i++) {
-				this.eventListeners_.push(google.maps.event.addDomListener(this.div_, events[i], cancelHandler));
-			}
-			// Workaround for Google bug that causes the cursor to change to a pointer
-			// when the mouse moves over a marker underneath InfoBox.
-			this.eventListeners_.push(google.maps.event.addDomListener(this.div_, "mouseover", function (e) {
-				this.style.cursor = "default";
-			}));
-		}
-		this.contextListener_ = google.maps.event.addDomListener(this.div_, "contextmenu", ignoreHandler);
-		/**
-		* This event is fired when the DIV containing the InfoBox's content is attached to the DOM.
-		* @name InfoBox#domready
-		* @event
-		*/
-		google.maps.event.trigger(this, "domready");
-		this.bindActions();
-	}
-};
-InfoBox.prototype.draw = function () {
-	this.createInfoBoxDiv_();
-	var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
-	this.div_.style.left = (pixPosition.x + this.pixelOffset_.width) + "px";
-	if (this.alignBottom_) {
-		this.div_.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + "px";
-	} else {
-		this.div_.style.top = (pixPosition.y + this.pixelOffset_.height) + "px";
-	}
-	if (this.isHidden_) {
-		this.div_.style.visibility = "hidden";
-	} else {
-		this.div_.style.visibility = "visible";
-	}
-};
-InfoBox.prototype.getArrowOffset = function () {
-	return this.arrowOffset;
-};
-InfoBox.prototype.getCloseClickHandler_ = function () {
-	var me = this;
-	return function (e) {
-		// 1.0.3 fix: Always prevent propagation of a close box click to the map:
-		e.cancelBubble = true;
-		if (e.stopPropagation) e.stopPropagation();
-		/**
-		* This event is fired when the InfoBox's close box is clicked.
-		* @name InfoBox#closeclick
-		* @event
-		*/
-		google.maps.event.trigger(me, "closeclick");
-		me.close();
-	};
-};
-InfoBox.prototype.getContent = function () {
-	return this.content_;
-};
-InfoBox.prototype.getPosition = function () {
-	return this.position_;
-};
-InfoBox.prototype.getVisible = function () {
-	var isVisible;
-	if ((typeof this.getMap() === "undefined") || (this.getMap() === null)) {
-		isVisible = false;
-	} else {
-		isVisible = !this.isHidden_;
-	}
-	return isVisible;
-};
-InfoBox.prototype.getZIndex = function () {
-	return this.zIndex_;
-};
-InfoBox.prototype.hide = function () {
-	this.isHidden_ = true;
-	if (this.div_) this.div_.style.visibility = "hidden";
-};
-InfoBox.prototype.onRemove = function () {
-	if (this.div_) {
-		this.div_.parentNode.removeChild(this.div_);
-		this.div_ = null;
-	}
-};
-InfoBox.prototype.open = function (map, anchor) {
-	var me = this;
-	if (anchor) {
-		this.position_ = anchor.getPosition();
-		this.moveListener_ = google.maps.event.addListener(anchor, "position_changed", function () {
-			me.setPosition(this.getPosition());
-		});
-	}
-	this.setMap(map);
-	if (this.div_) this.panBox_();
-};
-InfoBox.prototype.panBox_ = function (disablePan) {
-	var map;
-	var bounds;
-	var xOffset = 0, yOffset = 0;
-	if (!disablePan) {
-		map = this.getMap();
-		if (map instanceof google.maps.Map) { // Only pan if attached to map, not panorama
-			if (!map.getBounds().contains(this.position_)) {
-      			// Marker not in visible area of map, so set center
-      			// of map to the marker position first.
-       			 map.setCenter(this.position_);
-      		}
-			bounds = map.getBounds();
-			var mapDiv = map.getDiv();
-			var mapWidth = mapDiv.offsetWidth;
-			var mapHeight = mapDiv.offsetHeight;
-			var iwOffsetX = this.pixelOffset_.width;
-			var iwOffsetY = this.pixelOffset_.height;
-			var iwWidth = this.div_.offsetWidth;
-			var iwHeight = this.div_.offsetHeight;
-			var padX = this.infoBoxClearance_.width;
-			var padY = this.infoBoxClearance_.height;
-			var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
-			if (pixPosition.x < (-iwOffsetX + padX)) {
-				xOffset = pixPosition.x + iwOffsetX - padX;
-			} else if ((pixPosition.x + iwWidth + iwOffsetX + padX) > mapWidth) {
-				xOffset = pixPosition.x + iwWidth + iwOffsetX + padX - mapWidth;
-			}
-			if (this.alignBottom_) {
-				if (pixPosition.y < (-iwOffsetY + padY + iwHeight)) {
-					yOffset = pixPosition.y + iwOffsetY - padY - iwHeight;
-				} else if ((pixPosition.y + iwOffsetY + padY) > mapHeight) {
-					yOffset = pixPosition.y + iwOffsetY + padY - mapHeight;
-				}
-			} else {
-				if (pixPosition.y < (-iwOffsetY + padY)) {
-					yOffset = pixPosition.y + iwOffsetY - padY;
-				} else if ((pixPosition.y + iwHeight + iwOffsetY + padY) > mapHeight) {
-					yOffset = pixPosition.y + iwHeight + iwOffsetY + padY - mapHeight;
-				}
-			}
-			if (!(xOffset === 0 && yOffset === 0)) {
-				// Move the map to the shifted center.
-				var c = map.getCenter();
-				map.panBy(xOffset, yOffset);
-			}
-		}
-	}
-};
-InfoBox.prototype.setArrowOffset = function(_offset) {
-	this.arrowOffset = _offset;
-};
-InfoBox.prototype.setContent = function (_content) {
-	this.content_ = _content;
-	if (this.div_) {
-		if (this.closeListener_) {
-			google.maps.event.removeListener(this.closeListener_);
-			this.closeListener_ = null;
-		}
-		while (this.div_.firstChild) {
-			this.div_.removeChild(this.div_.firstChild);
-		}
-		var wrapper = document.createElement("div");
-		wrapper.className = "wrapper";
-		var content = document.createElement("div");
-		content.className = "content";
-		content.appendChild( this.content);
-		//content.innerHTML = this.content;
-		this.close_ = document.createElement("div");
-		this.close_.className = "close";
-		var arrow = document.createElement("div");
-		arrow.className = "arrow";
-		arrow.style.left = this.arrowOffset+"px";
-		wrapper.appendChild(this.close_);
-		wrapper.appendChild(content);
-		this.div_.appendChild(wrapper);
-		this.div_.appendChild(arrow);
-		this.addClickHandler_();
-	}
-	/**
-	* This event is fired when the content of the InfoBox changes.
-	* @name InfoBox#content_changed
-	* @event
-	*/
-	google.maps.event.trigger(this, "content_changed");
-};
-InfoBox.prototype.setOptions = function (_opts) {
-	if (typeof _opts.content !== "undefined") this.setContent(_opts.content);
-	if (typeof _opts.width !== "undefined") this.width = _opts.width;
-	if (typeof _opts.arrowOffset != "undefined") this.arrowOffse = _opts.arrowOffset;
-	if (typeof _opts.id != "undefined") this.id = _opts.id;
-	if (typeof _opts.disableAutoPan !== "undefined") this.disableAutoPan_ = _opts.disableAutoPan;
-	if (typeof _opts.pixelOffset !== "undefined") this.pixelOffset_ = _opts.pixelOffset;
-	if (typeof _opts.alignBottom !== "undefined") this.alignBottom_ = _opts.alignBottom;
-	if (typeof _opts.position !== "undefined") this.setPosition(_opts.position);
-	if (typeof _opts.zIndex !== "undefined") this.setZIndex(_opts.zIndex);
-	if (typeof _opts.infoBoxClearance !== "undefined") this.infoBoxClearance_ = _opts.infoBoxClearance;
-	if (typeof _opts.isHidden !== "undefined") this.isHidden_ = _opts.isHidden;
-	if (typeof _opts.visible !== "undefined") this.isHidden_ = !_opts.visible;
-	if (typeof _opts.enableEventPropagation !== "undefined") this.enableEventPropagation_ = _opts.enableEventPropagation;
-	if (this.div_) this.draw();
-};
-InfoBox.prototype.setPosition = function (_latlng) {
-	this.position_ = _latlng;
-	if (this.div_) this.draw();
-	/**
-	* This event is fired when the position of the InfoBox changes.
-	* @name InfoBox#position_changed
-	* @event
-	*/
-	google.maps.event.trigger(this, "position_changed");
-};
-InfoBox.prototype.setVisible = function (_isVisible) {
-	this.isHidden_ = !_isVisible;
-	if (this.div_) this.div_.style.visibility = (this.isHidden_ ? "hidden" : "visible");
-};
-InfoBox.prototype.setWidth = function(_width) {
-	this.width = _width;
-};
-InfoBox.prototype.setZIndex = function (_index) {
-	this.zIndex_ = _index;
-	if (this.div_) this.div_.style.zIndex = _index;
-	/**
-	* This event is fired when the zIndex of the InfoBox changes.
-	* @name InfoBox#zindex_changed
-	* @event
-	*/
-	google.maps.event.trigger(this, "zindex_changed");
-};
-InfoBox.prototype.show = function () {
-	this.isHidden_ = false;
-	if (this.div_) this.div_.style.visibility = "visible";
-};
-
 //***********
 // Map Zoom Custom Control
-//***********  
-function VhplabZoomControl() {
-	this.controlUI;
-	this.zoomInButton;
-	this.zoomOutButton;
-	this.zoomOutListener;
-	this.zoomInListener;
-};
-VhplabZoomControl.prototype.appendTo = function(_map) {
-	var control = this;
-	// Container
-	this.controlUI = document.createElement("div");
-	this.controlUI.id = "mapZoomControl";
-    // zoomIn Button
-	this.zoomInButton = document.createElement("div");
-	this.zoomInButton.className = "mapUiZoomButton mapUiBtn";
-	this.zoomInButton.id = "mapZoomIn";
-	this.zoomInButton.innerHTML="+";
-	this.zoomInListener = google.maps.event.addDomListener(this.zoomInButton, 'click', function() {
-		control.zoomIn(_map);
-	});
-    // zoomOut Button
-	this.zoomOutButton = document.createElement("div");
-	this.zoomOutButton.className = "mapUiZoomButton mapUiBtn";
-	this.zoomOutButton.id = "mapZoomOut";
-	this.zoomOutButton.innerHTML="-";
-	this.zoomOutListener = google.maps.event.addDomListener(this.zoomOutButton, 'click', function() {
-		control.zoomOut(_map);
-	});
-    this.controlUI.appendChild(this.zoomInButton);
-	this.controlUI.appendChild(this.zoomOutButton);
-	this.controlUI.index = 1;
-	_map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.controlUI);
-};
-VhplabZoomControl.prototype.initialize = function(_map, _service) {
-	var control = this;
-	control.appendTo(_map);
-};
-VhplabZoomControl.prototype.zoomIn = function(_map) {
-	_map.setZoom(_map.getZoom() + 1);
-};
-VhplabZoomControl.prototype.zoomOut = function(_map) {
-	_map.setZoom(_map.getZoom() - 1);
-};
+//***********
+var vhplabZoomControl = L.Control.Zoom.extend({
+	options: {
+		position: 'bottomright'
+	},
+	onAdd: function (map) {
+		var zoomName = 'leaflet-control-zoom',
+			container = L.DomUtil.create('div', zoomName + ' leaflet-bar');
+		this._map = map;
+		this._zoomInButton  = this._createButton(
+			this.options.zoomInText, this.options.zoomInTitle,
+			zoomName + '-in',  container, this._zoomIn,  this);
+		/*
+		this._zoomPanOut = this._createButton(
+			'Tout Voir','Voir tous les marqueurs',
+			zoomName + '-panout', container, this.panout, this);
+		*/
+		this._zoomOutButton = this._createButton(
+			this.options.zoomOutText, this.options.zoomOutTitle,
+			zoomName + '-out', container, this._zoomOut, this);
+		this._updateDisabled();
+		map.on('zoomend zoomlevelschange', this._updateDisabled, this);
+		return container;
+	},
+	panout: function() {
+		this._parent.panOut()
+	},
+	setParent: function(_parent) {
+		this._parent = _parent;
+	}
+});

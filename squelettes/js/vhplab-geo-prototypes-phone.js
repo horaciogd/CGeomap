@@ -6,7 +6,7 @@
  *
  * Author:
  * Horacio González
- * (c) 2015 - Distribuído baixo licencia GNU/GPL
+ * (c) 2016 - Distribuído baixo licencia GNU/GPL
  *
  */
  

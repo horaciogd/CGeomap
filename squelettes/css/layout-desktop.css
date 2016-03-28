@@ -18,4 +18,4 @@
    Footer
 -------------------- */
 
-footer { bottom: 15px; right: 86px; /* #mapZoomControl width (56) + footer margin x2 (30) */ left: 410px /* #content width (380) + #content margin x2 (30) */; }
+footer { bottom: 19px; right: 86px; /* #mapZoomControl width (56) + footer margin x2 (30) */ left: 410px /* #content width (380) + #content margin x2 (30) */; }

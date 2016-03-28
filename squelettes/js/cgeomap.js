@@ -53,7 +53,7 @@ VhplabInterface.prototype.createNavigationList = function() {
 	for (var i=0; i<this.map.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
 		pagination = (num - num%6)/6;
-		html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, marker.titre, marker.soustitre);
+		html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'));
 		num ++;
 	}
 	$('#navigation .menu .list').empty();
@@ -66,7 +66,7 @@ VhplabInterface.prototype.createNavigationList = function() {
 		this.paginateNavigation(0);
 	}
 };
-VhplabInterface.prototype.init = function(_opts) {
+VhplabInterface.prototype.initialize = function(_opts) {
 	var self = this;
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
