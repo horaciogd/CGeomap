@@ -28,25 +28,6 @@ How to
 Notes
 ------
 
-Following squelette files are just to  redirect from any spip page to sommaire
+Following squelette files are just to  redirect from any spip page to sommaire:
 
-404.html
-article.html
-auteur.html
-backend-breves.html
-backend.html
-breve.html
-calendrier.html
-contact.html
-forum.html
-identifiants.html
-mot.html
-plan.html
-recherche.html
-rss_forum_article.html
-rss_forum_breve.html
-rss_forum_rubrique.html
-rss_forum_syndic.html
-rss_forum_thread.html
-rubrique.html
-site.html
+404.html, article.html, auteur.html, backend-breves.html, backend.html, breve.html, calendrier.html, contact.html, forum.html, identifiants.html, mot.html, plan.html, recherche.html, rss_forum_article.html, rss_forum_breve.html, rss_forum_rubrique.html, rss_forum_syndic.html, rss_forum_thread.html, rubrique.html, site.html
