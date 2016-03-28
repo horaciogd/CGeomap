@@ -373,7 +373,7 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	this.open = true;
 	this.parent.open = this.id;
 };
-VhplabMarker.prototype.setDistance = function(refLat, refLng) {
+VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
 	this.distance = L.latLng([this.lat, this.lng]).distanceTo([_refLat, _refLng]);
 };
 VhplabMarker.prototype.updateData = function(_path, _data, _parent) {

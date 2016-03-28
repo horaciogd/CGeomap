@@ -13,80 +13,51 @@
 //***********
 // Vhplab Map
 //***********
-VhplabMap.prototype.initMapElements = function(_opts) {
-	// Geocoder
-	this.geocoder = new google.maps.Geocoder();
-	// location
-	this.locationCircle1;
-	this.locationCircle2;
-	this.locationMark;
-	this.interval;
-	// easer close window
-	this.addClickListener(_opts);
-	/*
-	this.addClickListener(_opts);
-	google.maps.event.addListener(this.map, 'click', function() {
-		if (!$('.customWindow').is(":hover")) self.closeOpenMarker();
-  	});
-  	*/
-};
 VhplabMap.prototype.addMarkers = function(_data, _callback) {
 	var n = this.offset;
 	var self = this;
 	var count = $(_data.markers).length - 1;
 	var path = _data.link;
+	// Loop through each marker data element
 	$.each(_data.markers, function(i, marker) {
 		n++;
 		self.addMarker(path, marker);
 		if(i==count) {
 			if(navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function(position) {
-					self.updateDistances(position.coords.latitude, position.coords.longitude);
-					var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-					var circOptions1 = {
-      					strokeColor: '#fff',
-      					strokeOpacity: 1,
-      					strokeWeight: 1.5,
-      					fillColor: '#fff',
-      					fillOpacity: 0.1,
-      					map: self.map,
-      					center: pos,
-      					radius: 2000
-    				};
-    				var circOptions2 = {
-      					strokeColor: '#fff',
-      					strokeOpacity: 1,
-      					strokeWeight: 2,
-      					fillColor: '#fff',
-      					fillOpacity: 0.2,
-      					map: self.map,
-      					center: pos,
-      					radius: 500
-    				};
-    				var circOptions3 = {
-      					strokeColor: '#fff',
-      					strokeOpacity: 0.9,
-      					strokeWeight: 2,
-      					fillColor: '#fff',
-      					fillOpacity: 0.4,
-      					map: self.map,
-      					center: pos,
-      					radius: 10
-    				};
-    				self.locationCircle1 = new google.maps.Circle(circOptions1);
-					self.locationCircle2 = new google.maps.Circle(circOptions2);
-					self.locationMark = new google.maps.Circle(circOptions3);
-					self.map.setCenter(pos);
+					// geolocation success
+					/*
+					$("#navigation hgroup .gps span").css('background-color', '#ed9128');
+					setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', '#fff'); }, 300);
+					*/
+					self.updateMap(position.coords.latitude, position.coords.longitude);
+					self.map.panTo([position.coords.latitude, position.coords.longitude]);
 					var loadded = self.markerList.length;
 					self.bindActions();
 					if (_callback) _callback();
+					
 				}, function() {
+					// geolocation error
 					var center = self.map.getCenter();
-					self.updateDistances(center.lat(), center.lng());
+					self.updateDistances(center.lat, center.lng);
       				var loadded = self.markerList.length;
 					self.bindActions();
 					if (_callback) _callback();
-   				});   				
+   				}, {
+ 					enableHighAccuracy: true, 
+					maximumAge : 20000, 
+					timeout : 17000
+				}); 
+				self.locationWatch = navigator.geolocation.watchPosition(function(position) {
+					// geolocation success
+					self.updateMap(position.coords.latitude, position.coords.longitude);
+				}, function(err) { 
+					// geolocation error
+				}, {
+ 					enableHighAccuracy: true, 
+					maximumAge : 20000, 
+					timeout : 17000
+				});	
 			}
 		}
 	});
@@ -97,54 +68,96 @@ VhplabMap.prototype.bindActions = function() {
 	cgeomap.slideContent('show');
 	$('#loading').fadeOut();
 };
+VhplabMap.prototype.clickListener = function(_e) {
+	// close infowindow easer 
+	if (!$('.cgeomap .leaflet-popup-content-wrapper').is(":hover")) self.closeOpenMarker();
+};
+VhplabMap.prototype.initMapElements = function(_opts) {
+	
+	// Max Zoom Service
+	
+	// Map Zoom Custom Control
+	
+	// Geocoder
+	this.geocoder = new L.GeoSearch.Provider.OpenStreetMap();
+	
+	// Clickable Marker
+	
+	// Resize markers on zoom
+  	
+	// Clusterer
+	
+	// Listeners
+	var self = this;
+	this.map.on('click', function(_e){
+		self.clickListener(_e);
+	});
+	
+	// Interface
+	this.locationCircle1 = L.circle([0, 0], 2000, {
+		color: '#2EA8E0',
+		weight: 1,
+		opacity: 1,
+		fillColor: '#2EA8E0',
+		fillOpacity: 0.1
+	}).addTo(this.map);
+	this.locationCircle2 = L.circle([0, 0], 500, {
+		color: '#2EA8E0',
+		weight: 2,
+		opacity: 1,
+		fillColor: '#2EA8E0',
+		fillOpacity: 0.2
+	}).addTo(this.map);
+	this.locationCircle3 = L.circle([0, 0], 10, {
+		color: '#2EA8E0',
+		weight: 3,
+		opacity: 0.9,
+		fillColor: '#2EA8E0',
+		fillOpacity: 0.4
+	}).addTo(this.map);
+	
+	this.locationWatch;
+};
 VhplabMap.prototype.myLocation = function(_callback) {
 	var self = this;
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			self.updateDistances(position.coords.latitude, position.coords.longitude);
-			self.map.panTo(pos);
-			self.map.setZoom(16);
-			self.locationCircle1.setCenter(pos);
-			self.locationCircle2.setCenter(pos);
-			self.locationMark.setCenter(pos);
+			// geolocation success
+			self.updateMap(position.coords.latitude, position.coords.longitude);
+			// self.map.panTo([position.coords.latitude, position.coords.longitude]);
 			if (_callback) _callback();
-		}, function(err) { 
+		}, function(err) {
+			// geolocation error
 			if (_callback) _callback();
-		}, { enableHighAccuracy: true });
+		}, { 
+			enableHighAccuracy: true, 
+			maximumAge : 20000, 
+			timeout : 17000
+		});
 	}
 };
-VhplabMap.prototype.myLocationWatch = function(_activate) {
-	var self = this;
-	if(navigator.geolocation) {
-		if (_activate) {
-			options = {
- 				enableHighAccuracy: true, 
-				maximumAge        : 20000, 
-				timeout           : 17000
-			};
-			self.interval = navigator.geolocation.watchPosition(function(position) {
-				var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				self.locationCircle1.setCenter(pos);
-				self.locationCircle2.setCenter(pos);
-				self.locationMark.setCenter(pos);
-				// self.map.panTo(pos);
-			}, function(err) { }, options);
-		} else {
-			navigator.geolocation.clearWatch(self.interval);
-		}
-	}
-};
-VhplabMap.prototype.addClickListener = function(_opts) {
-	var self = this;
-	this.formularyClickListener = google.maps.event.addListener(this.map, 'click', function(e) {
-		if (!$('.cgeomap .window').is(":hover")) self.closeOpenMarker();
-	});
+VhplabMap.prototype.updateMap = function(_lat, _lng) {
+	//alert('updateMap');
+	/*
+	$("#navigation hgroup .gps span").css('background-color', '#ed9128');
+	setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', '#fff'); }, 300);
+	*/
+	this.locationCircle1.setLatLng([_lat, _lng]);
+	this.locationCircle2.setLatLng([_lat, _lng]);
+	this.locationCircle3.setLatLng([_lat, _lng]);
+	this.updateDistances(_lat, _lng);
 };
 
 // ************ //
 // Vhplab Marker
 // ************ //
+VhplabMarker.prototype.bindPopupActions = function(_content) {
+	$('a.fancybox', _content).click(function(){
+		var img = $(this).attr('href');
+		$.fancybox({ 'href' : img });
+		return false;
+	});
+};
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
@@ -166,7 +179,8 @@ VhplabMarker.prototype.openInfoWindow = function() {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
 		open.closeInfoWindow();
 	}
-	this.infoWindow.open(this.map, this.marker);
+	this.parent.map.setView([this.lat, this.lng], this.zoom);
+	this.infoWindow.openOn(this.parent.map);
 	this.open = true;
 	this.parent.open = this.id;
 	var base_fb_url = $('#navigation .user .facebook').data('base_href');
@@ -195,30 +209,5 @@ VhplabMarker.prototype.getData = function(_callback) {
 				if (_callback) _callback();
 			});
 		});
-	}
-};
-
-// ************ //
-// InfoBox
-// ************ //
-InfoBox.prototype.bindActions = function(_content) {
-	$('a.fancybox', this.div_).click(function(){
-		var img = $(this).attr('href');
-		$.fancybox({ 'href' : img });
-		return false;
-	});
-};
-InfoBox.prototype.panBox_ = function (disablePan) {
-	var map;
-	if (!disablePan) {
-		map = this.getMap();
-		if (map instanceof google.maps.Map) { // Only pan if attached to map, not panorama
-			if (!map.getBounds().contains(this.position_)) {
-      			// Marker not in visible area of map, so set center
-      			// of map to the marker position first.
-       			 map.setCenter(this.position_);
-      		}
-			map.panTo(this.position_);
-		}
 	}
 };

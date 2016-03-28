@@ -48,7 +48,7 @@ VhplabInterface.prototype.createNavigationList = function(_opts) {
 	var num = 0;
 	for (var i=0; i<this.map.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
-		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, marker.titre, marker.soustitre, marker.distance);
+		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'), marker.distance);
 		num ++;
 	}
 	$('#content ul').empty();
@@ -138,7 +138,6 @@ VhplabInterface.prototype.toggleContent = function() {
 			$('footer .toggle_map').removeClass('toggle_map');
 			$('footer .location_reload').addClass('location_button');
 			$('footer .location_reload').removeClass('location_reload');
-			self.map.myLocationWatch(true);
 		});
 		$("#content").data('visible', false);
 	} else {
@@ -150,7 +149,6 @@ VhplabInterface.prototype.toggleContent = function() {
 			$('footer .toggle_list').removeClass('toggle_list');
 			$('footer .location_button').addClass('location_reload');
 			$('footer .location_button').removeClass('location_button');
-			self.map.myLocationWatch(false);
 		});
 		$("#content").data('visible', true);
 	}
