@@ -1,5 +1,5 @@
-CGeomap 0.01
-==============
+CGeomap for Leaflet 0.02
+========================
 
 
 CGEOMAP(http://gpsmuseum.eu/cgeomap/) es una herramienta colaborativa de espacialización de la información en el espacio público. Es un entorno creativo open source, mapa y web-app que permite geolocalizar contenidos audiovisuales y pasearlos desde el smartphone.
@@ -8,7 +8,7 @@ CGEOMAP nace de una larga trayectoria de colaboración entre varios colectivos a
 
 En este repositorio encontrarás el plugin y los esqueletos de Spip que utilizamos de base para crear nuestros proyectos publicados bajo licencia GNU GENERAL PUBLIC LICENSE. Encontrarás toda la documentación acerca de como utilizarlo y un ejemplo de su uso aquí: http://www.vhplab.net/cgeomap/
 
-Date: Fri Jul 10 2015
+Date: Mon Mar 28 2016
 
 Enjoy the code and drop me a line for comments and questions!
 horaciogd at vhplab dot net
