@@ -37,6 +37,21 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
    Content
 -------------------- */
 
+/* --------------------
+   Player
+-------------------- */
+
+.vhplab_player { text-align: left; padding: 4px; }
+.vhplab_player ul { position: relative; display: inline-block;  padding-left: 22px; height: 19px; width: 230px; vertical-align: middle; background-color: #32353B; border-radius: 3px; padding: 3px 3px 3px 25px; font-weight: normal; font-size: 10px; color: #f6f9ff; list-style-type: none; }
+.vhplab_player ul li { margin: 0; padding: 0; position: absolute !important; top: 3px; height: 19px; cursor: pointer; background-color: transparent !important; background-repeat: no-repeat !important; background-size: 224px 46px !important; background-image: url('../images/icons/cgeomap-player-buttons-@2x.png') !important; }
+.vhplab_player ul li.play { margin-top: 0 !important; width: 18px; left: 6px; background-position: -24px 0px !important; }
+.vhplab_player ul li.pause { width: 18px; left: 6px; background-position: -91px 0px !important; }
+.vhplab_player ul li.volume { width: 18px; right: 6px; background-position: -111px 0px; !important; }
+.vhplab_player ul li.progress_bar { width: 136px; height: 12px; left: 60px; top: 5px; background-color: #ffffff; border: 1px solid #444343; border-radius: 3px; background-image: none !important; }
+.vhplab_player ul li.position { top: 5px; left: 30px; background-image: none !important; }
+.vhplab_player ul li.duration { top: 5px; right: 30px; background-image: none !important; }
+.vhplab_player ul li.progress_bar span { display: block; position: absolute; background-repeat: repeat-x; background-color: #bfbfbf !important; border-radius: 2px; top: 0px; left: 0px; height: 12px; width: 0%; }
+
 
 /* --------------------
    Map

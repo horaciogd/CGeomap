@@ -1,0 +1,38 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)[(#ENV{callback})(]][{
+	"marker": [<BOUCLE_article(ARTICLES){id_article}>{[
+		"id_article": "(#ID_ARTICLE)"][,
+		"surtitre": "(#SURTITRE|supprimer_numero|extraire_br)"][,
+		"titre": "(#TITRE|supprimer_numero|extraire_br)"][,
+		"soustitre": "(#SOUSTITRE|supprimer_numero|extraire_br)"][,
+		"descriptif": "(#DESCRIPTIF|extraire_br)"][,
+		"chapo": "(#CHAPO|extraire_br)"][,
+		"texte": "(#TEXTE|extraire_module{[(#ENV{link}|?{#ENV{link},true})]}|extraire_br)"][,
+		"ps": "(#PS|extraire_br)"][,
+		"notes": "(#NOTES|extraire_br)"][,
+		"date": "(#DATE|date_iso)"][,
+		"date_redac": "(#DATE_REDAC|date_iso)"][,
+		"date_modif": "(#DATE_MODIF|date_iso)"][,
+		"id_rubrique": "(#ID_RUBRIQUE)"][,
+		"id_secteur": "(#ID_SECTEUR)"][,
+		"lien": {"nom_site": "(#NOM_SITE|supprimer_numero|extraire_br|texte_backend)",[ "url_site": "(#URL_SITE)"]}][,
+		"visites": "(#VISITES)"][,
+		"popularite": "(#POPULARITE)"][,
+		"lang": "(#LANG)"]<B_autores>,
+		<BOUCLE_autores(AUTEURS){id_article}{0,1}>"auteur": {["nom": "(#NOM|supprimer_numero|extraire_br|texte_backend)"][, "creator": "(#LESAUTEURS|extraire_br|texte_backend)"][, "url_auteur": "(#URL_AUTEUR|url_absolue)"]}</BOUCLE_autores></B_autores>[,
+		"url_article": "(#URL_ARTICLE|url_absolue)"]<B_gis>,
+		<BOUCLE_gis(VHPLAB_GIS){id_article}>["lat": "(#LAT)"][,
+		"lng": "(#LONX)"]</BOUCLE_gis></B_gis><B_icon>,
+		<BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>["icon": "(#LOGO_MOT|image_reduire{40}|extraire_attribut{src})"][,
+		"icon2x": "(#LOGO_MOT|image_reduire{80}|extraire_attribut{src})"]</BOUCLE_icon></B_icon><B_image>,
+		<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,1}>"image": {["url_document": "(#URL_DOCUMENT|url_absolue)"][, "hauteur": "(#HAUTEUR)"][, "largeur": "(#LARGEUR)"][, "length": "(#TAILLE)"][, "type": "image/(#EXTENSION)"][, "titre":"(#TITRE|supprimer_numero|supprimer_tags|texte_backend)"][, "descriptif":"(#DESCRIPTIF|supprimer_numero|supprimer_tags|texte_backend)"][, "credits":"(#CREDITS|supprimer_numero|supprimer_tags|texte_backend)"][(#HAUTEUR|<={#LARGEUR}|?{[, "screen": "(#FICHIER|image_reduire{1800,0}|extraire_attribut{src}|url_absolue)"],[, "screen": "(#FICHIER|image_reduire{0,1200}|extraire_attribut{src}|url_absolue)"]})][(#HAUTEUR|<={#LARGEUR}|?{[, "window": "(#FICHIER|image_reduire{700,0}|image_recadre{700,300,'top center'}extraire_attribut{src}|url_absolue)"],[, "window": "(#FICHIER|image_reduire{700,0}|image_recadre{700,300,'top center'}|extraire_attribut{src}|url_absolue)"]})][(#HAUTEUR|<={#LARGEUR}|?{[, "thumbnail": "(#FICHIER|image_reduire{0,100}|image_recadre{100,100,center}|extraire_attribut{src}|url_absolue)"],[, "thumbnail": "(#FICHIER|image_reduire{100,0}|image_recadre{100,100,center}|extraire_attribut{src}|url_absolue)"]})]}</BOUCLE_image></B_image><BOUCLE_mp3(DOCUMENTS){id_article}{mode=document}{extension=mp3}{0,1}>,
+		"enclosure": {["url": "(#URL_DOCUMENT|url_absolue)"][, "length": "(#TAILLE)"], "type": "audio/mpeg"}</BOUCLE_mp3><B_tags>,
+		"tags": "<BOUCLE_tags(MOTS){id_article}{", "}>[(#TITRE|texte_backend)]</BOUCLE_tags>"</B_tags>
+	}</BOUCLE_article>]
+}][);(#ENV{callback}|oui)]

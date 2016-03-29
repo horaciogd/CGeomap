@@ -13,10 +13,7 @@
 // Vhplab Interface
 //***********
  VhplabInterface.prototype.ready = function(_opts) {
-	$("#content .wrapper").load(_opts.url_article, function() {
-	
-	});
-	this.map = new VhplabMap();
+ 	this.map = new VhplabMap();
 	this.map.initialize({
 		url: this.url_site,
 		markers: (typeof _opts.markers != "undefined") ? _opts.markers : '',
@@ -29,4 +26,10 @@
 		custom: (typeof _opts.custom != "undefined") ? _opts.custom : false
 	});
 	this.bindToggleContent();
+};
+VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
+	// get URL via alert(this.url_article);
+ 	$("#content .wrapper").load(this.url_article, function() {
+		if(_callback) _callback();
+	});
 };

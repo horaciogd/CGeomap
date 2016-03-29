@@ -5,7 +5,7 @@
  *
  * Author:
  * Horacio González
- * (c) 2013 - Distribuído baixo licencia GNU/GPL
+ * (c) 2016 - Distribuído baixo licencia GNU/GPL
  *
  */
 
@@ -19,6 +19,7 @@ var cgeomap;
 //***********
 function VhplabInterface() {
 	this.url_site = '';
+	this.url_article = '';
   	this.map;
   	this.toggleContentDist = 0;
   	this.toggleContentOffset = -12;
@@ -69,7 +70,9 @@ VhplabInterface.prototype.createNavigationList = function() {
 VhplabInterface.prototype.initialize = function(_opts) {
 	var self = this;
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
+	if (typeof _opts.url_article != "undefined") this.url_article = _opts.url_article;
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
+	
 	// load custom map prototypes
 	if (typeof _opts.custom_map_prototypes != "undefined") {
 		$.getScript(_opts.custom_map_prototypes, function(data) {
@@ -79,6 +82,20 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	} else {
 		self.ready(_opts.map_opts);
 	}
+	
+	// initialize soundManager
+	soundManager.setup({
+		// disable or enable debug output
+		debugMode: true,
+  		// use HTML5 audio for MP3/MP4, if available
+  		preferFlash: false,
+  		useFlashBlock: true,
+  		// path to directory containing SM2 SWF
+  		url: 'swf/',
+  		// optional: enable MPEG-4/AAC support (requires flash 9)
+  		flashVersion: 9
+  	});
+  	
 	this.initContent();
 };
 VhplabInterface.prototype.initContent = function() {
@@ -177,4 +194,113 @@ VhplabInterface.prototype.toggleContent = function() {
 		});
 		$("#content").data('visible', true);
 	}
+};
+
+//***********
+// Vhplab Player
+//***********
+function VhplabPlayer() {
+	this.sound;
+	this.soundURL;
+	this.selector;
+	this.id;
+	this.volume = 50;
+};
+VhplabPlayer.prototype.appendTo = function(_container) {
+	$(_container).append('<div class="vhplab_player" id="'+ this.selector +'"></div>');
+	$('#'+ this.selector).append('<ul></ul>');
+	$('#'+ this.selector +' ul').append('<li class="play" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="pause" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="position" >00:00</li>');
+	$('#'+ this.selector +' ul').append('<li class="duration" >00:00</li>');
+	$('#'+ this.selector +' ul').append('<li class="volume" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="progress_bar" ><span></span></li>');
+    this.bindActions();
+};
+VhplabPlayer.prototype.bindActions = function() {
+	var self = this;
+	$('#'+ this.selector +' .play').click(function(){
+		self.play();
+	});
+	$('#'+ this.selector +' .pause').click(function(){
+      	self.pause();
+	});
+	$('#'+ this.selector +' .progress_bar').click(function(e){
+      	var w = $(this).width();
+		var x = e.clientX - $(this).offset().left;
+		if (self.sound.playState) self.sound.setPosition(x*self.sound.duration/w);
+	});
+	$('#'+ this.selector +' .volume').click(function(){
+		self.setVolume();
+	});
+	$('#'+ this.selector +' .pause').hide();
+};
+VhplabPlayer.prototype.init = function(_opts) {
+	typeof _opts.id != "undefined" ? this.id = _opts.id : this.id = 0;
+	typeof _opts.url != "undefined" ? this.soundURL = _opts.url : this.soundURL = '';
+	typeof _opts.selector != "undefined" ? this.selector = _opts.selector : this.selector = 'player_' + this.id;
+	// create sound
+	var self = this;
+    this.sound = soundManager.createSound({
+		id:'exilioSound_' + (self.id),
+		url: self.soundURL,
+		onload: function() {
+			$('#'+ self.selector +' .duration').text(self.milToTime(this.duration));
+		},
+		onplay: function() {
+		},
+		onresume: function() {
+		},
+		onpause: function() {
+		},
+		onfinish: function() {
+			$('#'+ self.selector +' .play').show();
+			$('#'+ self.selector +' .pause').hide();
+			$('#'+ self.selector +" .progress_bar span").css('width', 0 +'%');
+		},
+		whileplaying: function() {
+			$('#'+ self.selector +' .position').text(self.milToTime(this.position));
+			var percent = this.position / this.duration * 100;
+			$('#'+ self.selector +" .progress_bar span").css('width', percent +'%');
+		}
+	});
+};
+VhplabPlayer.prototype.pause = function() {
+	this.sound.pause();
+	$('#'+ this.selector +' .play').show();
+	$('#'+ this.selector +' .pause').hide();
+};
+VhplabPlayer.prototype.play = function() {
+	this.sound.play();
+	$('#'+ this.selector +' .play').hide();
+	$('#'+ this.selector +' .pause').show();
+};
+VhplabPlayer.prototype.setVolume = function() {
+	this.volume += 25;
+	if (this.volume>100) this.volume = 0;
+	this.sound.setVolume(this.volume);
+	switch (this.volume) {
+		case 0:
+			$('#'+ this.selector +' .volume').css("background-position", "-111px 0");
+			break;
+		case 25:
+			$('#'+ this.selector +' .volume').css("background-position", "-129px 0");
+			break;
+		case 50:
+			$('#'+ this.selector +' .volume').css("background-position", "-150px 0");
+			break;
+		case 75:
+			$('#'+ this.selector +' .volume').css("background-position", "-171px 0");
+			break;
+		case 100:
+			$('#'+ this.selector +' .volume').css("background-position", "-193px 0");
+			break;
+	}
+};
+VhplabPlayer.prototype.milToTime = function(_mil) {
+	var seconds = Math.floor((_mil / 1000) % 60);
+	if (seconds<10) seconds = '0'+ seconds;
+	var minutes = Math.floor((_mil / (60 * 1000)) % 60);
+	if (minutes<10) minutes = '0'+ minutes;
+	return minutes + ":" + seconds;
 };
