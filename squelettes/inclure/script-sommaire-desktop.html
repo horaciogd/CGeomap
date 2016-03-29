@@ -23,11 +23,13 @@
 		//<![CDATA[
 		var cgeomap;
 		$(document).ready(function() {
-			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {[(#ENV{login}|=={false}|oui)
+				alert('<:cgeomap:mensaje_error_login:>');]
 				cgeomap = new VhplabInterface();
 				cgeomap.initialize({[
 					url_site: '(#URL_SITE_SPIP|url_absolue)'][,
 					url_article: '(#URL_PAGE{ajax-content-squelette}|url_absolue)'][,
+					url_user: '(#URL_PAGE{ajax-auteur}|url_absolue)'][,
 					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-desktop.js}|url_absolue)'],
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
 						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE',</BOUCLE_get_map>

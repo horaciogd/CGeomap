@@ -85,11 +85,6 @@ VhplabMarker.prototype.appendContent = function() {
 			});
 		});	
 	}
-	
-  	/*
-	
-	*/
-	
 };
 VhplabMarker.prototype.bindPopupActions = function(_content) {
 	$('a.fancybox', _content).click(function(){

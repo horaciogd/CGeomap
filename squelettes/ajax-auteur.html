@@ -1,0 +1,17 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})][
+
+(#REM) Avoid spip admin buttons
+][(#ENV{form}|=={true}|oui)
+						[(#HTTP_HEADER{location: #URL_PAGE{sommaire}&login=false})]
+					][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][<!-- login -->
+					(#LOGIN_PUBLIC{#URL_PAGE{sommaire}})
+					<!-- login -->][<!-- ajax loadded user -->(#SESSION{id_auteur}|oui)
+					<ul class="utilities" data-session="ok"[(#SESSION{statut}|=={0minirezo}|oui) data-admin="ok"]>
+						<li><a class="logout on" href="[(#URL_LOGOUT{#URL_PAGE{sommaire}})]"><:cgeomap:submit_logout:></a></li>
+						[<li><a class="contribuer" name="contribuer" data-href="(#URL_PAGE{ajax-contribuer}|url_absolue)"><:cgeomap:nueva_entrada:></a></li>]
+					</ul>
+					<div class="navigation">
+						<ol id="aportaciones">
+						</ol><!-- aportaciones -->
+					</div><!-- navigation -->]

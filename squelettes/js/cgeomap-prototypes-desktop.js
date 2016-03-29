@@ -12,7 +12,7 @@
 //***********
 // Vhplab Interface
 //***********
- VhplabInterface.prototype.ready = function(_opts) {
+VhplabInterface.prototype.ready = function(_opts) {
  	this.map = new VhplabMap();
 	this.map.initialize({
 		url: this.url_site,
@@ -30,6 +30,15 @@
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 	// get URL via alert(this.url_article);
  	$("#content .wrapper").load(this.url_article, function() {
+ 		cgeomap.loadUser();
 		if(_callback) _callback();
+	});
+};
+VhplabInterface.prototype.loadUser = function(_callback) {
+	// get URL via alert(this.url_user);
+	$("#user").load(this.url_user, function() {
+		if ($("#user .utilities").data("session") == "ok") cgeomap.session = true;
+		if ($("#user .utilities").data("admin") == "ok") cgeomap.admin = true;
+		$('.formulaire_login').hide();
 	});
 };
