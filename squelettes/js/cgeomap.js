@@ -26,6 +26,7 @@ function VhplabInterface() {
   	this.map;
   	this.toggleContentDist = 0;
   	this.toggleContentOffset = -12;
+	this.form = new VhplabContribuerFrom();
 };
 VhplabInterface.prototype.bindNavigationListActions = function() {
 	var self = this;
@@ -86,6 +87,9 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
 	
+	// initialize formulary
+	this.form.initialize(_opts);
+	
 	var self = this;
 	// load custom map prototypes
 	if (typeof _opts.custom_map_prototypes != "undefined") {
@@ -117,6 +121,18 @@ VhplabInterface.prototype.initContent = function() {
 	this.toggleContentDist = $("#content").width() + position.left + this.toggleContentOffset;
 	$('#content').css({ left: "-="+this.toggleContentDist });
 	$("#content").data('visible', false);
+};
+VhplabInterface.prototype.loadContributions = function() {
+
+};
+VhplabInterface.prototype.loadForm = function() {
+
+};
+VhplabInterface.prototype.loadMap = function() {
+
+};
+VhplabInterface.prototype.loadEmbed = function() {
+
 };
 VhplabInterface.prototype.paginateNavigation = function(_dir) {
 	var pos = $('#navigation .menu .list').data('pagination');
@@ -213,15 +229,60 @@ VhplabInterface.prototype.toggleLogin = function(_me) {
  	if (!this.session) {
 		var tgl =  $(_me).data("tgl");
 		if (tgl=="on") {
-			$('.formulaire_login').slideUp();
+			$('#user .login').slideUp();
 			$(_me).data("tgl","off");
 		} else {
-			$('.formulaire_login').slideDown();
+			$('#user .login').slideDown();
 			$(_me).data("tgl","on");
 		}
 	}
 };
+VhplabInterface.prototype.toggleUtilities = function(_me) {
+	var target = $(_me).attr('name');
+	var selected = $("#content").data('selected');
+	$("#content").data('selected',target);
+	$("#user .utilities a").removeClass('on');
+	$("#user .utilities ."+target).addClass('on');
+	if (target!=selected) {
+		switch (target) {
+			case 'carte':
+				cgeomap.loadMap();
+				break;
+			case 'contributions':
+				cgeomap.loadContributions();
+				break;
+			case 'contribuer':
+				cgeomap.loadForm();
+				break;
+			case 'embed':
+				cgeomap.loadEmbed();
+				break;
+			case 'editer':
+				cgeomap.form.load(_me);
+				break;
+		}
+	}
+};
 
+//***********
+// Vhplab Contribuer Formulary
+//***********
+function VhplabContribuerFrom() {
+	this.url_form = '';
+	this.url_upload = '';
+	this.url_delete = '';
+	this.data = {};
+	this.status = 'editer';
+	this.trash = false;
+	this.geo = false;
+};
+VhplabContribuerFrom.prototype.initialize = function(_opts) {
+	if (typeof _opts.url_site != "undefined") {
+		this.url_form = _opts.url_site + 'spip.php?page=insert';
+		this.url_upload = _opts.url_site  + 'jQuery-File-Upload/server/php/';
+		this.url_delete = _opts.url_site  + 'spip.php?page=delete';
+	}
+};
 
 //***********
 // Vhplab Player

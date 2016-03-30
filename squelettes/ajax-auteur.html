@@ -7,9 +7,15 @@
 					][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][<!-- login -->
 					(#LOGIN_PUBLIC{#URL_PAGE{sommaire}})
 					<!-- login -->][<!-- ajax loadded user -->(#SESSION{id_auteur}|oui)
-					<ul class="utilities" data-session="ok"[(#SESSION{statut}|=={0minirezo}|oui) data-admin="ok"]>
-						<li><a class="logout on" href="[(#URL_LOGOUT{#URL_PAGE{sommaire}})]"><:cgeomap:submit_logout:></a></li>
-						[<li><a class="contribuer" name="contribuer" data-href="(#URL_PAGE{ajax-contribuer}|url_absolue)"><:cgeomap:nueva_entrada:></a></li>]
+					<div class='login data' data-session="ok"[(#SESSION{statut}|=={0minirezo}|oui) data-admin="ok"]>
+						<span>[(#SESSION{id_auteur}|?{#SESSION{nom}})]</span>
+						<a class="btn" name="logout" id="logout" href="[(#URL_LOGOUT{#URL_PAGE{sommaire}})]"><:cgeomap:submit_logout:></a>
+					</div><!-- login -->
+					<ul class="utilities">
+						<li><a class="btn carte" name="carte"><:cgeomap:mapa:></a></li>
+						[<li><a class="btn contribuer" name="contribuer" data-href="(#URL_PAGE{ajax-contribuer}|url_absolue)"><:cgeomap:contribuir:></a></li>]
+						[<li><a class="btn contributions" name="contributions" data-href="(#URL_PAGE{ajax-auteur-articles}|url_absolue)&id_auteur=#SESSION{id_auteur}"><:cgeomap:contribuciones:></a></li>]
+						[<li><a class="btn embed" name="embed" data-href="(#URL_PAGE{ajax-embed}|url_absolue)"><:cgeomap:insertar:></a></li>]
 					</ul>
 					<div class="navigation">
 						<ol id="aportaciones">

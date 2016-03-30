@@ -37,8 +37,16 @@ VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 VhplabInterface.prototype.loadUser = function(_callback) {
 	// get URL via alert(this.url_user);
 	$("#user").load(this.url_user, function() {
+		/* Session & Admin */
 		if ($("#user .utilities").data("session") == "ok") cgeomap.session = true;
 		if ($("#user .utilities").data("admin") == "ok") cgeomap.admin = true;
-		$('.formulaire_login').hide();
+		/* Login */
+		$('#user .login').hide();
+		/* Utilities  */
+		$("#content").data('selected','carte');
+		$("#user .utilities .carte").addClass('on');
+		$("#user .utilities a").click(function() { 
+			cgeomap.toggleUtilities(this);
+		});
 	});
 };

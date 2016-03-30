@@ -13,18 +13,21 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	
 	// C
 	'contacto' => 'Contacta con',
+	'contribuir' => 'Nueva Entrada',
+	'contribuciones' => 'Mis Aportaciones',
+	
+	// I
+	'insertar' => 'Insertar Mapa',
 	
 	// L
 	'login' => 'usuario',
 	
 	// M
+	'mapa' => 'Mapa',
 	'mensaje_error_login' => 'Usuario o clave incorrectos!',
 	
 	// N
 	'nodo' => 'URL del nodo',
-	'nueva_entrada' => 'Nueva entrada',
-	
-	
 	
 	// P
 	'password' => 'clave',
