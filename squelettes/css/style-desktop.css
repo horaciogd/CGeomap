@@ -71,11 +71,9 @@
 #user .utilities a:hover, #user .utilities a:active, #user .utilities a.on { color: #656364; }
 
 /* Login  */
-fieldset, .btn, .form-control { vertical-align: middle; background-image: none; display: inline-block; }
-fieldset { border: none; }
 .form-control { background-color: #fff; border: 1px solid #ccc; border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
 .form-control:focus { border-color: #641626; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(243, 165, 181, .6); box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(243, 165, 181, .6); }
-#formulaire_login .btn { white-space: nowrap; background-color: #fff; border: 1px solid transparent; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; }
+#formulaire_login .btn { white-space: nowrap; background-color: #fff; border: 1px solid transparent; }
 #formulaire_login li { float: left; width: 160px; margin-left: 13px; text-align: center; padding: 0; }
 #formulaire_login li:first-child { margin-left: 0px; }
 #formulaire_login .form-control { padding: 3px 6px; width: 146px; }
@@ -90,12 +88,74 @@ fieldset { border: none; }
 .texte img { margin: 1em 0; }
 
 /* Modules  */
-.modules li { margin-bottom: 4px; }
-.modules li header, .modules li .content { padding: 6px 8px; border: solid 1px #c2c6cd; background-color: #eff0f2; }
-.modules li header { border-bottom: none; -webkit-border-top-right-radius: 12px; -webkit-border-bottom-top-radius: 6px; -moz-border-radius-topright: 6px; -moz-border-radius-topleft: 6px; border-top-right-radius: 6px; border-top-left-radius: 6px; }
-.modules li .content { padding-top: 2px; border-top: none; -webkit-border-bottom-right-radius: 6px; -webkit-border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -moz-border-radius-bottomleft: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; }
-.modules li .content .wrap { font-size: 0.8em; }
-.modules li img { border-radius: 4px; }
+.module { margin-bottom: 4px; position: relative; }
+.module header, .module .content { padding: 6px 8px; border: solid 1px #c2c6cd; background-color: #eff0f2; }
+.module header { border-bottom: none; -webkit-border-top-right-radius: 12px; -webkit-border-bottom-top-radius: 6px; -moz-border-radius-topright: 6px; -moz-border-radius-topleft: 6px; border-top-right-radius: 6px; border-top-left-radius: 6px; }
+.module .content { padding-top: 2px; border-top: none; -webkit-border-bottom-right-radius: 6px; -webkit-border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -moz-border-radius-bottomleft: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; }
+.module .content .wrap { font-size: 0.8em; }
+.module img { border-radius: 4px; }
+
+
+/* --------------------
+   Formulaire
+-------------------- */
+
+.media .btn, .audio .btn, .submit input { display: inline-block; padding: 3px 6px; border-radius: 8px; font-size: 0.8em; border: #fff solid 1px; }
+
+/* tgl */
+.wrap_content .tgl { display: none; }
+
+/* modules */
+.module_button { position: absolute; right: -96px; background-image: url('../images/icons/cgeomap-module-buttons-@2x.png'); background-size: 202px 282px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }
+#add_link_module { background-position: 0px -219px; top: 510px; }
+#add_text_module { background-position: 0px -73px; top: 290px; }
+#add_media_module { background-position: 0px 0px; top: 360px; }
+#add_audio_module { background-position: 0px -146px; top: 440px; }
+#add_link_module:hover { background-position: -108px -219px; }
+#add_text_module:hover { background-position: -108px -73px; }
+#add_media_module:hover { background-position: -108px 0px; }
+#add_audio_module:hover { background-position: -108px -146px; }
+#formulaire .modules li header.hover { background-image: url('../images/pix/handler.png'); background-repeat: no-repeat; background-position: center 4px; background-size: 20px 10px; }
+
+/* delete */
+.module .delete { display: block; position: absolute; top: 4px; right: 4px; cursor: pointer; background-image: url('../images/icons/cgeomap-btn-erase-@2x.png'); width: 26px; height: 26px; background-repeat: no-repeat; background-size: 52px 28px; background-position: -26px 0px; }
+.module .delete:hover, .module .delete:active { background-position: 0 0px; }
+
+/* texte */
+.module textarea { width: 330px; resize: vertical; }
+
+/* link */
+form .link li { line-height: 20px; }
+form .link ul { margin-bottom: 20px; }
+.link .form-control { padding: 3px 6px; }
+.link .add, .link .remove { display: block; width: 20px; height: 20px; text-align: center; font-weight: bold; } 
+.link .remove { float: right; }
+.link .add { position: absolute; bottom: 8px; right: 8px; }
+
+/* fileupload */
+.media .field_box, .media .value_box, .audio .field_box, .audio .value_box { text-align: center; }
+.module .fileinput { overflow: hidden; color: #000; background-color: #d5deed; border-color: #c2c6cd; }
+.module .fileinput:hover, .module .fileinput:focus { background-color: #cad4e5; }
+.module .fileinput:active { color: #fff; background-color: #878d96; }
+.module .fileinput input { position: absolute; top: 0; right: 0; margin: 0; opacity: 0; -ms-filter: 'alpha(opacity=0)'; font-size: 200px; direction: ltr; cursor: pointer; }
+.module .remove_media { border-color: #ef4123; }
+.module .remove_media:hover, .module .remove_media:active { background-color: rgba(239, 65, 35, .6); }
+.module .remove_media span { color: #ef4123; }
+.module .remove_media:hover span { color: #fff; }
+.module .progress {  height: 20px; overflow: hidden; background-color: #f5f5f5; border-radius: 4px; -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
+.module .progress-bar { float: left; width: 0; height: 100%; line-height: 20px; background-color: #428bca; -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15); -webkit-transition: width .6s ease;  transition: width .6s ease; }
+
+/* cartography */
+.wrap_cartography { border: 1px solid #fff; background: rgba(255,255,255, 0.9); -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
+.wrap_cartography li { display: block; width: 100px; float: left; margin-left: 20px; text-align: center; }
+
+/* submit */
+#sending_data { background: url('../js/fancybox/fancybox_overlay.png'); }
+#sending_data div { background: url('../js/fancybox/fancybox_loading.gif') center center no-repeat; }
+.submit { position: absolute; bottom: 10px; right: 15px; }
+.submit input { color: #878d96; background-color: #94ffd9; border-color: #c2c6cd; -webkit-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); }
+.submit input:hover, .btn-primary:focus { background-color: #f6ff8c; }
+.submit input:active { color: #ffffff; background-color: #ffda8c; }
 
 
 /* --------------------

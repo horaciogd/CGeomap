@@ -20,12 +20,58 @@ VhplabMap.prototype.bindActions = function() {
 		cgeomap.map.openMarker();
 	});
 };
+VhplabMap.prototype.clickListener = function(_e) {
+	this.clickableMarker.setLatLng(_e.latlng);
+	this.clickableMarker.setOpacity(1);
+	this.map.panTo(_e.latlng);
+	$(this.latitudeTag).val(_e.latlng.lat);
+	$(this.longitudeTag).val(_e.latlng.lng);
+	$(this.zoomTag).val(this.map.getZoom());
+	$(".cartography label").addClass('new');
+	$("#formulaire .wrap_cartography").data('ok',true);
+	cgeomap.form.check();
+};
 VhplabMap.prototype.openMarker = function() {
 	if (this.open) {
 		var marker = $(this.markers).data('marker_'+this.open);
 		marker.click();
 	}
 };
+VhplabMap.prototype.initMapElements = function(_opts) {
+	// Max Zoom Service
+	
+	// Map Zoom Custom Control
+	this.zoomControl = new vhplabZoomControl();
+	this.zoomControl.setParent(this);
+	this.map.addControl(this.zoomControl);
+	
+	// Geocoder
+	this.geocoder = new L.Control.GeoSearch({
+        provider: new L.GeoSearch.Provider.OpenStreetMap()
+    });
+    this.geocoder._processResults = function(results, qry) {
+       	cgeomap.map.clickableMarker.setLatLng([results[0].Y, results[0].X]);
+		cgeomap.map.clickableMarker.setOpacity(1);
+		cgeomap.map.map.panTo([results[0].Y, results[0].X]);
+		$(cgeomap.map.latitudeTag).val(results[0].Y);
+		$(cgeomap.map.longitudeTag).val(results[0].X);
+		$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
+		$(".cartography label").addClass('new');
+		$("#formulaire .wrap_cartography").data('ok',true);
+		cgeomap.form.check();
+    }
+	
+	// Clickable Marker
+	this.setInitialMarker(_opts);
+    	
+};
+VhplabMap.prototype.zoomListener = function(_e) {
+	$(this.zoomTag).val(this.map.getZoom());
+	$(".cartography label").addClass('new');
+	$("#formulaire .wrap_cartography").data('ok',true);
+	cgeomap.form.check();
+};
+
 
 // ************ //
 // Vhplab Marker

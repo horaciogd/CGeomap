@@ -49,6 +49,15 @@ function extension($fichier){
     if (preg_match(',\.([^\.]+)$,', $fichier, $regs)) return $regs[1];
     return '';
 }
+function extraire_action($baliza) {
+	$pos = strpos($baliza, "formulaire_action_args");
+	if ($pos === false) {
+	} else {
+		$baliza = substr($baliza, $pos + 22);
+		$list = split("'", $baliza);
+	}
+	return $list[4];
+}
 function extraire_br($baliza) {
 	$return = str_replace("\n", "", $baliza);
 	$return = str_replace("\t", "", $return);

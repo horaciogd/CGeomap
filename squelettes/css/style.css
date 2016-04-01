@@ -2,14 +2,20 @@
    General
 -------------------- */
 
- * { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+* { color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
 a { text-decoration: none; }
 a:hover, a:active { background-color: #25fade; }
 a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap a:hover, .fancybox-wrap a:active{ background-color: transparent; }
-.btn { cursor: pointer; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -o-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
+
+fieldset, .btn, .form-control { vertical-align: middle; background-image: none; display: inline-block; }
+fieldset { border: none; }
+.btn { cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; -khtml-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
 
 .right { text-align: right; }
 .right img, .center img { display: inline-block; padding: 0 10px; }
+
+.hidden { display: none; }
+.new { color: #94ffd9; font-style: italic; cursor: pointer; }
 
 
 /* --------------------
@@ -36,6 +42,7 @@ a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap
 /* --------------------
    Content
 -------------------- */
+
 
 /* --------------------
    Player

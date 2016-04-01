@@ -1,0 +1,64 @@
+#CACHE{24*3600}
+[(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+				<div class="module_button" id="add_text_module" data-type="text"></div>
+				<div class="module_button" id="add_link_module" data-type="link"></div>
+				<div class="module_button" id="add_media_module" data-type="media"></div>
+				<div class="module_button" id="add_audio_module" data-type="audio"></div>
+				<form method='post' action='' enctype='multipart/form-data'>
+					<header>
+						<hgroup>
+							<div class="wrap_title">
+								<div class="value_box">
+									<h2 class="value edit" title="<:exilio:aide_titre:>" name="title"><:cgeomap:campo_titulo:></h2>
+								</div>
+								<div class="field_box hidden">
+									<input name="title" class="form-control" value="" tabindex="1" type="text">
+								</div>
+							</div><!-- wrap_title -->
+							<div class="wrap_subtitle">
+								<div class="value_box">
+									<h3 class="value edit" title="<:exilio:aide_soustitre:>" name="subtitle"><:cgeomap:campo_subtitulo:></h3>
+								</div>
+								<div class="field_box hidden">
+									<input name="subtitle" class="form-control" value="" tabindex="2" type="text">
+								</div>
+							</div><!-- wrap_subtitle -->
+							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{128}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
+						</hgroup>
+					</header>
+					<div class="wrap_content">
+						<div class="wrap_modules audiovisuel" data-type="audiovisuel" data-tgl="off">
+							<header>
+								<button type="button" class="tgl"></button>
+								<h4><:cgeomap:modulo_audiovisual:></h4>
+							</header>
+							<ul class="modules tgl-off">
+								<li><ul class="trash"><li></li></ul></li>
+								<li class="margin">&nbsp;</li>
+							</ul>
+						</div><!-- audiovisuel -->
+						<div class="bottom"></div>
+					</div><!-- wrap_content -->
+					<ul class="wrap_cartography">
+						<li class="cartography">
+							<label for="latitude"><:vhplab:latitude_label:></label>
+							<input type="text" class="latitude" name="latitude" tabindex="4" value="" size="15" />
+						</li>
+						<li class="cartography">
+							<label for="longitude"><:vhplab:longitude_label:></label>
+							<input type="text" class="longitude" name="longitude" tabindex="5" value="" size="15" />
+						</li>
+						<li class="cartography">
+							<label for="zoom"><:vhplab:zoom_label:></label>
+							<input type="text" class="zoom" name="zoom" tabindex="6" value="" size="15" />
+						</li>
+						<li class="geocode">
+							<label for="address"><:vhplab:address_label:></label>
+							<input type="text" class="address" name="address" tabindex="7" value="" size="45" />
+						</li>
+					</ul><!-- wrap_cartography -->
+					<input type='hidden' class="id_article" name="id_article" value='oui' />
+					<p class='submit'><input type='submit' name="save" class='btn' value='<:bouton_enregistrer:>' /></p>
+				</div>
+			</form>
+			

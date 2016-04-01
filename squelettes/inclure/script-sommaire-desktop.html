@@ -1,20 +1,22 @@
 		[<!-- jQuery -->
 		<script type="text/javascript" src="(#CHEMIN{js/jquery-1.11.3.min.js})"></script>][
 		<script type="text/javascript" src="(#CHEMIN{js/jquery-ui-1.11.4.min.js})"></script>][
-		
+		<!-- jQuery-File-Upload -->
+		<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>]
+		[<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>]
+		[<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/jquery.fileupload.js"></script>][
 		<!-- Fancybox -->
 		<script type="text/javascript" src="(#CHEMIN{js/fancybox/jquery.fancybox.js})"></script>]
 		[<link rel="stylesheet" href="(#CHEMIN{js/fancybox/jquery.fancybox.css})" type="text/css" />][
-		
 		<!-- Leaflet 0.7.7 -->
 		<script type="text/javascript" src="(#CHEMIN{js/leaflet/leaflet.js})"></script>][
 		<script type="text/javascript" src="(#CHEMIN{js/leaflet/l.control.geosearch.js})"></script>][
 		<script type="text/javascript" src="(#CHEMIN{js/leaflet/l.geosearch.provider.openstreetmap.js})"></script>][
 		<link rel="stylesheet" href="(#CHEMIN{js/leaflet/leaflet.css}|direction_css)" />][
-		
 		<!-- Soundmanager 2 -->
-		<script type="text/javascript" src="(#CHEMIN{js/soundmanager2/soundmanager2.js})"></script>][
-		
+		<script type="text/javascript" src="(#CHEMIN{js/soundmanager2/soundmanager2.js})"></script>]
+		<INCLURE{fond=inclure/script-traduire} />
+		[
 		<!-- CGeomap -->
 		<script src="(#CHEMIN{js/vhplab_geo.js}|url_absolue)" type="text/javascript"></script>][
 		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>][
@@ -38,7 +40,7 @@
 						zoom: (#CONFIG{vhplab/default_zoom})][,
 						latitude: (#CONFIG{vhplab/default_latitude})][,
 						longitude: (#CONFIG{vhplab/default_longitude})][,
-						open: (#ENV{nodo}|?{#ENV{nodo},1})]
+						open: (#ENV{nodo}|?{#ENV{nodo},1})],
 					}
 				});
 			});

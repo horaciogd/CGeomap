@@ -71,20 +71,7 @@ VhplabMap.prototype.clickListener = function(_e) {
 	$(this.zoomTag).val(this.map.getZoom());
 };
 VhplabMap.prototype.codeAddress = function(_address) {
-	var self = this;
-	googleGeocodeProvider.GetLocations( _address, function ( data ) {
-  		// in data are your results with x, y, label and bounds (currently availabel for google maps provider only)
-  		/*
-  		if (status == google.maps.GeocoderStatus.OK) {
-			self.map.setCenter(results[0].geometry.location);
-			self.clickableMarker.setPosition(results[0].geometry.location);
-			$("#vhplab_latitude").val(results[0].geometry.location.lat());
-			$("#vhplab_longitude").val(results[0].geometry.location.lng());
-		} else {
-      		alert('Geocode was not successful for the following reason: ' + status);
-		}
-		*/
-	});
+	this.geocoder.geosearch(_address);
 };
 VhplabMap.prototype.closeOpenMarker = function() {
 	if(this.open) {
@@ -162,11 +149,26 @@ VhplabMap.prototype.loadMarkers = function() {
 VhplabMap.prototype.panOut = function() {
 	this.map.setView([this.lat, this.lng], this.zoom);
 };
+VhplabMap.prototype.reloadMarkers = function(_url, _callback) {
+	var self = this;
+	// load markers data
+	// get URL via alert(_url);
+	$.getJSON(_url, function(data){
+		//alert(data.toSource());
+		self.updateMarkers(data[0], function(){
+			self.reloadMarkers(_callback);
+		}, function(){
+			if (_callback) _callback();
+		});
+	});
+	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){});				
+};
 VhplabMap.prototype.setInitialMarker = function(_opts) {
-	var url;
+	var url, visible;
+	(typeof _opts.visible != "undefined") ? visible = _opts.visible : visible = 1;
 	if (typeof _opts.default_icon != "undefined") {
 		url = _opts.default_icon;
-	} else if (($("#formulaire .icon").attr("src") != "undefined")&&($("#formulaire .icon").attr("src") != "")) {
+	} else if ((typeof $("#formulaire .icon").attr("src") != "undefined")&&($("#formulaire .icon").attr("src") != "")) {
 		url = $("#formulaire .icon").attr("src");
 	} else {
 		url = this.baseURL + 'plugins/vhplab/images/icons/default_icon.png';
@@ -197,7 +199,7 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		$(this.zoomTag).val(this.map.getZoom());
 	}
 	this.clickableMarker.addTo(this.map);
-	this.clickableMarker.setOpacity(1);
+	this.clickableMarker.setOpacity(visible);
 };
 VhplabMap.prototype.showMarkers = function(_exception) {
 	if (typeof _exception != "undefined") {
@@ -222,6 +224,33 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		if (ma.distance < mb.distance) return -1;
 		if (ma.distance > mb.distance) return 1;
 		return 0;
+	});
+};
+VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
+	var marker = $(this.markers).data('marker_'+_data.id);
+	if (typeof marker == "undefined") {
+		marker = new VhpGisMarker();
+		marker.loadBasicData(_path, _data, this, _n);
+		$(this.markers).data('marker_'+marker.id, marker);
+		this.markerList.push(marker.id);
+	} else {
+		marker.updateData(_path, _data, this);
+	}
+};
+VhplabMap.prototype.updateMarkers = function(_data, _more, _callback) {
+	var n = this.offset;
+	var self = this;
+	var count = $(_data.markers).length - 1;
+	var path = _data.link;
+	// Loop through each marker data element
+	$.each(_data.markers, function(i, marker) {
+		n++;
+		self.updateMarker(path, marker, n);
+		if(i==count) {
+			var loadded = self.markerList.length;
+			self.offset = loadded;
+			_callback();
+		}
 	});
 };
 VhplabMap.prototype.zoomListener = function(_opts) {
