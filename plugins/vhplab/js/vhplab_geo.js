@@ -123,7 +123,12 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.map.addControl(this.zoomControl);
 	
 	// Geocoder
-	this.geocoder = new L.GeoSearch.Provider.OpenStreetMap();
+	/*
+	this.geocoder = new L.Control.GeoSearch({
+        provider: new L.GeoSearch.Provider.OpenStreetMap()
+    }).addTo(map);
+    */
+    this.geocoder = new L.GeoSearch.Provider.OpenStreetMap();
 	
 	if ((typeof _opts.formulaire != "undefined")&&(_opts.formulaire==true)) {
 		// Clickable Marker
@@ -180,23 +185,29 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		iconAnchor: [30, 60]
 	});
 	this.clickableMarker.setIcon(icon);
-	if ((navigator.geolocation)&&(_opts.latitude==0.0)&&(_opts.longitude==0.0)) {
+	var latitude, longitude, zoom;
+	var pos = this.map.getCenter();
+	(typeof _opts.latitude!="undefined") ? latitude = _opts.latitude : latitude = pos.lat;
+	(typeof _opts.longitude!="undefined") ? longitude = _opts.longitude : longitude = pos.lng;
+	(typeof _opts.zoom!="undefined") ? zoom = _opts.zoom : zoom = this.map.getZoom();
+	if ( ((latitude==0.0)&&(longitude==0.0)&&(navigator.geolocation)) || ((typeof _opts.position!="undefined")&&(_opts.position=="geolocation")) ) {
 		var self = this;
 		navigator.geolocation.getCurrentPosition(function(position) {
-			self.map.setView([position.coords.latitude, position.coords.longitude], self.zoom);
+			// succes
+			self.map.setView([position.coords.latitude, position.coords.longitude], zoom);
 			self.clickableMarker.setLatLng([position.coords.latitude, position.coords.longitude]);
-			$(self.latitudeTag).val(pos.lat());
-			$(self.longitudeTag).val(pos.lng());
-			$(self.zoomTag).val(self.map.getZoom());
+			$(self.latitudeTag).val(position.coords.latitude);
+			$(self.longitudeTag).val(position.coords.longitude);
+			$(self.zoomTag).val(zoom);
 		}, function() {
-			handleNoGeolocation(true);
+			// error
 		});
 	} else {
-		var pos = this.map.getCenter();
-		this.clickableMarker.setLatLng(pos);
-		$(this.latitudeTag).val(pos.lat);
-		$(this.longitudeTag).val(pos.lng);
-		$(this.zoomTag).val(this.map.getZoom());
+		this.map.setView([latitude, longitude], zoom);
+		this.clickableMarker.setLatLng([latitude, longitude]);
+		$(this.latitudeTag).val(latitude);
+		$(this.longitudeTag).val(longitude);
+		$(this.zoomTag).val(zoom);
 	}
 	this.clickableMarker.addTo(this.map);
 	this.clickableMarker.setOpacity(visible);
@@ -315,6 +326,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	typeof _opts.lng != "undefined" ? this.lng = parseFloat(_opts.lng) : this.lng = 0.0;
 	typeof _opts.zoom != "undefined" ? this.zoom = parseInt(_opts.zoom) : this.zoom = 0;
 	typeof _opts.titre != "undefined" ? $(this.data).data('titre', _opts.titre) : $(this.data).data('titre', "");
+	typeof _opts.lesauteurs != "undefined" ? $(this.data).data('lesauteurs', _opts.lesauteurs) : $(this.data).data('lesauteurs', "");
 	typeof _opts.soustitre != "undefined" ? $(this.data).data('soustitre', _opts.soustitre) : $(this.data).data('soustitre', "");
 	this.parent = _parent;
 	
@@ -323,15 +335,20 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	this.infoWindow.setLatLng([this.lat, this.lng]);
 	
 	if (typeof _opts.icon != "undefined") {
-		var width, height, icon;
+		var width, height, url;
 		typeof _opts.icon.width != "undefined" ? width = parseInt(_opts.icon.width) : width = 60;
 		typeof _opts.icon.height != "undefined" ? height = parseInt(_opts.icon.height) : height = 60;
-		typeof _opts.icon.url != "undefined" ? icon = _path + _opts.icon.url : icon = 'plugins/vhplab/images/icons/default_icon.png';
+		typeof _opts.icon.url != "undefined" ? url = _path + _opts.icon.url : url = 'plugins/vhplab/images/icons/default_icon.png';
     	var icon = L.icon({
-			iconUrl: icon,
-    		iconRetinaUrl: icon,
+			iconUrl: url,
+    		iconRetinaUrl: url,
     		iconSize: [width/2, height/2],
     		iconAnchor: [width/4, height/2]
+		});
+		$(this.data).data('icon', {
+			url: url,
+			width: width,
+			height: height
 		});
 		this.marker.setIcon(icon);
 		L.setOptions(this.infoWindow, {
@@ -347,9 +364,6 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 };
 VhplabMarker.prototype.loadWindowData = function(_data) {
 	// alert('loadWindowData: '+ JSON.stringify(_data));
-	typeof _data.id_article != "undefined" ? $(this.data).data('id_article', parseInt(_data.id_article)) : $(this.data).data('id_article', 0);
-	typeof _data.titre != "undefined" ? $(this.data).data('titre', _data.titre) : $(this.data).data('titre', "");
-	typeof _data.soustitre != "undefined" ? $(this.data).data('soustitre', _data.soustitre) : $(this.data).data('soustitre', "");
 	typeof _data.texte != "undefined" ? $(this.data).data('texte', _data.texte) : $(this.data).data('texte', "");
 	typeof _data.descriptif != "undefined" ? $(this.data).data('descriptif', _data.descriptif) : $(this.data).data('descriptif', "");
 	typeof _data.chapo != "undefined" ? $(this.data).data('chapo', _data.chapo) : $(this.data).data('chapo', "");
@@ -366,11 +380,10 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 	typeof _data.popularite != "undefined" ? $(this.data).data('popularite', parseInt(_data.popularite)) : $(this.data).data('popularite', 0);
 	typeof _data.lang != "undefined" ? $(this.data).data('lang', _data.lang) : $(this.data).data('lang', "");
 	typeof _data.auteur != "undefined" ? $(this.data).data('auteur', _data.auteur) : $(this.data).data('auteur', false);
+	typeof _data.autorise != "undefined" ? $(this.data).data('autorise', _data.autorise) : $(this.data).data('autorise', false);
 	typeof _data.url_article != "undefined" ? $(this.data).data('url_article', _data.url_article) : $(this.data).data('url_article', "");
 	typeof _data.url_editer != "undefined" ? $(this.data).data('url_editer', _data.url_editer) : $(this.data).data('url_editer', "");
-	typeof _data.url_editer_ajax != "undefined" ? $(this.data).data('url_editer_ajax', _data.url_editer_ajax) : $(this.data).data('url_editer_ajax', "");
 	typeof _data.autorise != "undefined" ? $(this.data).data('autorise', _data.autorise) : $(this.data).data('autorise', false);
-	typeof _data.icon != "undefined" ? $(this.data).data('icon', _data.icon) : $(this.data).data('icon', false);
 	typeof _data.image != "undefined" ? image = _data.image : image = false;
 	$(this.data).data('image', image);
 	typeof _data.enclosure != "undefined" ? enclosure = _data.enclosure : enclosure = false;

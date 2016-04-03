@@ -3,6 +3,9 @@
 
 (#REM) Avoid spip admin buttons
 ][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+				<BOUCLE_autoriser(AUTEURS){id_article}>[(#SESSION{id_auteur}|=={#ID_AUTEUR}|?{#SET{autorise,oui}, #SET{autorise,non}})]</BOUCLE_autoriser>
+				[(#SESSION{statut}|=={0minirezo}|?{#SET{autorise,oui}})][(#GET{autorise}|=={oui}|?{[(#SET{article,#ID_ARTICLE})],[(#SET{article,0})]})]
+				<BOUCLE_article(ARTICLES){id_article=#GET{article}}>
 				<div class="module_button" id="add_text_module" data-type="text"></div>
 				<div class="module_button" id="add_link_module" data-type="link"></div>
 				<div class="module_button" id="add_media_module" data-type="media"></div>
@@ -12,18 +15,18 @@
 						<hgroup>
 							<div class="wrap_title titre">
 								<div class="value_box">
-									<h1 class="value edit" title="<:cgeomap:aide_titre:>" name="title"><:cgeomap:campo_titulo:></h1>
+									<h1 class="value edit" title="<:cgeomap:aide_titre:>" name="title">#TITRE</h1>
 								</div>
 								<div class="field_box hidden">
-									<input name="title" class="form-control" value="" tabindex="1" type="text">
+									<input name="title" class="form-control" value="#TITRE" tabindex="1" type="text">
 								</div>
 							</div><!-- wrap_title -->
 							<div class="wrap_subtitle soustitre">
 								<div class="value_box">
-									<h2 class="value edit" title="<:cgeomap:aide_soustitre:>" name="subtitle"><:cgeomap:campo_subtitulo:></h2>
+									<h2 class="value edit" title="<:cgeomap:aide_soustitre:>" name="subtitle">#SOUSTITRE</h2>
 								</div>
 								<div class="field_box hidden">
-									<input name="subtitle" class="form-control" value="" tabindex="2" type="text">
+									<input name="subtitle" class="form-control" value="#SOUSTITRE" tabindex="2" type="text">
 								</div>
 							</div><!-- wrap_subtitle -->
 							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
@@ -31,7 +34,8 @@
 					</header>
 					<div class="content">
 						<div class="modules">
-							<div class="block_modules audiovisuel" data-type="audiovisuel" data-tgl="on">
+							<BOUCLE_modules(ARTICLES){id_article=#GET{article}}>[(#SET{modules,#TEXTE})]</BOUCLE_modules>[(#GET{modules}|extraire_formulaire_module)]
+							[(#TEXTE|=={''}|oui)<div class="block_modules audiovisuel" data-type="audiovisuel" data-tgl="on">
 								<header class="block">
 									<button type="button" class="tgl tgl-on"></button>
 									<h4><:cgeomap:modulo_audiovisual:></h4>
@@ -40,28 +44,29 @@
 									<li><ul class="trash"><li></li></ul></li>
 									<li class="margin">&nbsp;</li>
 								</ul>
-							</div><!-- audiovisuel -->
+							</div><!-- audiovisuel -->]
 							<div class="bottom"></div>
 						</div><!-- modules -->
 					</div><!-- content -->
-					<ul class="wrap_cartography">
+					<ul class="wrap_cartography"><BOUCLE_gis(VHPLAB_GIS){id_article=#GET{article}}>[(#SET{latitude,#LATITUDE})][(#SET{longitude,#LONGITUDE})][(#SET{zoom,#ZOOM})][(#SET{address,#ADDRESS})]</BOUCLE_gis>
 						<li class="cartography">
 							<label for="latitude"><:vhplab:latitude_label:></label>
-							<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="" size="15" />
+							<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="[(#GET{latitude})]" data-new="[(#GET{latitude})]" size="15" />
 						</li>
 						<li class="cartography">
 							<label for="longitude"><:vhplab:longitude_label:></label>
-							<input type="text" class="longitude form-control " name="longitude" tabindex="5" value="" size="15" />
+							<input type="text" class="longitude form-control" name="longitude" tabindex="5" value="[(#GET{longitude})]" size="15" />
 						</li>
 						<li class="cartography">
 							<label for="zoom"><:vhplab:zoom_label:></label>
-							<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="" size="5" />
+							<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="[(#GET{zoom})]" size="5" />
 						</li>
 						<li class="geocode">
 							<label for="address"><:vhplab:address_label:></label>
-							<input type="text" class="address form-control" name="address" tabindex="7" value="" size="45" />
+							<input type="text" class="address form-control" name="address" tabindex="7" value="[(#GET{address})]" size="45" />
 						</li>
 					</ul><!-- wrap_cartography -->
-					<input type='hidden' class="id_article" name="id_article" value='oui' />
+					[<input type='hidden' class="id_article" name="id_article" value='(#ID_ARTICLE)' />]
 					<p class='submit'><input type='submit' name="save" class='btn' value='<:bouton_enregistrer:>' /></p>
 				</form>
+				</BOUCLE_article>

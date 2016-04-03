@@ -33,6 +33,11 @@ VhplabInterface.prototype.ready = function(_opts) {
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 	// get URL via alert(this.url_article);
  	$("#content .wrapper").load(this.url_article, function() {
+ 		$('#article .header .editer').click(function() { 
+ 			$(this).fadeOut('fast', function(){
+ 				cgeomap.toggleUtilities($(this).attr('name'));
+ 			});
+ 		});
  		cgeomap.loadUser();
 		if(_callback) _callback();
 	});

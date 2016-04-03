@@ -77,6 +77,22 @@ VhplabMap.prototype.zoomListener = function(_e) {
 // Vhplab Marker
 // ************ //
 VhplabMarker.prototype.appendContent = function() {
+	/* editer */
+	if (($(this.data).data('autorise'))&&($(this.data).data('autorise')=='oui')) {
+		$('#article .header .editer').data('href', $(this.data).data('url_editer'));
+		$('#article .header .editer').data('visible', true);
+		$('#article .header .editer').show();
+	} else {
+		$('#article .header .editer').data('visible', false);
+		$('#article .header .editer').hide();
+	}
+	
+	/* icon */
+	var icon = $(this.data).data('icon');
+	$('#article header img').attr('src', icon.url);
+	$('#article header img').attr('width', icon.width/2);
+	$('#article header img').attr('height', icon.height/2);
+	
 	/* title & subtitle */
 	$('#article .titre').html($(this.data).data('titre'));
 	$('#article .soustitre').html($(this.data).data('soustitre'));
@@ -85,26 +101,26 @@ VhplabMarker.prototype.appendContent = function() {
 	$('#article .texte').empty();
 	
 	/* modules */
-	$('#article .modules ul li.audio').each(function(i){
+	$('#article .modules_list ul li.audio').each(function(i){
 		soundManager.destroySound('cgeomap_sound_' + i);
 	});
-	$('#article .modules').empty();
+	$('#article .modules_list').empty();
 	
 	var t = $(this.data).data('texte');
 	/* texte */
-	if(t.search("<div class='wrap_modules")==(-1)) {
+	if(t.search("<div class='block_modules")==(-1)) {
 		$('#article .texte').html($(this.data).data('texte'));
 		$('#article .texte a.fancybox').fancybox();
 		
 	/* modules */
 	} else {
 		$('#article .modules').append($(this.data).data('texte'));
-		$("#article .modules header").hover(function() {
+		$("#article .modules_list header").hover(function() {
     			$('.toggle', this).addClass('hover');
   			}, function() {
     			$('.toggle', this).removeClass('hover');
   		});
-  		$('#article .modules ul li.audio').each(function(i){
+  		$('#article .modules_list .audio').each(function(i){
 			var url = $('a', this).attr("href");
 			var player = new VhplabPlayer();
 			player.init({
@@ -114,8 +130,8 @@ VhplabMarker.prototype.appendContent = function() {
 			$('.content', this).empty();
 			player.appendTo($('.content', this));
 		});
-		$("#article .modules a.fancybox").fancybox();
-		$('#article .modules ul li.link').each(function(i){
+		$("#article .modules_list a.fancybox").fancybox();
+		$('#article .modules_list .link').each(function(i){
 			/* internal link */
 			$('.content li a', this).each(function(u){
 				var url = $(this).attr('href');

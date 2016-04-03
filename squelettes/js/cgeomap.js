@@ -65,7 +65,7 @@ VhplabInterface.prototype.createNavigationList = function() {
 	for (var i=0; i<this.map.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
 		pagination = (num - num%6)/6;
-		html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'));
+		html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('lesauteurs'));
 		num ++;
 	}
 	$('#navigation .menu .list').empty();
@@ -130,11 +130,14 @@ VhplabInterface.prototype.loadEmbed = function() {
 	$("#content").data('selected','embed');
 	$("#user .utilities .embed").addClass('on');
 };
-VhplabInterface.prototype.loadForm = function() {
-	alert('loadForm');
+VhplabInterface.prototype.loadContribuer = function() {
 	cgeomap.form.load();
 	$("#content").data('selected','contribuer');
 	$("#user .utilities .contribuer").addClass('on');
+};
+VhplabInterface.prototype.loadEditer = function() {
+	cgeomap.form.load($('#article .header .editer').data('href'));
+	$("#content").data('selected','editer');
 };
 VhplabInterface.prototype.loadMap = function(_callback) {
 	var self = this;
@@ -262,7 +265,7 @@ VhplabInterface.prototype.toggleLogin = function(_me) {
 };
 VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 	var selected = $("#content").data('selected');
-	alert('target: '+ _target +' selected: '+ selected);
+	// alert('target: '+ _target +' selected: '+ selected);
 	if (_target!=selected) {
 		var hide = "";
 		switch (selected) {
@@ -293,11 +296,11 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 					if (_callback) _callback();
 					break;
 				case 'contribuer':
-					cgeomap.loadForm();
+					cgeomap.loadContribuer();
 					if (_callback) _callback();
 					break;
 				case 'editer':
-					//cgeomap.form.load(_me);
+					cgeomap.loadEditer();
 					break;
 				case 'embed':
 					cgeomap.loadEmbed();
@@ -348,7 +351,7 @@ VhplabContribuerFrom.prototype.bindActions = function() {
 			return cgeomap.form.submit();
 		}
 	});
-	$(".enregistrer .btn-primary").css('opacity','0.4');
+	$(".submit .btn").css('opacity','0.4');
 	
 	/* title & subtitle */
     $("#formulaire .wrap_title .edit").dblclick(function(){ cgeomap.form.activateInputField(this) });
@@ -364,8 +367,8 @@ VhplabContribuerFrom.prototype.bindActions = function() {
 		cgeomap.form.updateInputField(this);
 		cgeomap.form.status = 'editer';
     });
-    $("#formulaire .wrap_title input").data('limit', 34);
-    $("#formulaire .wrap_subtitle input").data('limit', 62);
+    $("#formulaire .wrap_title input").attr('maxlength', 20);
+    $("#formulaire .wrap_subtitle input").attr('maxlength', 45);
     
     /* modules */
     $(".module_button").click(function(){ cgeomap.form.createNewModule(this); });
@@ -390,13 +393,92 @@ VhplabContribuerFrom.prototype.bindActions = function() {
 	/* icon */
 	this.setIcon(0);
 };
+VhplabContribuerFrom.prototype.bindEachModuleActions = function(_block) {
+	var audio_modules = 0;
+	var media_modules = 0;
+	var text_modules = 0;
+	var link_modules = 0;
+	var container = ".content ."+_block;
+	$(".module", "#formulaire "+ container).each(function(){
+		if ($(this).hasClass("audio")) {
+			/* audio data */
+			$(this).data('audio', $(".value_box a", this).data('id'));
+   			$(this).data('ok', true);
+   			/* context */
+			var c = container +" .audio_"+ audio_modules;
+			/* bind audio actions */
+			cgeomap.form.bindMediaModuleActions(c, 'audio', audio_modules);
+			soundManager.onready(function() {
+				// soundManager.createSound() etc. may now be called
+				var player = new VhplabPlayer();
+				player.init({
+					id: 'new_audio_'+audio_modules,
+					url: $('.value_box a', c).attr("href")
+				});
+				$('.value_box', c).empty();
+				player.appendTo($('.value_box', c));
+				$('.value_box', c).append('<div class="btn remove_media"><span>'+_T.eliminar+'</span></div>');
+			});
+			$('.value_box', c).show();
+			$('.field_box', c).hide();
+			/* bind remove actions */
+			$('.remove_media span', c).click(function(){
+				$('.value_box', c).empty();
+				$('.fileinput', c).show();
+				$('.progress-bar', c).css('width',0);
+				$('.progress', c).hide();
+				$('.field_box', c).show();
+				cgeomap.form.deleteMedia(c, 'audio');
+				$(c).data('ok', false);
+				$(c).data('audio', '');
+				$(".submit .btn").css('opacity','0.4');
+			});
+   			audio_modules++;
+		} else if ($(this).hasClass("media")) {
+			/* image data */
+			$(this).data('media',$(".value_box img", this).data('id'));
+   			$(this).data('ok', true);
+			/* context */
+			var c = container +" .media_"+ media_modules;
+			/* bind media actions */
+			cgeomap.form.bindMediaModuleActions(c, 'media', audio_modules);
+			/* bind remove actions */
+			$('.remove_media span', c).click(function(){
+				$('.value_box', c).empty();
+				$('.fileinput', c).show();
+				$('.progress-bar', c).css('width',0);
+				$('.progress', c).hide();
+				$('.field_box', c).show();
+				cgeomap.form.deleteMedia(c, 'media');
+				$(c).data('ok', false);
+				$(c).data('media', '');
+				$(".submit .btn").css('opacity','0.4');
+			});
+   			media_modules++;
+		} else if ($(this).hasClass("text")) {
+			/* bind text actions */
+			cgeomap.form.bindTextModuleActions(container +" .text_"+ text_modules);
+			$(this).data('ok', true);
+   			text_modules++;
+		} else if ($(this).hasClass("link")) {
+			/* bind link actions */
+			cgeomap.form.bindLinkModuleActions(container +" .link_"+ link_modules +" ul li");
+			$(this).data('ok', true);
+   			link_modules++;
+		}
+	});
+	$("#add_link_module").data('n_'+_block, link_modules);
+	$("#add_text_module").data('n_'+_block, text_modules);
+	$("#add_media_module").data('n_'+_block, media_modules);
+	$("#add_audio_module").data('n_'+_block, audio_modules);
+};
 VhplabContribuerFrom.prototype.bindLinkModuleActions = function(_context) {
 	$(_context).each(function(){
 		if ($(this).hasClass("add")) {
 			$(this).click( function(){
     			cgeomap.form.addLinkToModule(this);
     			$(this).parent().parent().parent().data('ok',false);
-				$(".enregistrer .btn-primary").css('opacity','0.4');
+				$(".submit .btn").css('opacity','0.4');
     		});
 		} else {
 			var field = $('.field_box input:first-child', this);
@@ -421,7 +503,7 @@ VhplabContribuerFrom.prototype.bindLinkModuleActions = function(_context) {
     			var list = $(this).parent().parent().parent();
     			if($('li', list).size()<=2) {
     				$(c).data('ok',false);
-					$(".enregistrer .btn-primary").css('opacity','0.4');
+					$(".submit .btn").css('opacity','0.4');
     			}
     			$(this).parent().parent().remove();
         	});
@@ -490,7 +572,6 @@ VhplabContribuerFrom.prototype.bindUploadedMediaActions = function(_data, _class
 	} else if (_class=='audio') {
 		soundManager.onready(function() {
 			// soundManager.createSound() etc. may now be called
-			var url = $('.value_box a', _container).attr("href");
 			var player = new VhplabPlayer();
 			player.init({
 				id: 'new_audio_'+_n,
@@ -515,7 +596,7 @@ VhplabContribuerFrom.prototype.bindUploadedMediaActions = function(_data, _class
 		$.ajax({url: del, type: 'DELETE'});
 		$(_container).data('ok', false);
 		$(_container).data(_class, '');
-		$(".enregistrer .btn-primary").css('opacity','0.4');
+		$(".submit .btn").css('opacity','0.4');
 	});
 };
 VhplabContribuerFrom.prototype.check = function() {
@@ -531,9 +612,9 @@ VhplabContribuerFrom.prototype.check = function() {
 	/* cartography */
 	var cartography = $("#formulaire .wrap_cartography").data('ok');
 	if ((title)&&(subtitle)&&(modules_audiovisuel)&&(cartography)) {
-		$(".enregistrer .btn-primary").css('opacity','1');
+		$(".submit .btn").css('opacity','1');
 	} else {
-		$(".enregistrer .btn-primary").css('opacity','0.4');
+		$(".submit .btn").css('opacity','0.4');
 		// alert('title:'+ title +' subtitle:'+ subtitle +' options:'+ options +' modules_audiovisuel:'+ modules_audiovisuel +' cartography'+cartography);
 	}
 };
@@ -576,9 +657,9 @@ VhplabContribuerFrom.prototype.cleanUploads = function(_uploads) {
 	}
 };
 VhplabContribuerFrom.prototype.createAudioModule = function(_container, _type, _n) {
-	$(_container +" .modules").append(this.createModule(_type, _T.module_label_audio, _n, '', _T.module_help_sound));
+	$(_container +" .modules_list").append(this.createModule(_type, _T.module_label_audio, _n, '', _T.module_help_sound));
 	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createField('\t\t\t\t', '', this.createMediaInput('', _T.seleciona_audio)));
-	this.bindMediaModuleActions(_container +" ."+ _type +"_"+ _n, _type);
+	this.bindMediaModuleActions(_container +" ."+ _type +"_"+ _n, _type, _n);
 };
 VhplabContribuerFrom.prototype.createField = function(_tab, _value, _input) {
 	var html = '';
@@ -606,11 +687,11 @@ VhplabContribuerFrom.prototype.createLinkList = function(_tab) {
 	return html;
 };
 VhplabContribuerFrom.prototype.createLinkModule = function(_container, _type, _n) {
-	$(_container +" .modules").append(this.createModule(_type, _T.module_label_links, _n, '\t\t\t\t\t\t\t\t', _T.help_link));
+	$(_container +" .modules_list").append(this.createModule(_type, _T.module_label_links, _n, '\t\t\t\t\t\t\t\t', _T.help_link));
 	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createLinkList('\t\t\t\t\t\t\t\t'));
 	$(_container +" ."+ _type +"_"+ _n +" ul .add").hide();
 	$(_container +" ."+ _type +"_"+ _n +" ul").append('\t' + this.createLink(_type, _T.module_label_address, _T.module_label_text, '\t\t\t\t\t\t\t'));
-	alert(_container +" ."+ _type +"_"+ _n +" ul li");
+	// alert(_container +" ."+ _type +"_"+ _n +" ul li");
 	this.bindLinkModuleActions(_container +" ."+ _type +"_"+ _n +" ul li");
 };
 VhplabContribuerFrom.prototype.createMediaInput = function(_tab, _text) {
@@ -626,7 +707,7 @@ VhplabContribuerFrom.prototype.createMediaInput = function(_tab, _text) {
 	return html;
 };
 VhplabContribuerFrom.prototype.createMediaModule = function(_container, _type, _n) {
-	$(_container +" .modules").append(this.createModule(_type, _T.module_label_image, _n, '', _T.module_help_image));
+	$(_container +" .modules_list").append(this.createModule(_type, _T.module_label_image, _n, '', _T.module_help_image));
 	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createField('\t\t\t\t', '', this.createMediaInput('', _T.seleciona_imagen)));
    	this.bindMediaModuleActions(_container +" ."+ _type +"_"+ _n, _type, _n);
 };
@@ -645,7 +726,7 @@ VhplabContribuerFrom.prototype.createModule = function(_class, _text, _n, _tab, 
 VhplabContribuerFrom.prototype.createNewModule = function(_me) {
 	var type = $(_me).data("type");
 	var n = $(_me).data('n_audiovisuel');
-	var container = "#formulaire .wrap_content .audiovisuel";
+	var container = "#formulaire .content .audiovisuel";
 	if ($(container +" li.module").size()<=25) {
 		switch(type) {
 			case 'text':
@@ -663,43 +744,30 @@ VhplabContribuerFrom.prototype.createNewModule = function(_me) {
 		}
 		this.bindModuleHeaderActions(container +" ."+ type +"_"+ n);
 		$(container +" ."+ type +"_"+ n).data('ok', false);
-		$(".enregistrer .btn-primary").css('opacity','0.4');
+		$(".submit .btn").css('opacity','0.4');
 		$(_me).data('n_audiovisuel', n+1);
-		//$("#formulaire .wrap_content").mCustomScrollbar("update");
+		//$("#formulaire .content").mCustomScrollbar("update");
 	}
 };
 VhplabContribuerFrom.prototype.createTextModule = function(_container, _type, _n) {
-	$(_container +" .modules").append(this.createModule(_type, _T.module_label_text, _n, '\t\t\t\t\t\t\t', _T.module_help_text));
+	$(_container +" .modules_list").append(this.createModule(_type, _T.module_label_text, _n, '\t\t\t\t\t\t\t', _T.module_help_text));
 	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createField('\t\t\t\t', '<p class="value" name="text"></p><span class="error"></span>', '\t\t\t\t\t<textarea class="form-control text" name="text" rows="6"></textarea>\n'));
 	this.bindTextModuleActions(_container +" ."+ _type +"_"+ _n);
+};
+VhplabContribuerFrom.prototype.deleteMedia = function(_c, _type) {
+	var delete_media;
+	(typeof $("#formulaire .id_article").data('delete-media') != "undefined") ? delete_media = $("#formulaire .id_article").data('delete-media') + ":" : delete_media = "";
+	delete_media += $(_c).data(_type);
+	$("#formulaire .id_article").data('delete-media', delete_media);
+	// alert('delete_media: '+delete_media);	
 };
 VhplabContribuerFrom.prototype.deleteModule = function(_me) {
 	var container = $(_me).parent().parent();
 	var clase = $(container).attr('class');
 	var type = clase.split(" ");
-	if (type[0]=="media") {
-		if ($("#formulaire .id_article").val()!='oui') {
-			var delete_media;
-			(typeof $("#formulaire .id_article").data('delete-media') != "undefined") ? delete_media = $("#formulaire .id_article").data('delete-media') + ":" : delete_media = "";
-			if (typeof $('.value_box img', container).data('id') != "undefined") {
-				delete_media += $('.value_box img', container).data('id');	
-			} else if ($(container).data('delete-media')!="undefined") {
-				delete_media += $(container).data('delete-media');
-			}
-			$("#formulaire .id_article").data('delete-media', delete_media);
-		} else {
-			$('.remove_media span', container).trigger('click');
-		}
-	} else if (type[0]=="audio") {
-		if ($("#formulaire .id_article").val()!='oui') {
-			var delete_audio;
-			(typeof $("#formulaire .id_article").data('delete-audio') != "undefined") ? delete_audio = $("#formulaire .id_article").data('delete-audio') + ":" : delete_audio = "";
-			if (typeof $(".sm2_link", container).data('id') != "undefined") {
-				delete_audio += $('.sm2_link', container).data('id');	
-			} else if ($(container).data('delete-audio')!="undefined") {
-			delete_audio += $(container).data('delete-audio');
-			}
-			$("#formulaire .id_article").data('delete-audio', delete_audio);
+	if ((type[0]=="media")||(type[0]=="audio")) {
+		if (($("#formulaire .id_article").val()!='oui')&&(typeof $(container).data(type[0])=="number")) {
+			this.deleteMedia(container, type[0]);
 		} else {
 			$('.remove_media span', container).trigger('click');
 		}
@@ -758,6 +826,25 @@ VhplabContribuerFrom.prototype.getModulesData = function(_wrapper) {
 	$(return_data).data('clean_uploads', clean_uploads);
 	return return_data;
 };
+VhplabContribuerFrom.prototype.initData = function() {
+	/* title & subtitle */
+	$("#formulaire .wrap_title").data('ok', true);
+	$("#formulaire .wrap_subtitle").data('ok', true);
+	/* options */
+	$("#formulaire .wrap_options").data('ok', false);
+	/* modules */
+	this.bindModuleHeaderActions("#formulaire .modules");
+	this.bindEachModuleActions('audiovisuel');
+	/* cartography */
+	$("#formulaire .wrap_cartography").data('ok',true);
+	cgeomap.map.setInitialMarker({
+		latitude: $("#formulaire .wrap_cartography .latitude").val(),
+		longitude: $("#formulaire .wrap_cartography .longitude").val(),
+		zoom: $("#formulaire .wrap_cartography .zoom").val()
+	});
+	/* callback */
+	this.check();
+};
 VhplabContribuerFrom.prototype.initialize = function(_opts) {
 	if (typeof _opts.url_site != "undefined") {
 		this.url_form = _opts.url_site + 'spip.php?page=ajax-contribuer';
@@ -765,21 +852,39 @@ VhplabContribuerFrom.prototype.initialize = function(_opts) {
 		this.url_upload = _opts.url_site + 'jQuery-File-Upload/server/php/';
 	}
 };
-VhplabContribuerFrom.prototype.load = function(_me) {
+VhplabContribuerFrom.prototype.load = function(_url) {
 	$("#formulaire").empty();
-	// get url via alert('url: '+ url);
-	$("#formulaire").load(this.url_form, function() {
-		if(cgeomap.map.open) {
-			var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
-			open.closeInfoWindow();
-		}
-		cgeomap.map.hideMarkers();
-		cgeomap.form.resetData();
-		cgeomap.form.bindActions();
-		$("#formulaire").slideDown("slow",function(){
+	// new
+	if (_url) {
+		// get url via alert('url: '+ _url);
+		$("#formulaire").load(_url, function() {
+			if(cgeomap.map.open) {
+				var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
+				open.closeInfoWindow();
+			}
+			cgeomap.map.hideMarkers();
+			cgeomap.form.initData();
+			cgeomap.form.bindActions();
+			$("#formulaire").slideDown("slow",function(){
 			
+			});
 		});
-	});
+	// contribuer
+	} else {
+		// get url via alert('url: '+ this.url_form);
+		$("#formulaire").load(this.url_form, function() {
+			if(cgeomap.map.open) {
+				var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
+				open.closeInfoWindow();
+			}
+			cgeomap.map.hideMarkers();
+			cgeomap.form.resetData();
+			cgeomap.form.bindActions();
+			$("#formulaire").slideDown("slow",function(){
+			
+			});
+		});
+	}
 };
 VhplabContribuerFrom.prototype.progressAnimation = function(_data, _container) {
 	var progress = parseInt(_data.loaded / _data.total * 100, 10);
@@ -825,13 +930,15 @@ VhplabContribuerFrom.prototype.setIcon = function(_n) {
 		}
 	}
 	if (this.icons.length>_n) {
-		$("#formulaire header .icon").data("id_icon", $(this.icons[_n]).data('id'));
-		$("#formulaire header .icon").attr("src", $(this.icons[_n]).data('src'));
+		$("#formulaire .header .icon").data("id_icon", $(this.icons[_n]).data('id'));
+		$("#formulaire .header .icon").attr("src", $(this.icons[_n]).data('src'));
+		$("#formulaire .header .icon").attr("width", 60);
+		$("#formulaire .header .icon").attr("height", 60);
 		var icon = L.icon({
 			iconUrl: $(this.icons[_n]).data('src'),
     		iconRetinaUrl: $(this.icons[_n]).data('src'),
-    		iconSize: [64, 64],
-    		iconAnchor: [32, 32]
+    		iconSize: [60, 60],
+    		iconAnchor: [30, 60]
 		});
 		cgeomap.map.clickableMarker.setIcon(icon);
 	}
@@ -859,7 +966,7 @@ VhplabContribuerFrom.prototype.sortableStop = function(_me, _container) {
 			if (typeof $(this).attr("class") != "undefined") {
 				$(_container +" .trash").empty();
 				$(_container +" .trash").append("<li></li>");
-				$(".wrap_content").mCustomScrollbar("update");
+				$("#formulaire .content").mCustomScrollbar("update");
 				cgeomap.form.check();
 				// alert('trash'); 
 			}
@@ -867,7 +974,7 @@ VhplabContribuerFrom.prototype.sortableStop = function(_me, _container) {
 	}
 };
 VhplabContribuerFrom.prototype.submit = function() {
-	alert('submit');
+	// alert('submit');
 	/* title & subtitle */
 	var title = $("#formulaire .wrap_title").data('ok');
 	var subtitle = $("#formulaire .wrap_subtitle").data('ok');
@@ -880,7 +987,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 	// alert($(audiovisuel_modules).toSource());
 	if ((title)&&(subtitle)&&($(audiovisuel_modules).data('num')>0)&&($(audiovisuel_modules).data('modules'))&&(cartography)) {
 		$("body").prepend('<div id="sending_data"><div></div></div>');
-		$(".enregistrer .btn-primary").hide();
+		$(".submit .btn").hide();
 		var id_article = 'new';
 		// id_article when editing and delete media if old media was deleted in modules
 		if ($("#formulaire .id_article").val()!='oui') {
@@ -916,14 +1023,13 @@ VhplabContribuerFrom.prototype.submit = function() {
 			};
 			// alert($(formData).toSource());
 			$.getJSON(cgeomap.form.url_form, formData, function(response){
-				// 
-				alert($(response).toSource());
+				// alert($(response).toSource());
 				if (typeof(response[0].message_ok)!="undefined") {
 					cgeomap.form.cleanUploads($(audiovisuel_modules).data('clean_uploads'));
 					$("#formulaire").empty();
 					var text = response[0].message_ok.split(":");
 					var updateURL = response[0].update +'&id_article='+ text[2] +'&var_mode=recalcul';
-					alert(updateURL);
+					// alert(updateURL);
 					cgeomap.map.openMarker = text[2];
 					$("#formulaire").load(updateURL, function() {
 						$("#formulaire").empty();
@@ -973,11 +1079,15 @@ VhplabContribuerFrom.prototype.toggleGeo = function() {
 	}
 };
 VhplabContribuerFrom.prototype.updateHeaderField = function(_me, _tag) {
+	// alert('updateHeaderField');
 	var container = $(_me).parent();
 	var old = $(_tag, container).text();
 	var value = $(_me).val();
+	var limit = $(_me).data('limit');
+	// alert(limit);
 	if ((typeof(value)!='undefined')&&(value != "")&&(value!=old)) {
-    	if (value.length>=45) value = value.slice(0,45) + '...';
+    	if ((typeof(limit)!='undefined')&&(value.length>limit)) value = value.slice(0, limit-3) + '...';
+    	
     	$(_tag, container).text(value);
     	$(_tag, container).attr("class","value new");
 		$("input", container).hide();
@@ -991,11 +1101,8 @@ VhplabContribuerFrom.prototype.updateInputField = function(_me) {
 	var container = $(_me).parent().parent();
 	var old = $(".value_box .value", container).text();
 	var value = $(_me).val();
-	var limit = $(_me).data('limit');
 	if ((typeof(value)!='undefined')&&(value != "")&&(value!=old)) {
-    	var text = value
-    	if ((typeof(limit)!='undefined')&&(value.length>=limit)) text = text.slice(0,limit-3) + '...';
-    	$(".value_box .value", container).text(text);
+    	$(".value_box .value", container).text(value);
     	$(".value_box .value", container).attr("class","value new");
 		$(".field_box", container).hide();
 		$(".value_box .new", container).show();

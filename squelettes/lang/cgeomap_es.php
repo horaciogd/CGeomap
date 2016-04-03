@@ -7,6 +7,9 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 
 	// A
 	'agenda' => 'Agenda',
+	'audiovisual_modules' => 'Módulos audivisuales',
+	'aide_titre' => 'Haz clic 2 veces para escribir tu título (30 carácteres). Cuidado, no debes apretar la tecla \'enter\' para terminar la edición de los textos. Haz clic fuera del bloque para seguir editando otros contenidos.',
+	'aide_soustitre' => 'Haz clic 2 veces para escribir tu subtítulo (45 carácteres). Cuidado, no debes apretar la tecla \'enter\' para terminar la edición de los textos. Haz clic fuera del bloque para seguir editando otros contenidos. Colocate al final del texto antes de clicar fuera para guardar tus cambios.',
 	
 	// E
 	'editar' => 'Editar',
