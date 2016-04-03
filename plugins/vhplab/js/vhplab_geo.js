@@ -240,8 +240,8 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
 	var marker = $(this.markers).data('marker_'+_data.id);
 	if (typeof marker == "undefined") {
-		marker = new VhpGisMarker();
-		marker.loadBasicData(_path, _data, this, _n);
+		marker = new VhplabMarker();
+		marker.initialize(_path, _data, this);
 		$(this.markers).data('marker_'+marker.id, marker);
 		this.markerList.push(marker.id);
 	} else {
@@ -296,7 +296,7 @@ function VhplabMarker() {
 VhplabMarker.prototype.bindPopupActions = function(_content) {
 	
 };
-VhplabMarker.prototype.click = function() {
+VhplabMarker.prototype.click = function(_callback) {
 	if(!this.open) {
 		var self = this;
 		if (this.loadded) {
@@ -307,6 +307,7 @@ VhplabMarker.prototype.click = function() {
 				$.each(data[0].marker, function(i, marker){
 					self.loadWindowData(marker);
 					self.openInfoWindow();
+					if(_callback) _callback();
 				});
 			});
 		}

@@ -85,7 +85,7 @@
 article { position: relative; }
 
 /* header  */
-.header { height: 60px; margin-bottom: 12px; }
+.header { height: 60px; margin-bottom: 8px; }
 .header img { position: absolute; top: 0px; left: 0; }
 .header .titre, .header .soustitre { margin-left: 60px; }
 .header .titre { line-height: 36px; height: 44px; font-size: 26px; }
@@ -116,6 +116,15 @@ article { position: relative; }
  
 /* buttons */
 .media .btn, .audio .btn, .submit input, .editer { display: inline-block; padding: 3px 6px; border-radius: 8px; font-size: 0.8em; border: #fff solid 1px; }
+
+/* visibility */
+.field_box { text-align: right; margin-bottom: 8px; }
+.field_box li { display: inline-block; line-height: 24px; }
+.field_box li.label { float: left; background-image: url('../images/icons/cgeomap-globe-@2x.png'); background-size: 24px 24px; padding-left: 24px; background-repeat: no-repeat; }
+.field_box li.label, .field_box label { font-size: 0.8em; vertical-align: middle; }
+.field_box .btn { width: 24px; height: 24px; background-size: 24px 24px; background-position: center center; border-radius: 7px; border: 2px solid #000; margin: 0 2px 0 6px; background-color: transparent; }
+.field_box .btn:hover, .field_box .btn:focus,.field_box .btn:active { background-color: #f6ff8c; }
+.field_box .selected { background-image: url('../images/pix/cgeomap-check-@2x.png'); }
 
 /* modules */
 .module_button { position: absolute; right: -96px; background-image: url('../images/icons/cgeomap-module-buttons-@2x.png'); background-size: 202px 282px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }

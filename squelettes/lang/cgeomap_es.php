@@ -64,6 +64,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'recent_articles' => 'Últimas aportaciones',
 	'required_title' => 'No se recibió ningún título para la entrada',
 	'required_subtitle' => 'No se recibió ningún subtítulo para la entrada',
+	'required_visibility' => 'No se recibió ninguna indicación acerca de la visibilidad',
 	'required_icon' => 'No se recibió ningún icono para la entrada',
 	'required_audiovisuel' => 'No se recibió módulo audiovisual tag para la entrada',
 	'required_delete_media' => 'No se recibieron las imagenes para eliminar',
@@ -78,6 +79,8 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'submit_login' => 'LOGIN',
 	'submit_logout' => 'LOGOUT',
 	
+	// V
+	'visible' => 'visibilidad',
 );
 
 ?>

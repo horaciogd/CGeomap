@@ -29,10 +29,26 @@
 									<input name="subtitle" class="form-control" value="#SOUSTITRE" tabindex="2" type="text">
 								</div>
 							</div><!-- wrap_subtitle -->
-							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
+							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{par num titre}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
+							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/spip.php?nodo=">
+							<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
 						</hgroup>
 					</header>
 					<div class="content">
+						[(#SET{visibility,'default'})]<BOUCLE_get_visibility(MOTS){type=visibility}{id_article=#ID_ARTICLE}>[(#SET{visibility,[(#TITRE|textebrut)]})]</BOUCLE_get_visibility>
+						<div class="visibility"[ data-visibility="(#GET{visibility})"]>
+							<B_visibility>
+							<ul class="field_box">
+								<li class="label"><:cgeomap:visible:></li>
+								<BOUCLE_visibility(MOTS){type=visibility}{par num titre}>
+								<li class="select">
+									<button type="button" class="btn select-[(#TITRE|supprimer_numero|textebrut)]" name="select-[(#TITRE|supprimer_numero|textebrut)]" value="[(#TITRE|supprimer_numero|textebrut)]" data-n="#COMPTEUR_BOUCLE"></button>
+									<label for="select-[(#TITRE|supprimer_numero|textebrut)]">[(#DESCRIPTIF|textebrut)]</label>
+								</li>
+							</BOUCLE_visibility>
+							</ul>
+							</B_visibility>
+						</div><!-- visibility -->
 						<div class="modules">
 							<BOUCLE_modules(ARTICLES){id_article=#GET{article}}>[(#SET{modules,#TEXTE})]</BOUCLE_modules>[(#GET{modules}|extraire_formulaire_module)]
 							[(#TEXTE|=={''}|oui)<div class="block_modules audiovisuel" data-type="audiovisuel" data-tgl="on">

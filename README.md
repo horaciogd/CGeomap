@@ -13,7 +13,7 @@ Date: Mon Mar 28 2016
 Enjoy the code and drop me a line for comments and questions!
 horaciogd at vhplab dot net
 
-Third Part components: SPIP 3.0 - *Arnaud Martin, Antoine Pitrou, Philippe Riviere, Emmanuel Saint-James*, jQuery v1.11.3 | jQuery UI v1.11.4 - *jQuery Foundation*, Leaflet JavaScript library for mobile-friendly interactive maps - *CloudMade, Vladimir Agafonkin*, SoundManager 2 - *Scott Schiller*, FancyBox v2.1.5 - *Janis Skarnelis*, jQuery File Upload - *Sebastian Tschan*, jQuery custom scrollbar plugin v3.0.8 - *malihu*, jQuery mousewheel - *Brandon Aaron*
+Third Part components: SPIP 3.0 - *Arnaud Martin, Antoine Pitrou, Philippe Riviere, Emmanuel Saint-James*, jQuery v1.11.3 | jQuery UI v1.11.4 - *jQuery Foundation*, Leaflet JavaScript library for mobile-friendly interactive maps - *CloudMade, Vladimir Agafonkin*, SoundManager 2 - *Scott Schiller*, FancyBox v2.1.5 - *Janis Skarnelis*, jQuery File Upload - *Sebastian Tschan*, phpqrcode - *Dominik Dzienia*, jQuery custom scrollbar plugin v3.0.8 - *malihu*, jQuery mousewheel - *Brandon Aaron*
  
 
 
@@ -22,7 +22,7 @@ How to
 
 **1)** Install Spip in your server.
 
-**2)** Copy *mes_fonctions.php* file and *squelettes*, *jQuery-File-Upload* and *plugins* folders in the root of the content manager.
+**2)** Copy *mes_fonctions.php* file and *squelettes*, *jQuery-File-Upload*, *phpqrcode* and *plugins* folders in the root of the content manager.
 
 
 Notes

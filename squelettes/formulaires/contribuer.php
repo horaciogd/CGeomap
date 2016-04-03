@@ -9,12 +9,17 @@ function formulaires_contribuer_charger_dist($id_article='new', $retour='', $aja
 	/* title & subtitle */
 	$valeurs['title'] = $title;
 	$valeurs['subtitle'] = $subtitle;
+	/* visibility */
+	$valeurs['visibility'] = $options;
 	/* icon */
 	$valeurs['icon'] = $icon;
 	/* modules */
 	$valeurs['audiovisuel'] = $audiovisuel;
 	$valeurs['delete_media'] = $delete_media;
 	$valeurs['delete_audio'] = $delete_audio;
+	/* qr */
+	$valeurs['base_url'] = $base_url;
+	$valeurs['qr_url'] = $qr_url;
 	/* cartography */
 	$valeurs['latitude'] = $latitude;
 	$valeurs['longitude'] = $longitude;
@@ -33,6 +38,8 @@ function formulaires_contribuer_verifier_dist($id_article='new', $retour='', $aj
 	/* title & subtitle */
 	if ((!_request('title'))||(_request('title')=='')) $erreurs['title'] = _T('cgeomap:title');
 	if ((!_request('subtitle'))||(_request('subtitle')=='')) $erreurs['subtitle'] = _T('cgeomap:required_subtitle');
+	/* visibility */
+	if (!_request('visibility')) $erreurs['visibility'] = _T('cgeomap:required_visibility');
 	/* icon */
 	if (!_request('icon')) $erreurs['icon'] = _T('cgeomap:required_icon');
 	/* modules */
@@ -58,12 +65,17 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	/* title & subtitle */
 	$title = _request('title');
 	$subtitle = _request('subtitle');
+	/* visibility */
+	$visibility = _request('visibility');
 	/* icon */
 	$icon = _request('icon');
 	/* modules */
 	$audiovisuel = _request('audiovisuel');
 	$delete_media = _request('delete_media');
 	$delete_audio = _request('delete_audio');
+	/* qr */
+	$base_url = _request('base_url');
+	$qr_url = _request('qr_url');
 	/* cartography */
 	$latitude = _request('latitude');
 	$longitude = _request('longitude');
@@ -94,26 +106,47 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 		sql_updateq('spip_articles', array('titre' => $title, 'soustitre' => $subtitle, 'id_rubrique' => $rubrique, 'statut' => 'publie', 'date' => $date), 'id_article='.intval($id_article));
 		
 		// 3 insertamos las coordenadas del articulo
-		$result = sql_select('*', 'spip_vhpgis_liens', 'id_objet='.intval($id_article).' AND objet='.sql_quote("article"));
+		$result = sql_select('*', 'spip_vhplab_gis_liens', 'id_objet='.intval($id_article).' AND objet='.sql_quote("article"));
 		if ($row = sql_fetch($result)){
-			sql_updateq('spip_vhpgis', array('latitude' => $latitude, 'longitude' => $longitude, 'zoom' => $zoom, 'address' => $address), 'id_vhpgis='.intval($row['id_vhpgis']));
+			sql_updateq('spip_vhplab_gis', array('latitude' => $latitude, 'longitude' => $longitude, 'zoom' => $zoom, 'address' => $address), 'id_vhplab_gis='.intval($row['id_vhplab_gis']));
 		} else {
-			$id_vhpgis = sql_insertq("spip_vhpgis", array( 'latitude' => $latitude, 'longitude' => $longitude, 'zoom' => $zoom, 'address' => $address));
-			sql_insertq('spip_vhpgis_liens', array('id_vhpgis' => intval($id_vhpgis), 'id_objet' => intval($id_article), 'objet' => 'article'));
+			$id_vhplab_gis = sql_insertq("spip_vhplab_gis", array( 'latitude' => $latitude, 'longitude' => $longitude, 'zoom' => $zoom, 'address' => $address));
+			sql_insertq('spip_vhplab_gis_liens', array('id_vhplab_gis' => intval($id_vhplab_gis), 'id_objet' => intval($id_article), 'objet' => 'article'));
 		}
 		
 		// 4 desasociamos todas las palabras clave que pudiese tener el articulo
 		sql_delete("spip_mots_liens", "id_objet='".intval($id_article)."' AND objet='article'");
 		
 		// 5 asociamos las palabras clave al articulo
-		if ($options == 'oui') sql_insertq('spip_mots_liens', array( 'id_mot' => 10, 'id_objet' => intval($id_article), 'objet' => 'article'));
-		if ($options == 'proximite') sql_insertq('spip_mots_liens', array( 'id_mot' => 13, 'id_objet' => intval($id_article), 'objet' => 'article'));
+		if ($visibility == 'default') sql_insertq('spip_mots_liens', array( 'id_mot' => 1, 'id_objet' => intval($id_article), 'objet' => 'article'));
+		if ($visibility == 'qr') sql_insertq('spip_mots_liens', array( 'id_mot' => 2, 'id_objet' => intval($id_article), 'objet' => 'article'));
+		if ($visibility == 'proximity') sql_insertq('spip_mots_liens', array( 'id_mot' => 3, 'id_objet' => intval($id_article), 'objet' => 'article'));
 		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($icon), 'id_objet' => intval($id_article), 'objet' => 'article'));
 		
 		// 7 procesamos los módulos y actualizamos el texto del artículo
 		$texte = '';
 		$texte .= "\n<block class=\"audiovisuel\">".vhplab_process_modules($audiovisuel, $id_article)."\n</block>";
 		sql_updateq('spip_articles', array('texte' => $texte), 'id_article='.intval($id_article));
+		
+		// 8 creamos el qr y lo adjuntamos como documento
+		$id_qr = '';
+		$doc_result = sql_select('*', 'spip_documents_liens', 'id_objet='.intval($id_article).' AND objet='.sql_quote("article"));
+		while ($doc = sql_fetch($doc_result)){
+			$qr_result = sql_select('*', 'spip_documents', 'id_document='.intval($doc['id_document']).' AND descriptif='.sql_quote("qr"));
+			if ($qr = sql_fetch($qr_result)){
+				$id_qr = $doc['id_document'];
+			}
+		}
+		$ajouter_documents = charger_fonction('ajouter_documents', 'action');
+		$file = array('name' => 'article_'.$id_article.'_qr.png', 'tmp_name' => $qr_url.urlencode($base_url.$id_article));
+		$descriptif = "qr";
+		if ($id_qr!='') {
+			$id_document = $ajouter_documents($id_qr, array(0 => $file), 'article', intval($id_article), 'image');
+			sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
+		} else {
+			$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id_article), 'image');
+			sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
+		}
 		
 		// 10 eliminamos los documentos borrados
 		$supprimer_document = charger_fonction('supprimer_document','action');
@@ -205,8 +238,8 @@ function vhplab_process_modules($modules, $id) {
 						}
 					}
 					break;
-				case 'description':
-					$txt .= "\n<module class=\"description\" name=\"".$module['header']."\">".$module['data']."</module>";
+				case 'text':
+					$txt .= "\n<module class=\"text\" name=\"".$module['header']."\">".$module['data']."</module>";
 					break;
 				case 'link':
 					$txt .= "\n<module class=\"link\" name=\"".$module['header']."\">";

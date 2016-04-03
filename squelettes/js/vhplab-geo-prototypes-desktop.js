@@ -104,8 +104,7 @@ VhplabMarker.prototype.appendContent = function() {
 	$('#article .modules_list ul li.audio').each(function(i){
 		soundManager.destroySound('cgeomap_sound_' + i);
 	});
-	$('#article .modules_list').empty();
-	
+	$('#article .modules').empty();
 	var t = $(this.data).data('texte');
 	/* texte */
 	if(t.search("<div class='block_modules")==(-1)) {
@@ -155,7 +154,7 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 		return false;
 	});
 };
-VhplabMarker.prototype.click = function() {
+VhplabMarker.prototype.click = function(_callback) {
 	if(!this.open) {
 		var self = this;
 		if (this.loadded) {
@@ -178,6 +177,7 @@ VhplabMarker.prototype.click = function() {
 						self.appendContent();
 						cgeomap.slideContent('show');
 						self.openInfoWindow();
+						if(_callback) _callback();
 					});
 				});
 			});
