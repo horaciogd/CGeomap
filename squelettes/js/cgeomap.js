@@ -91,7 +91,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	this.form.initialize(_opts);
 	
 	var self = this;
-	// load custom map prototypes
+	// load custom map prototypes console.log('load custom map prototypes');
 	if (typeof _opts.custom_map_prototypes != "undefined") {
 		$.getScript(_opts.custom_map_prototypes, function(data) {
 			self.ready(_opts.map_opts);
@@ -158,6 +158,28 @@ VhplabInterface.prototype.loadMap = function(_callback) {
 	}
 	$("#user .carte").addClass('on');
 	$("#content").data('selected','carte');
+};
+VhplabInterface.prototype.loadUtilities = function(_target, _callback) {
+	switch (_target) {
+		case 'carte':
+			cgeomap.loadMap(_callback);
+			break;
+		case 'contributions':
+			cgeomap.loadContributions();
+			if (_callback) _callback();
+			break;
+					case 'contribuer':
+			cgeomap.loadContribuer();
+			if (_callback) _callback();
+			break;
+		case 'editer':
+			cgeomap.loadEditer();
+			break;
+		case 'embed':
+			cgeomap.loadEmbed();
+			if (_callback) _callback();
+			break;
+	}
 };
 VhplabInterface.prototype.paginateNavigation = function(_dir) {
 	var pos = $('#navigation .menu .list').data('pagination');
@@ -285,29 +307,27 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 				hide = "#embed";
 				break;
 		}
-		$(hide).slideUp("fast", function(){
-			$("#user .utilities a").removeClass('on');
-			switch (_target) {
-				case 'carte':
-					cgeomap.loadMap(_callback);
-					break;
-				case 'contributions':
-					cgeomap.loadContributions();
-					if (_callback) _callback();
-					break;
-				case 'contribuer':
-					cgeomap.loadContribuer();
-					if (_callback) _callback();
-					break;
-				case 'editer':
-					cgeomap.loadEditer();
-					break;
-				case 'embed':
-					cgeomap.loadEmbed();
-					if (_callback) _callback();
-					break;
+		if ($(hide).is(":visible")) {
+			// hide editer button first when visible
+			if (($('#article .header .editer').is(":visible"))&&(hide=="#article")) {
+				$('#article .header .editer').fadeOut("fast", function(){
+					// hide selected content and show new content
+					$(hide).slideUp("fast", function(){
+						$("#user .utilities a").removeClass('on');
+						cgeomap.loadUtilities(_target, _callback);
+					});
+				});
+			} else {
+				// hide selected content and show new content
+				$(hide).slideUp("fast", function(){
+					$("#user .utilities a").removeClass('on');
+					cgeomap.loadUtilities(_target, _callback);
+				});
 			}
-		});
+		} else {
+			// show new content
+			cgeomap.loadUtilities(_target, _callback);
+		}
 	}
 };
 

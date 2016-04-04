@@ -33,6 +33,8 @@ VhplabInterface.prototype.ready = function(_opts) {
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 	// get URL via alert(this.url_article);
  	$("#content .wrapper").load(this.url_article, function() {
+ 		$('#article').hide();
+ 		$('#article .header .editer').hide();
  		$('#article .header .editer').click(function() { 
  			$(this).fadeOut('fast', function(){
  				cgeomap.toggleUtilities($(this).attr('name'));
@@ -55,8 +57,8 @@ VhplabInterface.prototype.loadUser = function(_callback) {
 		/* Login */
 		$('#user .login').hide();
 		/* Utilities  */
-		$("#content").data('selected','carte');
-		$("#user .utilities .carte").addClass('on');
+		//$("#content").data('selected','carte');
+		//$("#user .utilities .carte").addClass('on');
 		$("#user .utilities a").click(function() { 
 			cgeomap.toggleUtilities($(this).attr('name'));
 		});
