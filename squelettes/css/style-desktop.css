@@ -81,11 +81,8 @@
 #login { color: #fff; background-color: #b0c935; text-decoration: none; float: right; padding: 3px 10px; border-radius: 10px; margin-top: 6px; }
 #pass_securise { display: none !important; }
 
-/* article  */
-article { position: relative; }
-
 /* header  */
-.header { height: 60px; margin-bottom: 8px; }
+.header { height: 60px; }
 .header img { position: absolute; top: 0px; left: 0; }
 .header .titre, .header .soustitre { margin-left: 60px; }
 .header .titre { line-height: 36px; height: 44px; font-size: 26px; }
@@ -94,8 +91,14 @@ article { position: relative; }
 .header .editer:hover, .header .editer:focus { background-color: #94ffd9; }
 .header .editer:active { background-color: #878d96; }
 
+/* scroll  */
+article .content.mCustomScrollbar { right: -16px; }
+article .content.mCustomScrollbar .texte p { margin-right: 8px; }
+article .content.mCS_no_scrollbar { right: 0px; }
+article .content.mCS_no_scrollbar .texte p { margin-right: 0px; }
+
 /* Texte  */
-.texte p { font-size: 0.9em; margin: 1em 0; text-align: justify; }
+.texte p { font-size: 0.9em; text-align: justify; }
 .texte img { margin: 1em 0; }
 
 /* Modules  */

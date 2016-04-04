@@ -38,6 +38,10 @@ VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
  				cgeomap.toggleUtilities($(this).attr('name'));
  			});
  		});
+		$("#article .scroll").mCustomScrollbar({
+			scrollInertia: 150,
+			theme: "dark-thick"
+		});
  		cgeomap.loadUser();
 		if(_callback) _callback();
 	});

@@ -162,6 +162,7 @@ VhplabMarker.prototype.click = function(_callback) {
 				self.appendContent();
 				cgeomap.slideContent('show');
 				self.openInfoWindow();
+				$("#article .scroll").mCustomScrollbar("update");
 			});
 		} else {
 			$('#loading_content').fadeIn();
@@ -178,6 +179,7 @@ VhplabMarker.prototype.click = function(_callback) {
 						cgeomap.slideContent('show');
 						self.openInfoWindow();
 						if(_callback) _callback();
+						$("#article .scroll").mCustomScrollbar("update");
 					});
 				});
 			});
