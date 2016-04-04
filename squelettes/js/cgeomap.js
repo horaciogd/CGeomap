@@ -90,15 +90,14 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	// initialize formulary
 	this.form.initialize(_opts);
 	
-	var self = this;
 	// load custom map prototypes console.log('load custom map prototypes');
 	if (typeof _opts.custom_map_prototypes != "undefined") {
 		$.getScript(_opts.custom_map_prototypes, function(data) {
-			self.ready(_opts.map_opts);
+			cgeomap.ready(_opts.map_opts);
 		});
 	// use standard prototypes
 	} else {
-		self.ready(_opts.map_opts);
+		cgeomap.ready(_opts.map_opts);
 	}
 	
 	// initialize soundManager
@@ -219,7 +218,6 @@ VhplabInterface.prototype.ready = function(_opts) {
 		latitude: (typeof _opts.latitude != "undefined") ? _opts.latitude : 0.0,
 		longitude: (typeof _opts.longitude != "undefined") ? _opts.longitude : 0.0,
 		open: (typeof _opts.open != "undefined") ? _opts.open : false,
-		custom: (typeof _opts.custom != "undefined") ? _opts.custom : false,
 	});
 	this.bindToggleContent();
 };

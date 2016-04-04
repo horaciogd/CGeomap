@@ -23,7 +23,6 @@ VhplabInterface.prototype.ready = function(_opts) {
 		latitude: (typeof _opts.latitude != "undefined") ? _opts.latitude : 0.0,
 		longitude: (typeof _opts.longitude != "undefined") ? _opts.longitude : 0.0,
 		open: (typeof _opts.open != "undefined") ? _opts.open : false,
-		custom: (typeof _opts.custom != "undefined") ? _opts.custom : false,
 		latitudeTag: (typeof _opts.latitudeTag != "undefined") ? _opts.latitudeTag : '.cartography .latitude',
 		longitudeTag: (typeof _opts.longitudeTag != "undefined") ? _opts.longitudeTag : '.cartography .longitude',
 		zoomTag: (typeof _opts.zoomTag != "undefined") ? _opts.zoomTag : '.cartography .zoom'

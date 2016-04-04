@@ -123,12 +123,9 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.map.addControl(this.zoomControl);
 	
 	// Geocoder
-	/*
 	this.geocoder = new L.Control.GeoSearch({
         provider: new L.GeoSearch.Provider.OpenStreetMap()
-    }).addTo(map);
-    */
-    this.geocoder = new L.GeoSearch.Provider.OpenStreetMap();
+    });
 	
 	if ((typeof _opts.formulaire != "undefined")&&(_opts.formulaire==true)) {
 		// Clickable Marker

@@ -109,6 +109,18 @@ article .content.mCS_no_scrollbar .texte p { margin-right: 0px; }
 .module .content .wrap { font-size: 0.8em; }
 .module img { border-radius: 4px; }
 
+/* Player  */
+.vhplab_player { text-align: left; }
+.vhplab_player ul { height: 19px; width: 230px; border-radius: 3px; font-size: 10px; }
+.vhplab_player ul li { height: 19px; background-size: 224px 46px; background-image: url('../images/icons/cgeomap-player-buttons-@2x.png'); }
+.vhplab_player ul li.play { top: 3px; left: 6px; width: 18px; background-position: -24px 0px; }
+.vhplab_player ul li.pause { top: 3px; left: 6px; width: 18px; background-position: -91px 0px; }
+.vhplab_player ul li.volume { top: 3px; right: 6px; width: 18px; background-position: -111px 0px; }
+.vhplab_player ul li.position { top: 5px; left: 30px; }
+.vhplab_player ul li.duration { top: 5px; right: 30px; }
+.vhplab_player ul li.progress_bar { top: 5px; left: 60px; height: 12px; width: 136px; border-radius: 3px; }
+.vhplab_player ul li.progress_bar span { background-color: #bfbfbf; border-radius: 2px; height: 12px; }
+
 
 /* --------------------
    Formulaire

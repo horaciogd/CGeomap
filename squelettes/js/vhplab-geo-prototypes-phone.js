@@ -79,7 +79,9 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	// Map Zoom Custom Control
 	
 	// Geocoder
-	this.geocoder = new L.GeoSearch.Provider.OpenStreetMap();
+	this.geocoder = new L.Control.GeoSearch({
+        provider: new L.GeoSearch.Provider.OpenStreetMap()
+    });
 	
 	// Clickable Marker
 	
@@ -88,9 +90,8 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	// Clusterer
 	
 	// Listeners
-	var self = this;
 	this.map.on('click', function(_e){
-		self.clickListener(_e);
+		cegeomap.map.clickListener(_e);
 	});
 	
 	// Interface
@@ -162,13 +163,13 @@ VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
 		if (this.loadded) {
-			$('#content .wrapper').scrollTo('#article_'+ $(this.data).data('id_article'));
+			$('#content .wrapper').scrollTo('#article_'+ this.id);
 			this.openInfoWindow();
 		} else {
 			$('footer .loading').show();
 			this.getData(function(){
-				$('#article_'+ $(self.data).data('id_article') +' header').data('loaded', true);
-				$('#article_'+ $(self.data).data('id_article') +' header').trigger('click');
+				$('#article_'+ $(self.data).data('id') +' header').data('loaded', true);
+				$('#article_'+ $(self.data).data('id') +' header').trigger('click');
 				$('footer .loading').hide();
 			});
 		}
@@ -187,9 +188,9 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
 };
 VhplabMarker.prototype.appendContent = function() {
-	$('#article_'+ $(this.data).data('id_article') +' .wrap_article').empty();
-	$('#article_'+ $(this.data).data('id_article') +' .wrap_article').append($(this.data).data('texte'));
-	$('#article_'+ $(this.data).data('id_article') +' .wrap_article a.fancybox').fancybox();
+	$('#article_'+ this.id +' .wrap_article').empty();
+	$('#article_'+ this.id +' .wrap_article').append($(this.data).data('texte'));	
+	$('#article_'+ this.id +' .wrap_article a.fancybox').fancybox();
 };
 VhplabMarker.prototype.getData = function(_callback) {
 	if (this.loadded) {
@@ -205,7 +206,6 @@ VhplabMarker.prototype.getData = function(_callback) {
 			$.each(data[0].marker, function(i, marker){
 				self.loadWindowData(marker);
 				self.appendContent();
-				self.openInfoWindow();
 				if (_callback) _callback();
 			});
 		});
