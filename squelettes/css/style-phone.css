@@ -16,7 +16,7 @@
 #content .listado_nodos .header hgroup { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 6px; background: #18c2b1; }
 #content .listado_nodos .header hgroup:hover, #content .listado_nodos .header hgroup:active { background: #0bdec9; }
 #content .listado_nodos .header h2 { font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: #fff; white-space: nowrap; }
-#content .listado_nodos .header .distance { display: blocK; position: absolute; top: 6px; right: 6px; font-weight: bold; font-size: 14px; line-height: 40px; height: 40px; vertical-align: middle; color: #fff; padding-left: 40px;
+#content .listado_nodos .header .info { display: blocK; position: absolute; top: 6px; right: 6px; height: 40px; padding-left: 40px;
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
 background: -moz-linear-gradient(left, rgba(24,194,177,0) 0%, rgba(24,194,177,1) 30%, rgba(24,194,177,1) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(24,194,177,0)), color-stop(30%,rgba(24,194,177,1)), color-stop(100%,rgba(24,194,177,1))); /* Chrome,Safari4+ */
@@ -25,7 +25,7 @@ background: -o-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30
 background: -ms-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* IE10+ */
 background: linear-gradient(to right, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* W3C */
 }
-#content .listado_nodos .header hgroup:hover .distance, #content .listado_nodos .header hgroup:active .distance { 
+#content .listado_nodos .header hgroup:hover .info, #content .listado_nodos .header hgroup:active .info { 
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
 background: -moz-linear-gradient(left, rgba(11,222,201,0) 0%, rgba(11,222,201,1) 30%, rgba(11,222,201,1) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(11,222,201,0)), color-stop(30%,rgba(11,222,201,1)), color-stop(100%,rgba(11,222,201,1))); /* Chrome,Safari4+ */
@@ -34,6 +34,15 @@ background: -o-linear-gradient(left, rgba(11,222,201,0) 0%,rgba(11,222,201,1) 30
 background: -ms-linear-gradient(left, rgba(11,222,201,0) 0%,rgba(11,222,201,1) 30%,rgba(11,222,201,1) 100%); /* IE10+ */
 background: linear-gradient(to right, rgba(11,222,201,0) 0%,rgba(11,222,201,1) 30%,rgba(11,222,201,1) 100%); /* W3C */
 }
+#content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: #fff; }
+#content .listado_nodos .header .info .distance { background-image: url('../images/icons/cgeomap-bird-@2x.png'); background-size: 26px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }
+#content .listado_nodos .header .player_icon { width: 20px; line-height: 40px; height: 40px; background-image: url('../images/icons/cgeomap-player-icon-transparent-@2x.png'); background-size: 44px 44px; background-repeat: no-repeat; background-position: -12px 0; }
+#content .listado_nodos .header .player { width: 20px; line-height: 40px; height: 40px; background-image: url('../images/icons/cgeomap-player-header-transparent-@2x.png'); background-size: 90px 90px; background-repeat: no-repeat; background-position: -14px -1px; }
+#content .listado_nodos .header .player:active { background-position: -14px -47px; }
+#content .listado_nodos .header .active { background-position: -57px -1px !important; }
+#content .listado_nodos .header .active:active { background-position: -57px -47px !important; }
+#content .listado_nodos .header .loading { position: absolute; height: 48px; width: 90%; margin: 0 auto; background-image: url('../images/icons/loader_mobile_116_content_header.gif'); background-size: 58px 58px; background-repeat: no-repeat; background-position: center center; opacity: 0.3; filter: alpha(opacity=30); }
+
 #content .listado_nodos .wrap_article { font-size: 0.9em; margin: 6px 0 6px 6px; text-align: justify; }
 #content .listado_nodos .wrap_article .lien, #content .listado_nodos .wrap_article .fancybox { display: block; text-align: center; margin: 8px auto; }
 #content .listado_nodos .wrap_article img { display: inline;  }

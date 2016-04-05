@@ -57,13 +57,7 @@
 			"window": "(#FICHIER|image_reduire{700,0}|image_recadre{700,300,'top center'}|extraire_attribut{src}|url_absolue)"]})][(#HAUTEUR|<={#LARGEUR}|?{[, 
 			"thumbnail": "(#FICHIER|image_reduire{0,100}|image_recadre{100,100,center}|extraire_attribut{src}|url_absolue)"],[, 
 			"thumbnail": "(#FICHIER|image_reduire{100,0}|image_recadre{100,100,center}|extraire_attribut{src}|url_absolue)"]})]
-		}</BOUCLE_image></B_image><BOUCLE_mp3(DOCUMENTS){id_article}{mode=document}{extension=mp3}{0,1}>,
-		"enclosure": {[
-			"id": "(#ID_DOCUMENT)"][,
-			"url": "(#URL_DOCUMENT|url_absolue)"][, 
-			"length": "(#TAILLE)"], 
-			"type": "audio/mpeg"
-		}</BOUCLE_mp3><B_visibility>,
+		}</BOUCLE_image></B_image>[(#MODELE{enclosure}{id_article})]<B_visibility>,
 		"visibility":<BOUCLE_visibility(MOTS){id_article}{type=visibility}> "[(#TITRE|supprimer_numero|textebrut)]"</BOUCLE_visibility></B_visibility><B_tags>,
 		"tags": "<BOUCLE_tags(MOTS){id_article}{", "}>[(#TITRE|texte_backend)]</BOUCLE_tags>"</B_tags>
 	}</BOUCLE_article>]

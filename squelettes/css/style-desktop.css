@@ -102,6 +102,7 @@ article .content.mCS_no_scrollbar .texte p { margin-right: 0px; }
 .texte img { margin: 1em 0; }
 
 /* Modules  */
+.audiovisuel header.block { display: none; }
 .module { margin-bottom: 4px; position: relative; }
 .module header, .module .content { padding: 6px 8px; border: solid 1px #c2c6cd; background-color: #eff0f2; }
 .module header { border-bottom: none; -webkit-border-top-right-radius: 12px; -webkit-border-bottom-top-radius: 6px; -moz-border-radius-topright: 6px; -moz-border-radius-topleft: 6px; border-top-right-radius: 6px; border-top-left-radius: 6px; }

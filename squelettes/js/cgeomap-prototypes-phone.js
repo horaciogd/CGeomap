@@ -19,14 +19,9 @@ VhplabInterface.prototype.bindModulesActions = function(_context) {
     		$('.toggle', this).removeClass('hover');
   	});
   	$(_context +" .modules_list .audio").each(function(i){
-		var url = $('a', this).attr("href");
-		var player = new VhplabPlayer();
-		player.init({
-			id: i,
-			url: url
-		});
+		var sound = $('a', this).data("id");
 		$('.content', this).empty();
-		player.appendTo($('.content', this));
+		cgeomap.player.appendTo($('.content', this), sound);
 	});
 	$(_context +" .modules_list .link").each(function(i){
 		/* internal link */
@@ -47,14 +42,19 @@ VhplabInterface.prototype.bindModulesActions = function(_context) {
 };
 VhplabInterface.prototype.bindNavigationListActions = function() {
 	//$('#content ul li.article .wrap_article').hide();
-	$('#content ul li.article hgroup .loading').hide();
+	$('#content ul li.article .header .loading').hide();
 	$('#content ul').data('visible','none');
-	$('#content ul li.article header').data('visible', false);
-	$('#content ul li.article header').data('loaded', false);
+	$('#content ul li.article .header').data('visible', false);
+	$('#content ul li.article .header').data('loaded', false);
+	$("#content ul li.article .header .player").click(function(){
+		var sound = $(this).parent().parent().parent().data('sound');
+		cgeomap.play(sound, this);
+	});
 	$('footer .loading').hide();
-	var self = this;
 	$("#content li .header").click(function(e){
-		self.toggleArticle(this);
+		if ($(".player:hover", this).length == 0) {
+			cgeomap.toggleArticle(this);
+		}
 	});
 };
 VhplabInterface.prototype.bindToggleContent = function() {
@@ -63,15 +63,17 @@ VhplabInterface.prototype.bindToggleContent = function() {
 		self.toggleContent();
 	});
 };
-VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, _soustitre, _distance) {
+VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, _soustitre, _distance, _enclosure, _visible) {
 	var html = '';
-	html += _tab +'<li id="article_'+ _id +'" class="article">\n';
-	html += _tab +'\t<header class="header" data-id="'+_id+'" class="btn">\n';
+	html += _tab +'<li id="article_'+ _id +'" class="article '+ _visible +'">\n';
+	typeof _enclosure != "undefined" ? html += _tab +'\t<header class="header btn" data-sound="'+_enclosure.toString()+'" data-id="'+_id+'">\n' : html += _tab +'\t<header class="header btn" data-id="'+_id+'">\n';
 	html +=	_tab +'\t\t<hgroup>\n';
 	var txt_dist = '';
 	_distance - _distance%1000 > 0 ? txt_dist = parseInt((_distance - _distance%1000)/1000) + ' km' : txt_dist = parseInt(_distance) + ' m';
 	html +=	_tab +'\t\t\t<span class="loading"></span>\n';
-	html +=	_tab +'\t\t\t<h2>'+ _titre +'</h2><span class="distance">'+ txt_dist +'</span>\n';
+	var txt_enclosure = '';
+	if (typeof _enclosure != "undefined") txt_enclosure += '<span class="player_icon"></span><span class="player btn" ></span>';
+	html +=	_tab +'\t\t\t<h2>'+ _titre +'</h2><div class="info">'+ txt_enclosure +'<span class="distance">'+ txt_dist +'</span></div>\n';
 	html +=	_tab +'\t\t</hgroup>\n';
 	html += _tab +'\t</header>\n';
 	html += _tab +'\t<div class="wrap_article">\n';
@@ -81,22 +83,43 @@ VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, 
 };
 VhplabInterface.prototype.createNavigationList = function(_opts) {
 	var html = '\n';
-	var num = 0;
 	for (var i=0; i<this.map.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
-		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'), marker.distance);
-		num ++;
+		var visible = 'default';
+		if (($(marker.data).data('visible')=='qr')||($(marker.data).data('visible')=='proximity')) {
+			if (this.visibleNodes.indexOf(parseInt(marker.id)) != -1) {  
+				visible = 'found';
+			} else {
+				visible = 'hidden';
+				marker.marker.setOpacity(0);
+			}
+		}
+		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'), marker.distance, $(marker.data).data('enclosure'), visible);
 	}
 	$('#content ul').empty();
 	$('#content ul').append(html);
+};
+VhplabInterface.prototype.getCookie = function(_opts) {
+	var name = "nodes=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
 };
 VhplabInterface.prototype.initialize = function(_opts) {
 
 	// store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
+	(typeof _opts.initial_marker != "undefined") ? this.initial_marker = _opts.initial_marker : this.initial_marker = false;
 	
+	// Visibility settings for qr nodes
+	this.setVisibleNodes();
+	
+	// map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
-	
 	// load custom map prototypes
 	if (typeof _opts.custom_map_prototypes != "undefined") {
 		$.getScript(_opts.custom_map_prototypes, function(data) {
@@ -106,6 +129,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	} else {
 		cgeomap.ready(_opts.map_opts);
 	}
+	
 	
   	this.toggleContentOffset = 0;
 	this.initContent();
@@ -131,6 +155,9 @@ VhplabInterface.prototype.initialize = function(_opts) {
   		// optional: enable MPEG-4/AAC support (requires flash 9)
   		flashVersion: 9
   	});
+  	
+  	// Create Transparent Player
+  	this.player = new VhplabTransparentPlayer();
 };
 VhplabInterface.prototype.initContent = function() {
 	var position = $("#content").position();
@@ -138,9 +165,49 @@ VhplabInterface.prototype.initContent = function() {
 	$('#content').css({ left: "-=" + this.toggleContentDist });
 	$("#content").data('visible', false);
 };
+VhplabInterface.prototype.play = function(_sound, _button) {
+	if (typeof _sound == "number") {
+		this.player.toggle(_sound, _button);
+	} else if (typeof _sound == "string"){
+		var list = sound.split(",");
+		this.player.toggleList(_sound, _button);
+	}
+};
+VhplabInterface.prototype.setCookie = function(_opts) {
+	var d = new Date();
+	var days = 2;
+    d.setTime(d.getTime() + (days*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = "nodes="+ _opts.nodes +"; " + expires;
+};
+VhplabInterface.prototype.setVisibleNodes= function() {
+	var found = '';
+	this.visibleNodes = new Array();
+	if (this.initial_marker) {
+		found = this.initial_marker;
+		this.visibleNodes.push(parseInt(found));
+	}
+	var cookie = this.getCookie();
+	var nodes = cookie.split(',');
+	for(var i=0; i<nodes.length; i++) {
+		if ((found!=nodes[i])&&(!isNaN(nodes[i]))) this.visibleNodes.push(parseInt(nodes[i]));
+	}
+	this.setCookie({
+		nodes: this.visibleNodes.toString()
+	});
+};
 VhplabInterface.prototype.toggleArticle = function(_me) {
+	//alert('toggleArticle');
 	var visible = $(_me).parent().parent().data('visible');
 	var id = $(_me).data('id');
+	
+	/*
+	var sound = $('#article_'+ id +' header').data('sound');
+	if (typeof sound!="undefined") {
+		alert('play');
+		cgeomap.play(sound, $('#article_'+ id +' .player'));
+	}
+	*/
 	if (visible==id) {
 		$('#article_'+ id +' .wrap_article').hide();
 		$(_me).removeClass('open');
@@ -156,14 +223,7 @@ VhplabInterface.prototype.toggleArticle = function(_me) {
 			$('footer .loading').show();
 			var marker = $(this.map.markers).data('marker_'+ id);
 			marker.getData(function(){
-				$('#article_'+ id +' hgroup .loading').hide();
-				$('footer .loading').hide();
-				$('#article_'+ id +' .wrap_article').show();
-				$(_me).addClass('open');
-				$(_me).data('loaded', true);
-				$(_me).parent().parent().data('visible', id);
-				$('#content .wrapper').scrollTo('#article_'+ id);
-				cgeomap.bindModulesActions('#article_'+ id);
+				marker.bindContentActions();
 			});
 		} else {
 			$('#article_'+ id +' .wrap_article').show();
@@ -225,6 +285,174 @@ VhplabPlayer.prototype.setVolume = function() {
 			$('#'+ this.selector +' .volume').css("background-position", "-383px 0");
 			break;
 	}
+};
+
+//***********
+// Vhplab Transparent Player
+//***********	
+function VhplabTransparentPlayer() {
+	var self = this;
+	this.volume = 50;
+	this.trackIdList = new Array();
+	this.playing = '';
+	this.queue = false;
+};
+VhplabTransparentPlayer.prototype.addTrack = function(_enclosure) {
+	//alert(enclosure.id+' '+enclosure.url);
+	this.trackIdList.push(_enclosure.id);
+	var self = this;
+	soundManager.createSound({
+		id: 'enclosure_' + _enclosure.id,
+		url: _enclosure.url,
+		onload: function() {
+			var sound = self.playing.split('_');
+      		$('#vhplab_player_'+ sound[1] +' .duration').text(self.milToTime(this.duration));
+ 		},
+		onplay: function() {
+		},
+		onresume: function() {
+		},
+		onpause: function() {
+		},
+		onfinish: function() {
+			var sound = self.playing.split('_');
+      		$('#vhplab_player_'+ sound[1] +' .play').show();
+      		$('#vhplab_player_'+ sound[1] +' .pause').hide();
+      		$('#vhplab_player_'+ sound[1] +' .progress_bar span').css('width', 0 +'%');
+      		self.shiftQueue();
+		},
+		whileplaying: function() {
+			var sound = self.playing.split('_');
+			$('#vhplab_player_'+ sound[1] +' .position').text(self.milToTime(this.position));
+       		var percent = this.position / this.duration * 100;
+			$('#vhplab_player_'+ sound[1] +' .progress_bar span').css('width', percent +'%');
+			$('#vhplab_player_'+ sound[1] +' .duration').text(self.milToTime(this.duration));
+		}
+	});	
+};
+VhplabTransparentPlayer.prototype.play = function(_sound) {
+	$('#vhplab_player_'+ _sound +' .play').hide();
+	$('#vhplab_player_'+ _sound +' .pause').show();
+	soundManager.stopAll();
+	soundManager.play('enclosure_' + _sound);
+	this.playing = 'enclosure_' + _sound;
+};
+VhplabTransparentPlayer.prototype.stop = function() {
+	var sound = this.playing.split('_');
+	$('#vhplab_player_'+ sound[1] +' .play').show();
+	$('#vhplab_player_'+ sound[1] +' .pause').hide();
+	$('#vhplab_player_'+ sound[1] +' .progress_bar span').css('width', 0 +'%');
+	soundManager.stopAll();
+	this.playing = '';
+};
+VhplabTransparentPlayer.prototype.moveTo = function(_x, _w) {
+	var soundObj = soundManager.getSoundById(this.playing);
+	if (soundObj.playState) soundObj.setPosition(_x*soundObj.duration/_w);
+};
+VhplabTransparentPlayer.prototype.toggle = function(_sound, _button) {
+	if (this.playing=='') {
+		$(_button).addClass('active');
+		$('.window_wrapper .player').addClass('active');
+		this.play(_sound);
+	} else if (this.playing=='enclosure_'+_sound) {
+		$(_button).removeClass('active');
+		$('.window_wrapper .player').removeClass('active');
+		this.stop();
+		this.queue = false;
+	} else {
+		$("#content ul li.article .header .player").each(function(){
+			$(this).removeClass('active');
+		});
+		$(_button).addClass('active');
+		$('.window_wrapper .player').addClass('active');
+		var oldSound = this.playing.split('_');
+		$('#vhplab_player_'+ oldSound[1] +' .play').show();
+		$('#vhplab_player_'+ oldSound[1] +' .pause').hide();
+		$('#vhplab_player_'+ oldSound[1] +' .progress_bar span').css('width', 0 +'%');
+		this.play(_sound);
+	}
+};
+VhplabTransparentPlayer.prototype.toggleList = function(_list, _button) {
+	if (this.playing=='') {
+		$(_button).addClass('active');
+		$('.window_wrapper .player').addClass('active');
+		var sound = _list.shift();
+		this.play(sound);
+		this.queue = _list;
+	} else {
+		var isPlaying = false;
+		for (var i = 0; i<_list.length; i++) { 
+			if (this.playing=='enclosure_'+_list[i]) isPlaying=true;
+		}
+		if (isPlaying) {
+			$(_button).removeClass('active');
+			$('.window_wrapper .player').removeClass('active');
+			this.stop();
+			this.queue = false;
+		}  else {
+			$("#content ul li.article header .player").each(function(){
+				$(this).removeClass('active');
+			});
+			$(_button).addClass('active');
+			$('.window_wrapper .player').addClass('active');
+			var oldSound = this.playing.split('_');
+			$('#vhplab_player_'+ oldSound[1] +' .play').show();
+			$('#vhplab_player_'+ oldSound[1] +' .pause').hide();
+			$('#vhplab_player_'+ oldSound[1] +' .progress_bar span').css('width', 0 +'%');
+			var sound = _list.shift();
+			this.play(sound);
+			this.queue = _list;
+		}
+	}
+};
+VhplabTransparentPlayer.prototype.shiftQueue = function() {
+	if (this.queue) {
+		var sound = this.queue.shift();
+		this.play(sound);
+		if (this.queue.length==0) {
+			this.queue = false;
+		}
+	} else {
+		$("#content ul li.article header .player").each(function(){
+			$(this).removeClass('active');
+		});
+		$('.window_wrapper .player').removeClass('active');
+		this.playing = '';
+	}
+};
+VhplabTransparentPlayer.prototype.appendTo = function(_container, _sound) {
+	$(_container).append('<div class="vhplab_player" id="vhplab_player_'+ _sound +'"></div>');
+	$('.vhplab_player', _container).append('<ul></ul>');
+	$('.vhplab_player ul', _container).append('<li class="play" ></li>');
+	$('.vhplab_player ul', _container).append('<li class="pause" ></li>');
+	$('.vhplab_player ul', _container).append('<li class="position" >00:00</li>');
+	$('.vhplab_player ul', _container).append('<li class="duration" >00:00</li>');
+	$('.vhplab_player ul', _container).append('<li class="progress_bar" ><span></span></li>');
+    this.bindActions(_container, _sound);
+};
+VhplabTransparentPlayer.prototype.bindActions = function(_container, _sound) {
+	var self = this;
+    $('.vhplab_player ul .play', _container).click(function(){
+		var article = $(this).parent().parent().parent().parent().parent().parent().parent().parent();
+		self.toggle(_sound, $('.player', article));
+    });
+    $('.vhplab_player ul .pause', _container).click(function(){
+		var article = $(this).parent().parent().parent().parent().parent().parent().parent().parent();
+		self.toggle(_sound, $('.player', article));
+    });
+    $('.vhplab_player ul .progress_bar', _container).click(function(e){
+ 		var w = $(this).width();
+		var x = e.clientX - $(this).offset().left;
+		self.moveTo(x, w);
+	});
+ 	$('.vhplab_player ul .pause', _container).hide();
+};
+VhplabTransparentPlayer.prototype.milToTime = function(_mil) {
+	var seconds = Math.floor((_mil / 1000) % 60);
+	if (seconds<10) seconds = '0'+ seconds;
+	var minutes = Math.floor((_mil / (60 * 1000)) % 60);
+	if (minutes<10) minutes = '0'+ minutes;
+	return minutes + ":" + seconds;
 };
 
 /* scrollTo */

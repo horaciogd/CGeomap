@@ -119,6 +119,14 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	
 	this.locationWatch;
 };
+VhplabMap.prototype.loadMarkers = function() {
+	var self = this;
+	// load markers data
+	// get URL via alert(this.markersURL +'&sound=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?');
+	$.getJSON(this.markersURL +'&sound=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?', function(data){
+		self.addMarkers(data[0]);
+	});					
+};
 VhplabMap.prototype.myLocation = function(_callback) {
 	var self = this;
 	if(navigator.geolocation) {
@@ -159,6 +167,21 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 		return false;
 	});
 };
+VhplabMarker.prototype.bindContentActions = function(_content) {
+	$('#article_'+ this.id +' hgroup .loading').hide();
+	$('footer .loading').hide();
+	$('#article_'+ this.id +' .wrap_article').show();
+	$('#article_'+ this.id +' .header').addClass('open');
+	$('#article_'+ this.id +' .header').data('loaded', true);
+	$('#article_'+ this.id +' .header').parent().parent().data('visible', this.id);
+	$('#content .wrapper').scrollTo('#article_'+ this.id);
+	cgeomap.bindModulesActions('#article_'+ this.id);
+	var sound = $('#article_'+ this.id +' .header').data('sound')
+	if (cgeomap.player.playing=='enclosure_'+sound) {
+		$('#vhplab_player_'+ sound +' .play').hide();
+		$('#vhplab_player_'+ sound +' .pause').show();
+	}
+};
 VhplabMarker.prototype.click = function() {
 	if(!this.open) {
 		var self = this;
@@ -174,6 +197,57 @@ VhplabMarker.prototype.click = function() {
 			});
 		}
 	}
+};
+VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
+	typeof _opts.id != "undefined" ? this.id = parseInt(_opts.id) : this.id = 0;
+	typeof _opts.json != "undefined" ? this.json = _path + _opts.json : this.json = "";
+	typeof _opts.lat != "undefined" ? this.lat = parseFloat(_opts.lat) : this.lat = 0.0;
+	typeof _opts.lng != "undefined" ? this.lng = parseFloat(_opts.lng) : this.lng = 0.0;
+	typeof _opts.zoom != "undefined" ? this.zoom = parseInt(_opts.zoom) : this.zoom = 0;
+	typeof _opts.titre != "undefined" ? $(this.data).data('titre', _opts.titre) : $(this.data).data('titre', "");
+	typeof _opts.lesauteurs != "undefined" ? $(this.data).data('lesauteurs', _opts.lesauteurs) : $(this.data).data('lesauteurs', "");
+	typeof _opts.soustitre != "undefined" ? $(this.data).data('soustitre', _opts.soustitre) : $(this.data).data('soustitre', "");
+	if (typeof _opts.enclosure != "undefined") {
+		var enclosureIds = new Array();
+		$.each(_opts.enclosure, function(u, enclosure) {
+			cgeomap.player.addTrack(enclosure);
+			enclosureIds.push(enclosure.id);
+		});
+		$(this.data).data('enclosure', enclosureIds);
+	}
+	this.parent = _parent;
+	
+	this.marker.setLatLng([this.lat, this.lng]);
+	this.infoWindow.setContent('');
+	this.infoWindow.setLatLng([this.lat, this.lng]);
+	
+	if (typeof _opts.icon != "undefined") {
+		var width, height, url;
+		typeof _opts.icon.width != "undefined" ? width = parseInt(_opts.icon.width) : width = 60;
+		typeof _opts.icon.height != "undefined" ? height = parseInt(_opts.icon.height) : height = 60;
+		typeof _opts.icon.url != "undefined" ? url = _path + _opts.icon.url : url = 'plugins/vhplab/images/icons/default_icon.png';
+    	var icon = L.icon({
+			iconUrl: url,
+    		iconRetinaUrl: url,
+    		iconSize: [width/2, height/2],
+    		iconAnchor: [width/4, height/2]
+		});
+		$(this.data).data('icon', {
+			url: url,
+			width: width,
+			height: height
+		});
+		this.marker.setIcon(icon);
+		L.setOptions(this.infoWindow, {
+			offset: [0, -height/2]
+		});
+	}
+	
+	this.marker.addTo(this.parent.map);
+	var self = this;
+	this.marker.on('click', function(e) {
+		self.click();
+	});
 };
 VhplabMarker.prototype.openInfoWindow = function() {
 	if(this.parent.open) {

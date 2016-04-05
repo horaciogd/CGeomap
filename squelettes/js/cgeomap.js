@@ -276,9 +276,15 @@ VhplabInterface.prototype.toggleLogin = function(_me) {
 		var tgl =  $(_me).data("tgl");
 		if (tgl=="on") {
 			$('#user .login').slideUp();
+			$( "#article" ).animate({
+				top: 39,
+			});
 			$(_me).data("tgl","off");
 		} else {
 			$('#user .login').slideDown();
+			$( "#article" ).animate({
+				top: 77,
+			});
 			$(_me).data("tgl","on");
 		}
 	}
