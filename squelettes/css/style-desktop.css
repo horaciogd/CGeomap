@@ -81,6 +81,15 @@
 #login { color: #fff; background-color: #b0c935; text-decoration: none; float: right; padding: 3px 10px; border-radius: 10px; margin-top: 6px; }
 #pass_securise { display: none !important; }
 
+/* contributions  */
+#contributions { padding-top: 6px; border-top: 1px solid #ccc; }
+#contributions ol { }
+#contributions ol li { position: relative; margin-bottom: 8px; }
+#contributions ol li h3 { font-size: 0.8em; font-weight: 500; line-height: 18px; padding: 2px 0 0 26px; }
+#contributions ol li img { position: absolute; left: 0; top: 0; }
+#contributions ol li .delete { opacity: 0.8; position: absolute; top: 0; right: 0; background-color: #transparent; padding: 2px 6px; font-size: 0.7em; border-radius: 9px; border: #264542 solid 1px; }
+#contributions ol li .delete:hover { opacity: 1; background-color: #ff3e09; border-color: #ff3e09; color: rgba(255,255,255,1); }
+
 /* header  */
 .header { height: 60px; }
 .header img { position: absolute; top: 0px; left: 0; }
@@ -93,9 +102,11 @@
 
 /* scroll  */
 article .content.mCustomScrollbar { right: -16px; }
-article .content.mCustomScrollbar .texte p { margin-right: 8px; }
+#contributions.mCustomScrollbar { right: 0px; }
+article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol { margin-right: 8px; }
 article .content.mCS_no_scrollbar { right: 0px; }
-article .content.mCS_no_scrollbar .texte p { margin-right: 0px; }
+#contributions.mCS_no_scrollbar { right: 15px; }
+article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol { margin-right: 0px; }
 
 /* Texte  */
 .texte p { font-size: 0.9em; text-align: justify; }

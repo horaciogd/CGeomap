@@ -22,7 +22,9 @@ VhplabMap.prototype.bindActions = function() {
 };
 VhplabMap.prototype.clickListener = function(_e) {
 	this.clickableMarker.setLatLng(_e.latlng);
-	this.clickableMarker.setOpacity(1);
+	e.marker.addTo(cgeomap.map.map);
+	// this.clickableMarker.setOpacity(1);
+	this.clickableMarker.addTo(this.map);
 	this.map.panTo(_e.latlng);
 	$(this.latitudeTag).val(_e.latlng.lat);
 	$(this.longitudeTag).val(_e.latlng.lng);
@@ -51,7 +53,8 @@ VhplabMap.prototype.initMapElements = function(_opts) {
     });
     this.geocoder._processResults = function(results, qry) {
        	cgeomap.map.clickableMarker.setLatLng([results[0].Y, results[0].X]);
-		cgeomap.map.clickableMarker.setOpacity(1);
+		// cgeomap.map.clickableMarker.setOpacity(1);
+       	cgeomap.map.clickableMarker.addTo(cgeomap.map.map);
 		cgeomap.map.map.panTo([results[0].Y, results[0].X]);
 		$(cgeomap.map.latitudeTag).val(results[0].Y);
 		$(cgeomap.map.longitudeTag).val(results[0].X);

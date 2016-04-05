@@ -33,6 +33,8 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	
 	// M
 	'mapa' => 'Mapa',
+	'message_delete' => 'Tu aportación ha sido eliminada correctamente',
+	'message_eliminar' => '¿Quieres borrar tu aportación? Después de eliminarla no podrás recuperarla.',
 	'mensaje_error_login' => 'Usuario o clave incorrectos!',
 	'message_extension_1' => 'jpeg and png images allowed',
 	'message_extension_2' => 'ogg and mp3 sound files allowed',
@@ -56,12 +58,14 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	
 	// N
 	'nodo' => 'URL del nodo',
+	'not_allowed' => 'No tienes permiso para editar este artículo',
 	
 	// P
 	'password' => 'clave',
 	
 	// R
 	'recent_articles' => 'Últimas aportaciones',
+	'required_article' => 'No se recibió ninguna id para la entrada',
 	'required_title' => 'No se recibió ningún título para la entrada',
 	'required_subtitle' => 'No se recibió ningún subtítulo para la entrada',
 	'required_visibility' => 'No se recibió ninguna indicación acerca de la visibilidad',

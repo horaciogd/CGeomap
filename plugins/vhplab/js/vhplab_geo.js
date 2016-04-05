@@ -64,7 +64,8 @@ VhplabMap.prototype.bindActions = function() {
 };
 VhplabMap.prototype.clickListener = function(_e) {
 	this.clickableMarker.setLatLng(_e.latlng);
-	this.clickableMarker.setOpacity(1);
+	//this.clickableMarker.setOpacity(1);
+	this.clickableMarker.addTo(this.map);
 	this.map.panTo(_e.latlng);
 	$(this.latitudeTag).val(_e.latlng.lat);
 	$(this.longitudeTag).val(_e.latlng.lng);
@@ -93,11 +94,11 @@ VhplabMap.prototype.createMap = function(_opts) {
 VhplabMap.prototype.hideMarkers = function(_exception) {
 	if (typeof _exception != "undefined") {
 		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _exception)<0) e.marker.setOpacity(0);
+			if (jQuery.inArray(e.id, _exception)<0) cgeomap.map.map.removeLayer(e.marker);
 		});
 	} else {
 		$.each($(this.markers).data(),function(i, e) {
-			e.marker.setOpacity(0);
+			cgeomap.map.map.removeLayer(e.marker);
 		});
 	}
 };
@@ -206,17 +207,17 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		$(this.longitudeTag).val(longitude);
 		$(this.zoomTag).val(zoom);
 	}
-	this.clickableMarker.addTo(this.map);
-	this.clickableMarker.setOpacity(visible);
+	if (visible==1) this.clickableMarker.addTo(this.map);
+	//this.clickableMarker.setOpacity(visible);
 };
 VhplabMap.prototype.showMarkers = function(_exception) {
 	if (typeof _exception != "undefined") {
 		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _exception)>=0) e.marker.setOpacity(1);
+			if (jQuery.inArray(e.id, _exception)>=0) e.marker.addTo(cgeomap.map.map);
 		});
 	} else {
 		$.each($(this.markers).data(),function(i, e) {
-			e.marker.setOpacity(1);
+			e.marker.addTo(cgeomap.map.map);
 		});
 	}
 };

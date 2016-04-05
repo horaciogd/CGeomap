@@ -28,6 +28,26 @@ function VhplabInterface() {
   	this.toggleContentOffset = -12;
 	this.form = new VhplabContribuerFrom();
 };
+VhplabInterface.prototype.bindContributionsActions = function(_callback) {
+	var aportaciones = new Array();
+	$("#contributions li").each(function(){
+		aportaciones.push($(this).data("id"));
+	});
+	$("#contributions a").click(function(){
+		var container = $(this).parent().parent();
+		var id = $(container).data('id');
+		var marker = $(cgeomap.map.markers).data('marker_'+id);
+		marker.click();
+	});
+	$("#contributions .delete").click(function(){
+		var container = $(this).parent();
+		var id = $(container).data('id');
+		cgeomap.submitDelete(id);
+	});
+	$("#contributions").data('loaded', true);
+	$("#contributions").data('aportaciones', aportaciones);
+	if (_callback) _callback(aportaciones);
+};
 VhplabInterface.prototype.bindNavigationListActions = function() {
 	var self = this;
 	$("#navigation .menu .list a.article").click(function(){
@@ -124,6 +144,78 @@ VhplabInterface.prototype.initContent = function() {
 VhplabInterface.prototype.loadContributions = function() {
 	$("#content").data('selected','contributions');
 	$("#user .utilities .contributions").addClass('on');
+	var url = $("#user .utilities .contributions").data("href");
+	var loaded = $("#user .articles").data('loaded');
+	var recalcul =  $("#formulaire").data('recalcul');
+	if (recalcul) {
+		$('#loading_content').fadeIn();
+		this.map.open = false;
+		url += '&var_mode=recalcul';
+		$("#contributions ol").empty();
+		// get url via alert(url);
+		$("#contributions ol").load(url, function() {
+			if (recalcul!='none') {
+				var url_markers = cgeomap.map.markersURL +'&offset='+ cgeomap.map.offset +'&limit='+ cgeomap.map.limit +'&id_article='+ recalcul +'&var_mode=recalcul&callback=?';
+				// get url_markers via alert(url_markers);
+				cgeomap.map.reloadMarkers(url_markers, function(){
+					$("#formulaire").data('recalcul', false);
+					cgeomap.createNavigationList();
+					cgeomap.bindNavigationListActions();
+					cgeomap.bindContributionsActions(function(_a){
+						cgeomap.map.hideMarkers(_a);
+						$('#loading_content').fadeOut();
+						$("#contributions").slideDown("slow",function(){
+							$("#contributions").mCustomScrollbar({
+								scrollInertia: 150,
+								theme: "dark-thick"
+							});
+						});
+					});
+				});
+			} else {
+				$("#formulaire").data('recalcul', false);
+				cgeomap.createNavigationList();
+				cgeomap.bindNavigationListActions();
+				cgeomap.bindContributionsActions(function(_a){
+					cgeomap.map.hideMarkers(_a);
+					$('#loading_content').fadeOut();
+					$("#contributions").slideDown("slow",function(){
+						$("#contributions").mCustomScrollbar({
+							scrollInertia: 150,
+							theme: "dark-thick"
+						});
+					});
+				});
+			}
+		});
+	} else if (loaded) {
+		this.map.closeOpenMarker();
+		var aportaciones = $("#user .articles").data('aportaciones');
+		this.map.hideMarkers(aportaciones);
+		$("#contributions").slideDown("slow",function(){
+			$("#contributions").mCustomScrollbar({
+				scrollInertia: 150,
+				theme: "dark-thick"
+			});
+		});
+	} else {
+		$('#loading_content').fadeIn();
+		this.map.closeOpenMarker();
+		$("#contributions ol").empty();
+		$("#contributions ol").load(url, function() {
+			cgeomap.bindContributionsActions(function(_a){
+				cgeomap.map.hideMarkers(_a);
+				$('#loading_content').fadeOut();
+				$("#contributions").slideDown("slow",function(){
+					$("#contributions").mCustomScrollbar({
+						scrollInertia: 150,
+						theme: "dark-thick"
+					});
+				});
+			});
+		});
+	}
+	
 };
 VhplabInterface.prototype.loadEmbed = function() {
 	$("#content").data('selected','embed');
@@ -167,7 +259,7 @@ VhplabInterface.prototype.loadUtilities = function(_target, _callback) {
 			cgeomap.loadContributions();
 			if (_callback) _callback();
 			break;
-					case 'contribuer':
+			case 'contribuer':
 			cgeomap.loadContribuer();
 			if (_callback) _callback();
 			break;
@@ -251,6 +343,44 @@ VhplabInterface.prototype.slideContent = function(_how, _callback) {
 		}
 	}
 };
+VhplabInterface.prototype.submitDelete = function(id_article) {
+	if (confirm(_T.message_eliminar)) {
+		$("body").prepend('<div id="sending_data"><div></div></div>');
+		$.getJSON(this.url_site+'spip.php?page=json-delete', function(data){
+			var formData = {
+				page:'json-delete',
+				formulaire_action:'delete',
+				formulaire_action_args: data[0].formulaire_action_args,
+				article: id_article,
+			};
+			// alert(formData.toSource());
+			$.getJSON(cgeomap.url_site+'spip.php?page=json-delete', formData, function(response){
+				// alert(response.toSource());
+				// $('body').html(data);
+				if (typeof(response[0].message_ok)!="undefined") {
+					var text = response[0].message_ok.split(":");
+					$("#formulaire").data('recalcul', 'none');
+					$("#content").data('selected', 'none');
+					$("#contributions").data('loadded', 'false');
+					var deleted = $(cgeomap.map.markers).data('marker_'+text[1]);
+					cgeomap.map.map.removeLayer(deleted.marker);
+					$(cgeomap.map.markers).removeData('marker_'+text[1]);
+					var index = cgeomap.map.markerList.indexOf(parseInt(text[1]));
+					if (index > -1) cgeomap.map.markerList.splice(index, 1);
+					$('#contributions').slideUp("fast", function(){
+						$("#sending_data").fadeOut("slow", function(){
+							$("#sending_data").remove();
+							cgeomap.loadUtilities('contributions');
+						});
+					});
+				} else {
+					alert(response[0].message_erreur);
+					window.location.href = cgeomap.url_site;
+				}
+			});
+		});
+	}
+};
 VhplabInterface.prototype.toggleContent = function() {
 	var visible = $("#content").data('visible');
 	if (visible) {
@@ -299,7 +429,7 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 				hide = "#article";
 				break;
 			case 'contributions':
-				hide = "#user .navigation";
+				hide = "#contributions";
 				break;
 			case 'contribuer':
 				hide = "#formulaire";
@@ -1071,7 +1201,8 @@ VhplabContribuerFrom.prototype.submit = function() {
 						cgeomap.map.map.off('click');
 						cgeomap.map.map.off('zoomend');
 					}
-					cgeomap.map.clickableMarker.setOpacity(0);
+					//cgeomap.map.clickableMarker.setOpacity(0);
+					cgeomap.map.map.removeLayer(cgeomap.map.clickableMarker);
 					cgeomap.toggleUtilities('carte', function(){
 						$("#article").slideDown("fast");
 						$("#sending_data").fadeOut("slow", function(){

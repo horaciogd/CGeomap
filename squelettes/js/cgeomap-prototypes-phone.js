@@ -91,7 +91,8 @@ VhplabInterface.prototype.createNavigationList = function(_opts) {
 				visible = 'found';
 			} else {
 				visible = 'hidden';
-				marker.marker.setOpacity(0);
+				// marker.marker.setOpacity(0);
+				this.map.map.removeLayer(marker.marker);
 			}
 		}
 		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'), marker.distance, $(marker.data).data('enclosure'), visible);
@@ -200,11 +201,9 @@ VhplabInterface.prototype.toggleArticle = function(_me) {
 	//alert('toggleArticle');
 	var visible = $(_me).parent().parent().data('visible');
 	var id = $(_me).data('id');
-	
 	/*
 	var sound = $('#article_'+ id +' header').data('sound');
 	if (typeof sound!="undefined") {
-		alert('play');
 		cgeomap.play(sound, $('#article_'+ id +' .player'));
 	}
 	*/

@@ -63,5 +63,7 @@ VhplabInterface.prototype.loadUser = function(_callback) {
 		});
 		/* Formulaire */
 		$('#formulaire').hide();
+		/* Contributions */
+		$('#contributions').hide();
 	});
 };
