@@ -112,14 +112,14 @@ VhplabInterface.prototype.getCookie = function(_opts) {
 };
 VhplabInterface.prototype.initialize = function(_opts) {
 
-	// store url
+	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
 	(typeof _opts.initial_marker != "undefined") ? this.initial_marker = _opts.initial_marker : this.initial_marker = false;
 	
 	// Visibility settings for qr nodes
 	this.setVisibleNodes();
 	
-	// map options
+	// Map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
 	// load custom map prototypes
 	if (typeof _opts.custom_map_prototypes != "undefined") {
@@ -130,7 +130,6 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	} else {
 		cgeomap.ready(_opts.map_opts);
 	}
-	
 	
   	this.toggleContentOffset = 0;
 	this.initContent();
@@ -144,7 +143,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 		});
 	});
 	
-	// initialize soundManager
+	// Initialize soundManager
 	soundManager.setup({
 		// disable or enable debug output
 		debugMode: true,
@@ -156,7 +155,6 @@ VhplabInterface.prototype.initialize = function(_opts) {
   		// optional: enable MPEG-4/AAC support (requires flash 9)
   		flashVersion: 9
   	});
-  	
   	// Create Transparent Player
   	this.player = new VhplabTransparentPlayer();
 };
@@ -257,32 +255,6 @@ VhplabInterface.prototype.toggleContent = function() {
 			$('footer .location_button').removeClass('location_button');
 		});
 		$("#content").data('visible', true);
-	}
-};
-
-//***********
-// Vhplab Player
-//***********
-VhplabPlayer.prototype.setVolume = function() {
-	this.volume += 25;
-	if (this.volume>100) this.volume = 0;
-	this.sound.setVolume(this.volume);
-	switch (this.volume) {
-		case 0:
-			$('#'+ this.selector +' .volume').css("background-position", "-220px 0");
-			break;
-		case 25:
-			$('#'+ this.selector +' .volume').css("background-position", "-255px 0");
-			break;
-		case 50:
-			$('#'+ this.selector +' .volume').css("background-position", "-298px 0");
-			break;
-		case 75:
-			$('#'+ this.selector +' .volume').css("background-position", "-340px 0");
-			break;
-		case 100:
-			$('#'+ this.selector +' .volume').css("background-position", "-383px 0");
-			break;
 	}
 };
 

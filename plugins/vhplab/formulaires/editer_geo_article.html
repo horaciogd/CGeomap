@@ -1,6 +1,7 @@
 <!-- VHPlab GIS plugin spip 3.0 editer geo -->
 [(#SET{zoom,#CONFIG**{vhplab/default_zoom,12}})][(#SET{latitude,#CONFIG**{vhplab/default_latitude,0.0}})][(#SET{longitude,#CONFIG**{vhplab/default_longitude,0.0}})][(#SET{address,''})]
 <BOUCLE_editer_geo(VHPLAB_GIS){id_article}>[(#SET{zoom,#ZOOM})][(#SET{latitude,#LATITUDE})][(#SET{longitude,#LONGITUDE})][(#SET{address,#ADDRESS})]</BOUCLE_editer_geo>
+[(#SET{icon,[(#CHEMIN{images/icons/default_icon.png}|url_absolue)]})][(#SET{width,120})][(#SET{height,120})]
 <BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>[(#SET{icon,[(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]})][(#SET{width,[(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})]})][(#SET{height,[(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})]})]</BOUCLE_icon>
 <script type="text/javascript">
 //<![CDATA[
@@ -13,15 +14,10 @@ var article_map;
 				id: 'cgeomap',
 				zoom: [(#GET{zoom})],
 				latitude: [(#GET{latitude})],
-				longitude: [(#GET{longitude})],
+				longitude: [(#GET{longitude})][,
+				default_icon: '(#GET{icon})'],
 				formulaire: true,
-			});		
-			[article_map.clickableMarker.setIcon({
-				url: '(#GET{icon})',
-				size: new google.maps.Size([(#GET{width})], [(#GET{height})]),
-				scaledSize: new google.maps.Size([(#GET{width}|div{2})], [(#GET{height}|div{2})]),
-				anchor: new google.maps.Point([(#GET{width}|div{4})], [(#GET{height}|div{2})])
-			});]						
+			});
 		});
 	};
 	$(function(){

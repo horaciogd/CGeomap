@@ -5,11 +5,19 @@
 	function change_icon_existant() {
 		jQuery(".vhplab_gis_icon_logos li img").hide();
 		var selected = jQuery("#vhplab_gis_icon_existant option:selected").attr("value");
+		var selected_icon = jQuery("#vhplab_gis_icon_existant option:selected").data("icon");
 		if (selected=="mot_nouveau") {
 			jQuery(".editer_vhplab_gis_icon").show();
 		} else {
 			jQuery(".editer_vhplab_gis_icon").hide();
 			jQuery("#icon_"+ selected).show();
+			var icon = L.icon({
+				iconUrl: selected_icon,
+    			iconRetinaUrl: selected_icon,
+    			iconSize: [60, 60],
+				iconAnchor: [30, 60]
+			});
+			article_map.clickableMarker.setIcon(icon);
 		}
 	}
 	//jQuery('.formulaire_#FORM .action .delete').click(function(){jQuery(this).parents('tr').eq(0).animateRemove();});
@@ -43,7 +51,7 @@
 					<select name="vhplab_gis_icon_existant" id="vhplab_gis_icon_existant" onchange="change_icon_existant();">
 						<option value="">&nbsp;</option>
 						<BOUCLE_selector(MOTS){id_groupe}{par num titre, multi titre}>
-						<option value="mot_#ID_MOT"[(#GET{selected}|=={#ID_MOT}|oui) selected="selected"]>#TITRE</option>
+						<option value="mot_#ID_MOT"[(#GET{selected}|=={#ID_MOT}|oui) selected="selected"][ data-icon="(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]})"]>#TITRE</option>
 						</BOUCLE_selector>
 						<option value="mot_nouveau"><:vhplab:info_telecharger_nouveau_icon:></option>
 					</select>
