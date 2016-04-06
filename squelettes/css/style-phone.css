@@ -2,16 +2,29 @@
    Navigation
 -------------------- */
 
-#navigation .wrapper { border-bottom: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 6px; -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.4); -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.4); box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.4); }
+#navigation hgroup { height: 60px; position: relative; background-image: url('../images/pix/cgeomap-top-banner-@2x.png');  background-repeat: no-repeat; background-size: 2048px 92px; background-position: bottom center; }
 #navigation hgroup h1 { font-size: 20px; line-height: 32px; vertical-align: middle; }
+
 #navigation .logo { display: inline; padding: 0 6px; line-height: 32px; vertical-align: middle; }
+
+/* bookmark & GPS */
+#bookmark { background-color: #00adab; text-align: center; padding: 4px;}
+#bookmark .wrapper {  display: none; position: relative; background-color: #fff; border-radius: 7px; padding: 7px 7px 3px 7px; margin: 7px; }
+#bookmark img { margin-top: 14px; }
+#bookmark p:last-child { text-align: right; }
+#bookmark .hide { display: inline-block; width: 32px; height: 32px; background-image: url('../images/icons/cgeomap-bookmark-up-rollover-@2x.png'); background-size: 64px 32px; background-repeat: no-repeat; background-position: 0px 0px; }
+#bookmark .hide:active { background-position: -32px 0px; }
+#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 14px; line-height: 14px; background-color: #00adab; color: rgba(255,255,255,0.8); padding: 4px 6px; margin-top: 8px; border-radius: 9px; border: #18c2b1 solid 1px; }
+#navigation hgroup .bkmrk { -webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3); -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3); box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3); }
+#navigation hgroup .bkmrk:hover { border-color: #0bdec9;  background-color: #0bdec9; color: rgba(255,255,255,1); }
+#navigation hgroup .gps span { background-color: rgba(255,255,255,0.8); width: 8px; height: 8px; margin: 0 6px 2px 0; display: inline-block; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
 
 
 /* --------------------
    Content
 -------------------- */
 
-#content .wrapper { padding: 6px 6px 6px 0; background: rgba(255,255,255, 0.9); }
+#content .wrapper { padding: 40px 6px 6px 0; background: rgba(255,255,255, 0.9); }
 #content .listado_nodos .header { display: block; }
 #content .listado_nodos .header hgroup { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 6px; background: #18c2b1; }
 #content .listado_nodos .header hgroup:hover, #content .listado_nodos .header hgroup:active { background: #0bdec9; }

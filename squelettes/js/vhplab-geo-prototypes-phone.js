@@ -26,10 +26,6 @@ VhplabMap.prototype.addMarkers = function(_data, _callback) {
 			if(navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function(position) {
 					// geolocation success
-					/*
-					$("#navigation hgroup .gps span").css('background-color', '#ed9128');
-					setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', '#fff'); }, 300);
-					*/
 					self.updateMap(position.coords.latitude, position.coords.longitude);
 					self.map.panTo([position.coords.latitude, position.coords.longitude]);
 					var loadded = self.markerList.length;
@@ -66,6 +62,26 @@ VhplabMap.prototype.bindActions = function() {
 	cgeomap.createNavigationList();
 	cgeomap.bindNavigationListActions();
 	cgeomap.slideContent('show');
+	var width = parseInt($(window).width());
+	if (width>674) width = 674;
+	$("#navigation .bkmrk").click(function(){
+		if ($("#navigation .bkmrk").data('loaded')!=true) {
+			var url = cgeomap.url_site +"spip.php?page=ajax-bookmark-ios&width="+ (width*2 - 82);
+			if (/Android/i.test(navigator.userAgent)) url = cgeomap.url_site +"spip.php?page=ajax-bookmark-android&width="+ (width*2 - 82);
+			$("#bookmark").load(url, function(){
+				$("#navigation .bkmrk").data('loaded', true);
+				$("#navigation .bkmrk").fadeOut();
+				$("#bookmark .wrapper").slideDown();
+				$("#bookmark .hide").click(function(){
+					$("#bookmark .wrapper").slideUp();
+					$("#navigation .bkmrk").fadeIn();
+				});
+			});
+		} else {
+			$("#navigation .bkmrk").fadeOut();
+			$("#bookmark .wrapper").slideDown();
+		}
+	});
 	$('#loading').fadeOut();
 };
 VhplabMap.prototype.clickListener = function(_e) {
@@ -147,10 +163,8 @@ VhplabMap.prototype.myLocation = function(_callback) {
 };
 VhplabMap.prototype.updateMap = function(_lat, _lng) {
 	//alert('updateMap');
-	/*
-	$("#navigation hgroup .gps span").css('background-color', '#ed9128');
-	setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', '#fff'); }, 300);
-	*/
+	$("#navigation hgroup .gps span").css('background-color', '#0bdec9');
+	setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', 'rgba(255,255,255,0.8)'); }, 300);
 	this.locationCircle1.setLatLng([_lat, _lng]);
 	this.locationCircle2.setLatLng([_lat, _lng]);
 	this.locationCircle3.setLatLng([_lat, _lng]);
