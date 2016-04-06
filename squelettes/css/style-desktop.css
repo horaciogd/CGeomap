@@ -94,8 +94,8 @@
 .header { height: 60px; }
 .header img { position: absolute; top: 0px; left: 0; }
 .header .titre, .header .soustitre { margin-left: 60px; }
-.header .titre { line-height: 36px; height: 44px; font-size: 26px; }
-.header .soustitre { line-height: 24px; height: 16px; font-size: 12px; }
+.header .titre { line-height: 44px; height: 44px; font-size: 26px; }
+.header .soustitre { line-height: 16px; height: 16px; font-size: 12px; }
 .header .editer { position: absolute; top: -6px; right: -6px; color: #fff; background-color: #656364; border-color: #4a5458; -webkit-box-shadow: 2px 2px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 2px 2px 6px rgba(60, 60, 60, 0.5); box-shadow: 2px 2px 6px rgba(60, 60, 60, 0.5); }
 .header .editer:hover, .header .editer:focus { background-color: #94ffd9; }
 .header .editer:active { background-color: #878d96; }
@@ -103,34 +103,36 @@
 /* scroll  */
 article .content.mCustomScrollbar { right: -16px; }
 #contributions.mCustomScrollbar { right: 0px; }
-article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol { margin-right: 8px; }
+#formulaire .scroll.mCustomScrollbar { right: -16px; }
+article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol, #formulaire .scroll.mCustomScrollbar .block_modules { margin-right: 8px; }
 article .content.mCS_no_scrollbar { right: 0px; }
+#formulaire .scroll.mCS_no_scrollbar { right: 0px; }
 #contributions.mCS_no_scrollbar { right: 15px; }
-article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol { margin-right: 0px; }
+article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, #formulaire .scroll.mCS_no_scrollbar .block_modules { margin-right: 0px; }
 
 /* Texte  */
 .texte p { font-size: 0.9em; text-align: justify; }
 .texte img { margin: 1em 0; }
 
 /* Modules  */
-.audiovisuel header.block { display: none; }
+.audiovisuel header.block, .audiovisuel .trash, .audiovisuel .margin { display: none; }
 .module { margin-bottom: 4px; position: relative; }
-.module header, .module .content { padding: 6px 8px; border: solid 1px #c2c6cd; background-color: #eff0f2; }
+.module header, .module .content { padding: 6px 8px; border: solid 1px #94ffd9; background-color: rgba(148,255,217,0.4); }
 .module header { border-bottom: none; -webkit-border-top-right-radius: 12px; -webkit-border-bottom-top-radius: 6px; -moz-border-radius-topright: 6px; -moz-border-radius-topleft: 6px; border-top-right-radius: 6px; border-top-left-radius: 6px; }
 .module .content { padding-top: 2px; border-top: none; -webkit-border-bottom-right-radius: 6px; -webkit-border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -moz-border-radius-bottomleft: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; }
 .module .content .wrap { font-size: 0.8em; }
 .module img { border-radius: 4px; }
 
 /* Player  */
-.vhplab_player { text-align: left; }
-.vhplab_player ul { height: 19px; width: 230px; border-radius: 3px; font-size: 10px; }
-.vhplab_player ul li { height: 19px; background-size: 224px 46px; background-image: url('../images/icons/cgeomap-player-buttons-@2x.png'); }
+.vhplab_player { text-align: center; margin-bottom: 4px; }
+.vhplab_player ul { height: 24px; width: 96%; border-radius: 3px; font-size: 10px; }
+.vhplab_player ul li { height: 24px; background-size: 224px 46px; background-image: url('../images/icons/cgeomap-player-buttons-@2x.png'); }
 .vhplab_player ul li.play { top: 3px; left: 6px; width: 18px; background-position: -24px 0px; }
 .vhplab_player ul li.pause { top: 3px; left: 6px; width: 18px; background-position: -91px 0px; }
 .vhplab_player ul li.volume { top: 3px; right: 6px; width: 18px; background-position: -111px 0px; }
 .vhplab_player ul li.position { top: 5px; left: 30px; }
 .vhplab_player ul li.duration { top: 5px; right: 30px; }
-.vhplab_player ul li.progress_bar { top: 5px; left: 60px; height: 12px; width: 136px; border-radius: 3px; }
+.vhplab_player ul li.progress_bar { top: 5px; left: 60px; height: 12px; right: 60px; border-radius: 3px; }
 .vhplab_player ul li.progress_bar span { background-color: #bfbfbf; border-radius: 2px; height: 12px; }
 
 
@@ -138,13 +140,16 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol {
    Formulaire
 -------------------- */
 
- #formulaire form .header { position: relative; }
- .header .titre input, .header .soustitre input { width: 100%; padding: 2px 4px; }
+#formulaire form .header { position: relative; }
+
+/* header */
+.header .titre input, .header .soustitre input { width: 100%; padding: 2px 4px; }
  
 /* buttons */
 .media .btn, .audio .btn, .submit input, .editer { display: inline-block; padding: 3px 6px; border-radius: 8px; font-size: 0.8em; border: #fff solid 1px; }
 
 /* visibility */
+.visibility { padding-top: 6px; border-top: 1px solid #ccc; margin-top: 6px; }
 .field_box { text-align: right; margin-bottom: 8px; }
 .field_box li { display: inline-block; line-height: 24px; }
 .field_box li.label { float: left; background-image: url('../images/icons/cgeomap-globe-@2x.png'); background-size: 24px 24px; padding-left: 24px; background-repeat: no-repeat; }
@@ -154,7 +159,7 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol {
 .field_box .selected { background-image: url('../images/pix/cgeomap-check-@2x.png'); }
 
 /* modules */
-.module_button { position: absolute; right: -96px; background-image: url('../images/icons/cgeomap-module-buttons-@2x.png'); background-size: 202px 282px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }
+.module_button { position: absolute; right: -109px; background-image: url('../images/icons/cgeomap-module-buttons-@2x.png'); background-size: 202px 282px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }
 #add_link_module { background-position: 0px -219px; top: 510px; }
 #add_text_module { background-position: 0px -73px; top: 290px; }
 #add_media_module { background-position: 0px 0px; top: 360px; }
@@ -205,7 +210,7 @@ form .link ul { margin-bottom: 20px; }
 /* submit */
 #sending_data { background: url('../js/fancybox/fancybox_overlay.png'); }
 #sending_data div { background: url('../js/fancybox/fancybox_loading.gif') center center no-repeat; }
-.submit { position: absolute; bottom: 10px; right: 15px; }
+.submit { position: absolute; bottom: -10px; right: 15px; }
 .submit input { color: #878d96; background-color: #94ffd9; border-color: #c2c6cd; -webkit-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); }
 .submit input:hover, .btn-primary:focus { background-color: #f6ff8c; }
 .submit input:active { color: #ffffff; background-color: #ffda8c; }

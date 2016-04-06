@@ -83,6 +83,7 @@ VhplabMap.prototype.bindActions = function() {
 		}
 	});
 	$('#loading').fadeOut();
+	cgeomap.map.openMarker();
 };
 VhplabMap.prototype.clickListener = function(_e) {
 	// close infowindow easer 

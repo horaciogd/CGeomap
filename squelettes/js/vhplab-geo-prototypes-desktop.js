@@ -21,23 +21,15 @@ VhplabMap.prototype.bindActions = function() {
 	});
 };
 VhplabMap.prototype.clickListener = function(_e) {
-	this.clickableMarker.setLatLng(_e.latlng);
-	e.marker.addTo(cgeomap.map.map);
-	// this.clickableMarker.setOpacity(1);
-	this.clickableMarker.addTo(this.map);
-	this.map.panTo(_e.latlng);
-	$(this.latitudeTag).val(_e.latlng.lat);
-	$(this.longitudeTag).val(_e.latlng.lng);
-	$(this.zoomTag).val(this.map.getZoom());
+	cgeomap.map.clickableMarker.setLatLng(_e.latlng);
+	cgeomap.map.clickableMarker.addTo(cgeomap.map.map);
+	cgeomap.map.map.panTo(_e.latlng);
+	$(cgeomap.map.latitudeTag).val(_e.latlng.lat);
+	$(cgeomap.map.longitudeTag).val(_e.latlng.lng);
+	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
 	$(".cartography label").addClass('new');
 	$("#formulaire .wrap_cartography").data('ok',true);
 	cgeomap.form.check();
-};
-VhplabMap.prototype.openMarker = function() {
-	if (this.open) {
-		var marker = $(this.markers).data('marker_'+this.open);
-		marker.click();
-	}
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
 	// Max Zoom Service
@@ -69,7 +61,7 @@ VhplabMap.prototype.initMapElements = function(_opts) {
     	
 };
 VhplabMap.prototype.zoomListener = function(_e) {
-	$(this.zoomTag).val(this.map.getZoom());
+	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
 	$(".cartography label").addClass('new');
 	$("#formulaire .wrap_cartography").data('ok',true);
 	cgeomap.form.check();

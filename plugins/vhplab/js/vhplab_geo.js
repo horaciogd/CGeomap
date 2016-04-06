@@ -149,6 +149,12 @@ VhplabMap.prototype.loadMarkers = function() {
 		self.addMarkers(data[0]);
 	});					
 };
+VhplabMap.prototype.openMarker = function() {
+	if (this.open) {
+		var marker = $(this.markers).data('marker_'+this.open);
+		marker.click();
+	}
+};
 VhplabMap.prototype.panOut = function() {
 	this.map.setView([this.lat, this.lng], this.zoom);
 };
@@ -421,22 +427,41 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	this.data = {};
 	this.loadded = false;
 	this.open = false;
-	this.infoWindow = new InfoBox();
-	typeof _data.lat != "undefined" ? lat = parseFloat(_data.lat) : lat = 0.0;
-	typeof _data.lng != "undefined" ? lng = parseFloat(_data.lng) : lng = 0.0;
-	typeof _data.id != "undefined" ? this.id = parseInt(_data.id) : this.id = 0;
-	typeof _data.json != "undefined" ? this.json = _path + _data.json + '&var_mode=recalcul' : this.json = "";
+	typeof _data.json != "undefined" ? this.json = _path + _data.json : this.json = "";
+	typeof _data.lat != "undefined" ? this.lat = parseFloat(_data.lat) : this.lat = 0.0;
+	typeof _data.lng != "undefined" ? this.lng = parseFloat(_data.lng) : this.lng = 0.0;
+	typeof _data.zoom != "undefined" ? this.zoom = parseInt(_data.zoom) : this.zoom = 0;
+	typeof _data.titre != "undefined" ? $(this.data).data('titre', _data.titre) : $(this.data).data('titre', "");
+	typeof _data.lesauteurs != "undefined" ? $(this.data).data('lesauteurs', _data.lesauteurs) : $(this.data).data('lesauteurs', "");
+	typeof _data.soustitre != "undefined" ? $(this.data).data('soustitre', _data.soustitre) : $(this.data).data('soustitre', "");
 	this.parent = _parent;
+	
 	this.marker.setLatLng([this.lat, this.lng]);
 	this.infoWindow.setContent('');
 	this.infoWindow.setLatLng([this.lat, this.lng]);
-	var icon = L.icon({
-		iconUrl: this.icon,
-    	iconRetinaUrl: this.icon,
-    	iconSize: [32, 32],
-    	iconAnchor: [16, 16]
-	});
-	this.marker.setIcon(icon);
+	
+	if (typeof _data.icon != "undefined") {
+		var width, height, url;
+		typeof _data.icon.width != "undefined" ? width = parseInt(_data.icon.width) : width = 60;
+		typeof _data.icon.height != "undefined" ? height = parseInt(_data.icon.height) : height = 60;
+		typeof _data.icon.url != "undefined" ? url = _path + _data.icon.url : url = 'plugins/vhplab/images/icons/default_icon.png';
+    	var icon = L.icon({
+			iconUrl: url,
+    		iconRetinaUrl: url,
+    		iconSize: [width/2, height/2],
+    		iconAnchor: [width/4, height/2]
+		});
+		$(this.data).data('icon', {
+			url: url,
+			width: width,
+			height: height
+		});
+		this.marker.setIcon(icon);
+		L.setOptions(this.infoWindow, {
+			offset: [0, -height/2]
+		});
+	}
+	
 	var self = this;
 	$.getJSON(this.json, function(data) {
 		$.each(data[0].marker, function(i, marker){

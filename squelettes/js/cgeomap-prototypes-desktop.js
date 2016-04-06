@@ -401,6 +401,12 @@ VhplabContribuerFrom.prototype.bindActions = function() {
     	stop: function(event, ui) { cgeomap.form.sortableStop(ui.item, "#formulaire .audiovisuel"); }
     });
     
+     /* scroll */
+    $("#formulaire .scroll").mCustomScrollbar({
+		scrollInertia: 150,
+		theme: "dark-thick"
+	});
+
     /* cartography */
 	cgeomap.form.toggleGeo();
 	$("#formulaire .address").focus( function(){
@@ -768,7 +774,7 @@ VhplabContribuerFrom.prototype.createNewModule = function(_me) {
 		$(container +" ."+ type +"_"+ n).data('ok', false);
 		$(".submit .btn").css('opacity','0.4');
 		$(_me).data('n_audiovisuel', n+1);
-		//$("#formulaire .content").mCustomScrollbar("update");
+		$("#formulaire .scroll").mCustomScrollbar("update");
 	}
 };
 VhplabContribuerFrom.prototype.createTextModule = function(_container, _type, _n) {
@@ -795,6 +801,7 @@ VhplabContribuerFrom.prototype.deleteModule = function(_me) {
 		}
 	}
 	$(container).remove();
+	$("#formulaire .scroll").mCustomScrollbar("update");
 	this.check();
 };
 VhplabContribuerFrom.prototype.editName = function(_me) {
@@ -990,7 +997,7 @@ VhplabContribuerFrom.prototype.sortableStop = function(_me, _container) {
 			if (typeof $(this).attr("class") != "undefined") {
 				$(_container +" .trash").empty();
 				$(_container +" .trash").append("<li></li>");
-				$("#formulaire .content").mCustomScrollbar("update");
+				$("#formulaire .scroll").mCustomScrollbar("update");
 				cgeomap.form.check();
 				// alert('trash'); 
 			}
@@ -1060,11 +1067,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 						$("#formulaire").empty();
 					});
 					$("#formulaire").data('recalcul', text[2]);
-					if (cgeomap.form.geo) {
-						cgeomap.map.map.off('click');
-						cgeomap.map.map.off('zoomend');
-					}
-					//cgeomap.map.clickableMarker.setOpacity(0);
+					if (cgeomap.form.geo) cgeomap.form.toggleGeo();
 					cgeomap.map.map.removeLayer(cgeomap.map.clickableMarker);
 					cgeomap.toggleUtilities('carte', function(){
 						$("#article").slideDown("fast");
@@ -1087,21 +1090,13 @@ VhplabContribuerFrom.prototype.submit = function() {
 VhplabContribuerFrom.prototype.toggleGeo = function() {
 	if (this.geo) {
 		$(".wrap_cartography").hide();
-		cgeomap.map.map.off('click');
-		cgeomap.map.map.off('zoomend');
-		//cgeomap.map.map.off('click', cgeomap.map.clickListener);
-		//cgeomap.map.map.off('zoomend', cgeomap.map.zoomListener);
+		cgeomap.map.map.off('click', cgeomap.map.clickListener);
+		cgeomap.map.map.off('zoomend', cgeomap.map.zoomListener);
 		this.geo = false;
 	} else {
 		$(".wrap_cartography").show();
-		cgeomap.map.map.on('click', function(_e){
-			cgeomap.map.clickListener(_e);
-		});
-		cgeomap.map.map.on('zoomend', function(_e){
-			cgeomap.map.zoomListener(_e);
-		});
-		//cgeomap.map.map.on('click', cgeomap.map.clickListener);
-		//cgeomap.map.map.on('zoomend', cgeomap.map.zoomListener);
+		cgeomap.map.map.on('click', cgeomap.map.clickListener);
+		cgeomap.map.map.on('zoomend', cgeomap.map.zoomListener);
 		this.geo = true;
 	}
 };

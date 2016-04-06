@@ -14,15 +14,17 @@
 #content .wrapper { padding: 15px; }
 
 /* article  */
-article, #contributions { position: absolute; top: 39px; /* user height */ bottom: 15px; left: 15px; right: 15px; }
-article .scroll { position: absolute; top: 66px; /* header height */ bottom: 0px; left: 0px; right: 0px; /*overflow-y: auto; overflow-x: hidden;*/ overflow: hidden; }
+article, #contributions, #formulaire { position: absolute; top: 39px; /* user height */ bottom: 15px; left: 15px; right: 15px; }
+article .scroll { position: absolute; top: 66px; /* header height */ bottom: 0px; left: 0px; right: 0px; overflow: hidden; }
+#formulaire .scroll { position: absolute; top: 106px; /* header height */ bottom: 20px; left: 0px; right: 0px; overflow: hidden; }
+
 
 /* --------------------
    Formulaire
 -------------------- */
 
 /* cartography */
-.wrap_cartography { position: absolute; z-index: 12; bottom: 62px; right: -660px; height: 50px; width: 640px; }
+.wrap_cartography { position: absolute; z-index: 12; bottom: 62px; right: -673px; height: 50px; width: 640px; }
 
 /* submit */
 #sending_data { position: absolute; z-index: 1000; top: 0; right: 0; left: 0; bottom: 0; }

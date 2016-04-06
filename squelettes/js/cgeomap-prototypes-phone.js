@@ -61,7 +61,6 @@ VhplabInterface.prototype.bindNavigationListActions = function() {
 	$("#content .wrapper .bottom").click(function(e){
 		var first = $("#content .listado_nodos li:first").attr("id");
 		$('#content .wrapper').scrollTo('#'+ first);
-		alert('hola');
 	});
 };
 VhplabInterface.prototype.bindToggleContent = function() {
@@ -121,9 +120,9 @@ VhplabInterface.prototype.initialize = function(_opts) {
 
 	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
-	(typeof _opts.initial_marker != "undefined") ? this.initial_marker = _opts.initial_marker : this.initial_marker = false;
 	
 	// Visibility settings for qr nodes
+	(typeof _opts.open != "undefined") ? this.open = _opts.open : this.open = false;
 	this.setVisibleNodes();
 	
 	// Map options
@@ -189,8 +188,8 @@ VhplabInterface.prototype.setCookie = function(_opts) {
 VhplabInterface.prototype.setVisibleNodes= function() {
 	var found = '';
 	this.visibleNodes = new Array();
-	if (this.initial_marker) {
-		found = this.initial_marker;
+	if (this.open) {
+		found = this.open;
 		this.visibleNodes.push(parseInt(found));
 	}
 	var cookie = this.getCookie();

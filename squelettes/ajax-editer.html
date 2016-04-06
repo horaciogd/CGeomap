@@ -49,7 +49,7 @@
 							</ul>
 							</B_visibility>
 						</div><!-- visibility -->
-						<div class="modules">
+						<div class="modules scroll">
 							<BOUCLE_modules(ARTICLES){id_article=#GET{article}}>[(#SET{modules,#TEXTE})]</BOUCLE_modules>[(#GET{modules}|extraire_formulaire_module)]
 							[(#TEXTE|=={''}|oui)<div class="block_modules audiovisuel" data-type="audiovisuel" data-tgl="on">
 								<header class="block">
