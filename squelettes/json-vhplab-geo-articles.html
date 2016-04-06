@@ -23,7 +23,7 @@
 			"zoom": "(#ZOOM)"]</BOUCLE_gis>,<B_icon><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>
 			"icon": {["url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][, "width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][, "height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]}</BOUCLE_icon></B_icon>
 			"icon": {["url": "(#CHEMIN{images/icons/default_icon.png})"], "width": "120", "height": "120"}<//B_icon>[,
-			"json": "(#URL_PAGE{json-vhplab-geo-article})&id_article=#ID_ARTICLE"][(#ENV{sound}|==true|oui)[(#MODELE{enclosure}{id_article})]]<B_visibility>,
+			"json": "(#URL_PAGE{json-vhplab-geo-article})&id_article=#ID_ARTICLE"][(#ENV{enclosure}|==true|oui)[(#MODELE{enclosure}{id_article})]]<B_visibility>,
 			"visibility":<BOUCLE_visibility(MOTS){id_article}{type=visibility}> "[(#TITRE|supprimer_numero|textebrut)]"</BOUCLE_visibility></B_visibility>
 		</BOUCLE_item>
 		}</BOUCLE_json>
