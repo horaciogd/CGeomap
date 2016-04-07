@@ -65,22 +65,19 @@ VhplabMap.prototype.bindActions = function() {
 	var width = parseInt($(window).width());
 	if (width>674) width = 674;
 	$("#navigation .bkmrk").click(function(){
-		if ($("#navigation .bkmrk").data('loaded')!=true) {
-			var url = cgeomap.url_site +"spip.php?page=ajax-bookmark-ios&width="+ (width*2 - 82);
-			if (/Android/i.test(navigator.userAgent)) url = cgeomap.url_site +"spip.php?page=ajax-bookmark-android&width="+ (width*2 - 82);
-			$("#bookmark").load(url, function(){
-				$("#navigation .bkmrk").data('loaded', true);
-				$("#navigation .bkmrk").fadeOut();
-				$("#bookmark .wrapper").slideDown();
-				$("#bookmark .hide").click(function(){
-					$("#bookmark .wrapper").slideUp();
-					$("#navigation .bkmrk").fadeIn();
-				});
-			});
-		} else {
-			$("#navigation .bkmrk").fadeOut();
-			$("#bookmark .wrapper").slideDown();
-		}
+		cordova.plugins.barcodeScanner.scan(
+			function (result) {
+				var s = "Result: " + result.text + "<br/>" +
+				"Format: " + result.format + "<br/>" +
+				"Cancelled: " + result.cancelled;
+				setTimeout(function() {	
+					cgeomap.addToVisibleNodes(result.text.substr(cgeomap.url_site.length+14), true);
+				}, 40);
+			}, 
+			function (error) {
+				alert("Scanning failed: " + error);
+			}
+		);
 	});
 	$('#loading').fadeOut();
 	cgeomap.map.openMarker(true);
@@ -319,7 +316,7 @@ VhplabMarker.prototype.getData = function(_callback) {
 		if (_callback) _callback();
 	} else {
 		var self = this;
-		var width = parseInt($(window).width()-34);
+		var width = parseInt(cgeomap.windowWidth-34);
 		if (width>=900) width = 900;
 		// get URL via alert(this.json +'&width='+ width +'&link=false');
 		$.getJSON(this.json +'&width='+ width +'&link=false', function(data) {
@@ -344,6 +341,7 @@ VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
 			$(this.data).data('visibility','default');
 		}
 		this.vibrate = false;
+		navigator.vibrate(500);
 	} else if ((this.distance<=15)&&(this.autoplay)){
 		$("#article_"+ this.id +" header").trigger("click");
 		this.auto = false;

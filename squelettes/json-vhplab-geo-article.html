@@ -31,17 +31,8 @@
 		"url_editer": "(#URL_PAGE{ajax-editer}|url_absolue)[&id_article=(#ID_ARTICLE)][&id_rubrique=(#ID_RUBRIQUE)]&var_mode=recalcul"]<BOUCLE_gis(VHPLAB_GIS){id_article}>[,
 		"lat": "(#LATITUDE)"][,
 		"lng": "(#LONGITUDE)"][,
-		"zoom": "(#ZOOM)"]</BOUCLE_gis><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>,
-		"icon": {[
-			"url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][, 
-			"width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][, 
-			"height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]
-		}</BOUCLE_icon></B_icon>,
-		"icon": {[
-			"url": "(#CHEMIN{images/icons/default_icon.png})"], 
-			"width": "120", 
-			"height": "120"
-		}<//B_icon><B_image>,
+		"zoom": "(#ZOOM)"]</BOUCLE_gis>[,
+		(#MODELE{icon}{id_article})]<B_image>,
 		<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,1}>"image": {[
 			"url_document": "(#URL_DOCUMENT|url_absolue)"][, 
 			"hauteur": "(#HAUTEUR)"][, 
@@ -57,7 +48,8 @@
 			"window": "(#FICHIER|image_reduire{700,0}|image_recadre{700,300,'top center'}|extraire_attribut{src}|url_absolue)"]})][(#HAUTEUR|<={#LARGEUR}|?{[, 
 			"thumbnail": "(#FICHIER|image_reduire{0,100}|image_recadre{100,100,center}|extraire_attribut{src}|url_absolue)"],[, 
 			"thumbnail": "(#FICHIER|image_reduire{100,0}|image_recadre{100,100,center}|extraire_attribut{src}|url_absolue)"]})]
-		}</BOUCLE_image></B_image>[(#MODELE{enclosure}{id_article})]<B_visibility>,
+		}</BOUCLE_image></B_image>[,
+		(#MODELE{enclosure}{id_article})]<B_visibility>,
 		"visibility":<BOUCLE_visibility(MOTS){id_article}{type=visibility}> "[(#TITRE|supprimer_numero|textebrut)]"</BOUCLE_visibility></B_visibility><B_tags>,
 		"tags": "<BOUCLE_tags(MOTS){id_article}{", "}>[(#TITRE|texte_backend)]</BOUCLE_tags>"</B_tags>
 	}</BOUCLE_article>]
