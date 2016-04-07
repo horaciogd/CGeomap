@@ -490,19 +490,84 @@ VhplabInterface.prototype.toggleGeoEmbed = function(_t) {
 	}
 };
 VhplabInterface.prototype.toggleLogin = function(_me) {
+ 	var selected = $("#content").data('selected');
  	if (!this.session) {
 		var tgl =  $(_me).data("tgl");
 		if (tgl=="on") {
 			$('#user .login').slideUp();
-			$( "#article" ).animate({
-				top: 39,
-			});
+			switch (selected) {
+				case 'carte':
+					$( "#article" ).animate({
+						top: 39,
+					});
+					$( "#formulaire" ).css('top', 39);
+					$( "#contributions" ).css('top', 39);
+					break;
+				case 'contributions':
+					$( "#contributions" ).animate({
+						top: 39,
+					});
+					$( "#formulaire" ).css('top', 39);
+					$( "#article" ).css('top', 39);
+					break;
+				case 'contribuer':
+					$( "#formulaire" ).animate({
+						top: 39,
+					});
+					$( "#article" ).css('top', 39);
+					$( "#contributions" ).css('top', 39);
+					break;
+				case 'editer':
+					$( "#formulaire" ).animate({
+						top: 39,
+					});
+					$( "#article" ).css('top', 39);
+					$( "#contributions" ).css('top', 39);
+					break;
+				case 'embed':
+					$( "#formulaire" ).css('top', 39);
+					$( "#article" ).css('top', 39);
+					$( "#contributions" ).css('top', 39);
+					break;
+			}
 			$(_me).data("tgl","off");
 		} else {
 			$('#user .login').slideDown();
-			$( "#article" ).animate({
-				top: 77,
-			});
+			switch (selected) {
+				case 'carte':
+					$( "#article" ).animate({
+						top: 77,
+					});
+					$( "#formulaire" ).css('top', 77);
+					$( "#contributions" ).css('top', 77);
+					break;
+				case 'contributions':
+					$( "#contributions" ).animate({
+						top: 77,
+					});
+					$( "#formulaire" ).css('top', 77);
+					$( "#article" ).css('top', 77);
+					break;
+				case 'contribuer':
+					$( "#formulaire" ).animate({
+						top: 77,
+					});
+					$( "#article" ).css('top', 77);
+					$( "#contributions" ).css('top', 77);
+					break;
+				case 'editer':
+					$( "#formulaire" ).animate({
+						top: 77,
+					});
+					$( "#article" ).css('top', 77);
+					$( "#contributions" ).css('top', 77);
+					break;
+				case 'embed':
+					$( "#formulaire" ).css('top', 77);
+					$( "#article" ).css('top', 77);
+					$( "#contributions" ).css('top', 77);
+					break;
+			}
 			$(_me).data("tgl","on");
 		}
 	}
