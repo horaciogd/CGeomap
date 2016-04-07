@@ -137,6 +137,19 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 
 
 /* --------------------
+   Embed
+-------------------- */
+
+#embed .form-control { font-size: 0.8em; padding: 3px 6px;  white-space: nowrap; }
+#embed h4 { font-size: 0.8em; margin-bottom: 4px; }
+#embed .wrap_iframe code { display: block; padding: 4px; margin: 20px auto 4px auto; background-color: #f6f6f6; white-space: pre-wrap; font-family: "Courier New", Courier, monospace; border: 1px solid #ccc; border-radius: 4px; font-size: 0.8em; }
+#embed .wrap_iframe .msg {  font-size: 0.7em; }
+#embed .wrap_auteur, #embed .wrap_category, #embed .wrap_tags, #embed .wrap_meta_tags, #embed .wrap_recherche { margin: 12px 10px; }
+#embed .wrap_iframe { margin: 20px 10px; }
+#embed .wrap_recherche .form-control { width: 100%; }
+
+
+/* --------------------
    Formulaire
 -------------------- */
 
@@ -150,13 +163,13 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 
 /* visibility */
 .visibility { padding-top: 6px; border-top: 1px solid #ccc; margin-top: 6px; }
-.field_box { text-align: right; margin-bottom: 8px; }
-.field_box li { display: inline-block; line-height: 24px; }
-.field_box li.label { float: left; background-image: url('../images/icons/cgeomap-globe-@2x.png'); background-size: 24px 24px; padding-left: 24px; background-repeat: no-repeat; }
-.field_box li.label, .field_box label { font-size: 0.8em; vertical-align: middle; }
-.field_box .btn { width: 24px; height: 24px; background-size: 24px 24px; background-position: center center; border-radius: 7px; border: 2px solid #000; margin: 0 2px 0 6px; background-color: transparent; }
-.field_box .btn:hover, .field_box .btn:focus,.field_box .btn:active { background-color: #f6ff8c; }
-.field_box .selected { background-image: url('../images/pix/cgeomap-check-@2x.png'); }
+.visibility .field_box { text-align: right; margin-bottom: 8px; }
+.visibility .field_box li { display: inline-block; line-height: 24px; }
+.visibility .field_box li.label { float: left; background-image: url('../images/icons/cgeomap-globe-@2x.png'); background-size: 24px 24px; padding-left: 24px; background-repeat: no-repeat; }
+.visibility .field_box li.label, .field_box label { font-size: 0.8em; vertical-align: middle; }
+.visibility .field_box .btn { width: 24px; height: 24px; background-size: 24px 24px; background-position: center center; border-radius: 7px; border: 2px solid #000; margin: 0 2px 0 6px; background-color: transparent; }
+.visibility .field_box .btn:hover, .field_box .btn:focus,.field_box .btn:active { background-color: #f6ff8c; }
+.visibility .field_box .selected { background-image: url('../images/pix/cgeomap-check-@2x.png'); }
 
 /* modules */
 .module_button { position: absolute; right: -109px; background-image: url('../images/icons/cgeomap-module-buttons-@2x.png'); background-size: 202px 282px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }

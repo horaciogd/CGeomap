@@ -1,14 +1,6 @@
 		[<!-- jQuery -->
 		<script type="text/javascript" src="(#CHEMIN{js/jquery-1.11.3.min.js})"></script>][
 		<script type="text/javascript" src="(#CHEMIN{js/jquery-ui-1.11.4.min.js})"></script>][
-		<!-- jQuery-File-Upload -->
-		<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>]
-		[<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>]
-		[<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/jquery.fileupload.js"></script>][
-		<!-- jQuery mCustomScrollbar -->
-		<script src="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.min.js})"></script>]
-		[<script src="(#CHEMIN{js/jquery.mousewheel.min.js})"></script>]
-		[<link rel="stylesheet" href="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.css})" type="text/css" />][
 		<!-- Fancybox -->
 		<script type="text/javascript" src="(#CHEMIN{js/fancybox/jquery.fancybox.js})"></script>]
 		[<link rel="stylesheet" href="(#CHEMIN{js/fancybox/jquery.fancybox.css})" type="text/css" />][
@@ -27,25 +19,37 @@
 		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|url_absolue|direction_css)" />]
 		<script type="text/javascript">
 		//<![CDATA[
-		var cgeomap;
-		$(document).ready(function() {
-			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {[(#ENV{login}|=={false}|oui)
-				alert('<:cgeomap:mensaje_error_login:>');]
+		var cgeomap;[
+		(#ENV{center}|?{
+			[(#SET{latitude, [(#ENV{center}|latitude)]})],
+			[(#SET{latitude, [(#CONFIG{vhplab/default_latitude})]})]
+		})][
+		(#ENV{center}|?{
+			[(#SET{longitude, [(#ENV{center}|longitude)]})],
+			[(#SET{longitude, [(#CONFIG{vhplab/default_longitude})]})]
+		})][
+		(#ENV{zoom}|?{
+			[(#SET{zoom, [(#ENV{zoom})]})],
+			[(#SET{zoom, [(#CONFIG{vhplab/default_zoom})]})]
+		})]$(document).ready(function() {
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-map.js'}|url_absolue)]", function(data) {
 				cgeomap = new VhplabInterface();
 				cgeomap.initialize({[
 					url_site: '(#URL_SITE_SPIP|url_absolue)'][,
-					url_article: '(#URL_PAGE{ajax-content-squelette}|url_absolue)'][,
-					url_user: '(#URL_PAGE{ajax-auteur}|url_absolue)'][,
-					url_embed: '(#URL_PAGE{ajax-embed}|url_absolue)'][,
-					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-desktop.js}|url_absolue)'],
-					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
-						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE',</BOUCLE_get_map>
-						limit: 300,
+					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-map.js}|url_absolue)'],
+					map_opts: {
+						markers: 'spip.php?page=json-vhplab-geo-recherche-articles'[,
+						recherche: (#ENV{recherche}|?{['(#ENV{recherche})'], false})][,
+						auteur: (#ENV{auteur}|?{#ENV{auteur}, false})][,
+						categoria: (#ENV{categoria}|?{#ENV{categoria}, false})][,
+						tag: (#ENV{tag}|?{#ENV{tag}, false})][,
+						meta_tag: (#ENV{meta_tag}|?{#ENV{meta_tag}, false})],
 						id: 'cgeomap'[,
-						zoom: (#CONFIG{vhplab/default_zoom})][,
-						latitude: (#CONFIG{vhplab/default_latitude})][,
-						longitude: (#CONFIG{vhplab/default_longitude})][,
-						open: (#ENV{nodo}|?{#ENV{nodo},1})],
+						zoom: (#GET{zoom})][,
+						latitude: (#GET{latitude})][,
+						longitude: (#GET{longitude})][,
+						open: (#ENV{nodo}|?{#ENV{nodo}, false})],
+						custom: true
 					}
 				});
 			});

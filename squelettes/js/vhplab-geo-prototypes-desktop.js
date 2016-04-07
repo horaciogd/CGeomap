@@ -31,6 +31,23 @@ VhplabMap.prototype.clickListener = function(_e) {
 	$("#formulaire .wrap_cartography").data('ok',true);
 	cgeomap.form.check();
 };
+VhplabMap.prototype.embedClickListener = function(_e) {
+	cgeomap.map.map.panTo(_e.latlng);
+};
+VhplabMap.prototype.embedMoveendListener = function(_e) {
+	var center = cgeomap.map.map.getCenter()
+	$(cgeomap.map.latitudeTag).val(center.lat);
+	$(cgeomap.map.longitudeTag).val(center.lng);
+	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
+	$(".cartography label").addClass('new');
+};
+VhplabMap.prototype.embedZoomListener = function(_e) {
+	var center = cgeomap.map.map.getCenter()
+	$(cgeomap.map.latitudeTag).val(center.lat);
+	$(cgeomap.map.longitudeTag).val(center.lng);
+	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
+	$(".cartography label").addClass('new');
+};
 VhplabMap.prototype.initMapElements = function(_opts) {
 	// Max Zoom Service
 	
@@ -65,6 +82,18 @@ VhplabMap.prototype.zoomListener = function(_e) {
 	$(".cartography label").addClass('new');
 	$("#formulaire .wrap_cartography").data('ok',true);
 	cgeomap.form.check();
+};
+VhplabMap.prototype.showMarkerJson = function(_markers) {
+	var bounds = new L.latLngBounds();
+	var list = new Array();
+	$.each(_markers, function(i, m) {
+		var marker = $(cgeomap.map.markers).data('marker_'+ m.id);
+		list.push(marker.marker.getLatLng());
+		marker.marker.addTo(cgeomap.map.map);
+	});
+	var bounds = new L.latLngBounds(list);
+	this.map.fitBounds(bounds);
+	this.map.setZoom(this.map.getZoom()-1);
 };
 
 

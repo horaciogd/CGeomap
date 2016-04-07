@@ -80,8 +80,12 @@ VhplabInterface.prototype.createNavigationList = function() {
 };
 VhplabInterface.prototype.initialize = function(_opts) {
 	
+	// avoid error if no _opts
+	if (typeof _opts == "undefined") _opts = { };
+	
 	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
+	if (this.url_site.slice(-1)!="/") this.url_site += "/";
 	if (typeof _opts.url_article != "undefined") this.url_article = _opts.url_article;
 	if (typeof _opts.url_user != "undefined") this.url_user = _opts.url_user;
 	
@@ -161,7 +165,7 @@ VhplabInterface.prototype.ready = function(_opts) {
 		zoom: (typeof _opts.zoom != "undefined") ? _opts.zoom : 10,
 		latitude: (typeof _opts.latitude != "undefined") ? _opts.latitude : 0.0,
 		longitude: (typeof _opts.longitude != "undefined") ? _opts.longitude : 0.0,
-		open: (typeof _opts.open != "undefined") ? _opts.open : false,
+		open: (typeof _opts.open != "undefined") ? _opts.open : false
 	});
 	this.bindToggleContent();
 };

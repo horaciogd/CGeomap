@@ -33,6 +33,9 @@ function VhplabMap() {
 	this.latitudeTag = "#vhplab_latitude";
 	this.longitudeTag = "#vhplab_longitude";
 	this.zoomTag = "#vhplab_zoom";
+	this.lat;
+	this.lng;
+	this.zoom;
 };
 VhplabMap.prototype.addMarker = function(_path, _data) {
 	var marker = new VhplabMarker();
@@ -45,16 +48,21 @@ VhplabMap.prototype.addMarkers = function(_data, _callback) {
 	var self = this;
 	var count = $(_data.markers).length - 1;
 	var path = _data.link;
-	// Loop through each marker data element
-	$.each(_data.markers, function(i, marker) {
-		n++;
-		self.addMarker(path, marker, n);
-		if(i==count) {
-			var loadded = self.markerList.length;
-			self.bindActions();
-			if (_callback) _callback();
-		}
-	});
+	if ($(_data.markers).length>=1) {
+		// Loop through each marker data element
+		$.each(_data.markers, function(i, marker) {
+			n++;
+			self.addMarker(path, marker, n);
+			if(i==count) {
+				var loadded = self.markerList.length;
+				self.bindActions();
+				if (_callback) _callback();
+			}
+		});
+	} else {
+		self.bindActions();
+		if (_callback) _callback();
+	}
 };
 VhplabMap.prototype.bindActions = function() {
 	if (this.open) {

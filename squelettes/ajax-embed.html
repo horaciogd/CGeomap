@@ -1,0 +1,96 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})][
+
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+				<form method='post' action='' enctype='multipart/form-data'>
+					<div>
+						<header>
+							<div class="wrap_auteur">
+								<h4 title="<:cgeomap:help_auteur:>"><:cgeomap:campo_auteur:>:</h4>
+								<div class="value_box">
+								</div>
+								<div class="field_box">
+									<fieldset>
+										<select class="form-control" name="auteur" tabindex="1">
+											<option value="none"><:cgeomap:selector_none:></option>
+											<option value="0"><:cgeomap:selector_any:></option><BOUCLE_auteurs(AUTEURS)>[
+											<option value="#ID_AUTEUR">(#NOM)</option>]
+											</BOUCLE_auteurs>
+										</select>
+										<span class="error"></span>
+									</fieldset>
+								</div>
+							</div><!-- wrap_auteur -->
+							<!-- <div class="wrap_tags">
+								<h4 title="<:cgeomap:help_tag:>"><:cgeomap:campo_tag:>:</h4>
+								<div class="value_box">
+								</div>
+								<div class="field_box">
+									<fieldset>
+										<select class="form-control" name="tags" tabindex="3">
+											<option value="none"> </option></option><BOUCLE_tags(MOTS){type=tags}>[
+											<option value="#ID_MOT">(#TITRE|couper{40})</option>]
+											</BOUCLE_tags>
+										</select>
+									</fieldset>
+								</div>
+							</div> wrap_tags -->
+							<!-- <div class="wrap_meta_tags">
+								<h4 title="<:cgeomap:help_meta_tag:>"><:cgeomap:campo_meta_tag:>:</h4>
+								<div class="value_box">
+								</div>
+								<div class="field_box">
+									<fieldset>
+										<select class="form-control" name="meta_tags" tabindex="4">
+											<option value="none"> </option></option><BOUCLE_meta_tags(MOTS){type=meta_tags}>[
+											<option value="#ID_MOT">(#TITRE|couper{40})</option>]
+											</BOUCLE_meta_tags>
+										</select>
+									</fieldset>
+								</div>
+							</div> wrap_meta_tags -->
+							<div class="wrap_recherche">
+								<h4 title="<:cgeomap:help_tags:>"><:cgeomap:campo_recherche:>:</h4>
+								<div class="value_box">
+								</div>
+								<div class="field_box">
+									<fieldset>
+									<input  type="text" class="form-control recherche" name="recherche" tabindex="5" placeholder="<:cgeomap:texto_recherche:>" />
+									<span class="error"></span>
+									</fieldset>
+								</div>
+							</div><!-- wrap_recherche -->
+						</header>
+						<ul class="wrap_cartography">
+							<li class="cartography">
+								<label for="latitude"><:vhplab:latitude_label:></label>
+								<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="" size="15" />
+							</li>
+							<li class="cartography">
+								<label for="longitude"><:vhplab:longitude_label:></label>
+								<input type="text" class="longitude form-control " name="longitude" tabindex="5" value="" size="15" />
+							</li>
+							<li class="cartography">
+								<label for="zoom"><:vhplab:zoom_label:></label>
+								<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="" size="5" />
+							</li>
+							<li class="geocode">
+								<label for="address"><:vhplab:address_label:></label>
+								<input type="text" class="address form-control" name="address" tabindex="7" value="" size="45" />
+							</li>
+						</ul><!-- wrap_cartography -->
+						<ul class="wrap_iframe">
+							<li>
+								<a href="" class="url new" target="_blank"><:cgeomap:label_url:></a>
+							</li>
+							<li>
+								<code></code>
+							</li>
+							<li>
+								<span class="msg"></span>
+								<span class="error"></span>
+							</li>
+						</ul><!-- wrap_recherche -->
+					</div>
+				</form>
