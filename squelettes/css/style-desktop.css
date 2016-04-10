@@ -78,7 +78,7 @@
 #formulaire_login label { font-size: 0.7em; opacity: 0.6; display: block; }
 #formulaire_login a { font-size: 0.7em; }
 #formulaire_login li.submit { float: right; line-height: 30px; width: 100%; margin: 10px 0 4px 0; text-align: left; }
-#login { color: #fff; background-color: #b0c935; text-decoration: none; float: right; padding: 3px 10px; border-radius: 10px; margin-top: 6px; }
+#login.btn { color: #fff; background-color: #b0c935; text-decoration: none; float: right; padding: 3px 10px; border-radius: 10px; margin-top: 6px; }
 #pass_securise { display: none !important; }
 
 /* contributions  */
@@ -147,6 +147,8 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 #embed .wrap_auteur, #embed .wrap_category, #embed .wrap_tags, #embed .wrap_meta_tags, #embed .wrap_recherche { margin: 12px 10px; }
 #embed .wrap_iframe { margin: 20px 10px; }
 #embed .wrap_recherche .form-control { width: 100%; }
+
+.leaflet-control-loading { display: none; background: url('../images/icons/content-loader.gif') no-repeat; width: 40px; height: 40px; background-size: 40px 40px; }
 
 
 /* --------------------
@@ -223,10 +225,10 @@ form .link ul { margin-bottom: 20px; }
 /* submit */
 #sending_data { background: url('../js/fancybox/fancybox_overlay.png'); }
 #sending_data div { background: url('../js/fancybox/fancybox_loading.gif') center center no-repeat; }
-.submit { position: absolute; bottom: -10px; right: 15px; }
-.submit input { color: #878d96; background-color: #94ffd9; border-color: #c2c6cd; -webkit-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); }
-.submit input:hover, .btn-primary:focus { background-color: #f6ff8c; }
-.submit input:active { color: #ffffff; background-color: #ffda8c; }
+#formulaire .submit { position: absolute; bottom: -10px; right: 15px; }
+#formulaire .submit input { color: #878d96; background-color: #94ffd9; border-color: #c2c6cd; -webkit-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); }
+#formulaire .submit input:hover, .btn-primary:focus { background-color: #f6ff8c; }
+#formulaire .submit input:active { color: #ffffff; background-color: #ffda8c; }
 
 
 /* --------------------

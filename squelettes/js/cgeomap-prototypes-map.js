@@ -13,7 +13,6 @@
 // Vhplab Interface
 //***********
 VhplabInterface.prototype.ready = function(_opts) {
-	alert('cgeomap ready');
 	this.map = new VhplabMap();
 	this.map.initialize({
 		url: this.url_site,

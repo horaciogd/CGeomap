@@ -33,6 +33,10 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.zoomControl.setParent(this);
 	this.map.addControl(this.zoomControl);
 	
+	// Map Loading Custom Control
+	this.loadingControl = new vhplabLoadingControl();
+	this.map.addControl(this.loadingControl);
+	
 	/*
 	// Credits as custom control
   	this.credits = new VhplabCreditsControl();
@@ -66,6 +70,44 @@ VhplabMap.prototype.loadMarkers = function() {
 };
 VhplabMap.prototype.bindActions = function() {
 	$('#loading').fadeOut();
-	$('#mapLoadingControl').fadeOut();
 	this.openMarker();
 };
+
+// ************ //
+// Vhplab Marker
+// ************ //
+
+VhplabMarker.prototype.click = function(_callback) {
+	if(!this.open) {
+		var self = this;
+		if (this.loadded) {
+			this.openInfoWindow();
+		} else {
+			// get URL via alert(this.json);
+			$('.leaflet-control-loading').fadeIn();
+			$.getJSON(this.json, function(data) {
+				$.each(data[0].marker, function(i, marker){
+					$('.leaflet-control-loading').fadeOut();
+					self.loadWindowData(marker);
+					self.openInfoWindow();
+					if(_callback) _callback();
+				});
+			});
+		}
+	}
+};
+
+//***********
+// Map Loading Custom Control
+//***********
+var vhplabLoadingControl = L.Control.Zoom.extend({
+	options: {
+		position: 'topleft'
+	},
+	onAdd: function (map) {
+		var name = 'leaflet-control-loading',
+			container = L.DomUtil.create('div', name + ' leaflet-control');
+		this._map = map;
+		return container;
+	}
+});

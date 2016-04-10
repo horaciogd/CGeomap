@@ -245,8 +245,7 @@ VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 		$('#embed').hide();
 		$("#embed").data('loaded', false);
 		/* User */
- 		cgeomap.loadUser();
-		if(_callback) _callback();
+ 		cgeomap.loadUser(_callback);
 	});
 };
 VhplabInterface.prototype.loadContributions = function() {
@@ -419,16 +418,19 @@ VhplabInterface.prototype.loadUser = function(_callback) {
 	// get URL via alert(this.url_user);
 	$("#user").load(this.url_user, function() {
 		/* Session & Admin */
-		if ($("#user .utilities").data("session") == "ok") cgeomap.session = true;
-		if ($("#user .utilities").data("admin") == "ok") cgeomap.admin = true;
+		if ($("#user .data").data("session") == "ok") {
+			cgeomap.session = true;
+		} else {
+			$( "#article" ).css('top', 19);
+		}
+		if ($("#user .data").data("admin") == "ok") cgeomap.admin = true;
 		/* Login */
 		$('#user .login').hide();
 		/* Utilities  */
-		//$("#content").data('selected','carte');
-		//$("#user .utilities .carte").addClass('on');
 		$("#user .utilities a").click(function() { 
 			cgeomap.toggleUtilities($(this).attr('name'));
 		});
+		if(_callback) _callback();
 	});
 };
 VhplabInterface.prototype.removeRecherche = function(_me, _container) {
@@ -492,6 +494,21 @@ VhplabInterface.prototype.toggleGeoEmbed = function(_t) {
 VhplabInterface.prototype.toggleLogin = function(_me) {
  	var selected = $("#content").data('selected');
  	if (!this.session) {
+		var tgl =  $(_me).data("tgl");
+		if (tgl=="on") {
+			$('#user .login').slideUp();
+			$( "#article" ).animate({
+				top: 19,
+			});
+			$(_me).data("tgl","off");
+		} else {
+			$('#user .login').slideDown();
+			$( "#article" ).animate({
+				top: 109,
+			});
+			$(_me).data("tgl","on");
+		}
+	} else {
 		var tgl =  $(_me).data("tgl");
 		if (tgl=="on") {
 			$('#user .login').slideUp();
@@ -574,7 +591,6 @@ VhplabInterface.prototype.toggleLogin = function(_me) {
 };
 VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 	var selected = $("#content").data('selected');
-	// alert('target: '+ _target +' selected: '+ selected);
 	if (_target!=selected) {
 		var hide = "";
 		switch (selected) {
