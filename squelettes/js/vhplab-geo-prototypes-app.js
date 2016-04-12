@@ -181,6 +181,26 @@ VhplabMap.prototype.openMarker = function(_autoplay) {
 		marker.click();
 	}
 };
+VhplabMap.prototype.updateDistances = function(_lat, _lng) {
+	$.each($(this.markers).data(), function(name, marker) {
+		marker.setDistance(_lat, _lng);
+	});
+	//alert('sort list');
+	var self = this;
+	this.markerList.sort(function(a,b) {
+		var ma = $(self.markers).data('marker_'+a);
+		var mb = $(self.markers).data('marker_'+b);
+		if (ma.distance < mb.distance) return -1;
+		if (ma.distance > mb.distance) return 1;
+		return 0;
+	});
+	if (cgeomap.player.playing=='') {
+		for (var i=0; i<this.markerList.length; i++) {
+			var marker = $(this.markers).data('marker_'+ this.markerList[i]);
+			if (marker.checkAutoplay()) break;
+		}
+	}
+};
 VhplabMap.prototype.updateMap = function(_lat, _lng) {
 	//alert('updateMap');
 	$("#navigation hgroup .gps span").css('background-color', '#0bdec9');
@@ -342,9 +362,15 @@ VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
 		}
 		this.vibrate = false;
 		navigator.vibrate(500);
-	} else if ((this.distance<=15)&&(this.autoplay)){
-		$("#article_"+ this.id +" header").trigger("click");
-		this.auto = false;
 	}
 	// alert('distance: '+ this.distance);
+};
+VhplabMarker.prototype.checkAutoplay = function() {
+	if ((this.distance<=15)&&(this.autoplay)){
+		$("#article_"+ this.id +" header").trigger("click");
+		this.autoplay = false;
+		return true;
+	} else {
+		return false;
+	}
 };

@@ -24,7 +24,7 @@ article .scroll { position: absolute; top: 66px; /* header height */ bottom: 0px
 -------------------- */
 
 /* cartography */
-.wrap_cartography { position: absolute; z-index: 12; bottom: 62px; right: -673px; height: 50px; width: 640px; }
+.wrap_cartography { position: absolute; z-index: 15; bottom: 62px; right: -673px; height: 50px; width: 640px; }
 
 /* submit */
 #sending_data { position: absolute; z-index: 1000; top: 0; right: 0; left: 0; bottom: 0; }
