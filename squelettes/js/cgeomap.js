@@ -114,8 +114,9 @@ VhplabInterface.prototype.loadMap = function(_callback) {
 	if (recalcul) {
 		// get URL via alert(self.url_site +'spip.php?page=json-vhplab-geo-articles&id_rubrique=1&id_article='+ recalcul +'&offset=0&limit=300&var_mode=recalcul&callback=?');
 		this.map.reloadMarkers(self.url_site +'spip.php?page=json-vhplab-geo-articles&id_rubrique=1&id_article='+ recalcul +'&offset=0&limit=300&var_mode=recalcul&callback=?', function(){
-			cgeomap.map.map.setZoom(10);
 			$("#formulaire").data('recalcul', false);
+			cgeomap.createNavigationList();
+			cgeomap.bindNavigationListActions();
 			cgeomap.map.showMarkers();
 			var marker = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
 			marker.click(_callback);
@@ -176,7 +177,7 @@ VhplabInterface.prototype.slideContent = function(_how, _callback) {
 			$('#content').animate({
 				left: "+="+this.toggleContentDist,
 			}, "swing", function() {
-				$('.cgeomap .window .toggle_content').removeClass('closed');
+				$('.cgeomap .leaflet-popup-content-wrapper .toggle_content').removeClass('closed');
 				$('#toggle_content').removeClass('closed');
 				$("#content").data('visible', true);
 				if (_callback) _callback();
@@ -189,7 +190,7 @@ VhplabInterface.prototype.slideContent = function(_how, _callback) {
 			$('#content').animate({
 				left: "-="+this.toggleContentDist,
 			}, "swing", function() {
-				$('.cgeomap .window .toggle_content').addClass('closed');
+				$('.cgeomap .leaflet-popup-content-wrapper .toggle_content').addClass('closed');
 				$('#toggle_content').addClass('closed');
 				$("#content").data('visible', false);
 				if (_callback) _callback();
@@ -205,7 +206,7 @@ VhplabInterface.prototype.toggleContent = function() {
 		$('#content').animate({
 			left: "-="+this.toggleContentDist,
 		}, "swing", function() {
-			$('.cgeomap .window .toggle_content').addClass('closed');
+			$('.cgeomap .leaflet-popup-content-wrapper .toggle_content').addClass('closed');
 			$('#toggle_content').addClass('closed');
 		});
 		$("#content").data('visible', false);
@@ -213,7 +214,7 @@ VhplabInterface.prototype.toggleContent = function() {
 		$('#content').animate({
 			left: "+="+this.toggleContentDist,
 		}, "swing", function() {
-			$('.cgeomap .window .toggle_content').removeClass('closed');
+			$('.cgeomap .leaflet-popup-content-wrapper .toggle_content').removeClass('closed');
 			$('#toggle_content').removeClass('closed');
 		});
 		$("#content").data('visible', true);

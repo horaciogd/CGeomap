@@ -61,7 +61,7 @@ fieldset { border: none; }
 
 #cgeomap { background: #94ffd9; /*#18c2b1*/ }
 .cgeomap .leaflet-popup-content-wrapper h2 { font-size: 2.6em; }
-.cgeomap .leaflet-popup-content-wrapper h3 { display: none; }
+.cgeomap .leaflet-popup-content-wrapper h3 { /*display: none;*/ }
 .cgeomap .leaflet-popup-content-wrapper p { font-size: 1.2em; margin: 1em 0; }
 .cgeomap .leaflet-popup-content-wrapper a.fancybox { display: block; margin-top: 1.2em; }
 

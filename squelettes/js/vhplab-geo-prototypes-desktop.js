@@ -123,6 +123,7 @@ VhplabMarker.prototype.appendContent = function() {
 	$('#article .texte').empty();
 	
 	/* modules */
+	soundManager.stopAll();
 	$('#article .modules_list ul li.audio').each(function(i){
 		soundManager.destroySound('cgeomap_sound_' + i);
 	});
@@ -143,9 +144,10 @@ VhplabMarker.prototype.appendContent = function() {
   		});
   		$('#article .modules_list .audio').each(function(i){
 			var url = $('a', this).attr("href");
+			var sound_id = $('a', this).data("id");
 			var player = new VhplabPlayer();
 			player.init({
-				id: i,
+				id: sound_id,
 				url: url
 			});
 			$('.content', this).empty();
@@ -170,10 +172,17 @@ VhplabMarker.prototype.appendContent = function() {
 	}
 };
 VhplabMarker.prototype.bindPopupActions = function(_content) {
+	/*
 	$('a.fancybox', _content).click(function(){
 		var img = $(this).attr('href');
 		$.fancybox({ 'href' : img });
 		return false;
+	});
+	*/
+	var visible = $("#content").data('visible');
+	if (!visible) $('.toggle_content', _content).addClass('closed');
+	$('.toggle_content', _content).click(function(){
+		cgeomap.toggleContent();
 	});
 };
 VhplabMarker.prototype.click = function(_callback) {

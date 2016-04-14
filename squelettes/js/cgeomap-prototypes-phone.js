@@ -257,7 +257,7 @@ VhplabInterface.prototype.toggleContent = function() {
 		$('#content').animate({
 			left: "-=" + this.toggleContentDist,
 		}, "swing", function() {
-			$('.cgeomap .window .toggle_content').addClass('closed');
+			$('.cgeomap .leaflet-popup-content-wrapper .toggle_content').addClass('closed');
 			$('footer .toggle_map').addClass('toggle_list');
 			$('footer .toggle_map').removeClass('toggle_map');
 			$('footer .location_reload').addClass('location_button');
@@ -268,7 +268,7 @@ VhplabInterface.prototype.toggleContent = function() {
 		$('#content').animate({
 			left: "+=" + this.toggleContentDist,
 		}, "swing", function() {
-			$('.cgeomap .window .toggle_content').removeClass('closed');
+			$('.cgeomap .leaflet-popup-content-wrapper .toggle_content').removeClass('closed');
 			$('footer .toggle_list').addClass('toggle_map');
 			$('footer .toggle_list').removeClass('toggle_list');
 			$('footer .location_button').addClass('location_reload');
@@ -343,11 +343,11 @@ VhplabTransparentPlayer.prototype.moveTo = function(_x, _w) {
 VhplabTransparentPlayer.prototype.toggle = function(_sound, _button) {
 	if (this.playing=='') {
 		$(_button).addClass('active');
-		$('.window_wrapper .player').addClass('active');
+		$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 		this.play(_sound);
 	} else if (this.playing=='enclosure_'+_sound) {
 		$(_button).removeClass('active');
-		$('.window_wrapper .player').removeClass('active');
+		$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 		this.stop();
 		this.queue = false;
 	} else {
@@ -355,7 +355,7 @@ VhplabTransparentPlayer.prototype.toggle = function(_sound, _button) {
 			$(this).removeClass('active');
 		});
 		$(_button).addClass('active');
-		$('.window_wrapper .player').addClass('active');
+		$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 		var oldSound = this.playing.split('_');
 		$('#vhplab_player_'+ oldSound[1] +' .play').show();
 		$('#vhplab_player_'+ oldSound[1] +' .pause').hide();
@@ -366,7 +366,7 @@ VhplabTransparentPlayer.prototype.toggle = function(_sound, _button) {
 VhplabTransparentPlayer.prototype.toggleList = function(_list, _button) {
 	if (this.playing=='') {
 		$(_button).addClass('active');
-		$('.window_wrapper .player').addClass('active');
+		$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 		var sound = _list.shift();
 		this.play(sound);
 		this.queue = _list;
@@ -377,7 +377,7 @@ VhplabTransparentPlayer.prototype.toggleList = function(_list, _button) {
 		}
 		if (isPlaying) {
 			$(_button).removeClass('active');
-			$('.window_wrapper .player').removeClass('active');
+			$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 			this.stop();
 			this.queue = false;
 		}  else {
@@ -385,7 +385,7 @@ VhplabTransparentPlayer.prototype.toggleList = function(_list, _button) {
 				$(this).removeClass('active');
 			});
 			$(_button).addClass('active');
-			$('.window_wrapper .player').addClass('active');
+			$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 			var oldSound = this.playing.split('_');
 			$('#vhplab_player_'+ oldSound[1] +' .play').show();
 			$('#vhplab_player_'+ oldSound[1] +' .pause').hide();
@@ -407,7 +407,7 @@ VhplabTransparentPlayer.prototype.shiftQueue = function() {
 		$("#content ul li.article header .player").each(function(){
 			$(this).removeClass('active');
 		});
-		$('.window_wrapper .player').removeClass('active');
+		$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 		this.playing = '';
 	}
 };
