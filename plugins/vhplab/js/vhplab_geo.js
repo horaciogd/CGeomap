@@ -28,6 +28,7 @@ function VhplabMap() {
 	});
 	this.baseURL = ''; 
 	this.markersURL = '';
+	this.auteur = 'none';
 	this.offset = 0;
 	this.limit = 200;
 	this.latitudeTag = "#vhplab_latitude";
@@ -115,6 +116,7 @@ VhplabMap.prototype.initialize = function(_opts) {
 	if (typeof _opts.limit != "undefined") this.limit = _opts.limit;
 	if (typeof _opts.url != "undefined") this.baseURL = _opts.url;
 	if (typeof _opts.markers != "undefined") this.markersURL = this.baseURL + _opts.markers;
+	if (typeof _opts.auteur != "undefined") this.auteur = _opts.auteur;
 	if (typeof _opts.latitudeTag != "undefined") this.latitudeTag = _opts.latitudeTag;
 	if (typeof _opts.longitudeTag != "undefined") this.longitudeTag = _opts.longitudeTag;
 	if (typeof _opts.zoomTag != "undefined") this.zoomTag = _opts.zoomTag;
@@ -151,16 +153,25 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 };
 VhplabMap.prototype.loadMarkers = function() {
 	var self = this;
+	var url = this.markersURL;
+	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
+	url += '&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	// load markers data
-	// get URL via alert(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?');
-	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?', function(data){
+	// get URL via alert(url);
+	$.getJSON(url, function(data){
 		self.addMarkers(data[0]);
 	});					
 };
 VhplabMap.prototype.openMarker = function() {
 	if (this.open) {
 		var marker = $(this.markers).data('marker_'+this.open);
-		marker.click();
+		if (typeof marker != "undefined") {
+			marker.click();
+		} else {
+			var first = $(this.markers).data('marker_'+this.markerList[0]);
+			this.open = this.markerList[0];
+			first.click();
+		}
 	}
 };
 VhplabMap.prototype.panOut = function() {
@@ -297,11 +308,7 @@ function VhplabMarker() {
 	this.open = false;
 	this.num = null;
 	this.map = null;
-	this.infoWindow = L.popup({
-		maxWidth: 370,
-		minWidth: 370,
-		offset: [0, 0]
-	});
+	this.infoWindow = null;
 	this.marker = L.marker();
 	this.parent = null;
 };
@@ -343,6 +350,12 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	typeof _opts.soustitre != "undefined" ? $(this.data).data('soustitre', _opts.soustitre) : $(this.data).data('soustitre', "");
 	typeof _opts.visibility != "undefined" ? $(this.data).data('visibility', _opts.visibility) : $(this.data).data('visibility', "default");
 	this.parent = _parent;
+	
+	this.infoWindow = L.popup({
+		maxWidth: 370,
+		minWidth: 370,
+		offset: [0, 0]
+	});
 	
 	this.marker.setLatLng([this.lat, this.lng]);
 	this.infoWindow.setContent('');

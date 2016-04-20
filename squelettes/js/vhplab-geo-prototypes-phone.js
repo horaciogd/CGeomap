@@ -62,7 +62,7 @@ VhplabMap.prototype.bindActions = function() {
 	cgeomap.createNavigationList();
 	cgeomap.bindNavigationListActions();
 	cgeomap.slideContent('show');
-	var width = parseInt($(window).width());
+	var width = parseInt(cgeomap.windowWidth);
 	if (width>674) width = 674;
 	$("#navigation .bkmrk").click(function(){
 		if ($("#navigation .bkmrk").data('loaded')!=true) {
@@ -94,6 +94,7 @@ VhplabMap.prototype.initialize = function(_opts) {
 	if (typeof _opts.limit != "undefined") this.limit = _opts.limit;
 	if (typeof _opts.url != "undefined") this.baseURL = _opts.url;
 	if (typeof _opts.markers != "undefined") this.markersURL = this.baseURL + _opts.markers;
+	if (typeof _opts.auteur != "undefined") this.auteur = _opts.auteur;
 	if (typeof _opts.latitudeTag != "undefined") this.latitudeTag = _opts.latitudeTag;
 	if (typeof _opts.longitudeTag != "undefined") this.longitudeTag = _opts.longitudeTag;
 	if (typeof _opts.zoomTag != "undefined") this.zoomTag = _opts.zoomTag;
@@ -153,9 +154,12 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 };
 VhplabMap.prototype.loadMarkers = function() {
 	var self = this;
+	var url = this.markersURL;
+	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
+	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	// load markers data
-	// get URL via alert(this.markersURL +'&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?');
-	$.getJSON(this.markersURL +'&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?', function(data){
+	// get URL via alert(url);
+	$.getJSON(url, function(data){
 		self.addMarkers(data[0]);
 	});					
 };
@@ -166,10 +170,10 @@ VhplabMap.prototype.myLocation = function(_callback) {
 			// geolocation success
 			self.updateMap(position.coords.latitude, position.coords.longitude);
 			// self.map.panTo([position.coords.latitude, position.coords.longitude]);
-			if (_callback) _callback();
+			if (_callback) _callback(position);
 		}, function(err) {
 			// geolocation error
-			if (_callback) _callback();
+			if (_callback) _callback(position);
 		}, { 
 			enableHighAccuracy: true, 
 			maximumAge : 20000, 
@@ -180,8 +184,15 @@ VhplabMap.prototype.myLocation = function(_callback) {
 VhplabMap.prototype.openMarker = function(_autoplay) {
 	if (this.open) {
 		var marker = $(this.markers).data('marker_'+this.open);
-		if (_autoplay) marker.autoplay = true;
-		marker.click();
+		if (typeof marker != "undefined") {
+			if (_autoplay) marker.autoplay = true;
+			marker.click();
+		} else {
+			var first = $(this.markers).data('marker_'+this.markerList[0]);
+			this.open = this.markerList[0];
+			if (_autoplay) first.autoplay = true;
+			first.click();
+		}
 	}
 };
 VhplabMap.prototype.updateDistances = function(_lat, _lng) {
@@ -293,6 +304,14 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	}
 	this.parent = _parent;
 	
+	var width = parseInt(cgeomap.windowWidth*0.75);
+	if (width>370) width = 370;
+	this.infoWindow = L.popup({
+		maxWidth: width,
+		minWidth: width,
+		offset: [0, -8]
+	});
+	
 	this.marker.setLatLng([this.lat, this.lng]);
 	this.infoWindow.setContent('');
 	this.infoWindow.setLatLng([this.lat, this.lng]);
@@ -347,7 +366,7 @@ VhplabMarker.prototype.getData = function(_callback) {
 		if (_callback) _callback();
 	} else {
 		var self = this;
-		var width = parseInt($(window).width()-34);
+		var width = parseInt(cgeomap.windowWidth-34);
 		if (width>=900) width = 900;
 		// get URL via alert(this.json +'&width='+ width +'&link=false');
 		$.getJSON(this.json +'&width='+ width +'&link=false', function(data) {

@@ -39,7 +39,8 @@
 					url_embed: '(#URL_PAGE{ajax-embed}|url_absolue)'][,
 					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-desktop.js}|url_absolue)'],
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
-						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE',</BOUCLE_get_map>
+						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE'</BOUCLE_get_map>[,
+						auteur: (#ENV{author}|?{#ENV{author},1})],
 						limit: 300,
 						id: 'cgeomap'[,
 						zoom: (#CONFIG{vhplab/default_zoom})][,

@@ -136,6 +136,9 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
 	
+	// Store width
+	this.windowWidth = parseInt($(window).width());
+	
 	// Map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
 	// load custom map prototypes
@@ -153,9 +156,10 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	
 	$("footer .location_reload").click(function(){
 		$('footer .loading').show();
-		cgeomap.map.myLocation(function() {
+		cgeomap.map.myLocation(function(location) {
 			cgeomap.createNavigationList({visible: true});
 			cgeomap.bindNavigationListActions();
+			cgeomap.map.map.setView([location.coords.latitude, location.coords.longitude], 17);
 			$('footer .loading').hide();
 		});
 	});

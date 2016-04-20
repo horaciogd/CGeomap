@@ -209,6 +209,7 @@ VhplabInterface.prototype.ready = function(_opts) {
 	this.map.initialize({
 		url: this.url_site,
 		markers: (typeof _opts.markers != "undefined") ? _opts.markers : '',
+		auteur: (typeof _opts.auteur != "undefined") ? _opts.auteur : 'none',
 		limit: (typeof _opts.limit != "undefined") ? _opts.limit : 300,
 		id: (typeof _opts.id != "undefined") ? _opts.id : 'cgeomap',
 		zoom: (typeof _opts.zoom != "undefined") ? _opts.zoom : 10,

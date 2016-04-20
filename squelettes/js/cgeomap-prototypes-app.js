@@ -161,9 +161,10 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	
 	$("footer .location_reload").click(function(){
 		$('footer .loading').show();
-		cgeomap.map.myLocation(function() {
+		cgeomap.map.myLocation(function(location) {
 			cgeomap.createNavigationList({visible: true});
 			cgeomap.bindNavigationListActions();
+			cgeomap.map.map.setView([location.coords.latitude, location.coords.longitude], 17);
 			$('footer .loading').hide();
 		});
 	});

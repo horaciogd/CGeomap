@@ -141,8 +141,8 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 		$file = array('name' => 'article_'.$id_article.'_qr.png', 'tmp_name' => $qr_url.urlencode($base_url.$id_article));
 		$descriptif = "qr";
 		if ($id_qr!='') {
-			$id_document = $ajouter_documents($id_qr, array(0 => $file), 'article', intval($id_article), 'image');
-			sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
+			//$id_document = $ajouter_documents($id_qr, array(0 => $file), 'article', intval($id_article), 'image');
+			//sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
 		} else {
 			$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id_article), 'image');
 			sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
