@@ -1,0 +1,10 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)[(#ENV{callback})(]][{
+#FORMULAIRE_CONTRIBUER
+}][);(#ENV{callback}|oui)]

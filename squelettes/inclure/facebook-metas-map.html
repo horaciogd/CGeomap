@@ -1,0 +1,12 @@
+		<!-- Facebook Share Metas -->[
+		<meta property="og:title" content="(#NOM_SITE_SPIP|supprimer_numero|textebrut|texte_script)" />][
+		<meta property="og:description" content="(#DESCRIPTIF_SITE_SPIP|textebrut|texte_script)" />]
+		<meta property="og:type" content="website" />[
+		<meta property="og:site_name" content="(#NOM_SITE_SPIP|textebrut)"/>][
+		<meta property="og:url" content="(#SELF|url_absolue)" />]<BOUCLE_screenshot(BREVES){titre=screenshot}{0,1}><BOUCLE_base_image(DOCUMENTS){id_breve}{extension==jpg|png|gif}{0,5}>[
+		<meta property="og:image" content="(#URL_DOCUMENT|url_absolue)" />][
+		<meta property="og:image:type" content="image/(#EXTENSION)" />][
+		<meta property="og:image:width" content="(#LARGEUR)" />][
+		<meta property="og:image:height" content="(#HAUTEUR)" />]</BOUCLE_base_image><BOUCLE_base_mp3(DOCUMENTS){id_breve}{extension=mp3}{0,5}>[
+		<meta property="og:audio" content="(#URL_DOCUMENT|url_absolue)" />]
+    	<meta property="og:audio:type" content="audio/vnd.facebook.bridge" /></BOUCLE_base_mp3></BOUCLE_screenshot>

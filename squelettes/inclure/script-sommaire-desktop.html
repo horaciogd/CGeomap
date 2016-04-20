@@ -1,33 +1,52 @@
-		[<!-- Googlemaps -->
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=(#CONFIG{vhplab/api_key})"></script>]
 		[<!-- jQuery -->
-		<script src="(#CHEMIN{js/jquery-1.11.3.min.js})" type="text/javascript"></script>][
-		<script src="(#CHEMIN{js/jquery-ui-1.11.4.min.js})" type="text/javascript"></script>]
+		<script type="text/javascript" src="(#CHEMIN{js/jquery-1.11.3.min.js})"></script>][
+		<script type="text/javascript" src="(#CHEMIN{js/jquery-ui-1.11.4.min.js})"></script>][
+		<!-- jQuery-File-Upload -->
+		<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>]
+		[<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>]
+		[<script src="(#URL_SITE_SPIP)/jQuery-File-Upload/js/jquery.fileupload.js"></script>][
+		<!-- jQuery mCustomScrollbar -->
+		<script src="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.min.js})"></script>]
+		[<script src="(#CHEMIN{js/jquery.mousewheel.min.js})"></script>]
+		[<link rel="stylesheet" href="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.css})" type="text/css" />][
 		<!-- Fancybox -->
-		[<script type="text/javascript" src="(#CHEMIN{js/fancybox/jquery.fancybox.js})"></script>]
-		[<link rel="stylesheet" href="(#CHEMIN{js/fancybox/jquery.fancybox.css})" type="text/css" />]
-		<!-- CGeomap -->[
-		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|url_absolue|direction_css)" />][
+		<script type="text/javascript" src="(#CHEMIN{js/fancybox/jquery.fancybox.js})"></script>]
+		[<link rel="stylesheet" href="(#CHEMIN{js/fancybox/jquery.fancybox.css})" type="text/css" />][
+		<!-- Leaflet 0.7.7 -->
+		<script type="text/javascript" src="(#CHEMIN{js/leaflet/leaflet.js})"></script>][
+		<script type="text/javascript" src="(#CHEMIN{js/leaflet/l.control.geosearch.js})"></script>][
+		<script type="text/javascript" src="(#CHEMIN{js/leaflet/l.geosearch.provider.openstreetmap.js})"></script>][
+		<link rel="stylesheet" href="(#CHEMIN{js/leaflet/leaflet.css}|direction_css)" />][
+		<!-- Soundmanager 2 -->
+		<script type="text/javascript" src="(#CHEMIN{js/soundmanager2/soundmanager2.js})"></script>]
+		<INCLURE{fond=inclure/script-traduire} />
+		[
+		<!-- CGeomap -->
 		<script src="(#CHEMIN{js/vhplab_geo.js}|url_absolue)" type="text/javascript"></script>][
-		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>]
+		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>][
+		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|url_absolue|direction_css)" />]
 		<script type="text/javascript">
 		//<![CDATA[
 		var cgeomap;
 		$(document).ready(function() {
-			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {[(#ENV{login}|=={false}|oui)
+				alert('<:cgeomap:mensaje_error_login:>');]
 				cgeomap = new VhplabInterface();
-				cgeomap.init({[
-					url_site: '(#URL_SITE_SPIP|url_absolue)/',][
-					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-desktop.js}|url_absolue)',]
+				cgeomap.initialize({[
+					url_site: '(#URL_SITE_SPIP|url_absolue)'][,
+					url_article: '(#URL_PAGE{ajax-content-squelette}|url_absolue)'][,
+					url_user: '(#URL_PAGE{ajax-auteur}|url_absolue)'][,
+					url_embed: '(#URL_PAGE{ajax-embed}|url_absolue)'][,
+					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-desktop.js}|url_absolue)'],
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
-						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE',</BOUCLE_get_map>
+						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE'</BOUCLE_get_map>[,
+						auteur: (#ENV{author}|?{#ENV{author},1})],
 						limit: 300,
-						id: 'cgeomap',[
-						zoom: (#CONFIG{vhplab/default_zoom}),][
-						latitude: (#CONFIG{vhplab/default_latitude}),][
+						id: 'cgeomap'[,
+						zoom: (#CONFIG{vhplab/default_zoom})][,
+						latitude: (#CONFIG{vhplab/default_latitude})][,
 						longitude: (#CONFIG{vhplab/default_longitude})][,
 						open: (#ENV{nodo}|?{#ENV{nodo},1})],
-						custom: true
 					}
 				});
 			});

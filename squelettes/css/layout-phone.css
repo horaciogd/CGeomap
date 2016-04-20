@@ -4,13 +4,16 @@
 
 #navigation { top: 0; right: 0; width: 100%; }
 
+/* gps */
+#navigation hgroup .gps { position: absolute; top: -8px; left: 10px; }
+#navigation hgroup .bkmrk { position: absolute; top: -8px; right: 10px; }
 
 /* --------------------
    Content
 -------------------- */
 
-#content { top: 47px; bottom: 71px; /* footer height (33) + content wrapper padding x2 (6) + 2 ? */ left: 0; width: 100%; }
-#content .wrapper { overflow-y: scroll; /* has to be scroll, not auto */ -webkit-overflow-scrolling: touch; }
+#content { top: 0; bottom: 0; /* footer height (33) + content wrapper padding x2 (6) + 2 ? */ left: 0; width: 100%; }
+#content .wrapper { overflow-y: scroll; overflow-x: hidden; /* has to be scroll, not auto */ -webkit-overflow-scrolling: touch; }
 
 /* --------------------
    Footer

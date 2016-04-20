@@ -5,7 +5,7 @@
  *
  * Author:
  * Horacio Gonz‡lez
- * (c) 2015 - Distribu’do baixo licencia GNU/GPL
+ * (c) 2016 - Distribu’do baixo licencia GNU/GPL
  *
  */
 if (!defined('_ECRIRE_INC_VERSION')) return;

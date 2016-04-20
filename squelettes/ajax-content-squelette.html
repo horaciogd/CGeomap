@@ -1,0 +1,37 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})][
+
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+				<div id="user">
+				</div><!-- user -->
+				<article id="article">
+					<header class="header">
+						<hgroup>
+							<h1 class="titre"></h1>
+							<h2 class="soustitre"></h2>
+							<img class="icon" src="" />
+							<a class="editer btn" name="editer"><:cgeomap:editar:></a>
+							<a class="permalink btn" href="" target="_blank" name="permalink"><:cgeomap:url_nodo:></a>
+						</hgroup>
+					</header>
+					<div class="content scroll">
+						<div class="texte">
+						
+						</div><!-- texte -->
+						<div class="modules">
+						
+						</div><!-- modules -->
+					</div><!-- content -->
+				</article>
+				<div id="formulaire">
+				
+				</div><!-- formulaire -->
+				<div id="contributions">
+					<ol>
+					
+					</ol>
+				</div><!-- contributions -->
+				<div id="embed">
+				
+				</div><!-- embed -->

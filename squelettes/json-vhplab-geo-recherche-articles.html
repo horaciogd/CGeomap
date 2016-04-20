@@ -1,0 +1,106 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)jsonArticles(]{[
+	"title": "(#NOM_SITE_SPIP|extraire_br)",][
+	"link": "(#URL_SITE_SPIP)/",][
+	"description": "(#DESCRIPTIF_SITE_SPIP|extraire_br)",]	
+	"markers": [[
+(#REM) get all articles out of the bounds ][
+(#ENV{bounds}|==true|?{[(#SET{rubrique,1})],[(#SET{rubrique,0})]})
+]<BOUCLE_bounds_true(RUBRIQUES){id_rubrique=#GET{rubrique}}>[
+	(#SET{latitude_1, [(#ENV{nw}|latitude)]})][
+	(#SET{longitude_1, [(#ENV{nw}|longitude)]})][
+	(#SET{latitude_2, [(#ENV{se}|latitude)]})][
+	(#SET{longitude_2, [(#ENV{se}|longitude)]})][
+	(#REM)
+	]<BOUCLE_articles_bounds_1(ARTICLES){id_rubrique=1}{vhplab_gis.latitude >= #GET{latitude_1}}{doublons A}></BOUCLE_articles_bounds_1>[
+	(#REM)
+	]<BOUCLE_articles_bounds_2(ARTICLES){id_rubrique=1}{vhplab_gis.latitude <= #GET{latitude_2}}{doublons A}></BOUCLE_articles_bounds_2>[
+	(#REM)
+	]<BOUCLE_articles_bounds_3(ARTICLES){id_rubrique=1}{vhplab_gis.longitude <= #GET{longitude_1}}{doublons A}></BOUCLE_articles_bounds_3>[
+	(#REM)
+	]<BOUCLE_articles_bounds_4(ARTICLES){id_rubrique=1}{vhplab_gis.longitude >= #GET{longitude_2}}{doublons A}></BOUCLE_articles_bounds_4>
+</BOUCLE_bounds_true>[
+(#REM) get all articles of the other auteurs
+]<BOUCLE_auteur(AUTEURS){id_auteur=#ENV{auteur}}>[
+	(#REM)
+	]<BOUCLE_articles_auteur(ARTICLES){id_rubrique=1}{!id_auteur=#ENV{auteur}}{doublons A}></BOUCLE_articles_auteur>
+</BOUCLE_auteur>[
+(#REM) get all articles without this category
+]<BOUCLE_categoria(MOTS){id_mot=#ENV{categoria}}>[
+	(#REM)
+	]<BOUCLE_articles_categoria(ARTICLES){id_rubrique=1}{!id_mot=#ENV{categoria}}{doublons A}></BOUCLE_articles_categoria>
+</BOUCLE_categoria>[
+(#REM) get all articles without this tag
+]<BOUCLE_tag(MOTS){type=tags}{id_mot=#ENV{tag}}>[
+	(#REM)
+	]<BOUCLE_articles_tag(ARTICLES){id_rubrique=1}{!id_mot=#ENV{tag}}{doublons A}></BOUCLE_articles_tag>
+</BOUCLE_tag>[
+(#REM) get all articles without this meta tag
+]<BOUCLE_meta_tag(MOTS){type=meta_tags}{id_mot=#ENV{meta_tag}}>[
+	(#REM)
+	]<BOUCLE_articles_meta_tag(ARTICLES){id_rubrique=1}{!id_mot=#ENV{meta_tag}}{doublons A}></BOUCLE_articles_meta_tag>
+</BOUCLE_meta_tag>[
+(#REM) get only articles with or without images that are not present in the previous A bloucles
+][(#ENV{image}|==true|?{[(#SET{rubrique,1})],[(#SET{rubrique,0})]})
+]<B_image_true>
+	<BOUCLE_image_true(RUBRIQUES){id_rubrique=#GET{rubrique}}>
+		<BOUCLE_image_articles(ARTICLES){id_rubrique=1}{doublons A}>
+			<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}>
+				<BOUCLE_article_associe_image(articles){id_document}{doublons B}></BOUCLE_article_associe_image>
+			</BOUCLE_image>
+		</BOUCLE_image_articles>[
+		(#REM) get only articles with images and with or without audios that are present in the previous B bloucle
+		][(#ENV{audio}|==true|?{[(#SET{rubrique,1})],[(#SET{rubrique,0})]})
+		]<B_image_audio_true>
+			<BOUCLE_image_audio_true(RUBRIQUES){id_rubrique=#GET{rubrique}}>
+				<BOUCLE_image_audio_articles(ARTICLES){id_rubrique=1}{!doublons B}>
+					<BOUCLE_image_audio(DOCUMENTS){id_article}{extension==mp3|ogg|wav}>
+						<BOUCLE_article_associe_audio_image(articles){id_document}{doublons C}></BOUCLE_article_associe_audio_image>
+					</BOUCLE_image_audio>
+				</BOUCLE_image_audio_articles>[
+				(#REM) RESULT: all articles (with images and with audios) that are present in the previous C bloucle ]
+				<BOUCLE_recherche_image_audio(ARTICLES){id_rubrique=1}{recherche ?}{!doublons C}{", "}>{
+					<INCLURE{fond=inclure/json-article}{id_article}/>
+				
+				}</BOUCLE_recherche_image_audio>
+			</BOUCLE_image_audio_true>
+		</B_image_audio_true>[
+		(#REM) RESULT: all articles (with images) that are present in the previous B bloucle ]
+		<BOUCLE_recherche_image(ARTICLES){id_rubrique=1}{recherche ?}{!doublons B}{", "}>{
+			<INCLURE{fond=inclure/json-article}{id_article}/>
+		
+		}</BOUCLE_recherche_image>
+	<//B_image_audio_true>
+</BOUCLE_image_true>
+</B_image_true>[
+	(#REM) get only articles with or without audios that are present in the previous A bloucles
+	][(#ENV{audio}|==true|?{[(#SET{rubrique,1})],[(#SET{rubrique,0})]})
+	]<B_audio_true>
+		<BOUCLE_audio_true(RUBRIQUES){id_rubrique=#GET{rubrique}}>
+			<BOUCLE_audio_articles(ARTICLES){id_rubrique=1}{doublons A}>
+				<BOUCLE_audio(DOCUMENTS){id_article}{extension==mp3|ogg|wav}>
+					<BOUCLE_article_associe_audio(articles){id_document}{doublons B}></BOUCLE_article_associe_audio>
+				</BOUCLE_audio>
+			</BOUCLE_audio_articles>[
+			(#REM) RESULT: all articles (with audios) that are present in the previous B bloucle ]
+			<BOUCLE_recherche_audio(ARTICLES){id_rubrique=1}{recherche ?}{!doublons B}{", "}>{
+				<INCLURE{fond=inclure/json-article}{id_article}/>
+			
+			}</BOUCLE_recherche_audio>
+		</BOUCLE_audio_true>
+	</B_audio_true>[
+		(#REM) RESULT(default): all articles that are not present in the previous A bloucles ]
+		<BOUCLE_recherche(ARTICLES){id_rubrique=1}{recherche ?}{doublons A}{", "}>{
+			<INCLURE{fond=inclure/json-article}{id_article}{enclosure=#ENV{enclosure}}/>
+		
+		}</BOUCLE_recherche>
+	<//B_audio_true>
+<//B_image_true>
+	]
+}[);(#ENV{callback}|oui)]

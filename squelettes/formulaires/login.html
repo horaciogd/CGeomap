@@ -1,0 +1,26 @@
+#HTTP_HEADER{"Cache-Control: no-store, no-cache, must-revalidate"}
+#HTTP_HEADER{"Pragma: no-cache"}
+				
+				[<div class='login formulaire'>
+					(#ENV{editable})
+					<form id='formulaire_login' method='post' action='#ENV{action}&form=true'>
+					#ACTION_FORMULAIRE{#ENV{action}}
+						<fieldset>
+							<ul>
+								<li>
+									<label for="var_login"><:cgeomap:login:></label>
+									<input type='text' class='form-control' name='var_login' id='var_login' value="[(#ENV**{var_login})]" size='40'[(#HTML5) required='required' autofocus='autofocus'] autocapitalize="off" autocorrect="off" />
+								</li>
+								<li>
+									<label for="password"><:cgeomap:password:></label>
+									<input type='password' class='form-control' name='password' id='password' value="" size='40' autocapitalize="off" autocorrect="off" />
+									<input type="hidden" name="session_remember" id="session_remember" value="oui" />
+								</li>
+								<li class="submit">
+									<a href="[(#URL_PAGE{spip_pass}|parametre_url{lang,#LANG})]" id='spip_pass'><:login_motpasseoublie:></a>
+									<input class="btn" type="submit" name="login" id="login" value="<:cgeomap:submit_login:>" />
+								</li>
+							</ul>
+						</fieldset>
+					</form>
+				</div>]

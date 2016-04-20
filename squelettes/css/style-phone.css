@@ -2,20 +2,34 @@
    Navigation
 -------------------- */
 
-#navigation .wrapper { border-bottom: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 6px; -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.4); -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.4); box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.4); }
+#navigation hgroup { height: 60px; position: relative; background-image: url('../images/pix/cgeomap-top-banner-@2x.png');  background-repeat: no-repeat; background-size: 2048px 92px; background-position: bottom center; }
 #navigation hgroup h1 { font-size: 20px; line-height: 32px; vertical-align: middle; }
+
 #navigation .logo { display: inline; padding: 0 6px; line-height: 32px; vertical-align: middle; }
+
+/* bookmark & GPS */
+#bookmark { background-color: #00adab; text-align: center; padding: 4px;}
+#bookmark .wrapper {  display: none; position: relative; background-color: #fff; border-radius: 7px; padding: 7px 7px 3px 7px; margin: 7px; }
+#bookmark img { margin-top: 14px; }
+#bookmark p:last-child { text-align: right; }
+#bookmark .hide { display: inline-block; width: 32px; height: 32px; background-image: url('../images/icons/cgeomap-bookmark-up-rollover-@2x.png'); background-size: 64px 32px; background-repeat: no-repeat; background-position: 0px 0px; }
+#bookmark .hide:active { background-position: -32px 0px; }
+#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 14px; line-height: 14px; background-color: #00adab; color: rgba(255,255,255,0.8); padding: 4px 6px; margin-top: 8px; border-radius: 9px; border: #18c2b1 solid 1px; }
+#navigation hgroup .bkmrk { -webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3); -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3); box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3); }
+#navigation hgroup .bkmrk:hover { border-color: #0bdec9;  background-color: #0bdec9; color: rgba(255,255,255,1); }
+#navigation hgroup .gps span { background-color: rgba(255,255,255,0.8); width: 8px; height: 8px; margin: 0 6px 2px 0; display: inline-block; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
 
 
 /* --------------------
    Content
 -------------------- */
 
-#content .wrapper { padding: 6px 6px 6px 0; background: rgba(255,255,255, 0.9); }
-#content .listado_nodos header hgroup { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 6px; background: #18c2b1; }
-#content .listado_nodos header hgroup:hover, #content .listado_nodos header hgroup:active { background: #0bdec9; }
-#content .listado_nodos header h2 { font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: #fff; white-space: nowrap; }
-#content .listado_nodos header .distance { display: blocK; position: absolute; top: 6px; right: 6px; font-weight: bold; font-size: 14px; line-height: 40px; height: 40px; vertical-align: middle; color: #fff; padding-left: 40px;
+#content .wrapper { padding: 40px 6px 6px 0; background: rgba(255,255,255, 0.9); }
+#content .listado_nodos .header { display: block; }
+#content .listado_nodos .header hgroup { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 6px; background: #18c2b1; }
+#content .listado_nodos .header hgroup:hover, #content .listado_nodos .header hgroup:active { background: #0bdec9; }
+#content .listado_nodos .header h2 { font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: #fff; white-space: nowrap; }
+#content .listado_nodos .header .info { display: blocK; position: absolute; top: 6px; right: 6px; height: 40px; padding-left: 40px;
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
 background: -moz-linear-gradient(left, rgba(24,194,177,0) 0%, rgba(24,194,177,1) 30%, rgba(24,194,177,1) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(24,194,177,0)), color-stop(30%,rgba(24,194,177,1)), color-stop(100%,rgba(24,194,177,1))); /* Chrome,Safari4+ */
@@ -24,7 +38,7 @@ background: -o-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30
 background: -ms-linear-gradient(left, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* IE10+ */
 background: linear-gradient(to right, rgba(24,194,177,0) 0%,rgba(24,194,177,1) 30%,rgba(24,194,177,1) 100%); /* W3C */
 }
-#content .listado_nodos header hgroup:hover .distance, #content .listado_nodos header hgroup:active .distance { 
+#content .listado_nodos .header hgroup:hover .info, #content .listado_nodos .header hgroup:active .info { 
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
 background: -moz-linear-gradient(left, rgba(11,222,201,0) 0%, rgba(11,222,201,1) 30%, rgba(11,222,201,1) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(11,222,201,0)), color-stop(30%,rgba(11,222,201,1)), color-stop(100%,rgba(11,222,201,1))); /* Chrome,Safari4+ */
@@ -33,19 +47,51 @@ background: -o-linear-gradient(left, rgba(11,222,201,0) 0%,rgba(11,222,201,1) 30
 background: -ms-linear-gradient(left, rgba(11,222,201,0) 0%,rgba(11,222,201,1) 30%,rgba(11,222,201,1) 100%); /* IE10+ */
 background: linear-gradient(to right, rgba(11,222,201,0) 0%,rgba(11,222,201,1) 30%,rgba(11,222,201,1) 100%); /* W3C */
 }
+#content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: #fff; }
+#content .listado_nodos .header .info .distance { background-image: url('../images/icons/cgeomap-bird-@2x.png'); background-size: 26px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }
+#content .listado_nodos .header .player_icon { width: 20px; line-height: 40px; height: 40px; background-image: url('../images/icons/cgeomap-player-icon-transparent-@2x.png'); background-size: 44px 44px; background-repeat: no-repeat; background-position: -12px 0; }
+#content .listado_nodos .header .player { width: 20px; line-height: 40px; height: 40px; background-image: url('../images/icons/cgeomap-player-header-transparent-@2x.png'); background-size: 90px 90px; background-repeat: no-repeat; background-position: -14px -1px; }
+#content .listado_nodos .header .player:active { background-position: -14px -47px; }
+#content .listado_nodos .header .active { background-position: -57px -1px !important; }
+#content .listado_nodos .header .active:active { background-position: -57px -47px !important; }
+#content .listado_nodos .header .loading { position: absolute; left: 0; right: 0; height: 40px; margin: 0 auto; background: url('../images/icons/content-loader.gif') no-repeat; background-size: 40px 40px; background-repeat: no-repeat; background-position: center center; opacity: 0.4; filter: alpha(opacity=40); }
+
 #content .listado_nodos .wrap_article { font-size: 0.9em; margin: 6px 0 6px 6px; text-align: justify; }
 #content .listado_nodos .wrap_article .lien, #content .listado_nodos .wrap_article .fancybox { display: block; text-align: center; margin: 8px auto; }
 #content .listado_nodos .wrap_article img { display: inline;  }
+
+#content .wrapper .bottom { margin: 4px 2px 0 2px; background-image: url('../images/pix/cgeomap-bottom-banner-@2x.png');  background-repeat: no-repeat; background-size: 2048px 1024px; background-position: top center; }
+
+/* Modules  */
+.audiovisuel header.block { display: none; }
+.module { margin-bottom: 4px; position: relative; }
+.module header, .module .content { padding: 6px 8px; background-color: #94ffd9; }
+.module header { text-align: center; }
+.module .content .wrap { font-size: 0.8em; }
+.module img { border-radius: 4px; }
+.media .content { text-align: center; }
+
+/* Player  */
+.vhplab_player { text-align: center; }
+.vhplab_player ul { height: 42px; line-height: 42px; width: 96%; border-radius: 6px; font-size: 1em; }
+.vhplab_player ul li { height: 38px; background-size: 448px 92px; background-image: url('../images/icons/cgeomap-player-buttons-@4x.png'); }
+.vhplab_player ul li.play { top: 2px; left: 6px; width: 36px; background-position: -48px 0px; }
+.vhplab_player ul li.pause { top: 2px; left: 6px; width: 36px; background-position: -182px 0px; }
+.vhplab_player ul li.volume { top: 2px; right: 6px; width: 36px; background-position: -298px 0px; }
+.vhplab_player ul li.position { top: 0; left: 40px; }
+.vhplab_player ul li.duration { top: 0; right: 46px; }
+.vhplab_player ul li.progress_bar { top: 6px; left: 84px; right: 88px; height: 30px; border-radius: 6px; }
+.vhplab_player ul li.progress_bar span { background-color: #27a9e1; border-radius: 4px; height: 30px; }
 
 
 /* --------------------
    Footer
 -------------------- */
 
-footer .wrapper { border-top: 1px solid #fff; background: rgba(255,255,255, 0.9); position: relative; height: 58px; -webkit-box-shadow: 0px -3px 6px 0px rgba(0,0,0,0.4); -moz-box-shadow: 0px -3px 6px 0px rgba(0,0,0,0.4); box-shadow: 0px -3px 6px 0px rgba(0,0,0,0.4); }
-footer span { display: block; position: absolute; top: 4px; margin: 0; width: 50px; height: 50px; background-image: url('../images/icons/map-buttons.png'); background-size: 200px 200px; background-repeat: no-repeat; }
-footer .location { z-index: 5; position: absolute; top: 0; right: 8px;}
-footer .toggle { z-index: 6; position: absolute; top:0; left: 8px; }
+footer .wrapper { position: relative; height: 0px; }
+footer span { display: block; position: absolute; top: 4px; margin: 0; width: 50px; height: 50px; background-image: url('../images/icons/cgeomap-map-buttons-@2x.png'); background-size: 200px 200px; background-repeat: no-repeat; }
+footer .location { z-index: 9; position: absolute; top: -58px; right: 8px;}
+footer .toggle { z-index: 10; position: absolute; top: -58px; left: 8px; }
 footer .location_button { right: 0;  background-position: 0px -50px; }
 footer .location_button:hover { background-position: 0px 0px; }
 footer .location_button:active { background-position: -50px 0px; }

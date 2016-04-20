@@ -5,7 +5,7 @@
  *
  * Author:
  * Horacio Gonz‡lez
- * (c) 2015 - Distribu’do baixo licencia GNU/GPL
+ * (c) 2016 - Distribu’do baixo licencia GNU/GPL
  *
  */
 
@@ -16,8 +16,13 @@ function vhplab_header_prive($flux) {
 	if ((_request('exec')=='article')||(_request('exec')=='configurer_vhplab')) {
 		if (function_exists('lire_config')) $key = lire_config("vhplab/api_key");
 		$flux .= '
-		<!-- VHPlab plugin spip 3.0 -->
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key='.$key.'&sensor=true"></script>
+		<!-- Leaflet 0.7.7 -->
+		<link rel="stylesheet" href="'._DIR_PLUGIN_VHPLAB.'js/leaflet/leaflet.css" />
+		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/leaflet.js"></script>
+		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/l.control.geosearch.js"></script>
+		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/l.geosearch.provider.openstreetmap.js"></script>
+		
+		<!-- CGeomap -->
 		<link rel="stylesheet" type="text/css" media="all" href="'._DIR_PLUGIN_VHPLAB.'css/vhplab.css" />
 		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/vhplab_geo.js"></script>
 		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/cgeomap.js"></script>

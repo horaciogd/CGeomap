@@ -1,10 +1,11 @@
 [(#REM) 24h cache
 ][(#CACHE{24*3600})][
-(#REM) Main index redirect to eliminate this template
-][
+
 (#REM) Javascript header
 ][(#HTTP_HEADER{Content-type:text/javascript; charset=#CHARSET})][
-(#INCLURE{js/cgeomap-prototypes-phone.js})][
-(#CONFIG{auto_compress_js}|=={oui}|oui)
-#FILTRE{compacte}
-]
+
+(#REM) Inclure js
+][(#INCLURE{js/cgeomap-prototypes-phone.js})][
+
+(#REM) Compacte if desired
+][(#CONFIG{auto_compress_js}|=={oui}|oui)#FILTRE{compacte}]
