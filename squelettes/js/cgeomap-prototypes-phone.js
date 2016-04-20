@@ -160,7 +160,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 		cgeomap.map.myLocation(function(location) {
 			cgeomap.createNavigationList({visible: true});
 			cgeomap.bindNavigationListActions();
-			cgeomap.map.map.setView([location.coords.latitude, location.coords.longitude], 17);
+			cgeomap.map.map.setView([location.coords.latitude, location.coords.longitude], 14);
 			$('footer .loading').hide();
 		});
 	});
