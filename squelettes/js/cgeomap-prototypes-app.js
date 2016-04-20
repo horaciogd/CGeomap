@@ -140,6 +140,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 
 	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
+	if (this.url_site.slice(-1)!="/") this.url_site += "/";
 	
 	// Store width
 	this.windowWidth = parseInt($(window).width());

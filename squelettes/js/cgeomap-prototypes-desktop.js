@@ -170,6 +170,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	
 	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
+	if (this.url_site.slice(-1)!="/") this.url_site += "/";
 	if (typeof _opts.url_article != "undefined") this.url_article = _opts.url_article;
 	if (typeof _opts.url_user != "undefined") this.url_user = _opts.url_user;
 	if (typeof _opts.url_embed != "undefined") this.url_embed = _opts.url_embed;
