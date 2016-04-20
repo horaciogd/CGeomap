@@ -1698,6 +1698,7 @@ VhplabPlayer.prototype.init = function(_opts) {
 			$('#'+ self.selector +' .play').show();
 			$('#'+ self.selector +' .pause').hide();
 			$('#'+ self.selector +" .progress_bar span").css('width', 0 +'%');
+			$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 		},
 		whileplaying: function() {
 			$('#'+ self.selector +' .position').text(self.milToTime(this.position));
@@ -1710,11 +1711,13 @@ VhplabPlayer.prototype.pause = function() {
 	this.sound.pause();
 	$('#'+ this.selector +' .play').show();
 	$('#'+ this.selector +' .pause').hide();
+	$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 };
 VhplabPlayer.prototype.play = function() {
 	this.sound.play();
 	$('#'+ this.selector +' .play').hide();
 	$('#'+ this.selector +' .pause').show();
+	$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 };
 VhplabPlayer.prototype.setVolume = function() {
 	this.volume += 25;

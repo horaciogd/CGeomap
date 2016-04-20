@@ -103,6 +103,9 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	// T
 	'texto_recherche' => 'Terminos de búsqueda',
 	
+	// U
+	'url_nodo' => 'URL del nodo',
+	
 	// V
 	'visible' => 'visibilidad',
 );

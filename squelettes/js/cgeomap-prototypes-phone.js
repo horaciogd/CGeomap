@@ -324,6 +324,7 @@ VhplabTransparentPlayer.prototype.addTrack = function(_enclosure) {
 VhplabTransparentPlayer.prototype.play = function(_sound) {
 	$('#vhplab_player_'+ _sound +' .play').hide();
 	$('#vhplab_player_'+ _sound +' .pause').show();
+	$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 	soundManager.stopAll();
 	soundManager.play('enclosure_' + _sound);
 	this.playing = 'enclosure_' + _sound;
@@ -332,6 +333,7 @@ VhplabTransparentPlayer.prototype.stop = function() {
 	var sound = this.playing.split('_');
 	$('#vhplab_player_'+ sound[1] +' .play').show();
 	$('#vhplab_player_'+ sound[1] +' .pause').hide();
+	$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 	$('#vhplab_player_'+ sound[1] +' .progress_bar span').css('width', 0 +'%');
 	soundManager.stopAll();
 	this.playing = '';
@@ -343,11 +345,9 @@ VhplabTransparentPlayer.prototype.moveTo = function(_x, _w) {
 VhplabTransparentPlayer.prototype.toggle = function(_sound, _button) {
 	if (this.playing=='') {
 		$(_button).addClass('active');
-		$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 		this.play(_sound);
 	} else if (this.playing=='enclosure_'+_sound) {
 		$(_button).removeClass('active');
-		$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
 		this.stop();
 		this.queue = false;
 	} else {

@@ -411,7 +411,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
     this.content.id = "window_"+ this.id;
     var player = '';
     if (enclosure) player = '<span class="player" data-id_article="'+ this.id +'"></span>';
-	this.content.innerHTML = '<hgroup><span class="toggle_content" data-id_article="'+ this.id +'"></span>'+ player +'<h2>'+ $(this.data).data('titre') +'</h2><h4>'+ $(this.data).data('soustitre') +'</h4></hgroup><div>'+ $(this.data).data('descriptif') +'</div>';
+	this.content.innerHTML = '<hgroup><span class="toggle_content" data-id_article="'+ this.id +'"></span><h2>'+ player +''+ $(this.data).data('titre') +'</h2><h4>'+ $(this.data).data('soustitre') +'</h4></hgroup><div>'+ $(this.data).data('descriptif') +'</div>';
 	this.bindPopupActions(this.content);
 	this.infoWindow.setContent(this.content);
 	

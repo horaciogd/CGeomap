@@ -20,15 +20,15 @@
 .cgeomap .leaflet-popup-content-wrapper h2 { margin-right: 37px; text-align: left; }
 .cgeomap .leaflet-popup-content-wrapper h3 { margin-right: 37px; text-align: left; }
 
-.cgeomap .leaflet-popup-content-wrapper .toggle_content { display: block; position: absolute;  bottom: 22px; right: 6px; background: url('../images/icons/cgeomap-window-buttons-@2x.png') no-repeat -220px 0px; background-size: 343px 249px; width: 21px; height: 37px; cursor: pointer; margin: 2px; }
+.cgeomap .leaflet-popup-content-wrapper .toggle_content { display: none; position: absolute;  bottom: 22px; right: 6px; background: url('../images/icons/cgeomap-window-buttons-@2x.png') no-repeat -220px 0px; background-size: 343px 249px; width: 21px; height: 37px; cursor: pointer; margin: 2px; }
 .cgeomap .leaflet-popup-content-wrapper .toggle_content:hover { background-position: -220px -128px; }
 .cgeomap .leaflet-popup-content-wrapper .closed { background-position: -220px -64px !important; }
 .cgeomap .leaflet-popup-content-wrapper .closed:hover { background-position: -220px -192px !important; }
 
-.cgeomap .leaflet-popup-content-wrapper .player { display: none; position: absolute;  bottom: 25px; right: 26px; width: 20px; line-height: 40px; height: 40px; background-image: url('../images/icons/cgeomap-player-header-transparent-@2x.png'); background-size: 90px 90px; background-repeat: no-repeat; background-position: -14px -47px; /* -14px -1px */ }
-.cgeomap .leaflet-popup-content-wrapper .player:active { background-position: -14px -47px; }
-.cgeomap .leaflet-popup-content-wrapper .active { background-position: -57px -47px !important; /* -57px -1px */ }
-.cgeomap .leaflet-popup-content-wrapper .active:active { background-position: -57px -47px !important; }
+.cgeomap .leaflet-popup-content-wrapper .player { display: inline-block; width: 22px; height: 22px; height: 22px; background-image: url('../images/icons/cgeomap-player-popup-transparent-@2x.png'); background-size: 45px 45px; background-repeat: no-repeat; background-position: -4px 0px; }
+.cgeomap .leaflet-popup-content-wrapper .player:active { background-position: -4px -23px; }
+.cgeomap .leaflet-popup-content-wrapper .active { background-position: -27px 0px !important; }
+.cgeomap .leaflet-popup-content-wrapper .active:active { background-position: -27px -23px !important; }
 
 .cgeomap .leaflet-popup-content-wrapper .content { text-align: justify; }
 .cgeomap a.leaflet-popup-close-button { color: transparent; position: absolute;  top: 2px; right: 2px; background: url('../images/icons/close.png') no-repeat; background-size: 29px 57px; width: 29px; height: 29px; cursor: pointer; background-position: 0px 0px; padding: 0px; }

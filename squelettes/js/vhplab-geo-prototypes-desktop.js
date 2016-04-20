@@ -109,6 +109,14 @@ VhplabMarker.prototype.appendContent = function() {
 		$('#article .header .editer').data('visible', false);
 	}
 	
+	/* URL */
+	if (cgeomap.session == true) {
+		$('#article header .permalink').attr('href', $(this.data).data('url_article'));
+		$('#article header .permalink').show();
+	} else {
+		$('#article header .permalink').hide();
+	}
+	
 	/* icon */
 	var icon = $(this.data).data('icon');
 	$('#article header img').attr('src', icon.url);
@@ -178,18 +186,26 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 		$.fancybox({ 'href' : img });
 		return false;
 	});
-	*/
 	var visible = $("#content").data('visible');
 	if (!visible) $('.toggle_content', _content).addClass('closed');
 	$('.toggle_content', _content).click(function(){
 		cgeomap.toggleContent();
+	});
+	*/
+	$('.player', _content).click(function(){
+		var audio_module = $('#article .block_modules .audio:first');
+		if ($(this).hasClass('active')) {
+			$('.pause', audio_module).trigger('click');
+		} else {
+			$('.play', audio_module).trigger('click');
+		}
 	});
 };
 VhplabMarker.prototype.click = function(_callback) {
 	if ($("#content").data('selected')!='carte') {	
 		cgeomap.toggleUtilities('carte');
 	}
-	if(!this.open) {
+	if (!this.open) {
 		var self = this;
 		if (this.loadded) {
 			cgeomap.slideContent('hide', function() {
@@ -223,6 +239,8 @@ VhplabMarker.prototype.click = function(_callback) {
 				});
 			});
 		}
+	} else {
+		if (!this.infoWindow._isOpen) this.infoWindow.openOn(this.parent.map);
 	}
 };
 VhplabMarker.prototype.openInfoWindow = function() {

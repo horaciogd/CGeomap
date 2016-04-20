@@ -78,7 +78,7 @@ VhplabMap.prototype.bindActions = function() {
 // ************ //
 
 VhplabMarker.prototype.click = function(_callback) {
-	if(!this.open) {
+	if (!this.open) {
 		var self = this;
 		if (this.loadded) {
 			this.openInfoWindow();
@@ -94,6 +94,8 @@ VhplabMarker.prototype.click = function(_callback) {
 				});
 			});
 		}
+	} else {
+		if (!this.infoWindow._isOpen) this.infoWindow.openOn(this.parent.map);
 	}
 };
 
