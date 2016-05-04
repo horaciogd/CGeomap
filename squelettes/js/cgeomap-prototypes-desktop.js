@@ -1274,9 +1274,11 @@ VhplabContribuerFrom.prototype.initData = function() {
 };
 VhplabContribuerFrom.prototype.initialize = function(_opts) {
 	if (typeof _opts.url_site != "undefined") {
-		this.url_form = _opts.url_site + 'spip.php?page=ajax-contribuer';
-		this.url_json = _opts.url_site + 'spip.php?page=json-contribuer';
-		this.url_upload = _opts.url_site + 'jQuery-File-Upload/server/php/';
+		var url_site = _opts.url_site;
+		if (url_site.slice(-1)!="/") url_site += "/";
+		this.url_form = url_site + 'spip.php?page=ajax-contribuer';
+		this.url_json = url_site + 'spip.php?page=json-contribuer';
+		this.url_upload = url_site + 'jQuery-File-Upload/server/php/';
 	}
 };
 VhplabContribuerFrom.prototype.load = function(_url) {
