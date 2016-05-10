@@ -13,6 +13,36 @@
 //***********
 // Vhplab Map
 //***********
+VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
+	var n = this.offset;
+	var self = this;
+	var count = $(_data.markers).length - 1;
+	var path = _data.link;
+	if ($(_data.markers).length>=1) {
+		var aportaciones = new Array();
+		var list = new Array();
+		// Loop through each marker data element
+		$.each(_data.markers, function(i, marker) {
+			n++;
+			if (typeof $(this.markers).data('marker_'+marker.id) == "undefined") {
+				self.addMarker(path, marker, n);
+				aportaciones.push(parseInt(marker.id));
+				var newMarker = $(self.markers).data('marker_'+marker.id);
+				list.push(newMarker.marker.getLatLng());
+			}
+			if(i==count) {
+				var loadded = self.markerList.length;
+				self.hidden = aportaciones;
+				var bounds = new L.latLngBounds(list);
+				self.map.fitBounds(bounds);
+				self.map.setZoom(self.map.getZoom()-1);
+				if (_callback) _callback();
+			}
+		});
+	} else {
+		if (_callback) _callback();
+	}
+};
 VhplabMap.prototype.bindActions = function() {
 	cgeomap.createNavigationList();
 	cgeomap.bindNavigationListActions();
@@ -77,14 +107,14 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.setInitialMarker(_opts);
     	
 };
-VhplabMap.prototype.zoomListener = function(_e) {
-	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
-	$(".cartography label").addClass('new');
-	$("#formulaire .wrap_cartography").data('ok',true);
-	cgeomap.form.check();
+VhplabMap.prototype.loadNewMarkers = function(_url, _callback) {
+	var self = this;
+	// load markers data get URL via alert(_url);
+	$.getJSON(_url, function(data){
+		self.addNewMarkers(data[0], _callback);
+	});					
 };
 VhplabMap.prototype.showMarkerJson = function(_markers) {
-	var bounds = new L.latLngBounds();
 	var list = new Array();
 	$.each(_markers, function(i, m) {
 		var marker = $(cgeomap.map.markers).data('marker_'+ m.id);
@@ -94,6 +124,54 @@ VhplabMap.prototype.showMarkerJson = function(_markers) {
 	var bounds = new L.latLngBounds(list);
 	this.map.fitBounds(bounds);
 	this.map.setZoom(this.map.getZoom()-1);
+};
+VhplabMap.prototype.reloadMarkers = function(_url, _callback) {
+	var self = this;
+	// load markers data
+	// get URL via alert(_url);
+	$.getJSON(_url, function(data){
+		//alert(data.toSource());
+		self.updateMarkers(data[0], function(){
+			if (_callback) _callback();
+		});
+	});
+	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){});		
+};
+VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
+	var marker = $(this.markers).data('marker_'+_data.id);
+	if (typeof marker == "undefined") {
+		marker = new VhplabMarker();
+		marker.initialize(_path, _data, this);
+		$(this.markers).data('marker_'+marker.id, marker);
+		this.markerList.push(marker.id);
+	} else {
+		marker.updateData(_path, _data, this);
+	}
+};
+VhplabMap.prototype.updateMarkers = function(_data, _callback) {
+	var n = this.offset;
+	var self = this;
+	var count = $(_data.markers).length - 1;
+	var path = _data.link;
+	// Loop through each marker data element
+	$.each(_data.markers, function(i, marker) {
+		n++;
+		if (($("#user .data").data("auteur") != self.auteur)&&(typeof $(self.markers).data('marker_'+marker.id) == "undefined")) {
+			self.hidden.push(parseInt(marker.id));
+		}
+		self.updateMarker(path, marker, n);
+		if(i==count) {
+			var loadded = self.markerList.length;
+			self.offset = loadded;
+			_callback();
+		}
+	});
+};
+VhplabMap.prototype.zoomListener = function(_e) {
+	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
+	$(".cartography label").addClass('new');
+	$("#formulaire .wrap_cartography").data('ok',true);
+	cgeomap.form.check();
 };
 
 
@@ -248,6 +326,7 @@ VhplabMarker.prototype.openInfoWindow = function() {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
 		open.closeInfoWindow();
 	}
+	if (jQuery.inArray(this.id, this.parent.hidden)>=0) this.marker.addTo(this.parent.map);
 	this.parent.map.setView([this.lat, this.lng], this.zoom);
 	this.infoWindow.openOn(this.parent.map);
 	this.open = true;

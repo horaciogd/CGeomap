@@ -110,22 +110,12 @@ VhplabInterface.prototype.initContent = function() {
 };
 VhplabInterface.prototype.loadMap = function(_callback) {
 	var self = this;
-	var recalcul =  $("#formulaire").data('recalcul');
-	if (recalcul) {
-		// get URL via alert(self.url_site +'spip.php?page=json-vhplab-geo-articles&id_rubrique=1&id_article='+ recalcul +'&offset=0&limit=300&var_mode=recalcul&callback=?');
-		this.map.reloadMarkers(self.url_site +'spip.php?page=json-vhplab-geo-articles&id_rubrique=1&id_article='+ recalcul +'&offset=0&limit=300&var_mode=recalcul&callback=?', function(){
-			$("#formulaire").data('recalcul', false);
-			cgeomap.createNavigationList();
-			cgeomap.bindNavigationListActions();
-			cgeomap.map.showMarkers();
-			var marker = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
-			marker.click(_callback);
-		});
-	} else {
-		$("#article").slideDown("slow");
-		this.map.showMarkers();
-		if (_callback) _callback();
-	}
+	cgeomap.createNavigationList();
+	cgeomap.bindNavigationListActions();
+	cgeomap.map.showMarkersExcept(cgeomap.map.hidden);
+	cgeomap.map.map.removeLayer(cgeomap.map.clickableMarker);
+	var marker = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
+	marker.click(_callback);
 	$("#user .carte").addClass('on');
 	$("#content").data('selected','carte');
 };
