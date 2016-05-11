@@ -82,7 +82,6 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	$zoom = _request('zoom');
 	$address = _request('address');
 	// otra informacion
-	$date = date('Y-m-d H:i:s', time());
 	$id_auteur = $GLOBALS['visiteur_session']['id_auteur'];
 	$rubrique = 1;
 	
@@ -103,7 +102,7 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	
 	if ($id_article) {
 		// 2 actualizampos los campos del articulo
-		sql_updateq('spip_articles', array('titre' => $title, 'soustitre' => $subtitle, 'id_rubrique' => $rubrique, 'statut' => 'publie', 'date' => $date), 'id_article='.intval($id_article));
+		sql_updateq('spip_articles', array('titre' => $title, 'soustitre' => $subtitle, 'id_rubrique' => $rubrique, 'statut' => 'publie', 'date' => date('Y-m-d H:i:s')), 'id_article='.intval($id_article));
 		
 		// 3 insertamos las coordenadas del articulo
 		$result = sql_select('*', 'spip_vhplab_gis_liens', 'id_objet='.intval($id_article).' AND objet='.sql_quote("article"));
@@ -145,7 +144,8 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 			//sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
 		} else {
 			$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id_article), 'image');
-			sql_updateq('spip_documents', array('descriptif' => $descriptif), 'id_document='.intval($id_document[0]));
+			sql_updateq('spip_documents', array('descriptif' => $descriptif, 'statut' => 'publie', 'date_publication' => date('Y-m-d H:i:s')), 'id_document='.intval($id_document[0]));
+			sql_insertq('spip_documents_liens', array('id_document' => intval($id_document[0]), 'id_objet' => intval($id_article), 'objet' => 'article', 'vu' => 'oui'));
 		}
 		
 		// 10 eliminamos los documentos borrados
@@ -208,6 +208,8 @@ function vhplab_process_modules($modules, $id) {
 					if (is_array($module['data'])) {
 						$file = array('name' => $module['data']['name'], 'tmp_name' => $module['data']['mediumUrl']);
 						$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id), 'image');
+						sql_updateq('spip_documents', array('statut' => 'publie', 'date_publication' => date('Y-m-d H:i:s')), 'id_document='.intval($id_document[0]));
+						sql_insertq('spip_documents_liens', array('id_document' => intval($id_document[0]), 'id_objet' => intval($id), 'objet' => 'article', 'vu' => 'oui'));
 						$txt .= "\n<module class=\"media\" name=\"".$module['header']."\"><image".$id_document[0]."></module>";
 					} else {
 						$txt .= "\n<module class=\"media\" name=\"".$module['header']."\"><image".$module['data']."></module>";
@@ -225,6 +227,8 @@ function vhplab_process_modules($modules, $id) {
 					if (is_array($module['data'])) {
 						$file = array('name' => $module['data']['name'], 'tmp_name' => $module['data']['url']);
 						$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id), 'document');
+						sql_updateq('spip_documents', array('statut' => 'publie', 'date_publication' => date('Y-m-d H:i:s')), 'id_document='.intval($id_document[0]));
+						sql_insertq('spip_documents_liens', array('id_document' => intval($id_document[0]), 'id_objet' => intval($id), 'objet' => 'article', 'vu' => 'oui'));
 						$txt .= "\n<module class=\"audio\" name=\"".$module['header']."\"><audio".$id_document[0]."></module>";
 					} else {
 						$txt .= "\n<module class=\"audio\" name=\"".$module['header']."\"><audio".$module['data']."></module>";
