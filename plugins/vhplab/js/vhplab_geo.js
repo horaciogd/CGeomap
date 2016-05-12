@@ -178,6 +178,17 @@ VhplabMap.prototype.openMarker = function() {
 VhplabMap.prototype.panOut = function() {
 	this.map.setView([this.lat, this.lng], this.zoom);
 };
+VhplabMap.prototype.reloadMarkers = function(_callback) {
+	var self = this;
+	// load markers data
+	// get URL via alert(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?');
+	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){
+		//alert(data.toSource());
+		self.updateMarkers(data[0], function(){
+			if (_callback) _callback();
+		});
+	});	
+};
 VhplabMap.prototype.setInitialMarker = function(_opts) {
 	var url, visible;
 	(typeof _opts.visible != "undefined") ? visible = _opts.visible : visible = 1;
@@ -265,6 +276,33 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		if (ma.distance < mb.distance) return -1;
 		if (ma.distance > mb.distance) return 1;
 		return 0;
+	});
+};
+VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
+	var marker = $(this.markers).data('marker_'+_data.id);
+	if (typeof marker == "undefined") {
+		marker = new VhplabMarker();
+		marker.initialize(_path, _data, this);
+		$(this.markers).data('marker_'+marker.id, marker);
+		this.markerList.push(marker.id);
+	} else {
+		marker.updateData(_path, _data, this);
+	}
+};
+VhplabMap.prototype.updateMarkers = function(_data, _callback) {
+	var n = this.offset;
+	var self = this;
+	var count = $(_data.markers).length - 1;
+	var path = _data.link;
+	// Loop through each marker data element
+	$.each(_data.markers, function(i, marker) {
+		n++;
+		self.updateMarker(path, marker, n);
+		if(i==count) {
+			var loadded = self.markerList.length;
+			self.offset = loadded;
+			_callback();
+		}
 	});
 };
 VhplabMap.prototype.zoomListener = function(_opts) {
@@ -431,7 +469,7 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	this.data = {};
 	this.loadded = false;
 	this.open = false;
-	typeof _data.json != "undefined" ? this.json = _path + _data.json : this.json = "";
+	typeof _data.json != "undefined" ? this.json = _path + _data.json + '&var_mode=recalcul' : this.json = "";
 	typeof _data.lat != "undefined" ? this.lat = parseFloat(_data.lat) : this.lat = 0.0;
 	typeof _data.lng != "undefined" ? this.lng = parseFloat(_data.lng) : this.lng = 0.0;
 	typeof _data.zoom != "undefined" ? this.zoom = parseInt(_data.zoom) : this.zoom = 0;

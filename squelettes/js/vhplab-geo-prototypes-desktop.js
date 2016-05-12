@@ -114,17 +114,6 @@ VhplabMap.prototype.loadNewMarkers = function(_url, _callback) {
 		self.addNewMarkers(data[0], _callback);
 	});					
 };
-VhplabMap.prototype.showMarkerJson = function(_markers) {
-	var list = new Array();
-	$.each(_markers, function(i, m) {
-		var marker = $(cgeomap.map.markers).data('marker_'+ m.id);
-		list.push(marker.marker.getLatLng());
-		marker.marker.addTo(cgeomap.map.map);
-	});
-	var bounds = new L.latLngBounds(list);
-	this.map.fitBounds(bounds);
-	this.map.setZoom(this.map.getZoom()-1);
-};
 VhplabMap.prototype.reloadMarkers = function(_url, _callback) {
 	var self = this;
 	// load markers data
@@ -137,16 +126,16 @@ VhplabMap.prototype.reloadMarkers = function(_url, _callback) {
 	});
 	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){});		
 };
-VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
-	var marker = $(this.markers).data('marker_'+_data.id);
-	if (typeof marker == "undefined") {
-		marker = new VhplabMarker();
-		marker.initialize(_path, _data, this);
-		$(this.markers).data('marker_'+marker.id, marker);
-		this.markerList.push(marker.id);
-	} else {
-		marker.updateData(_path, _data, this);
-	}
+VhplabMap.prototype.showMarkerJson = function(_markers) {
+	var list = new Array();
+	$.each(_markers, function(i, m) {
+		var marker = $(cgeomap.map.markers).data('marker_'+ m.id);
+		list.push(marker.marker.getLatLng());
+		marker.marker.addTo(cgeomap.map.map);
+	});
+	var bounds = new L.latLngBounds(list);
+	this.map.fitBounds(bounds);
+	this.map.setZoom(this.map.getZoom()-1);
 };
 VhplabMap.prototype.updateMarkers = function(_data, _callback) {
 	var n = this.offset;

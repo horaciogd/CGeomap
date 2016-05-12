@@ -79,6 +79,9 @@ VhplabMap.prototype.bindActions = function() {
 			}
 		);
 	});
+	$("#reload").click(function(){
+		cgeomap.reload();
+	});
 	$('#loading').fadeOut();
 	cgeomap.map.openMarker(true);
 };
@@ -221,7 +224,38 @@ VhplabMap.prototype.updateMap = function(_lat, _lng) {
 	this.locationCircle3.setLatLng([_lat, _lng]);
 	this.updateDistances(_lat, _lng);
 };
-
+VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
+	var marker = $(this.markers).data('marker_'+_data.id);
+	if (typeof marker == "undefined") {
+		marker = new VhplabMarker();
+		marker.initialize(_path, _data, this);
+		marker.json += '&var_mode=recalcul';
+		$(this.markers).data('marker_'+marker.id, marker);
+		this.markerList.push(marker.id);
+	} else {
+		marker.updateData(_path, _data, this);
+	}
+};
+VhplabMap.prototype.reloadMarkers = function(_callback) {
+	this.markerList = new Array();
+	this.hidden = new Array();
+	this.markers = {};
+	this.totalMarkers = 0;
+	this.offset = 0;
+	this.limit = 200;
+	var self = this;
+	var url = this.markersURL;
+	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
+	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?';
+	// load markers data
+	// get URL via alert(url);
+	$.getJSON(url, function(data){
+		//alert(data.toSource());
+		self.updateMarkers(data[0], function(){
+			if (_callback) _callback();
+		});
+	});	
+};
 
 // ************ //
 // Vhplab Marker
