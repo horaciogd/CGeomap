@@ -178,7 +178,20 @@ VhplabMarker.prototype.appendContent = function() {
 	
 	/* URL */
 	if (cgeomap.session == true) {
-		$('#article header .permalink').attr('href', $(this.data).data('url_article'));
+		var url_nodo = $(this.data).data('url_article');
+		if (cgeomap.map.auteur!='none') {
+			var parts = url_nodo.split("/");
+			url_nodo = "http://";
+			for (var i=2; i<parts.length; i++) {
+				if (i == parts.length - 1) {
+					var nodo = parts[i].split("?");
+					url_nodo += "/spip.php?author="+ cgeomap.map.auteur +"&"+ nodo[1];
+				 } else {
+					url_nodo += "/"+ parts[i];
+				 }
+			}
+		}
+		$('#article header .permalink').attr('href', url_nodo);
 		$('#article header .permalink').show();
 	} else {
 		$('#article header .permalink').hide();
