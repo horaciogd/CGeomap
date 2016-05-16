@@ -32,8 +32,9 @@
 		"lat": "(#LATITUDE)"][,
 		"lng": "(#LONGITUDE)"][,
 		"zoom": "(#ZOOM)"]</BOUCLE_gis>[,
-		(#MODELE{icon}{id_article})]<B_image>,
-		<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,1}>"image": {[
+		(#MODELE{icon}{id_article})]<BOUCLE_qr(DOCUMENTS){id_article}{extension==png}{descriptif==qr}{0,1}{doublons}>[,
+		"url_qr": "(#URL_DOCUMENT|url_absolue)"]</BOUCLE_qr><B_image>,
+		<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,1}{doublons}>"image": {[
 			"url_document": "(#URL_DOCUMENT|url_absolue)"][, 
 			"hauteur": "(#HAUTEUR)"][, 
 			"largeur": "(#LARGEUR)"][, 

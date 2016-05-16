@@ -168,10 +168,18 @@ VhplabMap.prototype.zoomListener = function(_e) {
 // Vhplab Marker
 // ************ //
 VhplabMarker.prototype.appendContent = function() {
+	
+	/* qr */
+	$('#article .qr').remove();
+	
 	/* editer */
 	if (($(this.data).data('autorise'))&&($(this.data).data('autorise')=='oui')) {
 		$('#article .header .editer').data('href', $(this.data).data('url_editer'));
 		$('#article .header .editer').data('visible', true);
+		
+		/* qr */
+		if (($(this.data).data('url_qr')!='')&&($(this.data).data('visibility')=='qr')) $('#article .modules').after('<div class="qr"><img src="'+ $(this.data).data('url_qr') +'" /><a class="btn" target="_blank" href="'+ $(this.data).data('url_qr') +'">'+ _T.download_qr +'</a></div>');
+		
 	} else {
 		$('#article .header .editer').data('visible', false);
 	}

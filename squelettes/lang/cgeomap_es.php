@@ -11,11 +11,6 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'aide_titre' => 'Haz clic 2 veces para escribir tu título (30 carácteres). Cuidado, no debes apretar la tecla \'enter\' para terminar la edición de los textos. Haz clic fuera del bloque para seguir editando otros contenidos.',
 	'aide_soustitre' => 'Haz clic 2 veces para escribir tu subtítulo (45 carácteres). Cuidado, no debes apretar la tecla \'enter\' para terminar la edición de los textos. Haz clic fuera del bloque para seguir editando otros contenidos. Colocate al final del texto antes de clicar fuera para guardar tus cambios.',
 	
-	// E
-	'editar' => 'Editar',
-	'eliminar' => 'eliminar',
-	'error_no_markers' => 'No se ha encontarado ninguna entrada con estos parámetros',
-	
 	// C
 	'campo_auteur' => 'Editor',
 	'campo_categoria' => 'Categoría',
@@ -27,6 +22,14 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'contacto' => 'Contacta con',
 	'contribuir' => 'Nueva Entrada',
 	'contribuciones' => 'Mis Aportaciones',
+	
+	// D
+	'download_qr' => 'Descargar el Qr',
+	
+	// E
+	'editar' => 'Editar',
+	'eliminar' => 'eliminar',
+	'error_no_markers' => 'No se ha encontarado ninguna entrada con estos parámetros',
 	
 	// H
 	'help_auteur' => 'Selecciona un autor de la lista',

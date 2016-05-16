@@ -435,6 +435,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 	$(this.data).data('enclosure', enclosure);
 	typeof _data.tags != "undefined" ? tags = _data.tags.split(",") : tags = false;
 	$(this.data).data('tags', tags);
+	typeof _data.url_qr != "undefined" ? $(this.data).data('url_qr', _data.url_qr) : $(this.data).data('url_qr', '');
 	
 	// set window content
 	this.content = document.createElement("div");
