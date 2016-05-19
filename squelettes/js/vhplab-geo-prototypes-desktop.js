@@ -342,5 +342,10 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	this.open = true;
 	this.parent.open = this.id;
 	var base_fb_url = $('#navigation .user .facebook').data('base_href');
-	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
+	if (cgeomap.map.auteur!='none') {
+		$('#navigation .user .facebook').attr('href', base_fb_url + encodeURIComponent(cgeomap.url_site + '?author='+ cgeomap.map.auteur +'&nodo=' + this.id));
+	} else {
+		$('#navigation .user .facebook').attr('href', base_fb_url + encodeURIComponent(cgeomap.url_site + '?nodo=' + this.id));
+	}
 };
+		

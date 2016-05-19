@@ -175,6 +175,11 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	if (typeof _opts.url_user != "undefined") this.url_user = _opts.url_user;
 	if (typeof _opts.url_embed != "undefined") this.url_embed = _opts.url_embed;
 	
+	$("#navigation").data('visible', true);
+	$("#navigation .toggle_button").click(function(){
+		cgeomap.toggleMapNavigation();
+	});
+	
 	// initialize formulary
 	this.form.initialize(_opts);
 	
@@ -619,6 +624,24 @@ VhplabInterface.prototype.toggleLogin = function(_me) {
 			}
 			$(_me).data("tgl","on");
 		}
+	}
+};
+VhplabInterface.prototype.toggleMapNavigation = function() {
+	var visible = $("#navigation").data('visible');
+	if (visible) {
+		$("#navigation .articles").slideUp();
+		$("#navigation hgroup").fadeOut();
+		$("#navigation").data('visible', false);
+		$("#navigation .toggle_button").addClass('closed');
+		$("#navigation").animate({ top: "-=145"}, "swing", function() {
+		});
+	} else {
+		$("#navigation .articles").slideDown();
+		$("#navigation").data('visible', true);
+		$("#navigation hgroup").fadeIn();
+		$("#navigation .toggle_button").removeClass('closed');
+		$("#navigation").animate({ top: "+=145"}, "swing", function() {
+		});
 	}
 };
 VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {

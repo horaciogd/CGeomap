@@ -19,9 +19,11 @@
 -------------------- */
 
 #navigation .wrapper { border: 1px solid #fff; background: rgba(255,255,255, 0.9); padding: 16px; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5); }
-#navigation .logo { margin: -160px -160px auto auto; }
+#navigation .logo { position: absolute; top: -160px; right: 0; }
 
-#navigation .articles { margin-bottom: 2em; }
+#navigation .info { display: block; width: 34px; height: 34px; position: absolute; top: 4px; right: 4px; background: url('../images/icons/cgeomap-btn-info-video-@2x.png') no-repeat; background-size: 34px 34px;  }
+
+#navigation .articles { margin: 2em auto; }
 #navigation .articles .pagination { position: absolute; width: 348px; top: 0; }
 #navigation .articles .pagination .btn { float: right; margin-left: 0.4em; }
 #navigation .articles li { margin: 0.8em 0 0 0.8em; }
@@ -42,6 +44,13 @@
 .user .buttons .facebook:hover, .user .buttons .facebook:active { background-position: -210px -60px; }
 .user .buttons .login { background-position: 0px 0; }
 .user .buttons .login:hover, .user .buttons .login:active { background-position: 0px -60px; }
+
+/* Toggle Button */
+#navigation .toggle_wrapper { position: absolute; bottom: -64px; width: 100%; }
+#navigation .toggle_button { display: block; margin: 0 auto; width: 54px; height: 54px; background-image: url('../images/icons/cgeomap-arrow-buttons-@2x.png'); background-size: 128px 123px; background-repeat: no-repeat; cursor: pointer; background-position: -71px -66px; }
+#navigation .toggle_button:hover { background-position: -71px -3px; }
+#navigation .toggle_wrapper .closed { background-position: -3px -3px; }
+#navigation .toggle_wrapper .closed:hover { background-position: -3px -66px; }
 
 
 /* --------------------
