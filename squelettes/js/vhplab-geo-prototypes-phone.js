@@ -241,6 +241,8 @@ VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
 	}
 };
 VhplabMap.prototype.reloadMarkers = function(_callback) {
+	this.closeOpenMarker();
+	this.hideMarkers();
 	this.markerList = new Array();
 	this.hidden = new Array();
 	this.markers = {};
