@@ -22,7 +22,9 @@ function formulaires_delete_traiter_dist($id_article='new', $retour='', $ajaxloa
 	include_spip('action/editer_article');
 	include_spip('inc/autoriser');
 	$article = _request('article');
+	$id_auteur = $GLOBALS['visiteur_session']['id_auteur'];
 	include_spip('inc/autoriser');
+	
 	if (!autoriser('modifier', 'article', $article)) {
 		$id_article = false;
 		$result = sql_select('*', 'spip_auteurs_liens', 'id_objet='.intval($article).' AND objet='.sql_quote("article"));
