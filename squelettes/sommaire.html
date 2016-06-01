@@ -3,4 +3,6 @@
 (#REM) Avoid spip admin buttons
 ][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][
 (#REM) get a different inclure depending on device 
-][(#SET{index,inclure/sommaire-[(#SESSION|device)]})]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#ENV{author}}{login=#ENV{login}} />
+][(#SET{index,inclure/sommaire-[(#SESSION|device)]})][
+(#REM) get author from parameter or session
+][(#ENV{author}|?{[(#SET{auteur,[(#ENV{author})]})],[(#SET{auteur,[(#SESSION{id_auteur})]})]})]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}}{login=#ENV{login}} />
