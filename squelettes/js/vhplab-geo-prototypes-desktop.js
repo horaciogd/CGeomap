@@ -254,13 +254,27 @@ VhplabMarker.prototype.appendContent = function() {
 			/* internal link */
 			$('.content li a', this).each(function(u){
 				var url = $(this).attr('href');
-				var base = url.substr(0, cgeomap.url_site.length + 14);
-				if (base==cgeomap.url_site+"spip.php?nodo="){
-					var id = url.split("=");
+				var base = url.substr(0, cgeomap.url_site.length);
+				if (base==cgeomap.url_site) {
+					var author = '';
+					var nodo = '';
+					var data = url.slice(cgeomap.url_site.length);
+					var clean_data = data.split('?');
+					var parameters = clean_data[1].split('&');
+					for (var i = 0; i < parameters.length; i++) {
+						var p = parameters[i].split('=');
+						if (p[0]=='author') author = p[1];
+						if (p[0]=='nodo') nodo = p[1];
+					}
+					$(this).attr('target','_self');
 					$(this).click(function(){
-						var marker = $(cgeomap.map.markers).data('marker_'+id[1]);
-						marker.click();
-						return false;
+						var marker = $(cgeomap.map.markers).data('marker_'+nodo);
+						if (typeof marker != "undefined") {
+							marker.click();
+							return false;
+						} else {
+							return true;
+						}
 					});
 				}
 			});
