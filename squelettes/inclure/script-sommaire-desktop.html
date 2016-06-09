@@ -28,7 +28,12 @@
 		<script type="text/javascript">
 		//<![CDATA[
 		var cgeomap;
-		$(document).ready(function() {
+		$(document).ready(function() {[
+			(#SET{open,1})
+			]<BOUCLE_open_article(ARTICLES){id_auteur=#ENV{author}}{titre_mot=open}>[
+			(#SET{open,#ID_ARTICLE})
+			]</BOUCLE_open_article>[
+			(#ENV{nodo}|oui)[(#SET{open,#ENV{nodo}})]]
 			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-desktop.js'}|url_absolue)]", function(data) {[(#ENV{login}|=={false}|oui)
 				alert('<:cgeomap:mensaje_error_login:>');]
 				cgeomap = new VhplabInterface();
@@ -46,7 +51,7 @@
 						zoom: (#CONFIG{vhplab/default_zoom})][,
 						latitude: (#CONFIG{vhplab/default_latitude})][,
 						longitude: (#CONFIG{vhplab/default_longitude})][,
-						open: (#ENV{nodo}|?{#ENV{nodo},1})],
+						open: (#GET{open})]
 					}
 				});
 			});
