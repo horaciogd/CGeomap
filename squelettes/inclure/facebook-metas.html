@@ -1,15 +1,15 @@
 		<!-- Facebook Share Metas --><B_unique_url><BOUCLE_unique_url(ARTICLES){id_article=#ENV{nodo}}{0,1}>[
 		<meta property="og:title" content="(#TITRE|supprimer_numero|attribut_html)[ - (#SOUSTITRE|supprimer_numero|attribut_html)]" />][
-		<meta property="og:description" content="(#INTRODUCTION|couper{150}|attribut_html)" />]
+		<meta property="og:description" content="(#TEXTE|extraire_module_sumary|couper{150}|attribut_html)" />]
 		<meta property="og:type" content="website" />[
 		<meta property="og:site_name" content="(#NOM_SITE_SPIP|attribut_html)" />][
-		<meta property="og:url" content="(#URL_SITE_SPIP|url_absolue)/spip.php?[author=(#ENV{author})&]nodo=#ENV{nodo}"/>]<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,5}>[
+		<meta property="og:url" content="(#URL_SITE_SPIP|url_absolue)/spip.php?[author=(#ENV{author})&]nodo=#ENV{nodo}"/>]<BOUCLE_qr(DOCUMENTS){id_article}{extension==png}{descriptif==qr}{0,1}{doublons}></BOUCLE_qr><B_image><BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,5}{doublons}>[
 		<meta property="og:image" content="(#URL_DOCUMENT|url_absolue)" />][
 		<meta property="og:image:type" content="image/(#EXTENSION)" />][
 		<meta property="og:image:width" content="(#LARGEUR)" />][
-		<meta property="og:image:height" content="(#HAUTEUR)" />]</BOUCLE_image><BOUCLE_mp3(DOCUMENTS){id_article}{extension=mp3}>[
+		<meta property="og:image:height" content="(#HAUTEUR)" />]</BOUCLE_image></B_image><B_mp3><!--<BOUCLE_mp3(DOCUMENTS){id_article}{extension=mp3}>[
 		<meta property="og:audio" content="(#URL_DOCUMENT|url_absolue)" />]
-    	<meta property="og:audio:type" content="audio/vnd.facebook.bridge"></BOUCLE_mp3></BOUCLE_unique_url></B_unique_url>[
+    	<meta property="og:audio:type" content="audio/vnd.facebook.bridge"></BOUCLE_mp3>--></B_mp3></BOUCLE_unique_url></B_unique_url>[
 		<meta property="og:title" content="(#NOM_SITE_SPIP|supprimer_numero|textebrut|texte_script)" />][
 		<meta property="og:description" content="(#DESCRIPTIF_SITE_SPIP|textebrut|texte_script)" />]
 		<meta property="og:type" content="website" />[

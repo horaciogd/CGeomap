@@ -154,6 +154,36 @@ function extraire_module($baliza, $b=true){
 		return $baliza;
 	}
 }
+function extraire_module_sumary($baliza){
+	if (strpos($baliza,'</block>')) {
+		$baliza = str_replace("<br class='autobr' />", "", $baliza);
+		$block_list = explode('</block>', $baliza);
+		$return = "";
+		for ($i=0; $i<count($block_list)-1; $i++) {
+			$block = get_block($block_list[$i]);
+			// $return .= '('.$i.') '.$block['class'];
+			$modules = get_modules($block['content']);
+			// $return .= ' - num modules:'.count($modules).' ';
+			$n_audio = 0;
+			$n_image = 0;
+			$n_text = 0;
+			$n_link = 0;
+			$t = "\t\t\t\t\t\t";
+			for ($u=0; $u<count($modules); $u++) {
+				// $return .= $modules[$u]['class'].' ';
+				switch ($modules[$u]['class']) {
+					case "text":
+						$return .= "<p>".$modules[$u]['content']."</p>\n";
+						$n_text++;
+						break;
+				}
+			}
+		}
+		return $return;
+	} else {
+		return $baliza;
+	}
+}
 function get_audio_form_module($text, $name, $t, $n_audio) {
 	$audio = explode(' ', $text);
 	$titre = explode('/', $audio[0]);
