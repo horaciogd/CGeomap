@@ -22,6 +22,17 @@
 		var cgeomap;
 		$(document).ready(function() {
 			document.addEventListener("touchstart", function() {},false);
+			<B_images>
+			var images = new Array();
+			var texts = new Array();
+			<BOUCLE_images(DOCUMENTS){mode=image}>[(#CREDITS|=={intro}|oui)[
+			images.push("(#URL_DOCUMENT|url_absolue)");
+			texts.push("#DESCRIPTIF");]]</BOUCLE_images>
+			var n = Math.floor((Math.random() * images.length));
+			$("#loading").css("background-image", "url("+images[n]+")");
+			</B_images>
+			$("#loading").css("background-size", "110%");
+			$('#loading hgroup').fadeIn();
 			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-phone.js'}|url_absolue)]", function(data) {
 				cgeomap = new VhplabInterface();
 				cgeomap.initialize({[
