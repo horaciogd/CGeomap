@@ -22,13 +22,13 @@ fieldset { border: none; }
    Loading
 -------------------- */
 
-#loading {  background: rgb(255,255,255);  }
-#loading hgroup { color: #767576; text-align: center; }
-#loading hgroup h1 { margin: 0 1em; font-weight: 300; margin-top: 20%; font-size: 1.8em; line-height: 1.2em; }
-#loading hgroup h2 { margin: 0 2.6em; font-size: 1em; font-weight: 200; line-height: 0.9em; }
-#loading hgroup a:hover, #loading hgroup a:active { background-color: transparent; }
-#loading hgroup .loading { margin: 1em auto; text-align: center; display: block;width: 50px; height: 50px; background-image: url('../images/icons/cgeomap-map-buttons-@2x.png'); background-size: 200px 200px; background-repeat: no-repeat; position: relative; }
-#loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 5px; left: 5px; }
+#loading {
+	background: #fff; 
+	background-size: auto auto;
+	background-repeat: no-repeat;
+	background-position: center center; }
+#loading hgroup { display: none; color: #767576; text-align: center; }
+#loading hgroup h1 { margin: 0 1em; font-weight: 300; font-size: 1.8em; line-height: 1.2em; }
 
 
 /* --------------------

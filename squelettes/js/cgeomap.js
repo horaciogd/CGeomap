@@ -49,7 +49,7 @@ VhplabInterface.prototype.bindNavigationListActions = function() {
 		return false;
 	});
 	/* loading */
-	$('#loading').fadeOut();
+	$('#loading').delay(1000).fadeOut("slow");
 };
 VhplabInterface.prototype.bindToggleContent = function() {
 	var self = this;

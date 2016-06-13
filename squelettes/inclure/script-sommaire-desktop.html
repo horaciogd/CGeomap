@@ -28,7 +28,17 @@
 		<script type="text/javascript">
 		//<![CDATA[
 		var cgeomap;
-		$(document).ready(function() {[
+		$(document).ready(function() {
+			<B_images>
+			var images = new Array();
+			var texts = new Array();
+			<BOUCLE_images(DOCUMENTS){mode=image}>[(#CREDITS|=={intro}|oui)[
+			images.push("(#URL_DOCUMENT|url_absolue)");
+			texts.push("#DESCRIPTIF");]]</BOUCLE_images>
+			var n = Math.floor((Math.random() * images.length));
+			$("#loading").css("background-image", "url("+images[n]+")");</B_images>
+			$("#loading").css("background-size", "110%");
+			$('#loading hgroup').fadeIn();[
 			(#SET{open,1})
 			]<BOUCLE_open_article(ARTICLES){id_auteur=#ENV{author}}{titre_mot=open}>[
 			(#SET{open,#ID_ARTICLE})
