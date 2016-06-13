@@ -62,12 +62,19 @@ VhplabInterface.prototype.createNavigationList = function() {
 	var html = '\n';
 	var num = 0;
 	var pagination = 0;
+	var hidden = new Array();
 	for (var i=0; i<this.map.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.markerList[i]);
-		pagination = (num - num%6)/6;
-		html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('lesauteurs'));
-		num ++;
+		// hide hidden (qr+proximity) markers if user is not the author
+		if (($("#user .data").data("auteur")!=cgeomap.map.auteur)&&(($(marker.data).data('visibility')=='qr')||($(marker.data).data('visibility')=='proximity'))) {
+			hidden.push(parseInt(marker.id));
+		} else {
+			pagination = (num - num%6)/6;
+			html +=	this.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('lesauteurs'));
+			num ++;
+		}
 	}
+	this.map.hidden = hidden;
 	$('#navigation .menu .list').empty();
 	$('#navigation .menu .list').append(html);
 	$('#navigation .menu .list').data('pagination', 0);

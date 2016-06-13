@@ -44,9 +44,9 @@ VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
 	}
 };
 VhplabMap.prototype.bindActions = function() {
-	cgeomap.createNavigationList();
-	cgeomap.bindNavigationListActions();
 	cgeomap.loadArticleTemplate(function(){
+		cgeomap.createNavigationList();
+		cgeomap.bindNavigationListActions();
 		cgeomap.map.openMarker();
 	});
 };

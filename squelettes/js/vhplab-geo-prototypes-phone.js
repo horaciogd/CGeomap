@@ -86,7 +86,8 @@ VhplabMap.prototype.bindActions = function() {
 		cgeomap.reload();
 		return false;
 	});
-	$('#loading').fadeOut();
+	/* loading */
+	$('#loading').delay(1000).fadeOut("slow");
 	cgeomap.map.openMarker(true);
 };
 VhplabMap.prototype.clickListener = function(_e) {
