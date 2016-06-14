@@ -447,8 +447,8 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 	this.bindPopupActions(this.content);
 	this.infoWindow.setContent(this.content);
 	
-	// append article & open Popup
-	this.openInfoWindow();
+	// append article & open Popup 
+	// open popup was repeated both in click and loadwindow this.openInfoWindow();
 	
 	// store is already loadded
 	this.loadded = true;
@@ -477,6 +477,7 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	typeof _data.titre != "undefined" ? $(this.data).data('titre', _data.titre) : $(this.data).data('titre', "");
 	typeof _data.lesauteurs != "undefined" ? $(this.data).data('lesauteurs', _data.lesauteurs) : $(this.data).data('lesauteurs', "");
 	typeof _data.soustitre != "undefined" ? $(this.data).data('soustitre', _data.soustitre) : $(this.data).data('soustitre', "");
+	typeof _data.visibility != "undefined" ? $(this.data).data('visibility', _data.visibility) : $(this.data).data('visibility', "default");
 	this.parent = _parent;
 	
 	this.marker.setLatLng([this.lat, this.lng]);
@@ -506,6 +507,7 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	}
 	
 	var self = this;
+	// get URL via alert(this.json);
 	$.getJSON(this.json, function(data) {
 		$.each(data[0].marker, function(i, marker){
 			self.loadWindowData(marker);
