@@ -28,6 +28,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	
 	// E
 	'editar' => 'Editar',
+	'explorer' => 'Explorer',
 	'eliminar' => 'eliminar',
 	'error_no_markers' => 'No se ha encontarado ninguna entrada con estos parámetros',
 	

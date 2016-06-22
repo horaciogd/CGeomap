@@ -2,8 +2,9 @@
    Loading
 -------------------- */
 
-#loading hgroup h1 { margin-top: 20%;  }
-#loading hgroup h2 { margin: 0 2.6em; font-size: 1em; font-weight: 200; line-height: 0.9em; }
+#loading { background-size: 1100px 688px; background-position: center; }
+#loading hgroup h1 { margin-top: 26%;  font-weight: 400; font-size: 2em; }
+#loading hgroup h2 { margin: 0 2.6em; font-size: 1.6em; font-weight: 200; line-height: 1.6em; }
 #loading hgroup a:hover, #loading hgroup a:active { background-color: transparent; }
 #loading hgroup .loading { margin: 1em auto; text-align: center; display: block; width: 50px; height: 50px; background-image: url('../images/icons/cgeomap-map-buttons-@2x.png'); background-size: 200px 200px; background-repeat: no-repeat; position: relative; }
 #loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 5px; left: 5px; }

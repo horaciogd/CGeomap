@@ -31,7 +31,7 @@
 			var n = Math.floor((Math.random() * images.length));
 			$("#loading").css("background-image", "url("+images[n]+")");
 			</B_images>
-			$("#loading").css("background-size", "110%");
+			if ($(window).width()>1100) $("#loading").css("background-size", "100% auto");
 			$('#loading hgroup').fadeIn();
 			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-phone.js'}|url_absolue)]", function(data) {
 				cgeomap = new VhplabInterface();
