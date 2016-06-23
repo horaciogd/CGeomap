@@ -29,6 +29,15 @@ VhplabInterface.prototype.addToVisibleNodes= function(_nodo, _open) {
 	this.createNavigationList({visible: true});
 	this.bindNavigationListActions();
 	if (_open) $("#article_"+ _nodo +" header").trigger( "click" );
+	$("#article_"+ _nodo +" header h2").animate({
+    	color: "#e7302a" // #1afff7
+    }, 5000, function() {
+    	$("#article_"+ _nodo +" header h2").animate({
+    		color: "#fff"
+    	}, 5000);
+  	});
+	var sound = $('#article_'+ _nodo +' header').data('sound');
+	if (typeof sound!="undefined") cgeomap.play(sound, $('#article_'+ _nodo +' .player'));
 };
 VhplabInterface.prototype.bindModulesActions = function(_context) {
 	$(_context +" .modules_list header").hover(function() {
@@ -315,6 +324,14 @@ VhplabInterface.prototype.toggleContent = function() {
 			$('footer .location_button').removeClass('location_button');
 		});
 		$("#content").data('visible', true);
+	}
+};
+VhplabInterface.prototype.orientationchange = function() {
+	if (window.orientation<90) {
+		$('#loading').fadeOut("fast");
+		cgeomap.addToVisibleNodes($('#loading').data('result'), true);
+		//$('#loading').delay(600).fadeOut("slow");
+		window.removeEventListener("orientationchange");
 	}
 };
 

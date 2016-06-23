@@ -65,19 +65,26 @@ VhplabMap.prototype.bindActions = function() {
 	var width = parseInt(cgeomap.windowWidth);
 	if (width>674) width = 674;
 	$("#navigation .bkmrk").click(function(){
-		cordova.plugins.barcodeScanner.scan(
-			function (result) {
-				var s = "Result: " + result.text + "<br/>" +
-				"Format: " + result.format + "<br/>" +
-				"Cancelled: " + result.cancelled;
-				setTimeout(function() {	
-					cgeomap.addToVisibleNodes(result.text.substr(cgeomap.url_site.length+14), true);
-				}, 40);
-			}, 
-			function (error) {
-				alert("Scanning failed: " + error);
-			}
-		);
+		$('#loading hgroup').hide();
+		$('#loading').fadeIn("fast", function() {
+			$(this).delay(600).queue(function () {
+				cordova.plugins.barcodeScanner.scan(
+					function (result) {
+						var s = "Result: " + result.text + "<br/>" +
+						"Format: " + result.format + "<br/>" +
+						"Cancelled: " + result.cancelled;
+						$('#loading').data('result', result.text.substr(cgeomap.url_site.length+14));
+						//cgeomap.addToVisibleNodes(result.text.substr(cgeomap.url_site.length+14), true);
+						//$('#loading').fadeout("fast");
+						//$('#loading hgroup').show();
+					}, 
+					function (error) {
+						alert("Scanning failed: " + error);
+					}
+				);
+				$(this).dequeue();
+			});
+		});
 	});
 	$("#reload").click(function(){
 		cgeomap.reload();
@@ -429,7 +436,7 @@ VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
 	// alert('distance: '+ this.distance);
 };
 VhplabMarker.prototype.checkAutoplay = function() {
-	if ((this.distance<=15)&&(this.autoplay)){
+	if ((this.distance<=10)&&(this.autoplay)){
 		$("#article_"+ this.id +" header").trigger("click");
 		this.autoplay = false;
 		return true;

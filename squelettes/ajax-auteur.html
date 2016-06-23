@@ -7,7 +7,7 @@
 					][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][<!-- login -->
 					(#LOGIN_PUBLIC{#URL_PAGE{sommaire}})
 					<!-- login -->][<!-- ajax loadded user -->(#SESSION{id_auteur}|oui)
-					<div class='login data' data-session="ok"[(#SESSION{statut}|=={0minirezo}|oui) data-admin="ok"]>
+					<div class='login data' data-auteur="[(#SESSION{id_auteur})]" data-session="ok"[(#SESSION{statut}|=={0minirezo}|oui) data-admin="ok"]>
 						<span>[(#SESSION{id_auteur}|?{#SESSION{nom}})]</span>
 						<a class="btn" name="logout" id="logout" href="[(#URL_LOGOUT{#URL_PAGE{sommaire}})]"><:cgeomap:submit_logout:></a>
 					</div><!-- login -->
