@@ -1,0 +1,12 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+			<div class="wrapper">
+				<ul>
+					<BOUCLE_auteurs(AUTEURS)>
+						<li data-id="#ID_AUTEUR"><h2>#NOM</h2></li>
+					</BOUCLE_auteurs>
+				</ul>
+			</div>

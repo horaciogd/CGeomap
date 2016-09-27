@@ -155,6 +155,23 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	// Store width
 	this.windowWidth = parseInt($(window).width());
 	
+	// check author
+	if ((typeof _opts.map_opts.auteur!="undefined")&&(_opts.map_opts.auteur!="none")) {
+		cgeomap.continueInitialize(_opts);
+	} else {
+		$("#select").load(this.url_site+'spip.php?page=ajax-select', function() {
+			$("#select").slideDown('fast', function(){
+				$("#select li").click(function(){
+					if (typeof _opts.map_opts != "undefined") _opts.map_opts.auteur = $(this).data('id');
+					$("#select").fadeOut('fast', function(){
+						cgeomap.continueInitialize(_opts);
+					});
+				});
+			});
+		});
+	}
+};
+VhplabInterface.prototype.continueInitialize = function(_opts) {
 	// Map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
 	// load custom map prototypes

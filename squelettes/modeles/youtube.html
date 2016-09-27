@@ -1,0 +1,11 @@
+[(#REM)Modele pour <youtube|video=XXX>][(#REM)
+1st set w and h
+][(#SET{w,[(#ENV{width}|?{[(#ENV{width})],330})]})][(#SET{h,[(#GET{w}|div{[(#ENV{w})]})]})][(#SET{h,[(#GET{h}|mult{[(#ENV{h})]})]})][(#REM)
+video addres
+]https://www.youtube.com/embed/[(#ENV{video})][(#REM)
+width and height adapted to screen
+][ (#GET{w})][ (#GET{h})][(#REM)
+original width and height
+][ (#ENV{w})][ (#ENV{h})][(#REM)
+2nd set w and h for the thumbnail
+][(#SET{w,[(#ENV{width}|?{[(#ENV{width}|mult{2})],660})]})][(#SET{h,[(#ENV{height}|?{[(#ENV{height}|mult{2})],240})]})]<BOUCLE_tous(DOCUMENTS types_documents){id_document=#ID}{tout}>[(#HAUTEUR|<={#GET{h}}|?{#SET{h,#HAUTEUR},''})][(#LARGEUR|<={#GET{w}}|?{#SET{w,#LARGEUR},''})][(#ID_VIGNETTE|!={0}|?{[ (#LOGO_DOCUMENT|image_reduire{#GET{w},0}|extraire_attribut{src})],[ (#FICHIER|image_reduire{#GET{w},0}|image_recadre{#GET{w},#GET{h},'center center'}|extraire_attribut{src}|url_absolue)]})][(#ID_VIGNETTE|!={0}|?{[ (#LOGO_DOCUMENT|image_reduire{#GET{w},0}|extraire_attribut{width})],[ (#FICHIER|image_reduire{#GET{w},0}|image_recadre{#GET{w},#GET{h},'center center'}|extraire_attribut{width})]})][(#ID_VIGNETTE|!={0}|?{[ (#LOGO_DOCUMENT|image_reduire{#GET{w},0}|extraire_attribut{height})],[ (#FICHIER|image_reduire{#GET{w},0}|image_recadre{#GET{w},#GET{h},'center center'}|extraire_attribut{height})]})]</BOUCLE_tous>

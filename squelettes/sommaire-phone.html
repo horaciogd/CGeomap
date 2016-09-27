@@ -1,0 +1,6 @@
+[(#REM) 24h cache
+][(#CACHE{0})][
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][
+(#REM) get a different inclure depending on device 
+][(#SET{index,inclure/sommaire-phone})][(#ENV{author}|?{[(#SET{auteur,[(#ENV{author})]})],[(#SET{auteur,[(#SESSION{id_auteur})]})]})]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}} />

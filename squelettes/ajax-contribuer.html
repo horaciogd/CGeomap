@@ -27,7 +27,7 @@
 								</div>
 							</div><!-- wrap_subtitle -->
 							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{par num titre}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
-							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/spip.php?nodo=">
+							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/">
 							<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
 						</hgroup>
 					</header>
@@ -62,19 +62,19 @@
 					<ul class="wrap_cartography">
 						<li class="cartography">
 							<label for="latitude"><:vhplab:latitude_label:></label>
-							<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="" size="15" />
+							<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="" size="12" />
 						</li>
 						<li class="cartography">
 							<label for="longitude"><:vhplab:longitude_label:></label>
-							<input type="text" class="longitude form-control " name="longitude" tabindex="5" value="" size="15" />
+							<input type="text" class="longitude form-control " name="longitude" tabindex="5" value="" size="12" />
 						</li>
 						<li class="cartography">
 							<label for="zoom"><:vhplab:zoom_label:></label>
-							<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="" size="5" />
+							<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="" size="4" />
 						</li>
 						<li class="geocode">
 							<label for="address"><:vhplab:address_label:></label>
-							<input type="text" class="address form-control" name="address" tabindex="7" value="" size="45" />
+							<input type="text" class="address form-control" name="address" tabindex="7" value="" size="40" />
 						</li>
 					</ul><!-- wrap_cartography -->
 					<input type='hidden' class="id_article" name="id_article" value='oui' />

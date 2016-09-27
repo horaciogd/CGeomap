@@ -278,7 +278,16 @@ VhplabMarker.prototype.appendContent = function() {
 					});
 				}
 			});
-		});	
+		});
+		$("#article .modules_list .vimeo").fancybox({
+			'width'				: $("#article .modules_list .vimeo").data('width'),
+			'height'			: $("#article .modules_list .vimeo").data('height'),
+        	'autoScale'     	: false,
+        	'transitionIn'		: 'none',
+			'transitionOut'		: 'none',
+			'type'				: 'iframe'
+		});
+	
 	}
 };
 VhplabMarker.prototype.bindPopupActions = function(_content) {

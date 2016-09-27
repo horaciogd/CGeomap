@@ -50,6 +50,26 @@ VhplabInterface.prototype.bindNavigationListActions = function() {
 	});
 	/* loading */
 	$('#loading').delay(1000).fadeOut("slow");
+	/* phone preview */
+	if ((cgeomap.map.auteur)&&(cgeomap.session)) {
+		var url = this.url_site + 'spip.php?page=ajax-phone-iframe';
+		$('#navigation .preview').on('click', function(){
+			$.fancybox({
+				'wrapCSS'			: 'fancybox-transparent',
+    	   		href: url,
+    	    	type: 'ajax',
+				beforeShow : function() {
+					$("#navigation .preview").addClass('preview_active');
+    	    	},
+				beforeClose : function() {
+					$("#navigation .preview").removeClass('preview_active');
+    	    	}
+			});
+			return false;
+		});
+	} else {
+		$('#navigation .preview').remove();
+	}
 };
 VhplabInterface.prototype.bindToggleContent = function() {
 	var self = this;

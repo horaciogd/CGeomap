@@ -1,0 +1,37 @@
+#HTTP_HEADER{"Cache-Control: no-store, no-cache, must-revalidate"}
+#HTTP_HEADER{"Pragma: no-cache"}
+				
+				[<!-- formulaire constructor -->
+				<div class='constructor formulario'>
+					(#ENV{editable})
+					<form id='nuevo_constructor' method='post' action='#ENV{action}'>
+					#ACTION_FORMULAIRE{#ENV{action}}
+						<fieldset>
+							<ul>
+								<li>
+									<label for="nom"><:cgeomap:nom:></label>
+									<input type='text' class='form-control' name='nom' id='nom' value="[(#ENV**{nom})]" size='40' required='required' autofocus='autofocus' autocapitalize="off" autocorrect="off" />
+								</li>
+								<li>
+									<label for="email"><:cgeomap:email:></label>
+									<input type='text' class='form-control' name='email' id='email' value="[(#ENV**{email})]" size='40' required='required' autocapitalize="off" autocorrect="off" />
+								</li>
+								<li>
+									<label for="login"><:cgeomap:login:></label>
+									<input type='text' class='form-control' name='login' id='login' value="[(#ENV**{login})]" size='40' required='required' autocapitalize="off" autocorrect="off" />
+								</li>
+								<li>
+									<label for="pass"><:cgeomap:pass:></label>
+									<input type='password' class='form-control' name='pass' id='pass' value="[(#ENV**{pass})]" size='40' required='required' autocapitalize="off" autocorrect="off" />
+								</li>
+								
+								<li class="submit">
+									<input class="btn" type="submit" name="constructor" id="constructor" value="<:cgeomap:submit:>" />
+									<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/spip.php?">
+									<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
+									<input type="hidden" name="image" class="image" value="#URL_SITE_SPIP/squelettes/images/cgeomap_explorer_banner_1100x591.jpg">
+								</li>
+							</ul>
+						</fieldset>
+					</form>
+				</div>]

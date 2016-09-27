@@ -65,31 +65,87 @@ VhplabMap.prototype.bindActions = function() {
 	var width = parseInt(cgeomap.windowWidth);
 	if (width>674) width = 674;
 	$("#navigation .bkmrk").click(function(){
-		$('#loading hgroup').hide();
-		$('#loading').fadeIn("fast", function() {
-			$(this).delay(600).queue(function () {
+		$('section').hide();
+		$('footer').hide();
+		$('nav').hide();
+		
+		//$('#loading hgroup').hide();
+		//$('#loading').fadeIn("fast", function() {
+			//$(this).delay(600).queue(function () {
+			
 				cordova.plugins.barcodeScanner.scan(
 					function (result) {
+						/*
 						var s = "Result: " + result.text + "<br/>" +
 						"Format: " + result.format + "<br/>" +
 						"Cancelled: " + result.cancelled;
-						$('#loading').data('result', result.text.substr(cgeomap.url_site.length+14));
-						//cgeomap.addToVisibleNodes(result.text.substr(cgeomap.url_site.length+14), true);
-						//$('#loading').fadeout("fast");
-						//$('#loading hgroup').show();
+						*/
+						//setTimeout(function() {	
+							var str = result.text.split('spip.php?author=');
+							if (str.length==2) {
+								var data = str[1].split('&nodo=');
+								if (data.length==2) {
+									if ( cgeomap.auteur == data[0]) {
+									
+										$('#navigation').data('result', data[1]);
+										
+										// add to visible nodes when orientation change!
+										//cgeomap.addToVisibleNodes(data[1], true);
+										
+										/*
+										$('section').show();
+										$('footer').show();
+										$('nav').show();
+										*/
+										
+									} else {
+										alert('Este QR corresponde a otra ruta! cgeomap.auteur: '+ cgeomap.auteur +'data[0]: '+  data[0]);
+										/*
+										$('section').show();
+										$('footer').show();
+										$('nav').show();
+										*/
+									}
+								} else {
+									alert('URL: '+ result.text +', data length: '+ data.length);
+									/*
+									$('section').show();
+									$('footer').show();
+									$('nav').show();
+									*/
+								}
+							} else {
+								alert('URL: '+ result.text +', str length: '+ str.length);
+								/*
+								$('section').show();
+								$('footer').show();
+								$('nav').show();
+								*/
+						
+							}
+						//}, 40);
 					}, 
 					function (error) {
 						alert("Scanning failed: " + error);
+						
+						$('section').show();
+						$('footer').show();
+						$('nav').show();
+		
 					}
 				);
-				$(this).dequeue();
-			});
-		});
+				
+				//$(this).dequeue();
+			//});
+		//});
 	});
 	$("#reload").click(function(){
 		cgeomap.reload();
 	});
-	$('#loading').fadeOut();
+	/* loading */
+	$('#loading').delay(1000).fadeOut("slow", function(){
+		$('#loading').remove();
+	});
 	cgeomap.map.openMarker(true);
 };
 VhplabMap.prototype.clickListener = function(_e) {
@@ -427,6 +483,7 @@ VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
 		this.autoplay = true;
 	} else if ((this.distance<=100)&&(this.vibrate)){
 		if ($(this.data).data('visibility')=='proximity') {
+			//alert('proximity');
 			cgeomap.addToVisibleNodes(this.id, false);
 			$(this.data).data('visibility','default');
 		}

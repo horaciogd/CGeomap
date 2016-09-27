@@ -127,6 +127,7 @@ function extraire_module($baliza, $b=true){
 				// $return .= $modules[$u]['class'].' ';
 				switch ($modules[$u]['class']) {
 					case "video":
+						$modules_content .= get_video_module($modules[$u]['content'], $modules[$u]['name'], $t."\t");
 						break;
 					case "audio":
 						$modules_content .= get_audio_module($modules[$u]['content'], $modules[$u]['name'], $t."\t");
@@ -210,6 +211,20 @@ function get_audio_form_module($text, $name, $t, $n_audio) {
 	$return .= $t."\t\t</div>\n";
 	$return .= $t."\t</div>\n";
 	$return .= $t."</li><!-- audio module -->\n";
+	return $return; 				
+}
+function get_video_module($text, $name, $t) {
+	$video = explode(' ', $text);
+	$titre = explode('/', $video[0]);
+	$return = "\n";
+	$return .= $t."<li class=\"video module\">\n";
+	$return .= $t."\t<header>\n";
+	$return .= $t."\t\t<h5>".$name."</h5>\n";
+	$return .= $t."\t</header>\n";
+	$return .= $t."\t<div class=\"content\">\n";
+	$return .= $t."\t\t<a rel=\"vimeo\" class=\"vimeo\" title=\"".$name."\" href=\"".$video[0]."\" data-width=\"".intval($video[3])."\" data-height=\"".intval($video[4])."\" data-w=\"".intval($video[1])."\" data-h=\"".intval($video[2])."\"><span></span><img src=\"".$video[5]."\" width=\"".intval($video[6]/2)."\" height=\"".intval($video[7]/2)."\"></a>\n";
+	$return .= $t."\t</div>\n";
+	$return .= $t."</li><!-- video module -->\n";
 	return $return; 				
 }
 function get_audio_module($text, $name, $t) {

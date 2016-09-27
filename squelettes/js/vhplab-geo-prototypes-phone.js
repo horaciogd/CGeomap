@@ -398,6 +398,10 @@ VhplabMarker.prototype.appendContent = function() {
 	$('#article_'+ this.id +' .wrap_article').empty();
 	$('#article_'+ this.id +' .wrap_article').append($(this.data).data('texte'));	
 	$('#article_'+ this.id +' .wrap_article a.fancybox').fancybox();
+	$('#article_'+ this.id +' .wrap_article .vimeo').each(function(i){
+		$(this).empty();
+		$(this).append("<iframe src='"+ $(this).attr("href") +"' width='"+ $(this).data('w') +"' height='"+ $(this).data('h') +"' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>");
+	});
 };
 VhplabMarker.prototype.getData = function(_callback) {
 	if (this.loadded) {

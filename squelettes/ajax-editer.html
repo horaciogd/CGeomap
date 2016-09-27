@@ -30,7 +30,7 @@
 								</div>
 							</div><!-- wrap_subtitle -->
 							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{par num titre}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
-							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/spip.php?nodo=">
+							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/">
 							<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
 						</hgroup>
 					</header>
@@ -67,19 +67,19 @@
 					<ul class="wrap_cartography"><BOUCLE_gis(VHPLAB_GIS){id_article=#GET{article}}>[(#SET{latitude,#LATITUDE})][(#SET{longitude,#LONGITUDE})][(#SET{zoom,#ZOOM})][(#SET{address,#ADDRESS})]</BOUCLE_gis>
 						<li class="cartography">
 							<label for="latitude"><:vhplab:latitude_label:></label>
-							<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="[(#GET{latitude})]" data-new="[(#GET{latitude})]" size="15" />
+							<input type="text" class="latitude form-control" name="latitude" tabindex="4" value="[(#GET{latitude})]" data-new="[(#GET{latitude})]" size="12" />
 						</li>
 						<li class="cartography">
 							<label for="longitude"><:vhplab:longitude_label:></label>
-							<input type="text" class="longitude form-control" name="longitude" tabindex="5" value="[(#GET{longitude})]" size="15" />
+							<input type="text" class="longitude form-control" name="longitude" tabindex="5" value="[(#GET{longitude})]" size="12" />
 						</li>
 						<li class="cartography">
 							<label for="zoom"><:vhplab:zoom_label:></label>
-							<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="[(#GET{zoom})]" size="5" />
+							<input type="text" class="zoom form-control" name="zoom" tabindex="6" value="[(#GET{zoom})]" size="4" />
 						</li>
 						<li class="geocode">
 							<label for="address"><:vhplab:address_label:></label>
-							<input type="text" class="address form-control" name="address" tabindex="7" value="[(#GET{address})]" size="45" />
+							<input type="text" class="address form-control" name="address" tabindex="7" value="[(#GET{address})]" size="40" />
 						</li>
 					</ul><!-- wrap_cartography -->
 					[<input type='hidden' class="id_article" name="id_article" value='(#ID_ARTICLE)' />]
