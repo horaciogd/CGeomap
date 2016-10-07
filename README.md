@@ -24,6 +24,12 @@ How to
 
 **2)** Copy *mes_fonctions.php* file and *squelettes*, *jQuery-File-Upload*, *phpqrcode* and *plugins* folders in the root of the content manager.
 
+**2)** In order to use https edit spip's .htaccess adding the following
+
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://YOUR_DOMAIN/$1 [R,L]
+
 
 Notes
 ------
