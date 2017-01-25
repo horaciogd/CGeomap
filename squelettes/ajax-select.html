@@ -2,7 +2,7 @@
 ][(#CACHE{24*3600})][
 
 (#REM) Avoid spip admin buttons
-][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
 			<div class="wrapper">
 				<ul>
 					<BOUCLE_auteurs(AUTEURS)>

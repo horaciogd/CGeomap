@@ -14,49 +14,61 @@
 // Vhplab Map
 //***********
 VhplabMap.prototype.addMarkers = function(_data, _callback) {
-	var n = this.offset;
-	var self = this;
+	console.log('/* phone prototypes */ cgeomap.map.addMarkers();');
+	// Empty none layer
+	this.mapLayer.reset();
+	// Count markers
 	var count = $(_data.markers).length - 1;
-	var path = _data.link;
-	// Loop through each marker data element
-	$.each(_data.markers, function(i, marker) {
-		n++;
-		self.addMarker(path, marker);
-		if(i==count) {
-			if(navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-					// geolocation success
-					self.updateMap(position.coords.latitude, position.coords.longitude);
-					self.map.panTo([position.coords.latitude, position.coords.longitude]);
-					var loadded = self.markerList.length;
-					self.bindActions();
-					if (_callback) _callback();
-					
-				}, function() {
-					// geolocation error
-					var center = self.map.getCenter();
-					self.updateDistances(center.lat, center.lng);
-      				var loadded = self.markerList.length;
-					self.bindActions();
-					if (_callback) _callback();
-   				}, {
- 					enableHighAccuracy: true, 
-					maximumAge : 20000, 
-					timeout : 17000
-				}); 
-				self.locationWatch = navigator.geolocation.watchPosition(function(position) {
-					// geolocation success
-					self.updateMap(position.coords.latitude, position.coords.longitude);
-				}, function(err) { 
-					// geolocation error
-				}, {
- 					enableHighAccuracy: true, 
-					maximumAge : 20000, 
-					timeout : 17000
-				});	
+	console.log('Total Markers = '+ $(_data.markers).length);
+	// If _data has markers
+	if ($(_data.markers).length>=1) {
+		// Loop through each marker data element
+		$.each(_data.markers, function(i, marker) {
+			console.log('Looping through each marker: i = '+ i +', count = '+ count);
+			cgeomap.map.createMarker(_data.link, marker, i, cgeomap.map.mapLayer);
+			// Finish when all markers are looped
+			if(i==count) {
+				if(navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {
+						// geolocation success
+						cgeomap.map.updateMap(position.coords.latitude, position.coords.longitude);
+						cgeomap.map.map.panTo([position.coords.latitude, position.coords.longitude]);
+						var loadded = cgeomap.map.mapLayer.markerList.length;
+						cgeomap.map.bindActions();
+						if (_callback) _callback();
+					}, function() {
+						// geolocation error
+						var center = cgeomap.map.map.getCenter();
+						cgeomap.map.updateDistances(center.lat, center.lng);
+      					var loadded = cgeomap.map.mapLayer.markerList.length;
+						cgeomap.map.bindActions();
+						if (_callback) _callback();
+   					}, {
+ 						enableHighAccuracy: true, 
+						maximumAge : 20000, 
+						timeout : 17000
+					}); 
+					cgeomap.map.locationWatch = navigator.geolocation.watchPosition(function(position) {
+						// geolocation success
+						cgeomap.map.updateMap(position.coords.latitude, position.coords.longitude);
+					}, function(err) { 
+						// geolocation error
+					}, {
+ 						enableHighAccuracy: true, 
+						maximumAge : 20000, 
+						timeout : 17000
+					});	
+				}
+				console.log('markerList: '+ cgeomap.map.mapLayer.markerList.toString());
+				console.log('layer.length: '+ cgeomap.map.mapLayer.layer.getLayers().length);
+				// Callback to bind actiosn after loading and creating markers
+				if (_callback) _callback();
 			}
-		}
-	});
+		});
+	} else {
+		// Callback to bind actiosn after loading and creating markers
+		if (_callback) _callback();
+	}
 };
 VhplabMap.prototype.bindActions = function() {
 	cgeomap.createNavigationList();
@@ -90,7 +102,7 @@ VhplabMap.prototype.bindActions = function() {
 										$('#navigation').data('result', data[1]);
 										
 										// add to visible nodes when orientation change!
-										//cgeomap.addToVisibleNodes(data[1], true);
+										cgeomap.addToVisibleNodes(data[1], true);
 										
 										/*
 										$('section').show();
@@ -100,33 +112,33 @@ VhplabMap.prototype.bindActions = function() {
 										
 									} else {
 										alert('Este QR corresponde a otra ruta! cgeomap.auteur: '+ cgeomap.auteur +'data[0]: '+  data[0]);
-										/*
+										
 										$('section').show();
 										$('footer').show();
 										$('nav').show();
-										*/
+										
 									}
 								} else {
-									alert('URL: '+ result.text +', data length: '+ data.length);
-									/*
+									// alert('URL: '+ result.text +', data length: '+ data.length);
+									
 									$('section').show();
 									$('footer').show();
 									$('nav').show();
-									*/
+									
 								}
 							} else {
-								alert('URL: '+ result.text +', str length: '+ str.length);
-								/*
+								// alert('URL: '+ result.text +', str length: '+ str.length);
+								
 								$('section').show();
 								$('footer').show();
 								$('nav').show();
-								*/
+								
 						
 							}
 						//}, 40);
 					}, 
 					function (error) {
-						alert("Scanning failed: " + error);
+						// alert("Scanning failed: " + error);
 						
 						$('section').show();
 						$('footer').show();
@@ -251,8 +263,8 @@ VhplabMap.prototype.openMarker = function(_autoplay) {
 			if (_autoplay) marker.autoplay = true;
 			marker.click();
 		} else {
-			var first = $(this.markers).data('marker_'+this.markerList[0]);
-			this.open = this.markerList[0];
+			var first = $(this.markers).data('marker_'+this.mapLayer.markerList[0]);
+			this.open = this.mapLayer.markerList[0];
 			if (_autoplay) first.autoplay = true;
 			first.click();
 		}
@@ -264,7 +276,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 	});
 	//alert('sort list');
 	var self = this;
-	this.markerList.sort(function(a,b) {
+	this.mapLayer.markerList.sort(function(a,b) {
 		var ma = $(self.markers).data('marker_'+a);
 		var mb = $(self.markers).data('marker_'+b);
 		if (ma.distance < mb.distance) return -1;
@@ -272,8 +284,8 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		return 0;
 	});
 	if (cgeomap.player.playing=='') {
-		for (var i=0; i<this.markerList.length; i++) {
-			var marker = $(this.markers).data('marker_'+ this.markerList[i]);
+		for (var i=0; i<this.mapLayer.markerList.length; i++) {
+			var marker = $(this.markers).data('marker_'+ this.mapLayer.markerList[i]);
 			if (marker.checkAutoplay()) break;
 		}
 	}
@@ -294,7 +306,7 @@ VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
 		marker.initialize(_path, _data, this);
 		marker.json += '&var_mode=recalcul';
 		$(this.markers).data('marker_'+marker.id, marker);
-		this.markerList.push(marker.id);
+		this.mapLayer.markerList.push(marker.id);
 	} else {
 		marker.updateData(_path, _data, this);
 	}
@@ -302,7 +314,7 @@ VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
 VhplabMap.prototype.reloadMarkers = function(_callback) {
 	this.closeOpenMarker();
 	this.hideMarkers();
-	this.markerList = new Array();
+	this.mapLayer.markerList = new Array();
 	this.hidden = new Array();
 	this.markers = {};
 	this.totalMarkers = 0;

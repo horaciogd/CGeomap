@@ -1,4 +1,4 @@
 #CACHE{24*3600}
-[(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]<!-- ajax loadded aportaciones --><BOUCLE_user_navigation(ARTICLES){id_rubrique=1}{id_auteur}>
+[(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]<!-- ajax loadded aportaciones --><BOUCLE_user_navigation(ARTICLES){id_rubrique=1}{id_auteur}{par date}{inverse}>
 							<li data-id="#ID_ARTICLE"><BOUCLE_navigation_icon(MOTS){type=marker_icon}{id_article}{0,1}>[(#LOGO_MOT|image_reduire{20})]</BOUCLE_navigation_icon><h3>#COMPTEUR_BOUCLE. <a class="article" name="article_#ID_ARTICLE">#TITRE</a></h3><span class="btn delete"><:cgeomap:eliminar:></span></BOUCLE_navigation_category></li>
 						</BOUCLE_user_navigation><!-- -->

@@ -6,7 +6,7 @@
 		<meta name="keywords" content="[(#TEXTE||attribut_html)]"></BOUCLE_keywords>[
 		<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
 		<meta name="robots" content="index, follow" />
-		<INCLURE{fond=inclure/head-phone} />
+		<INCLURE{fond=inclure/head-phone}{color=#ENV{color}} />
 		
 		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}} />
 		
@@ -17,7 +17,7 @@
 		
 		<INCLURE{fond=inclure/section-select-phone} />
 		
-		<INCLURE{fond=inclure/section-loading-phone} />
+		<INCLURE{fond=inclure/section-loading-phone}{color=#ENV{color}} />
 		
 		<INCLURE{fond=inclure/nav-navigation-phone} />
 		

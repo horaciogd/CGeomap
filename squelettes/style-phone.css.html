@@ -1,0 +1,161 @@
+[(#REM) 24h cache
+][(#CACHE{10*24*3600})][
+
+(#REM) Javascript header
+][(#HTTP_HEADER{Content-Type: text/css})][
+
+(#REM) Color Variables
+][(#ENV{color}|?{[(#SET{bright-e,#e4322b})],[(#SET{bright-e,#e4322b})]})
+][(#ENV{color}|?{[(#SET{bright-bg,#91fad5})],[(#SET{bright-bg,#e5e6e7})]})
+][(#ENV{color}|?{[(#SET{medium-bg,#47b9bc})],[(#SET{medium-bg,#7a7b7c})]})
+][(#ENV{color}|?{[(#SET{dark-bg,#00a7aa})],[(#SET{dark-bg,#656364})]})
+][(#ENV{color}|?{[(#SET{grey-dark,#1d1d1b})],[(#SET{grey-dark,#1d1d1b})]})
+][(#ENV{color}|?{[(#SET{grey-medium,#7a7b7c})],[(#SET{grey-medium,#7a7b7c})]})
+][(#ENV{color}|?{[(#SET{grey-bright,#e5e6e7})],[(#SET{grey-bright,#e5e6e7})]})
+][(#ENV{color}|?{[(#SET{white,#fff})],[(#SET{white,#fff})]})
+][(#ENV{color}|?{[(#SET{acid-e,#27a7de})],[(#SET{acid-e,#d7df23})]})
+][(#ENV{color}|?{[(#SET{alpha-white,rgba(255,255,255, 0.9)})],[(#SET{alpha-white,rgba(255,255,255, 0.9)})]})
+][(#ENV{color}|?{[(#SET{alpha-shadow,rgba(60, 60, 60, 0.5)})],[(#SET{alpha-shadow,rgba(60, 60, 60, 0.5)})]})
+][(#ENV{color}|?{[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})],[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})]})
+][(#ENV{color}|?{[(#SET{alpha-bright-bg,rgba(145, 250, 213, 0.4)})],[(#SET{alpha-bright-bg,rgba(229, 230, 231, 0.4)})]})
+][(#ENV{color}|?{[(#SET{alpha-medium-bg,rgba(71, 185, 188, 0.4)})],[(#SET{alpha-medium-bg,rgba(122, 123, 124, 0.4)})]})
+][(#ENV{color}|?{[(#SET{transparent-medium-bg,rgba(71, 185, 188, 0)})],[(#SET{transparent-medium-bg,rgba(122, 123, 124, 0)})]})
+][(#ENV{color}|?{[(#SET{full-medium-bg,rgba(71, 185, 188, 1)})],[(#SET{full-medium-bg,rgba(122, 123, 124, 0)})]})
+][(#ENV{color}|?{[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})],[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})]})]
+/* --------------------
+   Loading
+-------------------- */
+
+#loading { }
+#loading hgroup { height: 270px; background-position: center center; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-logo-phone-@2x.png})],[(#CHEMIN{images/grey/pix/cgeomap-logo-phone-@2x.png})]})]'); background-size: 270px 270px; background-repeat: no-repeat; }
+#loading hgroup h1 { font-weight: 600; font-size: 38px; padding-top: 154px; line-height: 38px; margin: 0; }
+#loading hgroup h2 { margin: 0; padding-top: 6px; font-size: 22px; font-weight: 200; line-height: 22px; }
+#loading hgroup h3 { color: [(#GET{white})]; font-size: 14px; font-weight: 200; line-height: 14px; }
+#loading hgroup a:hover, #loading hgroup a:active { background-color: transparent; }
+#loading hgroup .loading { margin: 70px auto 10px auto; text-align: center; display: block; width: 60px; height: 60px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-loading-bg-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-loading-bg-@2x.png})]})]'); background-size: 60px 60px; background-repeat: no-repeat; position: relative; }
+#loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 10px; left: 10px; }
+
+
+ /* --------------------
+   Select
+-------------------- */
+
+#select .wrapper { top: 8px; bottom: 8px; right: 8px; left: 8px; padding: 6px; background: [(#GET{white})]; 
+-webkit-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ -moz-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ }
+#select ul li { display: block; }
+#select ul li h2 { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 0; background: [(#GET{bright-bg})];/*#18c2b1*/ font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: [(#GET{white})]; white-space: nowrap; }
+#select ul li:last-child h2 { margin: 0; }
+#select ul li h2:active { background: [(#GET{bright-bg})];/*#0bdec9*/ }
+.welcome { padding: 6px 8px; background-color: [(#GET{medium-bg})]; }
+.welcome span { display: block; cursor: pointer;  background-color: [(#GET{dark-bg})]; color: [(#GET{white})]; padding: 3px 6px; border-radius: 10px; font-size: 12px; line-height: 14px; border: transparent solid 1px; white-space: nowrap; }
+.welcome span:hover { background-color: [(#GET{bright-bg})]; }
+
+
+/* --------------------
+   Navigation
+-------------------- */
+
+#navigation hgroup { height: 60px; position: relative; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-top-banner-@2x.png})],[(#CHEMIN{images/grey/pix/cgeomap-top-banner-@2x.png})]})]');  background-repeat: no-repeat; background-size: 2048px 92px; background-position: bottom center; }
+#navigation hgroup h1 { font-size: 20px; line-height: 32px; vertical-align: middle; }
+
+#navigation .logo { display: inline; padding: 0 6px; line-height: 32px; vertical-align: middle; }
+
+/* bookmark & GPS */
+#bookmark { background-color: [(#GET{dark-bg})];/*#00adab*/ text-align: center; padding: 4px;}
+#bookmark .wrapper {  display: none; position: relative; background-color: [(#GET{white})]; border-radius: 7px; padding: 7px 7px 3px 7px; margin: 7px; }
+#bookmark img { margin-top: 14px; }
+#bookmark p:last-child { text-align: right; }
+#bookmark .hide { display: inline-block; width: 32px; height: 32px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-bookmark-up-rollover-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-bookmark-up-rollover-@2x.png})]})]'); background-size: 64px 32px; background-repeat: no-repeat; background-position: 0px 0px; }
+#bookmark .hide:active { background-position: -32px 0px; }
+#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 14px; line-height: 14px; background-color: [(#GET{dark-bg})];/*#00adab*/ color: [(#GET{alpha-white})];/*rgba(255,255,255,0.8)*/ padding: 4px 6px; margin-top: 8px; border-radius: 9px; border: [(#GET{medium-bg})]/*#18c2b1*/ solid 1px; }
+#navigation hgroup .bkmrk { -webkit-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ -moz-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ }
+#navigation hgroup .bkmrk:hover { border-color: [(#GET{bright-bg})];/*#0bdec9*/  background-color: [(#GET{bright-bg})];/*#0bdec9*/ color: [(#GET{white})]; /*rgba(255,255,255,1)*/ }
+#navigation hgroup .gps span { background-color: [(#GET{alpha-white})];/*rgba(255,255,255,0.8)*/ width: 8px; height: 8px; margin: 0 6px 2px 0; display: inline-block; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
+
+
+/* --------------------
+   Content
+-------------------- */
+
+#content .wrapper { padding: 40px 6px 6px 0; background: [(#GET{alpha-white})]; }
+#content .listado_nodos .header { display: block; }
+#content .listado_nodos .header hgroup { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 6px; background: [(#GET{medium-bg})];/*#18c2b1*/ }
+#content .listado_nodos .header hgroup:hover, #content .listado_nodos .header hgroup:active { background: [(#GET{bright-bg})];/*#0bdec9*/ }
+#content .listado_nodos .header h2 { font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: [(#GET{white})]; white-space: nowrap; }
+#content .listado_nodos .header h2.new { color: [(#GET{acid-e})]; /*#1afff7*/ }
+#content .listado_nodos .header .info { display: blocK; position: absolute; top: 6px; right: 6px; height: 40px; padding-left: 40px;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
+background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%, [(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%, [(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/), color-stop(30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/), color-stop(100%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* W3C */
+}
+#content .listado_nodos .header hgroup:hover .info, #content .listado_nodos .header hgroup:active .info { 
+/* para hacer este hover haría falta un color extra o cambiar algo*/
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
+background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%, [(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%, [(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/), color-stop(30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/), color-stop(100%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* W3C */
+}
+#content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: [(#GET{white})]; }
+#content .listado_nodos .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-bird-@2x.png})]})]'); background-size: 26px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }
+#content .listado_nodos .header .player_icon { width: 20px; line-height: 40px; height: 40px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-player-icon-transparent-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-player-icon-transparent-@2x.png})]})]'); background-size: 44px 44px; background-repeat: no-repeat; background-position: -12px 0; }
+#content .listado_nodos .header .player { width: 20px; line-height: 40px; height: 40px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-player-header-transparent-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-player-header-transparent-@2x.png})]})]'); background-size: 90px 90px; background-repeat: no-repeat; background-position: -14px -1px; }
+#content .listado_nodos .header .player:active { background-position: -14px -47px; }
+#content .listado_nodos .header .active { background-position: -57px -1px !important; }
+#content .listado_nodos .header .active:active { background-position: -57px -47px !important; }
+#content .listado_nodos .header .loading { position: absolute; left: 0; right: 0; height: 40px; margin: 0 auto; background: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/loader.gif})],[(#CHEMIN{images/grey/icons/loader.gif})]})]') no-repeat; background-size: 40px 40px; background-repeat: no-repeat; background-position: center center; opacity: 0.4; filter: alpha(opacity=40); }
+#content .listado_nodos .wrap_article { font-size: 0.9em; margin: 6px 0 6px 6px; text-align: justify; }
+#content .listado_nodos .wrap_article .lien, #content .listado_nodos .wrap_article .fancybox { display: block; text-align: center; margin: 8px auto; }
+#content .listado_nodos .wrap_article img { display: inline;  }
+
+#content .wrapper .bottom { margin: 4px 0  0 6px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-bottom-banner-@2x.png})],[(#CHEMIN{images/grey/pix/cgeomap-bottom-banner-@2x.png})]})]');  background-repeat: no-repeat; background-size: 2048px 1024px; background-position: top center; }
+
+/* Modules  */
+.audiovisuel header.block { display: none; }
+.module { margin-bottom: 4px; position: relative; }
+.module header, .module .content { padding: 6px 8px; background-color: [(#GET{bright-bg})]; }
+.module header { text-align: center; }
+.module .content .wrap { font-size: 0.8em; }
+.module img { border-radius: 4px; }
+.media .content { text-align: center; }
+
+/* Player  */
+.vhplab_player { text-align: center; }
+.vhplab_player ul { height: 42px; line-height: 42px; width: 96%; border-radius: 6px; font-size: 1em; }
+.vhplab_player ul li { height: 38px; background-size: 448px 92px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-player-buttons-@4x.png})],[(#CHEMIN{images/grey/icons/cgeomap-player-buttons-@4x.png})]})]'); }
+.vhplab_player ul li.play { top: 2px; left: 6px; width: 36px; background-position: -48px 0px; }
+.vhplab_player ul li.pause { top: 2px; left: 6px; width: 36px; background-position: -182px 0px; }
+.vhplab_player ul li.volume { top: 2px; right: 6px; width: 36px; background-position: -298px 0px; }
+.vhplab_player ul li.position { top: 0; left: 40px; }
+.vhplab_player ul li.duration { top: 0; right: 46px; }
+.vhplab_player ul li.progress_bar { top: 6px; left: 84px; right: 88px; height: 30px; border-radius: 6px; }
+.vhplab_player ul li.progress_bar span { background-color: #27a9e1; border-radius: 4px; height: 30px; }
+
+
+/* --------------------
+   Footer
+-------------------- */
+
+footer .wrapper { position: relative; height: 0px; }
+footer span { display: block; position: absolute; top: 4px; margin: 0; width: 50px; height: 50px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-map-buttons-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-map-buttons-@2x.png})]})]'); background-size: 200px 200px; background-repeat: no-repeat; }
+footer .location { z-index: 9; position: absolute; top: -58px; right: 8px;}
+footer .toggle { z-index: 10; position: absolute; top: -58px; left: 8px; }
+footer .location_button { right: 0;  background-position: 0px -50px; }
+footer .location_button:hover { background-position: 0px 0px; }
+footer .location_button:active { background-position: -50px 0px; }
+footer .location_reload { right: 0; background-position: -100px -50px; }
+footer .location_reload:hover { background-position: -100px 0px; }
+footer .location_reload:active { background-position: -150px 0px; }
+footer .loading { right: 0; top: 0; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/loader.gif})],[(#CHEMIN{images/grey/icons/loader.gif})]})]') !important; background-size: 40px 40px !important; background-position: 5px 5px; }
+footer .toggle_list { left: 0; background-position: -100px -150px; }
+footer .toggle_list:hover { background-position: -100px -100px; }
+footer .toggle_list:active { background-position: -150px -100px; }
+footer .toggle_map { left: 0; background-position: 0px -150px; }
+footer .toggle_map:hover { background-position: 0px -100px; }
+footer .toggle_map:active { background-position: -50px -100px; }

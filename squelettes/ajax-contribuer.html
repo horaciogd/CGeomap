@@ -2,7 +2,7 @@
 ][(#CACHE{24*3600})][
 
 (#REM) Avoid spip admin buttons
-][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
 				<div class="module_button" id="add_text_module" data-type="text"></div>
 				<div class="module_button" id="add_link_module" data-type="link"></div>
 				<div class="module_button" id="add_media_module" data-type="media"></div>

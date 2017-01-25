@@ -3,7 +3,7 @@
 			<div class="wrapper">
 				<hgroup>
 					<h1>[(#LOGO_SITE_SPIP|?{[<a[ href="(#URL_SITE_SPIP|url_absolue)"]><img class="logo"[ alt="(#NOM_SITE_SPIP)"] src="(#LOGO_SITE_SPIP|image_reduire{440,0}|extraire_attribut{src}|url_absolue)"[ width="(#LOGO_SITE_SPIP|image_reduire{440,0}|extraire_attribut{width}|div{2})"][ height="(#LOGO_SITE_SPIP|image_reduire{440,0}|extraire_attribut{height}|div{2})"] /></a>],[(#NOM_SITE_SPIP)]})]</h1>
-					<a class="info" href="http://info.cgeomap.eu/"></a>
+					<BOUCLE_info(BREVES){titre=Infolink}{0,1}>[<a class="info" href="(#URL_SITE)"></a>]</BOUCLE_info>
 					<a class="preview"></a>
 				</hgroup><BOUCLE_get_map(RUBRIQUES){titre=mapa}>[(#SET{mapa,#ID_RUBRIQUE})]</BOUCLE_get_map>
 				<div class="menu articles">

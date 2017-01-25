@@ -2,7 +2,7 @@
 ][(#CACHE{24*3600})][
 
 (#REM) Avoid spip admin buttons
-][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
 				<BOUCLE_autoriser(AUTEURS){id_article}>[(#SESSION{id_auteur}|=={#ID_AUTEUR}|?{#SET{autorise,oui}, #SET{autorise,non}})]</BOUCLE_autoriser>
 				[(#SESSION{statut}|=={0minirezo}|?{#SET{autorise,oui}})][(#GET{autorise}|=={oui}|?{[(#SET{article,#ID_ARTICLE})],[(#SET{article,0})]})]
 				<BOUCLE_article(ARTICLES){id_article=#GET{article}}>

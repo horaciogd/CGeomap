@@ -1,0 +1,11 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) ajax header
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][
+
+(#REM) Access-Control
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]<BOUCLE_article(ARTICLES){id_article}>
+			<div class="wrapper">[
+				(#TEXTE|extraire_module{[(#ENV{link}|?{#ENV{link},true})]})
+			</div>]</BOUCLE_article>

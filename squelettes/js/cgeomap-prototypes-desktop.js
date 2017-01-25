@@ -210,25 +210,8 @@ VhplabInterface.prototype.initialize = function(_opts) {
   	
 	this.initContent();
 };
-VhplabInterface.prototype.ready = function(_opts) {
- 	this.map = new VhplabMap();
-	this.map.initialize({
-		url: this.url_site,
-		markers: (typeof _opts.markers != "undefined") ? _opts.markers : '',
-		auteur: (typeof _opts.auteur != "undefined") ? _opts.auteur : 'none',
-		limit: (typeof _opts.limit != "undefined") ? _opts.limit : 300,
-		id: (typeof _opts.id != "undefined") ? _opts.id : 'cgeomap',
-		zoom: (typeof _opts.zoom != "undefined") ? _opts.zoom : 10,
-		latitude: (typeof _opts.latitude != "undefined") ? _opts.latitude : 0.0,
-		longitude: (typeof _opts.longitude != "undefined") ? _opts.longitude : 0.0,
-		open: (typeof _opts.open != "undefined") ? _opts.open : false,
-		latitudeTag: (typeof _opts.latitudeTag != "undefined") ? _opts.latitudeTag : '.cartography .latitude',
-		longitudeTag: (typeof _opts.longitudeTag != "undefined") ? _opts.longitudeTag : '.cartography .longitude',
-		zoomTag: (typeof _opts.zoomTag != "undefined") ? _opts.zoomTag : '.cartography .zoom'
-	});
-	this.bindToggleContent();
-};
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
+	console.log('cgeomap.loadArticleTemplate()');
 	// get URL via alert(this.url_article);
  	$("#content .wrapper").load(this.url_article, function() {
  		/* Article */
@@ -236,7 +219,7 @@ VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
  		$('#article .header .editer').hide();
  		$('#article .header .editer').click(function() { 
  			$(this).fadeOut('fast', function(){
- 				cgeomap.toggleUtilities($(this).attr('name'));
+ 				cgeomap.toggleUtilities($(this).attr('name'), true);
  			});
  		});
 		$("#article .scroll").mCustomScrollbar({
@@ -256,45 +239,55 @@ VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 	});
 };
 VhplabInterface.prototype.loadContributions = function() {
+	console.log('loadContributions();'); 
 	$("#content").data('selected','contributions');
 	$("#user .utilities .contributions").addClass('on');
 	var url = $("#user .utilities .contributions").data("href");
 	var loaded = $("#contributions").data('loaded');
 	var recalcul = $("#formulaire").data('recalcul');
+	
 	// deleted marker
 	if ((recalcul)&&(recalcul=='none')) {
+		console.log('Case A deleted marker (THIS IS HAPENING)');
 		// remove marker from marker list
-		$(cgeomap.map.markers).removeData('marker_'+$("#formulaire").data('deleted'));
-		var index = cgeomap.map.hidden.indexOf($("#formulaire").data('deleted'));
-		if (index > -1)  cgeomap.map.hidden.splice(index, 1);
-		// if marker was present in navigation list update navigation list
-		if ($("#user .data").data("auteur") == self.auteur) {
-			cgeomap.createNavigationList();
-			cgeomap.bindNavigationListActions();
+		var deleted = $("#formulaire").data('deleted');
+		$(cgeomap.map.markers).removeData('marker_'+ deleted);
+		// If contributions are not in marker list
+		if ((this.map.auteur != 'none')&&($("#user .data").data("auteur") != this.map.auteur)) {
+			console.log('Contributions are not in marker list (auteur!=editor)');
+			// we only need to erase marker from contributions (editorLayer)
+			this.map.removeFromLayer(deleted, 'editor');
+		// If contributions are in marker list
+		} else {
+			console.log('Contributions are in marker list');
+			// we need to erase marker from both contributions (editorLayer) & map (mapLayer)
+			this.map.removeFromLayer(deleted, 'editor');
+			this.map.removeFromLayer(deleted, 'map');
 		}
 		// reload conributions
-		var url_conributions = $("#user .utilities .contributions").data("href") + '&var_mode=recalcul';
 		$("#contributions ol").empty();
-		// get url via alert(url_conributions);
+		var url_conributions = $("#user .utilities .contributions").data("href") + '&var_mode=recalcul';
+		// get URL via LOG
+		console.log('Load: '+ url_conributions);	
 		$("#contributions ol").load(url_conributions, function() {
-			cgeomap.bindContributionsActions(function(_a){
-				cgeomap.map.showMarkers(_a);
-				$('#loading_content').fadeOut();
-				$("#contributions").slideDown("slow",function(){
-					$("#contributions").mCustomScrollbar({
-						scrollInertia: 150,
-						theme: "dark-thick"
-					});
+			cgeomap.bindContributionsActions();
+			$('#loading_content').fadeOut();
+			$("#formulaire").data('recalcul', false);
+			cgeomap.map.activeLayer = 'map';
+			cgeomap.map.showLayer('editor', true);
+			$("#contributions").slideDown("slow",function(){
+				$("#contributions").mCustomScrollbar({
+					scrollInertia: 150,
+					theme: "dark-thick"
 				});
 			});
-			// force markers json recalcul
-			$.getJSON(cgeomap.map.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){});
-			$("#formulaire").data('recalcul', false);
+			cgeomap.map.forceCache();
 		});
 	} else if (loaded) {
+		console.log('Case B already loaded');
 		this.map.closeOpenMarker();
-		var aportaciones = $("#contributions").data('aportaciones');
-		this.map.showMarkers(aportaciones, true);
+		cgeomap.map.showLayer('editor', true);
+		// Show contributions
 		$("#contributions").slideDown("slow",function(){
 			$("#contributions").mCustomScrollbar({
 				scrollInertia: 150,
@@ -302,18 +295,25 @@ VhplabInterface.prototype.loadContributions = function() {
 			});
 		});
 	} else {
+		console.log('Case C first time');
+		// Close marker, empty contributions & show loading
 		$('#loading_content').fadeIn();
 		this.map.closeOpenMarker();
 		$("#contributions ol").empty();
-		// contributions are not in marker list
-		if ($("#user .data").data("auteur") != this.map.auteur) {
-			cgeomap.map.hideMarkers();
+		// If contributions are not in marker list
+		if ((this.map.auteur != 'none')&&($("#user .data").data("auteur") != this.map.auteur)) {
+			console.log('Contributions are not in marker list (auteur!=editor)');
 			var markersURL = this.map.markersURL + '&id_auteur='+ $("#user .data").data("auteur") + '&offset='+ this.map.offset +'&limit='+ this.map.limit +'&callback=?';
-			// get URL via alert(markersURL);
-			this.map.loadNewMarkers(markersURL, function(){
-				// get URL via alert(url);
+			// get URL via LOG
+			console.log('markersURL'+ markersURL);
+			this.map.loadEditorMarkers(markersURL, function(){
+				// get URL via LOG
+				console.log('Load: '+ url);	
 				$("#contributions ol").load(url, function() {
 					cgeomap.bindContributionsActions(function(_a){
+						// Add markers to editor Layer if needed
+						console.log('editorLayer has '+ cgeomap.map.editorLayer.layer.getLayers().length +' Markers');
+						cgeomap.map.showLayer('editor', true);
 						$('#loading_content').fadeOut();
 						$("#contributions").slideDown("slow",function(){
 							$("#contributions").mCustomScrollbar({
@@ -326,10 +326,16 @@ VhplabInterface.prototype.loadContributions = function() {
 			});
 		// contributions are in marker list
 		} else {
-			// get URL via alert(url);
+			console.log('Contributions are in marker list');
+			// get URL via LOG
+			console.log('Load: '+ url);	
 			$("#contributions ol").load(url, function() {
-				cgeomap.bindContributionsActions(function(_a){
-					cgeomap.map.showMarkers(_a, true);
+				cgeomap.bindContributionsActions(function(){
+					// Add markers to editor Layer if needed
+					console.log('editorLayer has '+ cgeomap.map.editorLayer.layer.getLayers().length +' Markers');
+					if (cgeomap.map.editorLayer.layer.getLayers().length==0) cgeomap.map.addMarkersToEditorLayer();
+					cgeomap.map.showLayer('editor', true);
+					// Show contributions
 					$('#loading_content').fadeOut();
 					$("#contributions").slideDown("slow",function(){
 						$("#contributions").mCustomScrollbar({
@@ -342,19 +348,28 @@ VhplabInterface.prototype.loadContributions = function() {
 		}
 	}
 };
+VhplabInterface.prototype.loadContribuer = function() {
+	cgeomap.form.load();
+	$("#content").data('selected','contribuer');
+	$("#user .utilities .contribuer").addClass('on');
+};
+VhplabInterface.prototype.loadEditer = function() {
+	cgeomap.form.load($('#article .header .editer').data('href'));
+	$("#content").data('selected','editer');
+};
 VhplabInterface.prototype.loadEmbed = function() {
 	$("#content").data('selected','embed');
 	$("#user .utilities .embed").addClass('on');
 	var loaded = $("#embed").data('loaded');
 	if (loaded) {
-		alert('embed loaded');
+		//alert('embed loaded');
 		if ($("#navigation").data('visible')) cgeomap.toggleNavigation();
 		this.map.closeOpenMarker();
 		this.hideAllMarkers();
 		$("#categoryControl").fadeOut();
 		this.slideUtilities('embed', 'show');
 	} else {
-		alert('load embed');
+		// alert('load embed');
 		$('#loading_content').fadeIn();
 		$("#embed").empty();
 		$("#embed").load(this.url_embed, function() {
@@ -371,67 +386,86 @@ VhplabInterface.prototype.loadEmbed = function() {
 	
 	
 };
-VhplabInterface.prototype.loadContribuer = function() {
-	cgeomap.form.load();
-	$("#content").data('selected','contribuer');
-	$("#user .utilities .contribuer").addClass('on');
-};
-VhplabInterface.prototype.loadEditer = function() {
-	cgeomap.form.load($('#article .header .editer').data('href'));
-	$("#content").data('selected','editer');
-};
-VhplabInterface.prototype.loadMap = function(_callback) {
+VhplabInterface.prototype.loadMap = function(_force, _callback) {
+	console.log('cgeomap.loadMap();');
 	var self = this;
 	var recalcul =  $("#formulaire").data('recalcul');
-	// edited or added marker
+	
+	/* A marker was edited or added  */
 	if (recalcul) {
-		var url_conributions = $("#user .utilities .contributions").data("href") + '&var_mode=recalcul';
-		$("#contributions ol").empty();
-		if (($("#user .data").data("auteur")!= this.map.auteur)&&(this.map.hidden.length<=0)) {
-			var markersURL = this.map.markersURL + '&id_auteur='+ $("#user .data").data("auteur") + '&offset='+ this.map.offset +'&limit='+ this.map.limit +'&var_mode=recalcul&callback=?';
-			// get URL via alert(markersURL);
-			this.map.loadNewMarkers(markersURL, function(){
-				// get URL via alert(url_conributions);
-				$("#contributions ol").load(url_conributions, function() {
-					cgeomap.bindContributionsActions();
-				});
-			});
-		} else {
-			// get url via alert(url_conributions);
+		console.log('A marker was edited or added');
+		// Update both contributions (Mis Aportaciones - editorLayer) & map (Mapa - mapLayer)
+		/* we are loading the map with an open marker but setting the layer to editor */
+		this.map.reloadMarkers(recalcul, function(){
+			$("#formulaire").data('recalcul', false);
+			$("#contributions ol").empty();
+			var url_conributions = $("#user .utilities .contributions").data("href") + '&var_mode=recalcul';
+			// get URL via LOG
+			console.log('Load: '+ url_conributions);	
 			$("#contributions ol").load(url_conributions, function() {
 				cgeomap.bindContributionsActions();
 			});
-		}
-		cgeomap.map.map.removeLayer(cgeomap.map.clickableMarker);
-		var url = this.map.markersURL + '&id_article='+ recalcul +'&offset=0&limit=300&var_mode=recalcul&callback=?';
-		// get URL via alert(url);
-		this.map.reloadMarkers(url, function(){
-			$("#formulaire").data('recalcul', false);
-			// marker is not visible
-			if ($("#user .data").data("auteur") != self.auteur) {
-				var aportaciones = $("#contributions").data('aportaciones');
-				cgeomap.map.showMarkers(aportaciones);
+			$('#loading_content').fadeOut();
+		
+			// If editor layer was previously loaded rebuild it
+			if ($("#contributions").data('loaded')) {
+				cgeomap.map.rebuildLayer('editor');
+				cgeomap.map.showLayer('editor', false);
+				var marker = $(cgeomap.map.markers).data('marker_'+recalcul);
+				marker.click(_callback);
+				
+			// If editor layer was not loaded it is not posible to rebuild it
 			} else {
-				cgeomap.createNavigationList();
-				cgeomap.bindNavigationListActions();
-				cgeomap.map.showMarkersExcept(cgeomap.map.hidden);
+			
+				// If contributions are not in marker list load from json
+				if ((cgeomap.map.auteur != 'none')&&($("#user .data").data("auteur") != cgeomap.map.auteur)) {
+					console.log('Contributions are not in marker list (auteur!=editor)');
+					var markersURL = cgeomap.map.markersURL + '&id_auteur='+ $("#user .data").data("auteur") + '&offset='+ cgeomap.map.offset +'&limit='+ cgeomap.map.limit +'&var_mode=recalcul&callback=?';
+					// get URL via LOG
+					console.log('markersURL'+ markersURL);
+					cgeomap.map.loadEditorMarkers(markersURL, function(){
+						cgeomap.map.showLayer('editor', false);
+						$("#user .contributions").addClass('on');
+						var marker = $(cgeomap.map.markers).data('marker_'+recalcul);
+						marker.click(_callback);
+					});
+					
+				// If contributions are in marker list
+				} else {
+					console.log('Contributions are in marker list');
+					cgeomap.map.addMarkersToEditorLayer();
+					cgeomap.map.showLayer('editor', false);
+					$("#user .contributions").addClass('on');
+					var marker = $(cgeomap.map.markers).data('marker_'+recalcul);
+					marker.click(_callback);
+				}
 			}
-			var marker = $(cgeomap.map.markers).data('marker_'+recalcul);
-			marker.click(_callback);
+			
 		});
+		
+	/* No marker was edited or added  */
 	} else {
+		console.log('No need to recalul markers');
+		
+		var selected = $("#content").data('selected');
+		console.log('Active Layer ' + this.map.activeLayer +', previows utility was: '+ selected);
+		
 		$("#article").slideDown("slow");
-		this.map.showMarkersExcept(cgeomap.map.hidden);
-		cgeomap.map.map.removeLayer(cgeomap.map.clickableMarker);
+		if (((this.map.activeLayer!='none')&&(this.map.activeLayer!='editor'))||(_force)) this.map.showLayer('map', true);
+		
 		if (_callback) _callback();
 	}
-	$("#user .carte").addClass('on');
+	if (this.map.activeLayer=='none') {
+		$("#user .carte").addClass('on');
+	} else if (this.map.activeLayer=='editor') {
+		$("#user .contributions").addClass('on');
+	} 
 	$("#content").data('selected','carte');
 };
-VhplabInterface.prototype.loadUtilities = function(_target, _callback) {
+VhplabInterface.prototype.loadUtilities = function(_target, _force, _callback) {
 	switch (_target) {
 		case 'carte':
-			cgeomap.loadMap(_callback);
+			cgeomap.loadMap(_force, _callback);
 			break;
 		case 'contributions':
 			cgeomap.loadContributions();
@@ -456,6 +490,7 @@ VhplabInterface.prototype.loadUser = function(_callback) {
 		/* Session & Admin */
 		if ($("#user .data").data("session") == "ok") {
 			cgeomap.session = true;
+			console.log('cgeomap.session = true;');
 		} else {
 			$( "#article" ).css('top', 19);
 		}
@@ -464,10 +499,28 @@ VhplabInterface.prototype.loadUser = function(_callback) {
 		$('#user .login').hide();
 		/* Utilities  */
 		$("#user .utilities a").click(function() { 
-			cgeomap.toggleUtilities($(this).attr('name'));
+			cgeomap.toggleUtilities($(this).attr('name'), true);
 		});
 		if(_callback) _callback();
 	});
+};
+VhplabInterface.prototype.ready = function(_opts) {
+ 	this.map = new VhplabMap();
+	this.map.initialize({
+		url: this.url_site,
+		markers: (typeof _opts.markers != "undefined") ? _opts.markers : '',
+		auteur: (typeof _opts.auteur != "undefined") ? _opts.auteur : 'none',
+		limit: (typeof _opts.limit != "undefined") ? _opts.limit : 300,
+		id: (typeof _opts.id != "undefined") ? _opts.id : 'cgeomap',
+		zoom: (typeof _opts.zoom != "undefined") ? _opts.zoom : 10,
+		latitude: (typeof _opts.latitude != "undefined") ? _opts.latitude : 0.0,
+		longitude: (typeof _opts.longitude != "undefined") ? _opts.longitude : 0.0,
+		open: (typeof _opts.open != "undefined") ? _opts.open : false,
+		latitudeTag: (typeof _opts.latitudeTag != "undefined") ? _opts.latitudeTag : '.cartography .latitude',
+		longitudeTag: (typeof _opts.longitudeTag != "undefined") ? _opts.longitudeTag : '.cartography .longitude',
+		zoomTag: (typeof _opts.zoomTag != "undefined") ? _opts.zoomTag : '.cartography .zoom'
+	});
+	this.bindToggleContent();
 };
 VhplabInterface.prototype.removeRecherche = function(_me, _container) {
 	$('.value_box', '#embed .wrap_recherche').empty();
@@ -496,15 +549,21 @@ VhplabInterface.prototype.submitDelete = function(id_article) {
 					$("#formulaire").data('deleted', id_article);
 					$("#content").data('selected', 'none');
 					$("#contributions").data('loadded', 'false');
+					
 					var deleted = $(cgeomap.map.markers).data('marker_'+text[1]);
-					cgeomap.map.map.removeLayer(deleted.marker);
+					//cgeomap.map.map.removeLayer(deleted.marker);
 					$(cgeomap.map.markers).removeData('marker_'+text[1]);
-					var index = cgeomap.map.markerList.indexOf(parseInt(text[1]));
-					if (index > -1) cgeomap.map.markerList.splice(index, 1);
+					
+					console.log('submitDelete indexOf');
+					
+					cgeomap.map.removeFromLayer(parseInt(text[1]), 'editor');
+					//var index = cgeomap.map.mapMarkerList.indexOf(parseInt(text[1]));
+					//if (index > -1) cgeomap.map.mapMarkerList.splice(index, 1);
+					
 					$('#contributions').slideUp("fast", function(){
 						$("#sending_data").fadeOut("slow", function(){
 							$("#sending_data").remove();
-							cgeomap.loadUtilities('contributions');
+							cgeomap.loadUtilities('contributions', true);
 						});
 					});
 				} else {
@@ -644,7 +703,8 @@ VhplabInterface.prototype.toggleMapNavigation = function() {
 		});
 	}
 };
-VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
+VhplabInterface.prototype.toggleUtilities = function(_target, _force, _callback) {
+	console.log('toggleUtilities();');
 	var selected = $("#content").data('selected');
 	if (_target!=selected) {
 		var hide = "";
@@ -656,13 +716,28 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 				hide = "#contributions";
 				break;
 			case 'contribuer':
+				/*
+				var recalcul =  $("#formulaire").data('recalcul');
+				// if selected is contribuer & recalcul is false the editor did not save new entry
+				console.log('selected = contribuer');
+				console.log('recalcul = '+ recalcul);
+				*/
+				if (this.form.geo) this.form.toggleGeo();
 				hide = "#formulaire";
 				break;
 			case 'editer':
+				/*
+				var recalcul =  $("#formulaire").data('recalcul');
+				// if selected is editer & recalcul is false the editor did not save edited entry
+				console.log('selected = editer');
+				console.log('recalcul = '+ recalcul);
+				*/
+				if (this.form.geo) this.form.toggleGeo();
 				hide = "#formulaire";
 				break;
 			case 'embed':
 				hide = "#embed";
+				this.map.emptyLayer.reset();
 				break;
 		}
 		if ($(hide).is(":visible")) {
@@ -672,26 +747,35 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _callback) {
 					// hide selected content and show new content
 					$(hide).slideUp("fast", function(){
 						$("#user .utilities a").removeClass('on');
-						cgeomap.loadUtilities(_target, _callback);
+						cgeomap.loadUtilities(_target, _force, _callback);
 					});
 				});
 			} else {
 				// hide selected content and show new content
 				$(hide).slideUp("fast", function(){
 					$("#user .utilities a").removeClass('on');
-					cgeomap.loadUtilities(_target, _callback);
+					cgeomap.loadUtilities(_target, _force, _callback);
 				});
 			}
 		} else {
 			// show new content
-			cgeomap.loadUtilities(_target, _callback);
+			cgeomap.loadUtilities(_target, _force, _callback);
 		}
+	} else if ((_target=='carte')&&(this.map.activeLayer=='editor')) {
+		$("#user .utilities a").removeClass('on');
+		$("#user .carte").addClass('on');
+		console.log('Volver a mostrar todos');
+		this.map.showLayer('map', true);
+		if (_callback) _callback();
 	}
+	
 };
 VhplabInterface.prototype.updateEmbedMap = function(_url) {
+	console.log('updateEmbedMap();');
 	$("body").prepend('<div id="sending_data"><div></div></div>');
 	this.map.closeOpenMarker();
 	// get URL via alert(_url);
+	console.log('_url ='+ _url);
 	$.ajax({
 		type: 'GET',
 		url: _url,
@@ -703,7 +787,7 @@ VhplabInterface.prototype.updateEmbedMap = function(_url) {
 		success: function(_data, _textStatus, _jqXHR) {
 			// get _data via alert(_data.toSource());
 			if ($(_data.markers).length>=1) {
-				cgeomap.map.showMarkerJson(_data.markers);
+				cgeomap.map.showMarkerJson(_data.link, _data.markers);
 				$('.error', '#embed .wrap_iframe').empty();
 				var msg = _T.message_embed_1+' '+ $(_data.markers).length +' '+_T.message_embed_2;
 				if ($(_data.markers).length>=2) msg += 's';
@@ -785,8 +869,7 @@ VhplabInterface.prototype.urlEmbed = function(_reload) {
 	if (_reload) cgeomap.updateEmbedMap(url_markers);
 	var visible = $("#embed .wrap_iframe").data('visible');
 	if(!visible) $("#embed .wrap_iframe").slideDown();
-};
-	
+};	
 
 //***********
 // Vhplab Contribuer Formulary
@@ -978,7 +1061,7 @@ VhplabContribuerFrom.prototype.bindLinkModuleActions = function(_context) {
     		$('.value_box .remove', this).click(function(){
     			var c = $(this).parent().parent().parent().parent().parent();
     			var list = $(this).parent().parent().parent();
-    			if($('li', list).size()<=2) {
+    			if($('li', list).length<=2) {
     				$(c).data('ok',false);
 					$(".submit .btn").css('opacity','0.4');
     			}
@@ -1083,7 +1166,7 @@ VhplabContribuerFrom.prototype.check = function() {
 	/* visibility */
 	var visibility = $("#formulaire .visibility").data('ok');
 	/* modules */
-	var num_audiovisuel = $("#formulaire .audiovisuel li.module").size();
+	var num_audiovisuel = $("#formulaire .audiovisuel li.module").length;
 	var modules_audiovisuel = true;
 	$("#formulaire .audiovisuel li.module").each(function(index, module){
 		modules_audiovisuel = modules_audiovisuel && $(module).data('ok');
@@ -1100,7 +1183,10 @@ VhplabContribuerFrom.prototype.check = function() {
 VhplabContribuerFrom.prototype.checkExtension = function(_data, _class, _container) {
 	if (_class=='media') {
 		var name = _data.name.toLowerCase(); 
+		
+		console.log('checkExtension media indexOf');
 		var ext = name.substring(name.lastIndexOf(".") + 1);
+		
 		// Checking Extension
 		if (ext == "gif" || ext == "png" || ext == "jpg" || ext == "jpeg" ) {
 			$('.error', _container).empty();
@@ -1115,7 +1201,11 @@ VhplabContribuerFrom.prototype.checkExtension = function(_data, _class, _contain
 		}
 	} else if (_class=='audio') {
 		var name = _data.name.toLowerCase(); 
+		
+		
+		console.log('checkExtension audio indexOf');
 		var ext = name.substring(name.lastIndexOf(".") + 1);
+		
 		// Checking Extension
 		if (ext == "wav" || ext == "ogg" || ext == "mp3" ) {
 			$('.error', _container).empty();
@@ -1203,10 +1293,16 @@ VhplabContribuerFrom.prototype.createModule = function(_class, _text, _n, _tab, 
 	return html;
 };
 VhplabContribuerFrom.prototype.createNewModule = function(_me) {
+
+
 	var type = $(_me).data("type");
 	var n = $(_me).data('n_audiovisuel');
 	var container = "#formulaire .content .audiovisuel";
-	if ($(container +" li.module").size()<=25) {
+	
+	
+	console.log('createNewModule: '+ type +' '+ $(container +" li.module").length);
+	
+	if ($(container +" li.module").length<=25) {
 		switch(type) {
 			case 'text':
 				this.createTextModule(container, type, n);
@@ -1229,6 +1325,11 @@ VhplabContribuerFrom.prototype.createNewModule = function(_me) {
 	}
 };
 VhplabContribuerFrom.prototype.createTextModule = function(_container, _type, _n) {
+
+	console.log('_container: ' + _container);
+	console.log('createTextModule: '+ this.createModule(_type, _T.module_label_text, _n, '\t\t\t\t\t\t\t', _T.help_text));
+	
+	
 	$(_container +" .modules_list").append(this.createModule(_type, _T.module_label_text, _n, '\t\t\t\t\t\t\t', _T.help_text));
 	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createField('\t\t\t\t', '<p class="value" name="text"></p><span class="error"></span>', '\t\t\t\t\t<textarea class="form-control text" name="text" rows="6"></textarea>\n'));
 	this.bindTextModuleActions(_container +" ."+ _type +"_"+ _n);
@@ -1261,11 +1362,11 @@ VhplabContribuerFrom.prototype.editName = function(_me) {
 };
 VhplabContribuerFrom.prototype.getModulesData = function(_wrapper) {
 	var return_data = {};
-	var num = $("#formulaire "+ _wrapper +" li.module").size();
+	var num = $("#formulaire "+ _wrapper +" li.module").length;
 	var modules = true;
 	var modules_data = new Array();
 	var clean_uploads = new Array();
-	// alert("#formulaire "+ _wrapper +" li.module ||| num:"+ $("#formulaire "+ _wrapper +" li.module").size());
+	// alert("#formulaire "+ _wrapper +" li.module ||| num:"+ $("#formulaire "+ _wrapper +" li.module").length);
 	$("#formulaire "+ _wrapper +" li.module").each(function(index, module){
 		modules = modules && $(module).data('ok');
 		var get_type = $(module).attr('class');
@@ -1317,11 +1418,12 @@ VhplabContribuerFrom.prototype.initData = function() {
 	this.bindEachModuleActions('audiovisuel');
 	/* cartography */
 	$("#formulaire .wrap_cartography").data('ok',true);
-	cgeomap.map.setInitialMarker({
+	cgeomap.map.setClickableMarker({
 		latitude: $("#formulaire .wrap_cartography .latitude").val(),
 		longitude: $("#formulaire .wrap_cartography .longitude").val(),
 		zoom: $("#formulaire .wrap_cartography .zoom").val()
 	});
+	cgeomap.map.showLayer('empty', false);
 	/* callback */
 	this.check();
 };
@@ -1339,12 +1441,12 @@ VhplabContribuerFrom.prototype.load = function(_url) {
 	// new
 	if (_url) {
 		// get url via alert('url: '+ _url);
+		console.log('_url: ' + _url);
 		$("#formulaire").load(_url, function() {
 			if(cgeomap.map.open) {
 				var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
 				open.closeInfoWindow();
 			}
-			cgeomap.map.hideMarkers();
 			cgeomap.form.initData();
 			cgeomap.form.bindActions();
 			$("#formulaire").slideDown("slow",function(){
@@ -1354,12 +1456,13 @@ VhplabContribuerFrom.prototype.load = function(_url) {
 	// contribuer
 	} else {
 		// get url via alert('url: '+ this.url_form);
+		console.log('this.url_form: ' + this.url_form);
+		
 		$("#formulaire").load(this.url_form, function() {
 			if(cgeomap.map.open) {
 				var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
 				open.closeInfoWindow();
 			}
-			cgeomap.map.hideMarkers();
 			cgeomap.form.resetData();
 			cgeomap.form.bindActions();
 			$("#formulaire").slideDown("slow",function(){
@@ -1384,10 +1487,12 @@ VhplabContribuerFrom.prototype.resetData = function() {
 	$("#add_media_module").data('n_audiovisuel', 0);
 	$("#add_audio_module").data('n_audiovisuel', 0);
 	/* cartography */
-	$("#formulaire .latitude").val('');
-	$("#formulaire .longitude").val('');
-	$("#formulaire .zoom").val('');
-	$("#formulaire .wrap_cartography").data('ok',false);
+	cgeomap.map.setClickableMarker({
+		position: 'geolocation'
+	});
+	cgeomap.map.showLayer('empty', false);
+	/* callback */
+	this.check();
 };
 VhplabContribuerFrom.prototype.resizeFields = function(_me, _p1, _p2) {
 	var container = $(_me).parent().parent();
@@ -1482,7 +1587,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 		}
 		var audiovisuel = $(audiovisuel_modules).data('modules_data');
 		// no audiovisual module added
-		if ((typeof audiovisuel == "undefined")||($(audiovisuel).size() == 0)) audiovisuel = false;
+		if ((typeof audiovisuel == "undefined")||($(audiovisuel).length == 0)) audiovisuel = false;
 		var self = this;
 		// get URL via alert(this.url_json);
 		$.getJSON(this.url_json, function(data){
@@ -1521,13 +1626,16 @@ VhplabContribuerFrom.prototype.submit = function() {
 					});
 					$("#formulaire").data('recalcul', text[2]);
 					if (cgeomap.form.geo) cgeomap.form.toggleGeo();
-					cgeomap.map.map.removeLayer(cgeomap.map.clickableMarker);
-					cgeomap.toggleUtilities('carte', function(){
+					// Load map
+					cgeomap.toggleUtilities('carte', true, function(){
+						console.log('cgeomap.toggleUtilities.calback() in form.submit();');
 						$("#article").slideDown("fast");
 						$("#sending_data").fadeOut("slow", function(){
 							$("#sending_data").remove();
 						});
 					});
+					
+					
 				} else {
 					alert(response[0].message_erreur);
 					window.location.href = cgeomap.form.url_base;
@@ -1536,7 +1644,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 		});
 	} else {
 		//alert('incorrecto');
-		alert('title: '+ title +', subtitle: '+ subtitle +', visibility:'+ visibility +', audiovisuel_modules: '+ $(audiovisuel_modules).data('modules') +' '+ $(audiovisuel_modules).data('num') + ', cartography: '+cartography);
+		// alert('title: '+ title +', subtitle: '+ subtitle +', visibility:'+ visibility +', audiovisuel_modules: '+ $(audiovisuel_modules).data('modules') +' '+ $(audiovisuel_modules).data('num') + ', cartography: '+cartography);
 	}
 	return false;
 };

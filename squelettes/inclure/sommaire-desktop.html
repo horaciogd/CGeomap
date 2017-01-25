@@ -6,7 +6,7 @@
 		<meta name="keywords" content="[(#TEXTE||attribut_html)]"></BOUCLE_keywords>[
 		<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
 		<meta name="robots" content="index, follow" />
-		<INCLURE{fond=inclure/head-desktop} />
+		<INCLURE{fond=inclure/head-desktop}{color=#ENV{color}} />
 		
 		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}}{author=#ENV{author}} />
 		
@@ -14,7 +14,7 @@
 		
 	</head>
 	<body class="sommaire desktop">
-		<INCLURE{fond=inclure/section-loading-desktop} />
+		<INCLURE{fond=inclure/section-loading-desktop}{color=#ENV{color}} />
 		
 		<INCLURE{fond=inclure/nav-navigation-desktop} />
 		

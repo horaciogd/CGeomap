@@ -13,7 +13,7 @@
 	"link": "(#URL_SITE_SPIP)/",][
 	"description": "(#DESCRIPTIF_SITE_SPIP|replace{\n, })",]
 	<B_json>"markers": [
-		<BOUCLE_json(ARTICLES){id_rubrique ?}{id_secteur ?}{id_mot ?}{id_auteur ?}{recherche ?}{id_article ?}{id_groupe ?}{par num titre}{#GET{offset}, #GET{limit}}{", "}>{
+		<BOUCLE_json(ARTICLES){id_rubrique ?}{id_secteur ?}{id_mot ?}{id_auteur ?}{recherche ?}{id_article ?}{id_groupe ?}{par date}{inverse}{#GET{offset}, #GET{limit}}{", "}>{
 			<INCLURE{fond=inclure/json-article}{id_article}{enclosure=#ENV{enclosure}}/>
 		
 		}</BOUCLE_json>

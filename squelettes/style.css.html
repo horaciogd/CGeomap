@@ -1,0 +1,91 @@
+[(#REM) 24h cache
+][(#CACHE{10*24*3600})][
+
+(#REM) Javascript header
+][(#HTTP_HEADER{Content-Type: text/css})][
+
+(#REM) Color Variables
+][(#ENV{color}|?{[(#SET{bright-e,#e4322b})],[(#SET{bright-e,#e4322b})]})
+][(#ENV{color}|?{[(#SET{bright-bg,#91fad5})],[(#SET{bright-bg,#e5e6e7})]})
+][(#ENV{color}|?{[(#SET{medium-bg,#47b9bc})],[(#SET{medium-bg,#7a7b7c})]})
+][(#ENV{color}|?{[(#SET{dark-bg,#00a7aa})],[(#SET{dark-bg,#656364})]})
+][(#ENV{color}|?{[(#SET{grey-dark,#1d1d1b})],[(#SET{grey-dark,#1d1d1b})]})
+][(#ENV{color}|?{[(#SET{grey-medium,#7a7b7c})],[(#SET{grey-medium,#7a7b7c})]})
+][(#ENV{color}|?{[(#SET{grey-bright,#e5e6e7})],[(#SET{grey-bright,#e5e6e7})]})
+][(#ENV{color}|?{[(#SET{white,#fff})],[(#SET{white,#fff})]})
+][(#ENV{color}|?{[(#SET{acid-e,#27a7de})],[(#SET{acid-e,#d7df23})]})
+][(#ENV{color}|?{[(#SET{alpha-white,rgba(255,255,255, 0.9)})],[(#SET{alpha-white,rgba(255,255,255, 0.9)})]})
+][(#ENV{color}|?{[(#SET{alpha-shadow,rgba(60, 60, 60, 0.5)})],[(#SET{alpha-shadow,rgba(60, 60, 60, 0.5)})]})
+][(#ENV{color}|?{[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})],[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})]})
+][(#ENV{color}|?{[(#SET{alpha-bright-bg,rgba(145, 250, 213, 0.4)})],[(#SET{alpha-bright-bg,rgba(229, 230, 231, 0.4)})]})
+][(#ENV{color}|?{[(#SET{alpha-medium-bg,rgba(71, 185, 188, 0.4)})],[(#SET{alpha-medium-bg,rgba(122, 123, 124, 0.4)})]})
+][(#ENV{color}|?{[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})],[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})]})]
+/* --------------------
+   General
+-------------------- */
+
+* { margin:0; padding:0; border:0; outline:0; font-size:100%; color: [(#GET{grey-dark})]; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+a { text-decoration: none; }
+a:hover, a:active { background-color: [(#GET{bright-bg})]; }
+a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap a:hover, .fancybox-wrap a:active{ background-color: transparent; }
+
+fieldset, .btn, .form-control { vertical-align: middle; display: inline-block; }
+fieldset { border: none; }
+.btn { cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; -khtml-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
+
+.right { text-align: right; }
+.right img, .center img { display: inline-block; padding: 0 10px; }
+
+.hidden { display: none; }
+.new { color: [(#GET{medium-bg})]; font-style: italic; cursor: pointer; }
+
+body, #loading { background-color: [(#GET{dark-bg})]; background: -moz-linear-gradient(top, [(#GET{dark-bg})] 0%, [(#GET{medium-bg})] 40%, [(#GET{bright-bg})] 100%); background: -webkit-linear-gradient(top, [(#GET{dark-bg})] 0%,[(#GET{medium-bg})] 40%,[(#GET{bright-bg})] 100%); background: linear-gradient(to bottom, [(#GET{dark-bg})] 0%,[(#GET{medium-bg})] 40%,[(#GET{bright-bg})] 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='[(#GET{dark-bg})]', endColorstr='[(#GET{bright-bg})]',GradientType=0 ); }
+
+/* --------------------
+   Loading
+-------------------- */
+
+#loading { }
+#loading hgroup { display: none; color: [(#GET{grey-medium})]; text-align: center; }
+#loading hgroup h1 { margin: 0 1em; font-weight: 300; font-size: 1.8em; line-height: 1.2em; }
+
+
+/* --------------------
+   Navigation
+-------------------- */
+
+#navigation hgroup { text-align: center; }
+#navigation hgroup a:hover, #navigation hgroup a:active { background-color: transparent;  }
+
+
+/* --------------------
+   Content
+-------------------- */
+
+/* input */
+.form-control { background-color: [(#GET{white})]; border: 1px solid [(#GET{grey-medium})]; border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px [(#GET{alpha-soft-shadow})]; box-shadow: inset 0 1px 1px [(#GET{alpha-soft-shadow})]; -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
+.form-control:focus { border-color: [(#GET{dark-bg})]; -webkit-box-shadow: inset 0 1px 1px [(#GET{alpha-soft-shadow})], 0 0 4px [(#GET{alpha-medium-bg})]; box-shadow: inset 0 1px 1px [(#GET{alpha-soft-shadow})], 0 0 4px [(#GET{alpha-medium-bg})]; }
+
+/* Player */
+.vhplab_player ul { position: relative; display: inline-block; vertical-align: middle; background-color: [(#GET{grey-dark})]; font-weight: normal; color: [(#GET{grey-bright})]; list-style-type: none; }
+.vhplab_player ul li { position: absolute; cursor: pointer; background-color: transparent; background-repeat: no-repeat; }
+.vhplab_player ul li.position { background-image: none; }
+.vhplab_player ul li.duration { background-image: none; }
+.vhplab_player ul li.progress_bar { background-color: transparent; border: 1px solid [(#GET{grey-medium})]; background-image: none; }
+.vhplab_player ul li.progress_bar span { display: block; position: absolute; background-repeat: repeat-x; top: 0px; left: 0px; width: 0%; }
+
+/* --------------------
+   Map
+-------------------- */
+
+#cgeomap { background: [(#GET{bright-bg})]; }
+.cgeomap .leaflet-popup-content-wrapper h2 { font-size: 2.6em; }
+.cgeomap .leaflet-popup-content-wrapper h3 { }
+.cgeomap .leaflet-popup-content-wrapper p { font-size: 1.2em; margin: 1em 0; }
+.cgeomap .leaflet-popup-content-wrapper a.fancybox { display: block; margin-top: 1.2em; }
+
+
+/* --------------------
+   Footer
+-------------------- */
+

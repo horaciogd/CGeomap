@@ -51,6 +51,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	// L
 	'label_url' => 'Mapa a pantalla completa',
 	'login' => 'usuario',
+	'loading' => 'Cargando...',
 	
 	// M
 	'mapa' => 'Mapa',

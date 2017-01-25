@@ -62,7 +62,7 @@ VhplabMap.prototype.loadMarkers = function() {
 		dataType: 'jsonp',
 		success: function(_data, _textStatus, _jqXHR) {
 			// get _data via alert(_data.toSource());
-			self.addMarkers(_data);
+			self.addMarkers(_data, 'map', cgeomap.map.bindActions());
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 		}
@@ -70,6 +70,7 @@ VhplabMap.prototype.loadMarkers = function() {
 };
 VhplabMap.prototype.bindActions = function() {
 	$('#loading').fadeOut();
+	this.map.addLayer(this.mapLayer.layer);
 	this.openMarker();
 };
 

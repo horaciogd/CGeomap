@@ -17,8 +17,8 @@ function vhplab_header_prive($flux) {
 		if (function_exists('lire_config')) $key = lire_config("vhplab/api_key");
 		$flux .= '
 		<!-- Leaflet 0.7.7 -->
-		<link rel="stylesheet" href="'._DIR_PLUGIN_VHPLAB.'js/leaflet/leaflet.css" />
-		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/leaflet.js"></script>
+		<link rel="stylesheet" href="'._DIR_PLUGIN_VHPLAB.'js/leaflet/leaflet-1.0.2.css" />
+		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/leaflet-1.0.2.js"></script>
 		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/l.control.geosearch.js"></script>
 		<script type="text/javascript" src="'._DIR_PLUGIN_VHPLAB.'js/leaflet/l.geosearch.provider.openstreetmap.js"></script>
 		

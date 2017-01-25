@@ -2,7 +2,7 @@
 ][(#CACHE{1*24*3600})][
 
 (#REM) Avoid spip admin buttons
-][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})]
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
 				<form method='post' action='' enctype='multipart/form-data'>
 					<div>
 						<header>

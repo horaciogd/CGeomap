@@ -455,4 +455,12 @@ function wrapp_module($content, $type, $t) {
 	$return .= $t."</div><!-- ". $type ." -->\n";
 	return $return; 				
 }
+function latitude($baliza) {
+	$latitude = explode(",", $baliza);
+	return $latitude[0];
+}
+function longitude($baliza) {
+	$longitude = explode(",", $baliza);
+	return $longitude[1];
+}
 ?>

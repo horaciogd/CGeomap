@@ -1,4 +1,4 @@
-CGeomap for Leaflet 0.02
+CGeomap for Leaflet 0.12
 ========================
 
 

@@ -2,9 +2,10 @@
 		<section id="loading">
 			<div class="wrapper">
 				<hgroup>
-				[<h1><a href="(#URL_SITE_SPIP|url_absolue)">[(#NOM_SITE_SPIP|textebrut)[ - (#SLOGAN_SITE_SPIP|textebrut)]]</a></h1>]
-				<h2><:cgeomap:explorer:></h2>
-				<span class="loading btn">[<img src="(#CHEMIN{images/icons/loader.gif})" widt="40px" height="40px">]</span>
+				<h1>[<a href="(#URL_SITE_SPIP|url_absolue)">[(#ENV{color}|?{[(#NOM_SITE_SPIP|textebrut)[ - (#SLOGAN_SITE_SPIP|textebrut)]],&nbsp;})]</a>]</h1>
+				<h2>[(#ENV{color}|?{<:cgeomap:explorer:>, &nbsp;})]</h2>
+				<span class="loading btn">[<img src="(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-loader.gif})],[(#CHEMIN{images/grey/pix/cgeomap-loader.gif})]})" widt="40px" height="40px">]</span>
+				<h3><:cgeomap:loading:></h3>
 				</hgroup>
 			</div>
 		</section>

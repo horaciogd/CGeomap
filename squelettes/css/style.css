@@ -1,13 +1,30 @@
 /* --------------------
    General
 -------------------- */
+:root {
+  --bright-e: #e4322b;
+  --bright-bg: #91fad5;
+  --medium-bg: #47b9bc;
+  --dark-bg: #00a7aa;
+  --grey-dark: #1d1d1b;
+  --grey-medium: #7a7b7c;
+  --grey-bright: #e5e6e7;
+  --white: #fff;
+  --acid-e: #d7df23;
+  --alpha-white: rgba(255,255,255, 0.9);
+  --alpha-shadow: rgba(60, 60, 60, 0.5);
+  --alpha-soft-shadow: rgba(0, 0, 0, 0.1);
+  --alpha-bright-bg: rgba(145, 250, 213, 0.4);
+  --alpha-medium-bg: rgba(71, 185, 188, 0.4);
+  --alpha-bright-e: rgba(239, 65, 35, 0.6);
+}
 
-* { margin:0; padding:0; border:0; outline:0; font-size:100%; color: #264542; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+* { margin:0; padding:0; border:0; outline:0; font-size:100%; color: var(--grey-dark); font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
 a { text-decoration: none; }
-a:hover, a:active { background-color: #25fade; }
+a:hover, a:active { background-color: var(--bright-bg); }
 a.fancybox:hover, a.fancybox:active, a.lien:hover, a.lien:active, .fancybox-wrap a:hover, .fancybox-wrap a:active{ background-color: transparent; }
 
-fieldset, .btn, .form-control { vertical-align: middle; /*background-image: none;*/ display: inline-block; }
+fieldset, .btn, .form-control { vertical-align: middle; display: inline-block; }
 fieldset { border: none; }
 .btn { cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none; -khtml-user-select: none; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ }
 
@@ -15,19 +32,22 @@ fieldset { border: none; }
 .right img, .center img { display: inline-block; padding: 0 10px; }
 
 .hidden { display: none; }
-.new { color: #18c2b1; font-style: italic; cursor: pointer; }
+.new { color: var(--bright-bg); font-style: italic; cursor: pointer; }
 
+body, #loading {
+	background-color: var(--dark-bg);
+	background: -moz-linear-gradient(top,  var(--dark-bg) 0%, var(--medium-bg) 40%, var(--bright-bg) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  var(--dark-bg) 0%,var(--medium-bg) 40%,var(--bright-bg) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  var(--dark-bg) 0%,var(--medium-bg) 40%,var(--bright-bg) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='var(--dark-bg)', endColorstr='var(--bright-bg)',GradientType=0 ); /* IE6-9 */
+}
 
 /* --------------------
    Loading
 -------------------- */
 
-#loading {
-	background: #fff; 
-	background-size: auto auto;
-	background-repeat: no-repeat;
-	background-position: center center; }
-#loading hgroup { display: none; color: #767576; text-align: center; }
+#loading { }
+#loading hgroup { display: none; color: var(--grey-medium); text-align: center; }
 #loading hgroup h1 { margin: 0 1em; font-weight: 300; font-size: 1.8em; line-height: 1.2em; }
 
 
@@ -44,24 +64,24 @@ fieldset { border: none; }
 -------------------- */
 
 /* input */
-.form-control { background-color: #fff; border: 1px solid #ccc; border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
-.form-control:focus { border-color: #641626; -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(243, 165, 181, .6); box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(243, 165, 181, .6); }
+.form-control { background-color: var(--white); border: 1px solid var(--grey-medium); border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px var(--alpha-soft-shadow); box-shadow: inset 0 1px 1px var(--alpha-soft-shadow); -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
+.form-control:focus { border-color: var(--dark-bg); -webkit-box-shadow: inset 0 1px 1px var(--alpha-soft-shadow), 0 0 4px var(--alpha-medium-bg); box-shadow: inset 0 1px 1px var(--alpha-soft-shadow), 0 0 4px var(--alpha-medium-bg); }
 
 /* Player */
-.vhplab_player ul { position: relative; display: inline-block; vertical-align: middle; background-color: #32353B; font-weight: normal; color: #f6f9ff; list-style-type: none; }
+.vhplab_player ul { position: relative; display: inline-block; vertical-align: middle; background-color: var(--grey-dark); font-weight: normal; color: var(--grey-bright); list-style-type: none; }
 .vhplab_player ul li { position: absolute; cursor: pointer; background-color: transparent; background-repeat: no-repeat; }
 .vhplab_player ul li.position { background-image: none; }
 .vhplab_player ul li.duration { background-image: none; }
-.vhplab_player ul li.progress_bar { background-color: transparent; border: 1px solid #444343; background-image: none; }
+.vhplab_player ul li.progress_bar { background-color: transparent; border: 1px solid var(--grey-medium); background-image: none; }
 .vhplab_player ul li.progress_bar span { display: block; position: absolute; background-repeat: repeat-x; top: 0px; left: 0px; width: 0%; }
 
 /* --------------------
    Map
 -------------------- */
 
-#cgeomap { background: #94ffd9; /*#18c2b1*/ }
+#cgeomap { background: var(--bright-bg); }
 .cgeomap .leaflet-popup-content-wrapper h2 { font-size: 2.6em; }
-.cgeomap .leaflet-popup-content-wrapper h3 { /*display: none;*/ }
+.cgeomap .leaflet-popup-content-wrapper h3 { }
 .cgeomap .leaflet-popup-content-wrapper p { font-size: 1.2em; margin: 1em 0; }
 .cgeomap .leaflet-popup-content-wrapper a.fancybox { display: block; margin-top: 1.2em; }
 

@@ -13,7 +13,65 @@
 //***********
 // Vhplab Map
 //***********
+VhplabMap.prototype.addEditorMarkers = function(_data, _callback) {
+	
+	console.log('addEditorMarkers();');
+	
+	// Empty editor layer
+	var html = '';
+	var num = 0;
+	var pagination = 0;
+	this.editorLayer.clearLayers();
+	this.editorMarkerList = new Array();
+	var count = $(_data.markers).length - 1;
+	console.log('Total Markers = '+ $(_data.markers).length);
+	var path = _data.link;
+	
+	if ($(_data.markers).length>=1) {
+		// Loop through each marker data element
+		$.each(_data.markers, function(i, _marker) {
+			
+			console.log('i = '+ i +', count = '+ count);
+			
+			// create Marker
+			var marker = new VhplabMarker();
+			marker.initialize(_data.link, _marker, cgeomap.map);
+			console.log('Create Marker: "'+ marker.id);
+			
+			// Marker object saved as jQuery data
+			$(cgeomap.map.markers).data('marker_'+ marker.id, marker);
+			
+			// Add marker to List of all Markers 'editor'
+			cgeomap.map.editorMarkerList.push(marker.id);
+	
+			// Add marker to Layer of all Markers 'editor'
+			console.log('Add Marker: "'+ marker.id +'" to layer');
+			cgeomap.map.editorLayer.addLayer(marker.marker);
+			
+			// Create all Markers navigation entry
+			pagination = (num - num%6)/6;
+			html +=	cgeomap.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('lesauteurs'));
+			num ++;
+			
+			if(i==count) {
+				//var loadded = cgeomap.map.editorMarkerList.length;
+				(pagination==0) ? cgeomap.map.editorPagination = false : cgeomap.map.editorPagination = true;
+				
+				console.log('editorMarkerListMarkers: '+ cgeomap.map.editorMarkerList.toString());
+				console.log('editorLayer.length: '+ cgeomap.map.editorLayer.getLayers().length);
+			
+				cgeomap.map.editorNavigation = html;
+				if (_callback) _callback();
+			}
+			
+		});
+	} else {
+		if (_callback) _callback();
+	}
+	
+};
 VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
+	/*
 	var n = this.offset;
 	var self = this;
 	var count = $(_data.markers).length - 1;
@@ -42,43 +100,66 @@ VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
 	} else {
 		if (_callback) _callback();
 	}
+	*/
 };
 VhplabMap.prototype.bindActions = function() {
 	cgeomap.loadArticleTemplate(function(){
+		console.log('loadArticleTemplate(); callback!');
+		cgeomap.map.showLayer('map', false);
+		cgeomap.map.openMarker();
+		
+		/*
 		cgeomap.createNavigationList();
 		cgeomap.bindNavigationListActions();
-		cgeomap.map.openMarker();
+		
+		*/
 	});
 };
 VhplabMap.prototype.clickListener = function(_e) {
-	cgeomap.map.clickableMarker.setLatLng(_e.latlng);
-	cgeomap.map.clickableMarker.addTo(cgeomap.map.map);
-	cgeomap.map.map.panTo(_e.latlng);
-	$(cgeomap.map.latitudeTag).val(_e.latlng.lat);
-	$(cgeomap.map.longitudeTag).val(_e.latlng.lng);
-	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
-	$(".cartography label").addClass('new');
-	$("#formulaire .wrap_cartography").data('ok',true);
+	cgeomap.map.updateClickableMarker(_e.latlng.lat, _e.latlng.lng);
 	cgeomap.form.check();
 };
 VhplabMap.prototype.embedClickListener = function(_e) {
+	console.log('embedClickListener();');
 	cgeomap.map.map.panTo(_e.latlng);
 };
 VhplabMap.prototype.embedMoveendListener = function(_e) {
+	console.log('embedMoveendListener();');
 	var center = cgeomap.map.map.getCenter()
 	$(cgeomap.map.latitudeTag).val(center.lat);
 	$(cgeomap.map.longitudeTag).val(center.lng);
 	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
-	$(".cartography label").addClass('new');
+	cgeomap.urlEmbed(false);
 };
 VhplabMap.prototype.embedZoomListener = function(_e) {
+	console.log('embedZoomListener();');
 	var center = cgeomap.map.map.getCenter()
 	$(cgeomap.map.latitudeTag).val(center.lat);
 	$(cgeomap.map.longitudeTag).val(center.lng);
 	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
-	$(".cartography label").addClass('new');
+	cgeomap.urlEmbed(false);
+};
+VhplabMap.prototype.forceCache = function() {
+	console.log('forceCache();');
+	// Set URL
+	var cache_auteur_url = this.markersURL +'&id_auteur='+ $("#user .data").data("auteur") +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?'
+	var cache_url = this.markersURL + '&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?'	
+	// Load cache_auteur_url to renew cache
+	// Get URL via LOG
+	console.log('Force cache_auteur_url: '+ cache_auteur_url);
+	$.getJSON(cache_auteur_url, function(data){
+		console.log('cache_auteur_url renewed');
+	});
+	// Load cache_url to renew cache
+	// Get URL via LOG
+	console.log('Force cache_url: '+ cache_url);
+	$.getJSON(cache_url, function(data){
+		console.log('cache_url renewed');
+	});	
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
+	// Marker Layers
+	
 	// Max Zoom Service
 	
 	// Map Zoom Custom Control
@@ -91,21 +172,21 @@ VhplabMap.prototype.initMapElements = function(_opts) {
         provider: new L.GeoSearch.Provider.OpenStreetMap()
     });
     this.geocoder._processResults = function(results, qry) {
-       	cgeomap.map.clickableMarker.setLatLng([results[0].Y, results[0].X]);
-		// cgeomap.map.clickableMarker.setOpacity(1);
-       	cgeomap.map.clickableMarker.addTo(cgeomap.map.map);
-		cgeomap.map.map.panTo([results[0].Y, results[0].X]);
-		$(cgeomap.map.latitudeTag).val(results[0].Y);
-		$(cgeomap.map.longitudeTag).val(results[0].X);
-		$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
-		$(".cartography label").addClass('new');
-		$("#formulaire .wrap_cartography").data('ok',true);
+    	cgeomap.map.updateClickableMarker(results[0].Y, results[0].X);
 		cgeomap.form.check();
     }
 	
 	// Clickable Marker
-	this.setInitialMarker(_opts);
+	
+	//this.setInitialMarker(_opts);
     	
+};
+VhplabMap.prototype.loadEditorMarkers = function(_url, _callback) {
+	console.log('cgeomap.map.loadEditorMarkers();');
+	// load markers data
+	$.getJSON(_url, function(data){
+		cgeomap.map.addMarkers(data[0], 'editor', _callback);
+	});					
 };
 VhplabMap.prototype.loadNewMarkers = function(_url, _callback) {
 	var self = this;
@@ -114,55 +195,145 @@ VhplabMap.prototype.loadNewMarkers = function(_url, _callback) {
 		self.addNewMarkers(data[0], _callback);
 	});					
 };
-VhplabMap.prototype.reloadMarkers = function(_url, _callback) {
-	var self = this;
-	// load markers data
-	// get URL via alert(_url);
-	$.getJSON(_url, function(data){
-		//alert(data.toSource());
-		self.updateMarkers(data[0], function(){
-			if (_callback) _callback();
+VhplabMap.prototype.reloadMarkers = function(_id, _callback) {
+	console.log('reloadMarkers();');
+	// Set URL
+	var new_marker_url = this.markersURL +'&id_article='+ _id +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?'
+	// Load markers data
+	// Get URL via LOG
+	console.log('Load new_marker: '+ new_marker_url);
+	$.getJSON(new_marker_url, function(data){
+		var count = $(data[0].markers).length - 1;
+		console.log('Updating '+ $(data[0].markers).length +' markers');
+		$.each(data[0].markers, function(i, marker) {
+			console.log('updateMarker('+ data[0].link +', '+ marker +', '+ i +');');
+			cgeomap.map.updateMarker(data[0].link, marker, i);
+			if(i==count) {
+				console.log('Updating finished ready to callback()');
+				if (_callback) _callback();
+			}
 		});
 	});
-	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){});		
+	this.forceCache();
 };
-VhplabMap.prototype.showMarkerJson = function(_markers) {
-	var list = new Array();
+VhplabMap.prototype.showMarkerJson = function(_url, _markers) {
+	this.emptyLayer.reset();
+	var count = $(_markers).length - 1;
 	$.each(_markers, function(i, m) {
 		var marker = $(cgeomap.map.markers).data('marker_'+ m.id);
-		list.push(marker.marker.getLatLng());
-		marker.marker.addTo(cgeomap.map.map);
+		console.log('typeof marker = '+ typeof marker);
+		if (typeof marker != "undefined") {
+			// Add marker to marker's list
+			cgeomap.map.emptyLayer.markerList.push(marker.id);
+			// Add marker to leaflet layer
+			cgeomap.map.emptyLayer.layer.addLayer(marker.marker);
+		} else {
+			// create Marker
+			var new_marker = new VhplabMarker();
+			new_marker.initialize(_url, m, cgeomap.map);
+			console.log('Create Marker: "'+ new_marker.id);
+			// Save marker as jQuery data
+			$(cgeomap.map.markers).data('marker_'+ new_marker.id, new_marker);
+			// Add marker to marker's list
+			cgeomap.map.emptyLayer.markerList.push(new_marker.id);
+			// Add marker to leaflet layer
+			cgeomap.map.emptyLayer.layer.addLayer(new_marker.marker);
+		}
+		if (i==count) {
+			cgeomap.map.map.fitBounds(cgeomap.map.emptyLayer.layer.getBounds());
+			cgeomap.map.map.setZoom(cgeomap.map.map.getZoom()-2);
+		}
 	});
-	var bounds = new L.latLngBounds(list);
-	this.map.fitBounds(bounds);
-	this.map.setZoom(this.map.getZoom()-1);
 };
+VhplabMap.prototype.updateClickableMarker = function(_lat, _lng, _zoom) {
+	console.log('updateClickableMarker();');
+	this.clickableMarker.setLatLng([_lat, _lng]);
+	((typeof _zoom != "undefined")&&(_zoom != '')) ? this.map.setView([_lat, _lng], _zoom) : this.map.panTo([_lat, _lng]);
+	$(this.latitudeTag).val(_lat % 360);
+	$(this.longitudeTag).val(_lng % 360);
+	$(this.zoomTag).val(this.map.getZoom());
+	$(".cartography label").addClass('new');
+	$("#formulaire .wrap_cartography").data('ok',true);
+};
+/*
 VhplabMap.prototype.updateMarkers = function(_data, _callback) {
-	var n = this.offset;
-	var self = this;
+	
+	console.log('updateMarkers();');
+	
+	// Update none layer
+	var html = '';
+	var num = 0;
+	var pagination = 0;
 	var count = $(_data.markers).length - 1;
+	console.log('Total Markers = '+ $(_data.markers).length);
 	var path = _data.link;
-	// Loop through each marker data element
-	$.each(_data.markers, function(i, marker) {
-		n++;
-		if (($("#user .data").data("auteur") != self.auteur)&&(typeof $(self.markers).data('marker_'+marker.id) == "undefined")) {
-			self.hidden.push(parseInt(marker.id));
-		}
-		self.updateMarker(path, marker, n);
-		if(i==count) {
-			var loadded = self.markerList.length;
-			self.offset = loadded;
-			_callback();
-		}
-	});
+	
+	if ($(_data.markers).length>=1) {
+		// Loop through each marker data element
+		$.each(_data.markers, function(i, _marker) {
+			
+			console.log('i = '+ i +', count = '+ count);
+			
+			self.updateMarker(path, marker, n);
+		
+			// Get marker from jQuery data
+			var marker = $(cgeomap.map.markers).data('marker_'+_marker.id);
+			
+			// if marker doesn't exists create new marker
+			if (typeof marker == "undefined") {
+			
+				// create Marker
+				marker = new VhplabMarker();
+				marker.initialize(_data.link, _marker, cgeomap.map);
+				console.log('Create Marker: "'+ marker.id);
+			
+				// Marker object saved as jQuery data
+				$(cgeomap.map.markers).data('marker_'+ marker.id, marker);
+			
+				// Add marker to List of all Markers 'none'
+				cgeomap.map.mapMarkerList.push(marker.id);
+	
+				// Add marker to Layer of all Markers 'none'
+				console.log('Add Marker: "'+ marker.id +'" to layer');
+				cgeomap.map.mapLayer.addLayer(marker.marker);
+			
+			// if marker exists just update
+			} else {
+				marker.updateData(_path, _marker, cgeomap.map);
+			}
+	
+			// Create all markers navigation entry
+			pagination = (num - num%6)/6;
+			html +=	cgeomap.createNavigationElement('\t\t\t\t', pagination, marker.id, $(marker.data).data('titre'), $(marker.data).data('lesauteurs'));
+			num ++;
+			
+			if(i==count) {
+				//var loadded = cgeomap.map.editorMarkerList.length;
+				(pagination==0) ? cgeomap.map.mapPagination = false : cgeomap.map.mapPagination = true;
+				
+				console.log('mapMarkerListMarkers: '+ cgeomap.map.mapMarkerList.toString());
+				
+				console.log('mapLayer.length: '+ cgeomap.map.mapLayer.getLayers().length);
+			
+				cgeomap.map.mapNavigation = html;
+				cgeomap.map.bindActions();
+				if (_callback) _callback();
+			}
+			
+		});
+	} else {
+		cgeomap.map.bindActions();
+		if (_callback) _callback();
+	}
+	
 };
+*/
 VhplabMap.prototype.zoomListener = function(_e) {
 	$(cgeomap.map.zoomTag).val(cgeomap.map.map.getZoom());
 	$(".cartography label").addClass('new');
 	$("#formulaire .wrap_cartography").data('ok',true);
 	cgeomap.form.check();
 };
-
 
 // ************ //
 // Vhplab Marker
@@ -313,12 +484,16 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 	});
 };
 VhplabMarker.prototype.click = function(_callback) {
+	console.log('Marker click();');
+	console.log('marker.id = '+ this.id);
 	if ($("#content").data('selected')!='carte') {	
-		cgeomap.toggleUtilities('carte');
+		cgeomap.toggleUtilities('carte', false);
 	}
 	if (!this.open) {
+		console.log('marker.open = false');
 		var self = this;
 		if (this.loadded) {
+			console.log('marker.loadded = true');
 			cgeomap.slideContent('hide', function() {
 				self.appendContent();
 				cgeomap.slideContent('show', function() {
@@ -329,15 +504,18 @@ VhplabMarker.prototype.click = function(_callback) {
 				self.openInfoWindow();
 			});
 		} else {
+			console.log('marker.loadded = false');
 			$('#loading_content').fadeIn();
 			cgeomap.slideContent('hide', function() {
 				// image size for automatic processing
 				var width = 330;
 				var height = 120;
-				// get URL via alert(self.json +'&width='+ width +'&height='+ height);
+				// Get URL via log
+				console.log('Marker json URL: '+ self.json +'&width='+ width +'&height='+ height);
 				$.getJSON(self.json +'&width='+ width +'&height='+ height, function(data) {
 					$('#loading_content').fadeOut();
 					$.each(data[0].marker, function(i, marker){
+						console.log('Each loop: '+ i +' marker id'+ marker.id);
 						self.loadWindowData(marker);
 						self.appendContent();
 						cgeomap.slideContent('show', function() {
@@ -351,7 +529,9 @@ VhplabMarker.prototype.click = function(_callback) {
 			});
 		}
 	} else {
+		console.log('marker.open = true');
 		if (!this.infoWindow._isOpen) this.infoWindow.openOn(this.parent.map);
+		if (_callback) _callback();
 	}
 };
 VhplabMarker.prototype.openInfoWindow = function() {

@@ -13,12 +13,21 @@
 //***********
 function VhplabMap() {
 	this.map = null;
+	
+	this.tileLayer = null;
+	
+	this.mapLayer = new VhplabLayer();
+	this.editorLayer = new VhplabLayer();
+	this.emptyLayer = new VhplabLayer();
+	
+	this.activeLayer = '';
+	
 	this.maxZoomService = null;
 	this.ZoomControl = null;
 	this.geocoder = null;
-	this.markerList = new Array();
-	this.hidden = new Array();
+	
 	this.markers = {};
+	
 	this.open = false;
 	this.totalMarkers = 0;
 	this.clickableMarker = L.marker();
@@ -39,32 +48,74 @@ function VhplabMap() {
 	this.lng;
 	this.zoom;
 };
-VhplabMap.prototype.addMarker = function(_path, _data) {
-	var marker = new VhplabMarker();
-	marker.initialize(_path, _data, this);
-	$(this.markers).data('marker_'+marker.id, marker);
-	this.markerList.push(marker.id);
+VhplabMap.prototype.addClickableMarker = function(_latitude, _longitude, _zoom) {
+	// console.log('addClickableMarker();');
+	// console.log('_latitude: '+ _latitude +', _longitude: '+ _longitude +', _zoom: '+ _zoom);
+	this.emptyLayer.layer.clearLayers();
+	this.updateClickableMarker(_latitude, _longitude, _zoom);
+	this.emptyLayer.layer.addLayer(this.clickableMarker);
 };
-VhplabMap.prototype.addMarkers = function(_data, _callback) {
-	var n = this.offset;
-	var self = this;
+VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
+	console.log('cgeomap.map.addMarkers();');
+	// Empty none layer
+	var target = this.getLayer(_layer);
+	target.reset();
+	// Count markers
 	var count = $(_data.markers).length - 1;
-	var path = _data.link;
+	console.log('Total Markers = '+ $(_data.markers).length);
+	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, marker) {
-			n++;
-			self.addMarker(path, marker, n);
+			console.log('Looping through each marker: i = '+ i +', count = '+ count);
+			cgeomap.map.createMarker(_data.link, marker, i, target);
+			// Finish when all markers are looped
 			if(i==count) {
-				var loadded = self.markerList.length;
-				self.bindActions();
+				// Paginate only if needed
+				(i>6) ? target.pagination = false : target.pagination = true;
+				console.log('markerList: '+ target.markerList.toString());
+				console.log('layer.length: '+ target.layer.getLayers().length);
+				// Callback to bind actiosn after loading and creating markers
 				if (_callback) _callback();
 			}
 		});
 	} else {
-		self.bindActions();
+		// Callback to bind actiosn after loading and creating markers
 		if (_callback) _callback();
 	}
+};
+VhplabMap.prototype.addMarkersToEditorLayer = function() {
+	console.log('cegeomap.map.addMarkersToEditorLayer();');
+	// Empty layer
+	var target = this.getLayer('editor');
+	target.reset();
+	// Get editor id
+	var auteur = $("#user .data").data("auteur");
+	console.log('Editor id = '+ auteur +', typeof '+ typeof auteur);
+	// count only editor markers
+	var n = 0;
+	// Add Markers to editor layer
+	$.each($(this.markers).data(), function(i, marker) {
+		console.log('Looping through each marker: i = '+ i +', n = '+ n);
+		// console.log('Marker: "'+ e.id +'", Auteurs: '+ e.auteurs.toString() +', '+ jQuery.inArray(auteur, e.auteurs) +', typeof '+ typeof e.auteurs[0]);
+		if (jQuery.inArray(auteur, marker.auteurs)>=0)  { 
+			// Add marker to vhpLayer
+			cgeomap.map.addMarkerToLayer(marker, n, target);
+			n++;
+		}
+	});
+	(n>6) ? target.pagination = false : target.pagination = true;
+	console.log('markerList: '+ target.markerList.toString());
+	console.log('layer.length: '+ target.layer.getLayers().length);
+};
+VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
+	console.log('Add Marker: "'+ _marker.id +'" to layer');
+	// Add marker to marker's list
+	_layer.markerList.push(_marker.id);
+	// Add marker to leaflet layer
+	_layer.layer.addLayer(_marker.marker);
+	// Update navigation html
+	_layer.addToNavigationHtml(cgeomap.createNavigationElement('\t\t\t\t', (_num - _num % 6) / 6, _marker.id, $(_marker.data).data('titre'), $(_marker.data).data('lesauteurs')));		
 };
 VhplabMap.prototype.bindActions = function() {
 	if (this.open) {
@@ -77,12 +128,10 @@ VhplabMap.prototype.clickListener = function(_e) {
 	//this.clickableMarker.setOpacity(1);
 	this.clickableMarker.addTo(this.map);
 	this.map.panTo(_e.latlng);
-	$(this.latitudeTag).val(_e.latlng.lat);
-	$(this.longitudeTag).val(_e.latlng.lng);
+	$(this.latitudeTag).val(_e.latlng.lat%360);
+	$(this.longitudeTag).val(_e.latlng.lng%360);
+	
 	$(this.zoomTag).val(this.map.getZoom());
-};
-VhplabMap.prototype.codeAddress = function(_address) {
-	this.geocoder.geosearch(_address);
 };
 VhplabMap.prototype.closeOpenMarker = function() {
 	if(this.open) {
@@ -90,29 +139,98 @@ VhplabMap.prototype.closeOpenMarker = function() {
 		open.closeInfoWindow();
 	}
 };
+VhplabMap.prototype.codeAddress = function(_address) {
+	this.geocoder.geosearch(_address);
+};
 VhplabMap.prototype.createMap = function(_opts) {
 	this.lat = _opts.latitude;
 	this.lng = _opts.longitude;
 	this.zoom = _opts.zoom;
 	this.map = L.map(_opts.id, { zoomControl: false }).setView([_opts.latitude, _opts.longitude], _opts.zoom);
+	/*
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(this.map);
+	*/
+	this.tileLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
+		attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+		subdomains: 'abcd',
+		minZoom: 0,
+		maxZoom: 20,
+		ext: 'png'
+	});
+	this.tileLayer.addTo(this.map);
+	/*this.tileLayer.setZIndex(0);*/
+	//alert (this.tileLayer.getPane());
+	//this.tileLayer.getPane().style.zIndex = 0;
+	//this.tileLayer.bringToBack();
+	//alert (this.tileLayer.zIndex);
+};
+VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer) {
+	// create Marker
+	var marker = new VhplabMarker();
+	marker.initialize(_path, _markerData, this);
+	console.log('Create Marker: "'+ marker.id);
+	// Save marker as jQuery data
+	$(this.markers).data('marker_'+ marker.id, marker);
+	// Add marker to vhpLayer
+	this.addMarkerToLayer(marker, _num, _layer);
+};
+VhplabMap.prototype.getLayer = function(_name) {
+	switch (_name) {
+		case 'editor':
+			return this.editorLayer;
+			break;
+		case 'map':
+			return this.mapLayer;
+			break;
+		case 'empty':
+			return this.emptyLayer;
+			break;
+	}
+};
+VhplabMap.prototype.hideActiveLayer = function() {
+	switch (this.activeLayer) {
+		case 'editor':
+			console.log('hide editorLayer();');
+			this.map.removeLayer(this.editorLayer.layer);
+			break;
+		case 'map':
+			console.log('hide mapLayer();');
+			this.map.removeLayer(this.mapLayer.layer);
+			break;
+		case 'empty':
+			console.log('hide emptyLayer();');
+			this.map.removeLayer(this.emptyLayer.layer);
+			break;
+		case '':
+			break;
+	}
 };
 VhplabMap.prototype.hideMarkers = function(_exception) {
+	/*
 	if (typeof _exception != "undefined") {
+	
+		console.log('map.hideMarkers(); - _exception');
+		
 		$.each($(this.markers).data(),function(i, e) {
 			if (jQuery.inArray(e.id, _exception)<0) cgeomap.map.map.removeLayer(e.marker);
 		});
 	} else {
+		
+		console.log('map.hideMarkers();');
+		
 		$.each($(this.markers).data(),function(i, e) {
 			cgeomap.map.map.removeLayer(e.marker);
 		});
+		
 	}
+	*/
 };
 VhplabMap.prototype.initialize = function(_opts) {
+	console.log('cgeomap.map.initialize();');
 	if (typeof _opts.offset != "undefined") this.offset = _opts.offset;
 	if (typeof _opts.limit != "undefined") this.limit = _opts.limit;
 	if (typeof _opts.url != "undefined") this.baseURL = _opts.url;
@@ -127,6 +245,8 @@ VhplabMap.prototype.initialize = function(_opts) {
 	if (this.markersURL != '') this.loadMarkers();
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
+	// Marker Layers
+	
 	// Max Zoom Service
 	
 	// Map Zoom Custom Control
@@ -151,17 +271,19 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 			self.zoomListener(_e);
 		});
 	}
+	
 };
 VhplabMap.prototype.loadMarkers = function() {
-	var self = this;
+	// Load markers data
+	console.log('cgeomap.map.loadMarkers();');
 	var url = this.markersURL;
 	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
-	// load markers data
-	// get URL via alert(url);
+	// Get URL via log
+	console.log('Markers URL: '+ url);
 	$.getJSON(url, function(data){
-		self.addMarkers(data[0]);
-	});					
+		cgeomap.map.addMarkers(data[0], 'map', cgeomap.map.bindActions());
+	});	
 };
 VhplabMap.prototype.openMarker = function() {
 	if (this.open) {
@@ -169,8 +291,9 @@ VhplabMap.prototype.openMarker = function() {
 		if (typeof marker != "undefined") {
 			marker.click();
 		} else {
-			var first = $(this.markers).data('marker_'+this.markerList[0]);
-			this.open = this.markerList[0];
+			this.open = this.mapLayer.markerList[0];
+			console.log('Markers 0: marker_'+ this.open);
+			var first = $(this.markers).data('marker_'+ this.open);
 			first.click();
 		}
 	}
@@ -178,13 +301,45 @@ VhplabMap.prototype.openMarker = function() {
 VhplabMap.prototype.panOut = function() {
 	this.map.setView([this.lat, this.lng], this.zoom);
 };
+VhplabMap.prototype.rebuildLayer = function(_name) {
+	console.log('cegeomap.map.rebuildLayer("'+ _name +'");');
+	// Store variables
+	var target = this.getLayer(_name);
+	var markerList = Array.from(target.markerList);
+	console.log('layer markerList: '+ target.markerList.toString());
+	console.log('stored markerList: '+ markerList.toString());
+	// Empty layer
+	target.reset();
+	// Add Markers to layer
+	$.each(markerList, function(i, id) {
+		console.log('Looping through each marker: i = '+ i +'id = '+ id);
+		// Add marker to vhpLayer
+		cgeomap.map.addMarkerToLayer($(cgeomap.map.markers).data('marker_'+ id), i, target);
+	});
+	(markerList.length>6) ? target.pagination = false : target.pagination = true;
+	console.log('markerList: '+ target.markerList.toString());
+	console.log('layer.length: '+ target.layer.getLayers().length);
+};
+VhplabMap.prototype.removeFromLayer = function(_id, _name) {
+	console.log('cegeomap.map.removeFromLayer('+ _id +', "'+ _name +'");');
+	// Store variables
+	var target = this.getLayer(_name);
+	var index = target.markerList.indexOf(_id);
+	if (index > -1) {
+    	target.markerList.splice(index, 1);
+		this.rebuildLayer(_name);
+	}
+};
 VhplabMap.prototype.reloadMarkers = function(_callback) {
-	var self = this;
-	// load markers data
-	// get URL via alert(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?');
-	$.getJSON(this.markersURL +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?', function(data){
-		//alert(data.toSource());
-		self.updateMarkers(data[0], function(){
+	// Reload markers data
+	console.log('cgeomap.map.reloadMarkers();');
+	var url = this.markersURL;
+	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
+	url += '&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?';
+	// Get URL via log
+	console.log('Markers URL: '+ url);
+	$.getJSON(url, function(data){
+		cgeomap.map.updateMarkers(data[0], function(){
 			if (_callback) _callback();
 		});
 	});	
@@ -230,39 +385,69 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 		$(this.longitudeTag).val(longitude);
 		$(this.zoomTag).val(zoom);
 	}
+	
+	/*
 	if (visible==1) this.clickableMarker.addTo(this.map);
+	*/
+	
 	//this.clickableMarker.setOpacity(visible);
 };
-VhplabMap.prototype.showMarkers = function(_list, _fitBounds) {
-	if (typeof _list != "undefined") {
-		var list = new Array();
-		$.each($(this.markers).data(),function(i, e) {
-			if (jQuery.inArray(e.id, _list)>=0)  { 
-				e.marker.addTo(cgeomap.map.map);
-				list.push(e.marker.getLatLng());
-			} else {
-				cgeomap.map.map.removeLayer(e.marker);
-			}
-		});
-		if(_fitBounds) {
-			var bounds = new L.latLngBounds(list);
-			this.map.fitBounds(bounds);
-			this.map.setZoom(this.map.getZoom()-1);
-		}
+VhplabMap.prototype.setClickableMarker = function(_opts) {
+	var url;
+	if (typeof _opts.default_icon != "undefined") {
+		url = _opts.default_icon;
+	} else if ((typeof $("#formulaire .icon").attr("src") != "undefined")&&($("#formulaire .icon").attr("src") != "")) {
+		url = $("#formulaire .icon").attr("src");
 	} else {
-		$.each($(this.markers).data(),function(i, e) {
-			e.marker.addTo(cgeomap.map.map);
+		url = this.baseURL + 'plugins/vhplab/images/icons/default_icon.png';
+	}
+	console.log('setClickableMarker({ icon: '+ url +', latitude: '+ _opts.latitude +', longitude: '+ _opts.longitude +', zoom: '+ _opts.zoom +'});');
+	var icon = L.icon({
+		iconUrl: url,
+    	iconRetinaUrl: url,
+    	iconSize: [60, 60],
+		iconAnchor: [30, 60]
+	});
+	this.clickableMarker.setIcon(icon);
+	var latitude, longitude, zoom;
+	var pos = this.map.getCenter();
+	(typeof _opts.latitude!="undefined") ? latitude = _opts.latitude : latitude = pos.lat;
+	(typeof _opts.longitude!="undefined") ? longitude = _opts.longitude : longitude = pos.lng;
+	(typeof _opts.zoom!="undefined") ? zoom = _opts.zoom : zoom = this.map.getZoom();
+	if ( ((latitude==0.0)&&(longitude==0.0)&&(navigator.geolocation)) || ((typeof _opts.position!="undefined")&&(_opts.position=="geolocation")) ) {
+		console.log('setting ClickableMarker at geolocation position');
+		navigator.geolocation.getCurrentPosition(function(position) {
+			// success
+			console.log('geolocation success: '+ position.coords.latitude +', '+ position.coords.longitude);
+			cgeomap.map.addClickableMarker(position.coords.latitude, position.coords.longitude, '');
+		}, function() {
+			// error
+			console.log('geolocation error');
+			cgeomap.map.addClickableMarker(latitude, longitude, '');
 		});
+	} else {
+		console.log('showing Marker');
+		this.addClickableMarker(latitude, longitude, zoom);
 	}
 };
-VhplabMap.prototype.showMarkersExcept = function(_list) {
-	$.each($(this.markers).data(),function(i, e) {
-		if (jQuery.inArray(e.id, _list)<0)  { 
-			e.marker.addTo(cgeomap.map.map);
-		} else {
-			cgeomap.map.map.removeLayer(e.marker);
+VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
+	console.log('cegeomap.map.showLayer("'+ _name +'");');
+	if (this.activeLayer != _name) {
+		// Get layer
+		var target = this.getLayer(_name);
+		// Hide previous layer & and new one to leaflet map
+		this.hideActiveLayer();
+		this.map.addLayer(target.layer);
+		// append navigation html
+		if (_name != 'empty') cgeomap.appendNavigationList(target.navigationHtml, target.pagination);
+		// Store actual layer name
+		this.activeLayer = _name;
+		// Fit bounds to layer
+		if (_fitBounds) {
+			this.map.fitBounds(target.layer.getBounds());
+			this.map.setZoom(this.map.getZoom()-2);
 		}
-	});
+	}
 };
 VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 	$.each($(this.markers).data(), function(name, marker) {
@@ -270,7 +455,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 	});
 	//alert('sort list');
 	var self = this;
-	this.markerList.sort(function(a,b) {
+	this.mapLayer.markerList.sort(function(a,b) {
 		var ma = $(self.markers).data('marker_'+a);
 		var mb = $(self.markers).data('marker_'+b);
 		if (ma.distance < mb.distance) return -1;
@@ -278,37 +463,70 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		return 0;
 	});
 };
-VhplabMap.prototype.updateMarker = function(_path, _data, _n) {
+VhplabMap.prototype.updateMarker = function(_path, _data, _n, _layer) {
 	var marker = $(this.markers).data('marker_'+_data.id);
 	if (typeof marker == "undefined") {
-		marker = new VhplabMarker();
-		marker.initialize(_path, _data, this);
-		$(this.markers).data('marker_'+marker.id, marker);
-		this.markerList.push(marker.id);
+		this.createMarker(_path, _data, _n, this.getLayer('editor'));
+		// add marker to map layer if also visible in map layer 
+		if ((this.map.auteur == 'none')||($("#user .data").data("auteur") == this.map.auteur)) {
+			this.addMarkerToLayer($(this.markers).data('marker_'+ _data.id), _n, this.getLayer('map'));
+		}
 	} else {
 		marker.updateData(_path, _data, this);
 	}
 };
-VhplabMap.prototype.updateMarkers = function(_data, _callback) {
-	var n = this.offset;
-	var self = this;
+VhplabMap.prototype.updateMarkers = function(_data, _layer, _callback) {
+	console.log('cgeomap.map.updateMarkers();');
+	// Empty none layer
+	var target = this.getLayer(_layer);
+	target.reset();
+	// Count markers
 	var count = $(_data.markers).length - 1;
-	var path = _data.link;
-	// Loop through each marker data element
-	$.each(_data.markers, function(i, marker) {
-		n++;
-		self.updateMarker(path, marker, n);
-		if(i==count) {
-			var loadded = self.markerList.length;
-			self.offset = loadded;
-			_callback();
-		}
-	});
+	console.log('Total Markers = '+ $(_data.markers).length);
+	// If _data has markers
+	if ($(_data.markers).length>=1) {
+		// Loop through each marker data element
+		$.each(_data.markers, function(i, marker) {
+			console.log('Looping through each marker to update: i = '+ i +', count = '+ count);
+			console.log($(marker).toString());
+			cgeomap.map.updateMarker(_data.link, marker, i, target);
+			// Finish when all markers are looped
+			if(i==count) {
+				// Paginate only if needed
+				(i>6) ? target.pagination = false : target.pagination = true;
+				console.log('markerList: '+ target.markerList.toString());
+				console.log('layer.length: '+ target.layer.getLayers().length);
+				// Callback to bind actiosn after loading and creating markers
+				if (_callback) _callback();
+			}
+		});
+	} else {
+		// Callback to bind actiosn after loading and creating markers
+		if (_callback) _callback();
+	}
+	
 };
 VhplabMap.prototype.zoomListener = function(_opts) {
 	$(this.zoomTag).val(this.map.getZoom());
 };
 
+// ************ //
+// Vhplab Marker
+// ************ //
+function VhplabLayer() {
+	this.layer =  new L.featureGroup();
+	this.markerList = new Array();
+	this.navigationHtml = '';
+	this.pagination = false;
+};
+VhplabLayer.prototype.addToNavigationHtml = function(_html) {
+	this.navigationHtml += _html;
+};
+VhplabLayer.prototype.reset = function() {
+	this.layer.clearLayers();
+	this.markerList = new Array();
+	this.navigationHtml = '';
+};
 
 // ************ //
 // Vhplab Marker
@@ -320,6 +538,7 @@ function VhplabMarker() {
 	this.id = null;
 	this.json = null;
 	this.distance = null;
+	this.auteurs;
 	this.data = {};
 	this.content;
 	this.loadded = false;
@@ -364,6 +583,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	typeof _opts.lng != "undefined" ? this.lng = parseFloat(_opts.lng) : this.lng = 0.0;
 	typeof _opts.zoom != "undefined" ? this.zoom = parseInt(_opts.zoom) : this.zoom = 0;
 	typeof _opts.titre != "undefined" ? $(this.data).data('titre', _opts.titre) : $(this.data).data('titre', "");
+	typeof _opts.auteurs != "undefined" ? this.auteurs = _opts.auteurs.split(',').map(Number) : this.auteurs = new Array();
 	typeof _opts.lesauteurs != "undefined" ? $(this.data).data('lesauteurs', _opts.lesauteurs) : $(this.data).data('lesauteurs', "");
 	typeof _opts.soustitre != "undefined" ? $(this.data).data('soustitre', _opts.soustitre) : $(this.data).data('soustitre', "");
 	typeof _opts.visibility != "undefined" ? $(this.data).data('visibility', _opts.visibility) : $(this.data).data('visibility', "default");
@@ -401,7 +621,9 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 		});
 	}
 	
-	this.marker.addTo(this.parent.map);
+	/* no los vamos a añadir automáticamente al crearlos */
+	//this.marker.addTo(this.parent.map);
+	
 	var self = this;
 	this.marker.on('click', function(e) {
 		self.click();
@@ -523,8 +745,8 @@ var vhplabZoomControl = L.Control.Zoom.extend({
 		position: 'bottomright'
 	},
 	onAdd: function (map) {
-		var zoomName = 'leaflet-control-zoom',
-			container = L.DomUtil.create('div', zoomName + ' leaflet-bar');
+		var zoomName = 'leaflet-control-zoom';
+		var container = L.DomUtil.create('div', zoomName + ' leaflet-bar');
 		this._map = map;
 		this._zoomInButton  = this._createButton(
 			this.options.zoomInText, this.options.zoomInTitle,
