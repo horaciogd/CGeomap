@@ -72,7 +72,7 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
 			// Finish when all markers are looped
 			if(i==count) {
 				// Paginate only if needed
-				(i>6) ? target.pagination = false : target.pagination = true;
+				(i>6) ? target.pagination = true : target.pagination = false;
 				console.log('markerList: '+ target.markerList.toString());
 				console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
@@ -282,7 +282,9 @@ VhplabMap.prototype.loadMarkers = function() {
 	// Get URL via log
 	console.log('Markers URL: '+ url);
 	$.getJSON(url, function(data){
-		cgeomap.map.addMarkers(data[0], 'map', cgeomap.map.bindActions());
+		cgeomap.map.addMarkers(data[0], 'map', function(){
+			cgeomap.map.bindActions();
+		});
 	});	
 };
 VhplabMap.prototype.openMarker = function() {
@@ -493,7 +495,7 @@ VhplabMap.prototype.updateMarkers = function(_data, _layer, _callback) {
 			// Finish when all markers are looped
 			if(i==count) {
 				// Paginate only if needed
-				(i>6) ? target.pagination = false : target.pagination = true;
+				(i>6) ? target.pagination = true : target.pagination = false;
 				console.log('markerList: '+ target.markerList.toString());
 				console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers

@@ -13,6 +13,7 @@
 //***********
 // Vhplab Map
 //***********
+/*
 VhplabMap.prototype.addEditorMarkers = function(_data, _callback) {
 	
 	console.log('addEditorMarkers();');
@@ -70,8 +71,10 @@ VhplabMap.prototype.addEditorMarkers = function(_data, _callback) {
 	}
 	
 };
+*/
+/*
 VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
-	/*
+	
 	var n = this.offset;
 	var self = this;
 	var count = $(_data.markers).length - 1;
@@ -100,8 +103,8 @@ VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
 	} else {
 		if (_callback) _callback();
 	}
-	*/
 };
+	*/
 VhplabMap.prototype.bindActions = function() {
 	cgeomap.loadArticleTemplate(function(){
 		console.log('loadArticleTemplate(); callback!');

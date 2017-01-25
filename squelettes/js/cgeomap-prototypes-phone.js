@@ -102,7 +102,7 @@ VhplabInterface.prototype.bindToggleContent = function() {
 };
 VhplabInterface.prototype.continueInitialize = function(_opts) {
 	
-	console.log('continueInitialize');
+	console.log('/* phone prototypes */ continueInitialize');
 	
 	// Map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
@@ -132,28 +132,14 @@ VhplabInterface.prototype.continueInitialize = function(_opts) {
 		});
 	});
 	
-	// Initialize soundManager
-	soundManager.setup({
-		// disable or enable debug output
-		debugMode: true,
-  		// use HTML5 audio for MP3/MP4, if available
-  		preferFlash: false,
-  		useFlashBlock: true,
-  		// path to directory containing SM2 SWF
-  		url: 'swf/',
-  		// optional: enable MPEG-4/AAC support (requires flash 9)
-  		flashVersion: 9
-  	});
-  	// Create Transparent Player
-  	this.player = new VhplabTransparentPlayer();
 };
 VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, _soustitre, _distance, _enclosure, _visible) {
 	var html = '';
 	html += _tab +'<li id="article_'+ _id +'" class="article '+ _visible +'">\n';
 	typeof _enclosure != "undefined" ? html += _tab +'\t<header class="header btn" data-sound="'+_enclosure.toString()+'" data-id="'+_id+'">\n' : html += _tab +'\t<header class="header btn" data-id="'+_id+'">\n';
 	html +=	_tab +'\t\t<hgroup>\n';
-	var txt_dist = '';
-	_distance - _distance%1000 > 0 ? txt_dist = parseInt((_distance - _distance%1000)/1000) + ' km' : txt_dist = parseInt(_distance) + ' m';
+	var txt_dist = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	// _distance - _distance%1000 > 0 ? txt_dist = parseInt((parseInt_distance - _distance%1000)/1000) + ' km' : txt_dist = parseInt(_distance) + ' m';
 	html +=	_tab +'\t\t\t<span class="loading"></span>\n';
 	var txt_enclosure = '';
 	if (typeof _enclosure != "undefined") txt_enclosure += '<span class="player_icon"></span><span class="player btn" ></span>';
@@ -166,6 +152,7 @@ VhplabInterface.prototype.createNavigationElement = function(_tab, _id, _titre, 
 	return html;
 };
 VhplabInterface.prototype.createNavigationList = function(_opts) {
+	console.log('/* phone prototypes */ cgeomap.createNavigationList();');
 	var html = '\n';
 	for (var i=0; i<this.map.mapLayer.markerList.length; i++) {
 		var marker = $(this.map.markers).data('marker_'+ this.map.mapLayer.markerList[i]);
@@ -185,6 +172,7 @@ VhplabInterface.prototype.createNavigationList = function(_opts) {
 		}
 		html +=	this.createNavigationElement('\t\t\t\t',  marker.id, $(marker.data).data('titre'), $(marker.data).data('soustitre'), marker.distance, $(marker.data).data('enclosure'), visible);
 	}
+	console.log('html:'+ html);
 	$('#content ul').empty();
 	$('#content ul').append(html);
 };
@@ -200,7 +188,7 @@ VhplabInterface.prototype.getCookie = function(_opts) {
 };
 VhplabInterface.prototype.initialize = function(_opts) {
 
-	console.log('initialize');
+	console.log('/* phone prototypes */ cgeomap.initialize();');
 	
 	// Store url
 	if (typeof _opts.url_site != "undefined") this.url_site = _opts.url_site;
@@ -212,10 +200,28 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	// check author
 	console.log('auteur: '+ _opts.map_opts.auteur);
 	
+	
+	// Initialize soundManager
+	soundManager.setup({
+		// disable or enable debug output
+		debugMode: true,
+  		// use HTML5 audio for MP3/MP4, if available
+  		preferFlash: false,
+  		useFlashBlock: true,
+  		// path to directory containing SM2 SWF
+  		url: 'swf/',
+  		// optional: enable MPEG-4/AAC support (requires flash 9)
+  		flashVersion: 9
+  	});
+  	// Create Transparent Player
+  	this.player = new VhplabTransparentPlayer();
+  	
+	/*
 	if ((typeof _opts.map_opts.auteur!="undefined")&&(_opts.map_opts.auteur!="none")) {
 		cgeomap.continueInitialize(_opts);
 	
 	} else {
+	*/
 		console.log('$("#select").load('+ this.url_site +'spip.php?page=ajax-select);');
 		
 		
@@ -231,6 +237,11 @@ VhplabInterface.prototype.initialize = function(_opts) {
 			$('#select .wrapper').append('<div class="welcome"><span class="btn go">go</span></div>');
 			$("#select").slideDown('fast', function(){
 				
+			$("#select .welcome .btn").click(function(){
+				$("#select").fadeOut('fast', function(){
+					cgeomap.continueInitialize(_opts);
+				});
+			});
 				/*
 				$("#select li").click(function(){
 					if (typeof _opts.map_opts != "undefined") _opts.map_opts.auteur = $(this).data('id');
@@ -241,7 +252,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 				*/
 			});
 		});
-	}
+	//}
 };
 VhplabInterface.prototype.initContent = function() {
 	var position = $("#content").position();
@@ -280,6 +291,7 @@ VhplabInterface.prototype.setCookie = function(_opts) {
     document.cookie = "nodes="+ _opts.nodes +"; " + expires;
 };
 VhplabInterface.prototype.setVisibleNodes= function() {
+	console.log('setVisibleNodes();');
 	var found = '';
 	this.visibleNodes = new Array();
 	if (this.map.open) {

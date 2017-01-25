@@ -31,18 +31,16 @@ VhplabMap.prototype.addMarkers = function(_data, _callback) {
 				if(navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition(function(position) {
 						// geolocation success
+						console.log('getCurrentPosition success');
 						cgeomap.map.updateMap(position.coords.latitude, position.coords.longitude);
 						cgeomap.map.map.panTo([position.coords.latitude, position.coords.longitude]);
 						var loadded = cgeomap.map.mapLayer.markerList.length;
-						cgeomap.map.bindActions();
-						if (_callback) _callback();
 					}, function() {
 						// geolocation error
+						console.log('getCurrentPosition error');
 						var center = cgeomap.map.map.getCenter();
 						cgeomap.map.updateDistances(center.lat, center.lng);
       					var loadded = cgeomap.map.mapLayer.markerList.length;
-						cgeomap.map.bindActions();
-						if (_callback) _callback();
    					}, {
  						enableHighAccuracy: true, 
 						maximumAge : 20000, 
@@ -61,6 +59,7 @@ VhplabMap.prototype.addMarkers = function(_data, _callback) {
 				}
 				console.log('markerList: '+ cgeomap.map.mapLayer.markerList.toString());
 				console.log('layer.length: '+ cgeomap.map.mapLayer.layer.getLayers().length);
+				//console.log('layer.navigationHtml: '+ cgeomap.map.mapLayer.navigationHtml);
 				// Callback to bind actiosn after loading and creating markers
 				if (_callback) _callback();
 			}
@@ -70,8 +69,35 @@ VhplabMap.prototype.addMarkers = function(_data, _callback) {
 		if (_callback) _callback();
 	}
 };
+VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
+	console.log('/* phone prototypes */ cgeomap.map.addMarkerToLayer();');
+	console.log('Add Marker: "'+ _marker.id +'" to layer');
+	// Add marker to marker's list
+	_layer.markerList.push(_marker.id);
+	var visible = 'default';
+	if (($(_marker.data).data('visibility')=='qr')||($(_marker.data).data('visibility')=='proximity')) {
+		if (cgeomap.visibleNodes.indexOf(parseInt(_marker.id)) != -1) {  
+			visible = 'found';
+			// Add marker to leaflet layer
+			_layer.layer.addLayer(_marker.marker);
+		} else {
+			visible = 'hidden';
+			console.log('marker '+ _marker.id +' is hidden');
+				
+		}
+	} else {
+		// Add marker to leaflet layer
+		_layer.layer.addLayer(_marker.marker);
+	}
+	// Update navigation html
+	_layer.addToNavigationHtml(cgeomap.createNavigationElement('\t\t\t\t',  _marker.id, $(_marker.data).data('titre'), $(_marker.data).data('soustitre'), _marker.distance, $(_marker.data).data('enclosure'), visible));		
+};
 VhplabMap.prototype.bindActions = function() {
-	cgeomap.createNavigationList();
+	console.log('/* phone prototypes */ cgeomap.map.bindActions();');
+	//cgeomap.createNavigationList();
+	$('#content ul').empty();
+	$('#content ul').append(this.mapLayer.navigationHtml);
+	//console.log('append html to #content ul:'+ this.mapLayer.navigationHtml);
 	cgeomap.bindNavigationListActions();
 	cgeomap.slideContent('show');
 	var width = parseInt(cgeomap.windowWidth);
@@ -170,14 +196,18 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.locationWatch;
 };
 VhplabMap.prototype.loadMarkers = function() {
-	var self = this;
+	// Load markers data
+	console.log('/* phone prototypes */ cgeomap.map.loadMarkers();');
 	var url = this.markersURL;
 	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
-	// load markers data
-	// get URL via alert(url);
+	// Get URL via log
+	console.log('Markers URL: '+ url);
 	$.getJSON(url, function(data){
-		self.addMarkers(data[0]);
+		console.log('Markers loaded!');
+		cgeomap.map.addMarkers(data[0], function() {
+			cgeomap.map.bindActions();
+		});
 	});					
 };
 VhplabMap.prototype.myLocation = function(_callback) {
@@ -213,6 +243,7 @@ VhplabMap.prototype.openMarker = function(_autoplay) {
 	}
 };
 VhplabMap.prototype.updateDistances = function(_lat, _lng) {
+	//console.log('/* phone prototypes */ cgeomap.map.updateDistances();');
 	$.each($(this.markers).data(), function(name, marker) {
 		marker.setDistance(_lat, _lng);
 	});
@@ -233,7 +264,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 	}
 };
 VhplabMap.prototype.updateMap = function(_lat, _lng) {
-	//alert('updateMap');
+	//console.log('/* phone prototypes */ cgeomap.map.updateMap();');
 	$("#navigation hgroup .gps span").css('background-color', '#0bdec9');
 	setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', 'rgba(255,255,255,0.8)'); }, 300);
 	this.locationCircle1.setLatLng([_lat, _lng]);
@@ -393,6 +424,8 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	this.marker.on('click', function(e) {
 		self.click();
 	});
+	
+	this.hasDistance = false;
 };
 VhplabMarker.prototype.openInfoWindow = function() {
 	if(this.parent.open) {
@@ -432,9 +465,15 @@ VhplabMarker.prototype.getData = function(_callback) {
 	}
 };
 VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
+	//console.log('/* phone prototypes */ marker.setDistance();');
 	this.distance = L.latLng([this.lat, this.lng]).distanceTo([_refLat, _refLng]);
+	//console.log('distance: '+ this.distance);
 	if (this.distance<1000) {
 		$('#article_'+ this.id +' header .info .distance').html(parseInt(this.distance) + ' m');
+	} else if (!this.hasDistance) {
+		$('#article_'+ this.id +' header .info .distance').html(parseInt((this.distance - this.distance%1000)/1000) + ' km');
+		this.hasDistance = true;
+		console.log('distance is very big!');
 	}
 	if ((this.distance>150)&&($(this.data).data('visibility')=='proximity')) {
 		this.vibrate = true;
