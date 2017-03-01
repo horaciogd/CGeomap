@@ -378,6 +378,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	if (typeof _opts.enclosure != "undefined") {
 		var enclosureIds = new Array();
 		$.each(_opts.enclosure, function(u, enclosure) {
+			console.log('/* phone prototypes */ enclosure: '+ enclosure);
 			cgeomap.player.addTrack(enclosure);
 			enclosureIds.push(enclosure.id);
 		});

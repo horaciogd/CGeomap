@@ -73,6 +73,7 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
 			if(i==count) {
 				// Paginate only if needed
 				(i>6) ? target.pagination = true : target.pagination = false;
+				target.pages =  (i - i % 6) / 6;
 				console.log('markerList: '+ target.markerList.toString());
 				console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
@@ -104,9 +105,12 @@ VhplabMap.prototype.addMarkersToEditorLayer = function() {
 			n++;
 		}
 	});
-	(n>6) ? target.pagination = false : target.pagination = true;
+	(n>6) ? target.pagination = true : target.pagination = false;
+	target.pages =  (n - n % 6) / 6;
 	console.log('markerList: '+ target.markerList.toString());
 	console.log('layer.length: '+ target.layer.getLayers().length);
+	console.log('target.pagination: '+ target.pagination);
+	console.log('n: '+ n);
 };
 VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
 	console.log('Add Marker: "'+ _marker.id +'" to layer');
@@ -162,11 +166,6 @@ VhplabMap.prototype.createMap = function(_opts) {
 		ext: 'png'
 	});
 	this.tileLayer.addTo(this.map);
-	/*this.tileLayer.setZIndex(0);*/
-	//alert (this.tileLayer.getPane());
-	//this.tileLayer.getPane().style.zIndex = 0;
-	//this.tileLayer.bringToBack();
-	//alert (this.tileLayer.zIndex);
 };
 VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer) {
 	// create Marker
@@ -318,7 +317,8 @@ VhplabMap.prototype.rebuildLayer = function(_name) {
 		// Add marker to vhpLayer
 		cgeomap.map.addMarkerToLayer($(cgeomap.map.markers).data('marker_'+ id), i, target);
 	});
-	(markerList.length>6) ? target.pagination = false : target.pagination = true;
+	(markerList.length>6) ? target.pagination = true : target.pagination = false;
+	target.pages =  (markerList.length - markerList.length % 6) / 6;
 	console.log('markerList: '+ target.markerList.toString());
 	console.log('layer.length: '+ target.layer.getLayers().length);
 };
@@ -441,7 +441,7 @@ VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
 		this.hideActiveLayer();
 		this.map.addLayer(target.layer);
 		// append navigation html
-		if (_name != 'empty') cgeomap.appendNavigationList(target.navigationHtml, target.pagination);
+		if (_name != 'empty') cgeomap.appendNavigationList(target.navigationHtml, target.pagination, target.pages);
 		// Store actual layer name
 		this.activeLayer = _name;
 		// Fit bounds to layer
@@ -496,6 +496,7 @@ VhplabMap.prototype.updateMarkers = function(_data, _layer, _callback) {
 			if(i==count) {
 				// Paginate only if needed
 				(i>6) ? target.pagination = true : target.pagination = false;
+				target.pages =  (i - i % 6) / 6;
 				console.log('markerList: '+ target.markerList.toString());
 				console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
@@ -520,6 +521,7 @@ function VhplabLayer() {
 	this.markerList = new Array();
 	this.navigationHtml = '';
 	this.pagination = false;
+	this.pages = 0;
 };
 VhplabLayer.prototype.addToNavigationHtml = function(_html) {
 	this.navigationHtml += _html;
@@ -732,6 +734,7 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	
 	var self = this;
 	// get URL via alert(this.json);
+	console.log('update marker data  URL: '+ this.json);
 	$.getJSON(this.json, function(data) {
 		$.each(data[0].marker, function(i, marker){
 			self.loadWindowData(marker);

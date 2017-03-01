@@ -253,6 +253,42 @@ function vhplab_process_modules($modules, $id) {
 					}
 					$txt .= "\n</module>";
 					break;
+				case 'video':
+					if (is_array($module['data'])) {
+						// Guardamos el fotograma como documento adjunto
+						$file = array('name' => $module['data']['name'], 'tmp_name' => $module['data']['mediumUrl']);
+						$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id), 'image');
+						sql_updateq('spip_documents', array('statut' => 'publie', 'date_publication' => date('Y-m-d H:i:s')), 'id_document='.intval($id_document[0]));
+						sql_insertq('spip_documents_liens', array('id_document' => intval($id_document[0]), 'id_objet' => intval($id), 'objet' => 'article', 'vu' => 'oui'));
+						// Recogemos la proporción del video
+						$result = sql_select('*', 'spip_documents', 'id_document='.intval($id_document[0]));
+						$w = '800';
+						$h = '450';
+						if ($row = sql_fetch($result)){
+							$w = $row['largeur'];
+							$h = $row['hauteur'];
+						}
+						$txt .= "\n<module class=\"video\" name=\"".$module['header']."\"><".$module['channel_data'].$id_document[0]."|video=".$module['id_data']."|w=".$w."|h=".$h."></module>";
+					} else {
+						// Recogemos la proporción del video
+						$result = sql_select('*', 'spip_documents', 'id_document='.intval($module['data']));
+						$w = '800';
+						$h = '450';
+						if ($row = sql_fetch($result)){
+							$w = $row['largeur'];
+							$h = $row['hauteur'];
+						}
+						$txt .= "\n<module class=\"video\" name=\"".$module['header']."\"><".$module['channel_data'].$module['data']."|video=".$module['id_data']."|w=".$w."|h=".$h."></module>";
+					}
+					if (isset($module['delete_data'])) {
+						if ($delete_data = intval($module['delete_data'])) {
+							sql_delete('spip_documents_liens', 'id_document='.$delete_data);
+							$supprimer_document = charger_fonction('supprimer_document','action');
+							$supprimer_document($delete_data);
+							spip_log("supprimer document ($type)".$delete_data, 'upload');
+						}
+					}
+					break;
 			}
 		}
 	}

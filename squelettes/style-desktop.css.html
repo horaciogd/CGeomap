@@ -47,7 +47,7 @@
 #navigation .wrapper, #content .wrapper, .wrap_cartography, footer .wrapper { border: 1px solid [(#GET{white})]; background: [(#GET{alpha-white})]; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 3px 3px 6px [(#GET{alpha-shadow})]; -moz-box-shadow: 3px 3px 6px [(#GET{alpha-shadow})]; box-shadow: 3px 3px 6px [(#GET{alpha-shadow})]; }
 
 /* buttons */
-.media .btn, .audio .btn, .submit input, .editer, #logout, #contributions ol li .delete{ color: [(#GET{white})]; padding: 3px 6px; border-radius: 10px; font-size: 12px; line-height: 14px; border: transparent solid 1px; white-space: nowrap; }
+.media .btn, .audio .btn, .video .btn, .submit input, .editer, #logout, #contributions ol li .delete{ color: [(#GET{white})]; padding: 3px 6px; border-radius: 10px; font-size: 12px; line-height: 14px; border: transparent solid 1px; white-space: nowrap; }
 #contributions ol li .delete { border-radius: 8px; font-size: 11px; line-height: 11px; }
 
 
@@ -168,13 +168,19 @@
 .header .permalink { position: absolute; top: 0; right: 48px; font-size: 12px; color: [(#GET{grey-medium})]; }
 
 /* scroll  */
+.mCSB_inside > .mCSB_container { margin-right: 8px !important;  }
 article .content.mCustomScrollbar { right: -16px; }
 #contributions.mCustomScrollbar { right: 0px; }
 #formulaire .scroll.mCustomScrollbar { right: -16px; }
-article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol, #formulaire .scroll.mCustomScrollbar .block_modules { margin-right: 8px; }
-article .content.mCS_no_scrollbar { right: 0px; }
-#formulaire .scroll.mCS_no_scrollbar { right: 0px; }
+
+article .content.mCS_no_scrollbar { right: -8px; }
+#formulaire .scroll.mCS_no_scrollbar { right: -8px; }
 #contributions.mCS_no_scrollbar { right: 15px; }
+
+/* Margin to scroll when scrolling */
+article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol, #formulaire .scroll.mCustomScrollbar .block_modules { margin-right: 8px; }
+
+/* No margin when no scroll */
 article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, #formulaire .scroll.mCS_no_scrollbar .block_modules { margin-right: 0px; }
 
 /* Texte  */
@@ -189,7 +195,13 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 .module .content { padding-top: 2px; border-top: none; -webkit-border-bottom-right-radius: 6px; -webkit-border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -moz-border-radius-bottomleft: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; }
 .module .content .wrap { font-size: 0.8em; }
 .module img { border-radius: 4px; }
-.module .vimeo span { display: block; position: absolute; top: 36px; left: 8px; right: 8px; bottom: 10px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-video-play-@2x})],[(#CHEMIN{images/grey/icons/cgeomap-video-play-@2x})]})]'); background-size: 330px 120px; }
+.module .vimeo span, .module .youtube span { border-radius: 4px; display: block; position: absolute; top: 36px; left: 8px; right: 8px; bottom: 10px; background-size: 330px 120px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-video-play-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-video-play-@2x.png})]})]'); 
+	opacity: 0;
+	-webkit-transition: opacity 2s; /* For Safari 3.1 to 6.0 */
+	background-color: rgba(0, 0, 0, .3);
+    transition: opacity 500ms;
+}
+.module .vimeo:hover span, .module .youtube:hover span { opacity: 1; }
 .link a { text-decoration: underline; }
 
 /* qr  */
@@ -245,15 +257,18 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 .visibility .field_box .selected { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-check-@2x.png})],[(#CHEMIN{images/grey/pix/cgeomap-check-@2x.png})]})]'); }
 
 /* modules */
-.module_button { position: absolute; right: -109px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-module-buttons-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-module-buttons-@2x.png})]})]'); background-size: 202px 282px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }
-#add_link_module { background-position: 0px -219px; top: 410px; }
-#add_text_module { background-position: 0px -73px; top: 190px; }
+.module_button { position: absolute; right: -109px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-module-buttons-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-module-buttons-@2x.png})]})]'); background-size: 202px 355px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }
 #add_media_module { background-position: 0px 0px; top: 260px; }
-#add_audio_module { background-position: 0px -146px; top: 340px; }
-#add_link_module:hover { background-position: -108px -219px; }
-#add_text_module:hover { background-position: -108px -73px; }
+#add_text_module { background-position: 0px -73px; top: 190px; }
+#add_audio_module { background-position: 0px -146px; top: 330px; }
+#add_video_module { background-position: 0px -219px; top: 400px; }
+#add_link_module { background-position: 0px -292px; top: 470px; }
+
 #add_media_module:hover { background-position: -108px 0px; }
+#add_text_module:hover { background-position: -108px -73px; }
 #add_audio_module:hover { background-position: -108px -146px; }
+#add_video_module:hover { background-position: -108px -219px; }
+#add_link_module:hover { background-position: -108px -292px; }
 
 /* tgl */
 .modules .tgl { display: none; }
@@ -276,7 +291,7 @@ form .link ul { margin-bottom: 20px; }
 .link .add { position: absolute; bottom: 8px; right: 8px; }
 
 /* fileupload */
-.media .field_box, .media .value_box, .audio .field_box, .audio .value_box { text-align: center; }
+.media .field_box, .media .value_box, .audio .field_box, .audio .value_box, .video .field_box, .video .value_box { text-align: center; }
 .module .fileinput { overflow: hidden; background-color: [(#GET{dark-bg})]; border-color: [(#GET{grey-dark})]; color: [(#GET{white})]; }
 .module .fileinput:hover, .module .fileinput:focus, .module .fileinput:active { background-color: [(#GET{bright-bg})]; }
 .module .fileinput input { position: absolute; top: 0; right: 0; margin: 0; opacity: 0; -ms-filter: 'alpha(opacity=0)'; font-size: 200px; direction: ltr; cursor: pointer; }
@@ -288,6 +303,21 @@ form .link ul { margin-bottom: 20px; }
 
 .module .progress {  height: 20px; overflow: hidden; background-color: [(#GET{grey-bright})]; border-radius: 4px; -webkit-box-shadow: inset 0 1px 2px [(#GET{alpha-soft-shadow})]; box-shadow: inset 0 1px 2px [(#GET{alpha-soft-shadow})]; }
 .module .progress-bar { float: left; width: 0; height: 100%; line-height: 20px; background-color: [(#GET{medium-bg})]; -webkit-box-shadow: inset 0 -1px 0 [(#GET{alpha-soft-shadow})]; box-shadow: inset 0 -1px 0 [(#GET{alpha-soft-shadow})]; -webkit-transition: width .6s ease;  transition: width .6s ease; }
+
+/* video */
+.video fieldset { position: relative; /* width: 100%;*/ }
+
+.video .url_video { position: absolute; left: 0; top: 24px; }
+
+.video ul.field_box { text-align: right; margin-bottom: 8px; }
+.video ul.field_box li { display: inline-block; line-height: 24px; }
+.video ul.field_box li.label { float: left; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-globe-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-globe-@2x.png})]})]'); background-size: 24px 24px; padding-left: 24px; background-repeat: no-repeat; }
+.video ul.field_box li.label, .field_box label { font-size: 0.8em; vertical-align: middle; }
+.video ul.field_box .btn { width: 24px; height: 24px; background-size: 24px 24px; background-position: center center; border-radius: 7px; border: 2px solid [(#GET{grey-dark})]; margin: 0 2px 0 6px; background-color: transparent; }
+.video ul.field_box .btn:hover, .field_box .btn:focus, .field_box .btn:active { background-color: [(#GET{bright-bg})]; outline: 0; }
+.field_box .btn::-moz-focus-inner { border: 0; }
+.video ul.field_box .selected { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-check-@2x.png})],[(#CHEMIN{images/grey/pix/cgeomap-check-@2x.png})]})]'); }
+.video ul.field_box { margin-top: 20px; }
 
 /* cartography */
 .wrap_cartography { }

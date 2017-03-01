@@ -71,8 +71,6 @@ VhplabMap.prototype.addEditorMarkers = function(_data, _callback) {
 	}
 	
 };
-*/
-/*
 VhplabMap.prototype.addNewMarkers = function(_data, _callback) {
 	
 	var n = this.offset;
@@ -453,9 +451,11 @@ VhplabMarker.prototype.appendContent = function() {
 				}
 			});
 		});
+		console.log('/* fancybox */');
 		$("#article .modules_list .vimeo").fancybox({
 			'width'				: $("#article .modules_list .vimeo").data('width'),
 			'height'			: $("#article .modules_list .vimeo").data('height'),
+        	'arrows'     		: false,
         	'autoScale'     	: false,
         	'transitionIn'		: 'none',
 			'transitionOut'		: 'none',

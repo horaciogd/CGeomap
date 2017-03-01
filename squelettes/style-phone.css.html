@@ -40,14 +40,14 @@
    Select
 -------------------- */
 
-#select .wrapper { top: 8px; bottom: 8px; right: 8px; left: 8px; padding: 6px; background: [(#GET{white})]; 
+#select .wrapper { top: 8px; bottom: 70px; right: 8px; left: 8px; padding: 6px; background: [(#GET{white})]; 
 -webkit-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ -moz-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ }
 #select ul li { display: block; }
 #select ul li h2 { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 0; background: [(#GET{bright-bg})];/*#18c2b1*/ font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: [(#GET{white})]; white-space: nowrap; }
 #select ul li:last-child h2 { margin: 0; }
 #select ul li h2:active { background: [(#GET{bright-bg})];/*#0bdec9*/ }
-.welcome { padding: 6px 8px; background-color: [(#GET{medium-bg})]; }
-.welcome span { display: block; cursor: pointer;  background-color: [(#GET{dark-bg})]; color: [(#GET{white})]; padding: 3px 6px; border-radius: 10px; font-size: 12px; line-height: 14px; border: transparent solid 1px; white-space: nowrap; }
+.welcome { position: absolute; bottom: 8px; right: 8px; left: 8px; height: 30px; padding: 16px 28px; background-color: [(#GET{medium-bg})]; }
+.welcome span { text-align: center; display: block; cursor: pointer;  background-color: [(#GET{dark-bg})]; color: [(#GET{white})]; padding: 0 0 3px 0; border-radius: 6px; font-size: 18px; font-weight: 500; vertical-align: middle; line-height: 30px; border: transparent solid 1px; white-space: nowrap; }
 .welcome span:hover { background-color: [(#GET{bright-bg})]; }
 
 
@@ -61,7 +61,7 @@
 #navigation .logo { display: inline; padding: 0 6px; line-height: 32px; vertical-align: middle; }
 
 /* bookmark & GPS */
-#bookmark { background-color: [(#GET{dark-bg})];/*#00adab*/ text-align: center; padding: 4px;}
+#bookmark { background-color: [(#GET{medium-bg})];/*#00adab*/ text-align: center; padding: 4px;}
 #bookmark .wrapper {  display: none; position: relative; background-color: [(#GET{white})]; border-radius: 7px; padding: 7px 7px 3px 7px; margin: 7px; }
 #bookmark img { margin-top: 14px; }
 #bookmark p:last-child { text-align: right; }
@@ -95,12 +95,14 @@ background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(24,
 #content .listado_nodos .header hgroup:hover .info, #content .listado_nodos .header hgroup:active .info { 
 /* para hacer este hover haría falta un color extra o cambiar algo*/
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
-background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%, [(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%, [(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/), color-stop(30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/), color-stop(100%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* IE10+ */
-background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(11,222,201,1)*/ 100%); /* W3C */
+
+background: -moz-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%, [(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%, [(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/), color-stop(30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/), color-stop(100%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* W3C */
+
 }
 #content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: [(#GET{white})]; }
 #content .listado_nodos .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-bird-@2x.png})]})]'); background-size: 26px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }
@@ -123,7 +125,7 @@ background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(11,
 .module header { text-align: center; }
 .module .content .wrap { font-size: 0.8em; }
 .module img { border-radius: 4px; }
-.media .content { text-align: center; }
+.media .content, .video .content { text-align: center; }
 
 /* Player  */
 .vhplab_player { text-align: center; }

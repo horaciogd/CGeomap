@@ -28,7 +28,7 @@ function VhplabInterface() {
   	this.toggleContentOffset = -12;
 	this.form = new VhplabContribuerFrom();
 };
-VhplabInterface.prototype.appendNavigationList = function(html, pagination) {
+VhplabInterface.prototype.appendNavigationList = function(html, pagination, pages) {
 	console.log('cgeomap.appendNavigationList();');
 	console.log('html: '+ html);
 	console.log('pagination: '+ pagination);
@@ -36,8 +36,15 @@ VhplabInterface.prototype.appendNavigationList = function(html, pagination) {
 		$('#navigation .menu .list').empty();
 		$('#navigation .menu .list').append(html);
 		$('#navigation .menu .list').data('pagination', 0);
-		$('#navigation .menu .list').data('last', pagination);
-		(pagination) ? cgeomap.paginateNavigation(0) : $('#navigation .pagination').remove();
+		$('#navigation .menu .list').data('last', pages);
+		if (pagination) {
+			$('#navigation .pagination').empty();
+			$('#navigation .pagination').append("<span class=\"btn next\"></span><span class=\"btn prev\"></span>");
+			$('#navigation .pagination').show();
+			cgeomap.paginateNavigation(0);
+		} else {
+			 $('#navigation .pagination').hide();
+		 }
 		cgeomap.bindNavigationListActions();
 		$('#navigation .menu .list').slideDown("slow");
 	});
@@ -175,6 +182,11 @@ VhplabInterface.prototype.loadMap = function(_force, _callback) {
 VhplabInterface.prototype.paginateNavigation = function(_dir) {
 	var pos = $('#navigation .menu .list').data('pagination');
 	var last = $('#navigation .menu .list').data('last');
+	
+	
+	console.log('paginateNavigation - pos: '+ pos +', last: '+ last);
+	
+	
 	if (_dir=='prev') {
 		pos --;
 	} else if (_dir=='next') {
@@ -182,6 +194,7 @@ VhplabInterface.prototype.paginateNavigation = function(_dir) {
 	} else {
 		pos = _dir;
 	}
+	
 	if ((pos>=0)&&(pos<=last)) {
 		$('#navigation .menu .list li').hide();
 		$('#navigation .menu .list li.group_'+ pos).show();

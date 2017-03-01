@@ -73,6 +73,7 @@ function extraire_formulaire_module($baliza) {
 		// $return .= '('.$i.') '.$block['class'];
 		$modules = get_modules($block['content']);
 		// $return .= ' - num modules:'.count($modules).' ';
+		$n_video = 0;
 		$n_audio = 0;
 		$n_image = 0;
 		$n_text = 0;
@@ -83,6 +84,8 @@ function extraire_formulaire_module($baliza) {
 			// $return .= $modules[$u]['class'].' ';
 			switch ($modules[$u]['class']) {
 				case "video":
+					$modules_content .= get_video_form_module($modules[$u]['content'], $modules[$u]['name'], $t."\t", $n_video);
+					$n_video++;
 					break;
 				case "audio":
 					$modules_content .= get_audio_form_module($modules[$u]['content'], $modules[$u]['name'], $t."\t", $n_audio);
@@ -213,6 +216,48 @@ function get_audio_form_module($text, $name, $t, $n_audio) {
 	$return .= $t."</li><!-- audio module -->\n";
 	return $return; 				
 }
+
+function get_video_form_module($text, $name, $t, $n_video) {
+	$video = explode(' ', $text);
+	$titre = explode('/', $video[0]);
+	$return = "\n";
+	$return .= $t."<li class=\"video video_".$n_video." module\">\n";
+	$return .= $t."\t<header title=\""._T('cgeomap:help_handler')."\">\n";
+	$return .= $t."\t\t<h5  title=\""._T('cgeomap:help_video_image')."\">".$name."</h5>\n";
+	
+	$return .= $t."\t\t<input name=\"header_field\" class=\"hidden\" value=\"".$name."\" type=\"text\">\n";
+	$return .= $t."\t</header>\n";
+	$return .= $t."\t<div class=\"content\">\n";
+	$return .= $t."\t<span class=\"delete\"></span>\n";
+	
+	$return .= $t."\t\t<fieldset>\n";
+	$return .= $t."\t\t\t<div class=\"value_box\">\n";
+	$return .= $t."\t\t\t\t<img src=\"".$video[5]."\" width=\"".intval($video[6]/2)."\" height=\"".intval($video[7]/2)."\" data-id=\"".$video[8]."\" ><div class=\"btn remove_media\"><span>"._T('cgeomap:eliminar')."</span></div>\n";
+	$return .= $t."\t\t\t</div>\n";
+	$return .= $t."\t\t\t<div style=\"display: none;\" class=\"field_box\">\n";
+	$return .= $t."\t\t\t\t<span style=\"display: none;\" class=\"btn fileinput\">\n";
+	$return .= $t."\t\t\t\t\t<span>"._T('cgeomap:seleciona_imagen')."</span>\n";
+	$return .= $t."\t\t\t\t\t<input class=\"fileupload\" name=\"files[]\" multiple=\"\" type=\"file\">\n";
+	$return .= $t."\t\t\t\t</span>\n";
+	$return .= $t."\t\t\t\t<div class=\"progress hidden\">\n";
+	$return .= $t."\t\t\t\t\t<div class=\"progress-bar\"></div>\n";
+	$return .= $t."\t\t\t\t</div>\n";
+	$return .= $t."\t\t\t\t<span class=\"error\"></span>\n";
+	$return .= $t."\t\t\t</div>\n";
+	$return .= $t."\t\t</fieldset>\n";
+	
+	$return .= $t."\t\t<fieldset>\n";
+	$return .= $t."\t\t\t<ul class=\"field_box channel\">\n";
+	$return .= $t."\t\t\t\t<li><input class=\"form-control url_video\" name=\"url_video\" placeholder=\""._T('cgeomap:url_video')."\" type=\"text\"><label for=\"url_video\"><a href=\"\" data-id=\"".$video[9]."\" data-channel=\"".$video[10]."\" data-width=\"".intval($video[3])."\" data-height=\"".intval($video[4])."\" data-w=\"".intval($video[1])."\" data-h=\"".intval($video[2])."\" class=\"value\" target=\"_blank\"></a></label></li>\n";
+	$return .= $t."\t\t\t\t<li class=\"select\"><button type=\"button\" class=\"btn select-platform\" name=\"select-youtube\" value=\"youtube\"></button><label for=\"select-youtube\">youtube</label></li>\n";
+	$return .= $t."\t\t\t\t<li class=\"select\"><button type=\"button\" class=\"btn select-platform\" name=\"select-vimeo\" value=\"vimeo\"></button><label for=\"select-vimeo\">vimeo</label></li>\n";
+	$return .= $t."\t\t\t</ul>\n";
+	$return .= $t."\t\t</fieldset>\n";
+				
+	$return .= $t."\t</div>\n";
+	$return .= $t."</li><!-- video module -->\n";
+	return $return;	
+}	
 function get_video_module($text, $name, $t) {
 	$video = explode(' ', $text);
 	$titre = explode('/', $video[0]);

@@ -225,34 +225,39 @@ VhplabInterface.prototype.initialize = function(_opts) {
 		console.log('$("#select").load('+ this.url_site +'spip.php?page=ajax-select);');
 		
 		
-		var width = parseInt(cgeomap.windowWidth-34);
+		var width = parseInt(cgeomap.windowWidth-54);
 		if (width>=900) width = 900;
 		// get URL via alert(this.json +'&width='+ width +'&link=false');
 		console.log('$("#select").load('+ this.url_site+'spip.php?page=ajax-article&id_article=1' +'&width='+ width +'&link=false);');
 		
 		$('#select').empty();
-		$("#select").load(this.url_site+'spip.php?page=ajax-article&id_article=1' +'&width='+ width +'&link=false', function() {
+		
+		
+		var url = this.url_site +'spip.php?page=json-vhplab-geo-article&id_article=1&width='+ width +'&link=false';
+		console.log('url json:'+ url);
+		$.getJSON(url, function(data) {
+			$.each(data[0].marker, function(i, marker){
 			
-			cgeomap.bindModulesActions('#select');
-			$('#select .wrapper').append('<div class="welcome"><span class="btn go">go</span></div>');
-			$("#select").slideDown('fast', function(){
+				$("#select").append('<div class="wrapper"></div>');
+				$("#select .wrapper").append(marker.texte);
 				
-			$("#select .welcome .btn").click(function(){
-				$("#select").fadeOut('fast', function(){
-					cgeomap.continueInitialize(_opts);
+				cgeomap.bindModulesActions('#select');
+				
+				$.each(marker.enclosure, function(u, enclosure) {
+					cgeomap.player.addTrack(enclosure);
 				});
-			});
-				/*
-				$("#select li").click(function(){
-					if (typeof _opts.map_opts != "undefined") _opts.map_opts.auteur = $(this).data('id');
-					$("#select").fadeOut('fast', function(){
-						cgeomap.continueInitialize(_opts);
+		
+				$('#select').append('<div class="welcome"><span class="btn go">go</span></div>');
+				$("#select").slideDown('fast', function(){
+					$("#select .welcome .btn").click(function(){
+						$("#select").fadeOut('fast', function(){
+							cgeomap.continueInitialize(_opts);
+						});
 					});
 				});
-				*/
 			});
 		});
-	//}
+		
 };
 VhplabInterface.prototype.initContent = function() {
 	var position = $("#content").position();

@@ -36,6 +36,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'help_auteur' => 'Selecciona un autor de la lista',
 	'help_handler' => 'Arrastra el módulo hacia arriba o abajo para cambiar el orden. Arrastra hasta el icono de la papelera para eliminar.',
 	'help_image' => 'Haz clic 2 veces para escribir un título diferente para la descripción de la imagen. Subir una imagen en formato JPG o PNG con una dimensión máxima de 2048X1536 pixeles.',
+	'help_video_image' => 'Haz clic 2 veces para escribir un título diferente para la descripción del vídeo. Subir un fotograma del video en formato JPG o PNG de la misma proporción y tamaño que la película.',
 	'help_link' => 'Haz clic 2 veces para escribir un título diferente a tu listado de enlaces. Puedes añadir hasta 15 direcciones de internet. Cuidado, no debes apretar la tecla \'enter\' para terminar la edición de los textos. Haz clic fuera del bloque para seguir editando otros contenidos.',
 	'help_meta_tag' => 'Haz clic 2 veces para escribir una palabras clave técnica diferente.',
 	'help_sound' => 'Haz clic 2 veces para escribir un título diferente para la descripción del audio. Subir un mp3 con una duración máxima de 7 minutos.',
@@ -71,6 +72,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'message_thanks' => 'Gracias!',
 	'module_label_links' => 'enlaces',
 	'module_label_image' => 'imagen',
+	'module_label_video_image' => 'Fotograma de presentación',
 	'module_label_audio' => 'audio',
 	'module_label_address' => 'dirección',
 	'module_label_text' => 'texto',
@@ -110,6 +112,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	
 	// U
 	'url_nodo' => 'URL del nodo',
+	'url_video' => 'URL del video',
 	
 	// V
 	'visible' => 'visibilidad',
