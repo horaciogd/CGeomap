@@ -86,7 +86,8 @@ INSERT INTO `spip_documents_liens` (`id_document`, `id_objet`, `objet`, `vu`) VA
 
 INSERT INTO `spip_groupes_mots` (`id_groupe`, `titre`, `descriptif`, `texte`, `unseul`, `obligatoire`, `tables_liees`, `minirezo`, `comite`, `forum`, `maj`) VALUES
 (1, 'marker_icon', '', '', 'oui', 'oui', 'articles', 'oui', 'oui', 'non', '2017-01-11 18:12:01'),
-(2, 'visibility', '', '', 'non', 'non', 'articles', 'oui', 'oui', 'non', '2017-01-11 18:12:01');
+(2, 'visibility', '', '', 'non', 'non', 'articles', 'oui', 'oui', 'non', '2017-01-11 18:12:01'),
+(3, 'category', '', '', 'oui', 'non', 'articles', 'oui', 'oui', 'non', '2017-01-11 18:12:01');
 
 --
 -- Volcado de datos para la tabla `spip_mots`
@@ -98,7 +99,13 @@ INSERT INTO `spip_mots` (`id_mot`, `titre`, `descriptif`, `texte`, `id_groupe`, 
 (3, '2. proximity', 'Por proximidad', '', 2, 'visibility', '2017-01-11 18:12:01'),
 (5, '0', '', '', 1, 'marker_icon', '2017-01-11 18:12:01'),
 (6, '1', '', '', 1, 'marker_icon', '2017-01-11 18:12:01'),
-(7, '2', '', '', 1, 'marker_icon', '2017-01-11 18:12:01');
+(7, '2', '', '', 1, 'marker_icon', '2017-01-11 18:12:01'),
+(8, 'category_00', 'Categoría 01', '', 3, 'category', '2017-01-11 18:12:01'),
+(9, 'category_01', 'Categoría 02', '', 3, 'category', '2017-01-11 18:12:01'),
+(10, 'category_02', 'Categoría 03', '', 3, 'category', '2017-01-11 18:12:01'),
+(11, 'category_03', 'Categoría 04', '', 3, 'category', '2017-01-11 18:12:01'),
+(12, 'category_04', 'Categoría 05', '', 3, 'category', '2017-01-11 18:12:01'),
+(13, 'category_05', 'Categoría 06', '', 3, 'category', '2017-01-11 18:12:01');
 
 --
 -- Volcado de datos para la tabla `spip_mots_liens`
@@ -110,7 +117,10 @@ INSERT INTO `spip_mots_liens` (`id_mot`, `id_objet`, `objet`) VALUES
 (1, 3, 'article'),
 (5, 1, 'article'),
 (5, 2, 'article'),
-(5, 3, 'article');
+(5, 3, 'article')
+(8, 1, 'article'),
+(8, 2, 'article'),
+(8, 3, 'article');
 
 --
 -- Volcado de datos para la tabla `spip_rubriques`

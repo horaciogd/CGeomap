@@ -1,6 +1,6 @@
 [(#REM)Modele pour <img>]
 <BOUCLE_tous(DOCUMENTS types_documents){id_document=#ID}{tout}>
-[(#ENV{window}|?{[(#SET{w,760})],[(#ENV{width}|?{[(#SET{w,[(#ENV{width}|mult{2})]})],[(#SET{w,660})]})]})]
+[(#ENV{window}|?{[(#SET{w,660})],[(#ENV{width}|?{[(#SET{w,[(#ENV{width}|mult{2})]})],[(#SET{w,660})]})]})]
 [(#SET{src,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{src}|url_absolue)]})]
 [(#SET{h,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{height})]})]
 [(#SET{w,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{width})]})]

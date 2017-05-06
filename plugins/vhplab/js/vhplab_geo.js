@@ -15,6 +15,7 @@ function VhplabMap() {
 	this.map = null;
 	
 	this.tileLayer = null;
+	this.satelliteLayer = null;
 	
 	this.mapLayer = new VhplabLayer();
 	this.editorLayer = new VhplabLayer();
@@ -75,6 +76,7 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
 				(i>6) ? target.pagination = true : target.pagination = false;
 				target.pages =  (i - i % 6) / 6;
 				console.log('markerList: '+ target.markerList.toString());
+				// Esto no puede estar funcionando bien ???
 				console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
 				if (_callback) _callback();
@@ -86,7 +88,7 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
 	}
 };
 VhplabMap.prototype.addMarkersToEditorLayer = function() {
-	console.log('cegeomap.map.addMarkersToEditorLayer();');
+	console.log('cgeomap.map.addMarkersToEditorLayer();');
 	// Empty layer
 	var target = this.getLayer('editor');
 	target.reset();
@@ -113,6 +115,7 @@ VhplabMap.prototype.addMarkersToEditorLayer = function() {
 	console.log('n: '+ n);
 };
 VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
+	console.log('cgeomap.addMarkerToLayer();');
 	console.log('Add Marker: "'+ _marker.id +'" to layer');
 	// Add marker to marker's list
 	_layer.markerList.push(_marker.id);
@@ -151,19 +154,24 @@ VhplabMap.prototype.createMap = function(_opts) {
 	this.lng = _opts.longitude;
 	this.zoom = _opts.zoom;
 	this.map = L.map(_opts.id, { zoomControl: false }).setView([_opts.latitude, _opts.longitude], _opts.zoom);
-	/*
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	/* openstreetmap-tiles */
+	this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(this.map);
-	*/
-	this.tileLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
-		attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-		subdomains: 'abcd',
-		minZoom: 0,
+	});
+	this.satelliteLayer = L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/{type}/{mapID}/hybrid.day/{z}/{x}/{y}/{size}/{format}?app_id={app_id}&app_code={app_code}&lg={language}', {
+		attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+		subdomains: '1234',
+		mapID: 'newest',
+		app_id: 'jsOvofk7CMupabWlBWUg',
+		app_code: '3SaF3jCsS8c-YfUb0gAXlg',
+		base: 'aerial',
 		maxZoom: 20,
-		ext: 'png'
+		type: 'maptile',
+		language: 'eng',
+		format: 'png8',
+		size: '256'
 	});
 	this.tileLayer.addTo(this.map);
 };
@@ -303,7 +311,7 @@ VhplabMap.prototype.panOut = function() {
 	this.map.setView([this.lat, this.lng], this.zoom);
 };
 VhplabMap.prototype.rebuildLayer = function(_name) {
-	console.log('cegeomap.map.rebuildLayer("'+ _name +'");');
+	console.log('cgeomap.map.rebuildLayer("'+ _name +'");');
 	// Store variables
 	var target = this.getLayer(_name);
 	var markerList = Array.from(target.markerList);
@@ -323,7 +331,7 @@ VhplabMap.prototype.rebuildLayer = function(_name) {
 	console.log('layer.length: '+ target.layer.getLayers().length);
 };
 VhplabMap.prototype.removeFromLayer = function(_id, _name) {
-	console.log('cegeomap.map.removeFromLayer('+ _id +', "'+ _name +'");');
+	console.log('cgeomap.map.removeFromLayer('+ _id +', "'+ _name +'");');
 	// Store variables
 	var target = this.getLayer(_name);
 	var index = target.markerList.indexOf(_id);
@@ -345,6 +353,48 @@ VhplabMap.prototype.reloadMarkers = function(_callback) {
 			if (_callback) _callback();
 		});
 	});	
+};
+VhplabMap.prototype.setBaseLayer = function() {
+	this.satelliteLayer.remove();
+	this.tileLayer.addTo(this.map);
+};
+VhplabMap.prototype.setClickableMarker = function(_opts) {
+	var url;
+	if (typeof _opts.default_icon != "undefined") {
+		url = _opts.default_icon;
+	} else if ((typeof $("#formulaire .icon").attr("src") != "undefined")&&($("#formulaire .icon").attr("src") != "")) {
+		url = $("#formulaire .icon").attr("src");
+	} else {
+		url = this.baseURL + 'plugins/vhplab/images/icons/default_icon.png';
+	}
+	console.log('setClickableMarker({ icon: '+ url +', latitude: '+ _opts.latitude +', longitude: '+ _opts.longitude +', zoom: '+ _opts.zoom +'});');
+	var icon = L.icon({
+		iconUrl: url,
+    	iconRetinaUrl: url,
+    	iconSize: [60, 60],
+		iconAnchor: [30, 60]
+	});
+	this.clickableMarker.setIcon(icon);
+	var latitude, longitude, zoom;
+	var pos = this.map.getCenter();
+	(typeof _opts.latitude!="undefined") ? latitude = _opts.latitude : latitude = pos.lat;
+	(typeof _opts.longitude!="undefined") ? longitude = _opts.longitude : longitude = pos.lng;
+	(typeof _opts.zoom!="undefined") ? zoom = _opts.zoom : zoom = this.map.getZoom();
+	if ( ((latitude==0.0)&&(longitude==0.0)&&(navigator.geolocation)) || ((typeof _opts.position!="undefined")&&(_opts.position=="geolocation")) ) {
+		console.log('setting ClickableMarker at geolocation position');
+		navigator.geolocation.getCurrentPosition(function(position) {
+			// success
+			console.log('geolocation success: '+ position.coords.latitude +', '+ position.coords.longitude);
+			cgeomap.map.addClickableMarker(position.coords.latitude, position.coords.longitude, '');
+		}, function() {
+			// error
+			console.log('geolocation error');
+			cgeomap.map.addClickableMarker(latitude, longitude, '');
+		});
+	} else {
+		console.log('showing Marker');
+		this.addClickableMarker(latitude, longitude, zoom);
+	}
 };
 VhplabMap.prototype.setInitialMarker = function(_opts) {
 	var url, visible;
@@ -394,46 +444,12 @@ VhplabMap.prototype.setInitialMarker = function(_opts) {
 	
 	//this.clickableMarker.setOpacity(visible);
 };
-VhplabMap.prototype.setClickableMarker = function(_opts) {
-	var url;
-	if (typeof _opts.default_icon != "undefined") {
-		url = _opts.default_icon;
-	} else if ((typeof $("#formulaire .icon").attr("src") != "undefined")&&($("#formulaire .icon").attr("src") != "")) {
-		url = $("#formulaire .icon").attr("src");
-	} else {
-		url = this.baseURL + 'plugins/vhplab/images/icons/default_icon.png';
-	}
-	console.log('setClickableMarker({ icon: '+ url +', latitude: '+ _opts.latitude +', longitude: '+ _opts.longitude +', zoom: '+ _opts.zoom +'});');
-	var icon = L.icon({
-		iconUrl: url,
-    	iconRetinaUrl: url,
-    	iconSize: [60, 60],
-		iconAnchor: [30, 60]
-	});
-	this.clickableMarker.setIcon(icon);
-	var latitude, longitude, zoom;
-	var pos = this.map.getCenter();
-	(typeof _opts.latitude!="undefined") ? latitude = _opts.latitude : latitude = pos.lat;
-	(typeof _opts.longitude!="undefined") ? longitude = _opts.longitude : longitude = pos.lng;
-	(typeof _opts.zoom!="undefined") ? zoom = _opts.zoom : zoom = this.map.getZoom();
-	if ( ((latitude==0.0)&&(longitude==0.0)&&(navigator.geolocation)) || ((typeof _opts.position!="undefined")&&(_opts.position=="geolocation")) ) {
-		console.log('setting ClickableMarker at geolocation position');
-		navigator.geolocation.getCurrentPosition(function(position) {
-			// success
-			console.log('geolocation success: '+ position.coords.latitude +', '+ position.coords.longitude);
-			cgeomap.map.addClickableMarker(position.coords.latitude, position.coords.longitude, '');
-		}, function() {
-			// error
-			console.log('geolocation error');
-			cgeomap.map.addClickableMarker(latitude, longitude, '');
-		});
-	} else {
-		console.log('showing Marker');
-		this.addClickableMarker(latitude, longitude, zoom);
-	}
+VhplabMap.prototype.setSatelliteLayer = function() {
+	this.tileLayer.remove();
+	this.satelliteLayer.addTo(this.map);
 };
 VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
-	console.log('cegeomap.map.showLayer("'+ _name +'");');
+	console.log('cgeomap.map.showLayer("'+ _name +'");');
 	if (this.activeLayer != _name) {
 		// Get layer
 		var target = this.getLayer(_name);
@@ -530,6 +546,9 @@ VhplabLayer.prototype.reset = function() {
 	this.layer.clearLayers();
 	this.markerList = new Array();
 	this.navigationHtml = '';
+};
+VhplabLayer.prototype.resetNavigationHtml = function(_html) {
+	this.navigationHtml = _html;
 };
 
 // ************ //
@@ -772,6 +791,58 @@ var vhplabZoomControl = L.Control.Zoom.extend({
 		this._parent.panOut()
 	},
 	setParent: function(_parent) {
+		this._parent = _parent;
+	}
+});
+
+//***********
+// Map Type Custom Control
+//***********
+var vhplabTypeControl =  L.Control.Zoom.extend({
+	options: {
+    	position: 'bottomright'
+ 	 },
+  	onAdd: function (map) {
+		var typeName = 'leaflet-control-type';
+    	var container = L.DomUtil.create('div', typeName +' leaflet-bar leaflet-control');
+    	this._button  = this._createButton(
+			'Satelite', 'changeType',
+			typeName + '-in',  container, this.changeType,  this);
+		this._map = map;
+    	return container;
+  	},
+	changeType: function() {
+		if (this._layer == 'street') {
+			this._parent.tileLayer.remove();
+			this._parent.satelliteLayer.addTo(this._map);
+			this._layer = 'satellite';
+			$('.leaflet-control-type a').html('Street');
+			$('.cgeomap').addClass('clean');
+		} else {
+			this._parent.satelliteLayer.remove();
+			this._parent.tileLayer.addTo(this._map);
+			this._layer = 'street';
+			$('.leaflet-control-type a').html('Satelite');
+			$('.cgeomap').removeClass('clean');
+		}
+	},
+	changeTypeTo: function(_type) {
+		if ((_type == 'street')&&(this._layer != 'street')) {
+			this._parent.satelliteLayer.remove();
+			this._parent.tileLayer.addTo(this._map);
+			this._layer = 'street';
+			$('.leaflet-control-type a').html('Satelite');
+			$('.cgeomap').removeClass('clean');
+		} else if ((_type == 'satellite')&&(this._layer != 'satellite')) {
+			this._parent.tileLayer.remove();
+			this._parent.satelliteLayer.addTo(this._map);
+			this._layer = 'satellite';
+			$('.leaflet-control-type a').html('Street');
+			$('.cgeomap').addClass('clean');
+		}
+	},
+	setParent: function(_parent) {
+		this._layer = 'street';
 		this._parent = _parent;
 	}
 });

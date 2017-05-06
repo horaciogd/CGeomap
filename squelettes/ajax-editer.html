@@ -30,7 +30,7 @@
 									<input name="subtitle" class="form-control" value="#SOUSTITRE" tabindex="2" type="text">
 								</div>
 							</div><!-- wrap_subtitle -->
-							<img data-icons="<BOUCLE_icons(MOTS){type=marker_icon}{par num titre}{','}>[(#ID_MOT)] [(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})]</BOUCLE_icons>" class="icon" />
+							<img data-icons="<BOUCLE_category_icons(MOTS){type=category}{par num titre}{','}><BOUCLE_marker_icons(MOTS){type=marker_icon}{par num titre}{','}>[(#_category_icons:ID_MOT)] [(#ID_MOT)] [(#_category_icons:LOGO_MOT|image_masque{[(#LOGO_MOT|extraire_attribut{src}|url_absolue)],mode=normal}|image_reduire{120}|extraire_attribut{src})]</BOUCLE_marker_icons></BOUCLE_category_icons>" class="icon" />
 							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/">
 							<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
 						</hgroup>
@@ -50,6 +50,21 @@
 							</ul>
 							</B_visibility>
 						</div><!-- visibility -->
+						
+						[(#SET{category,'category_00'})]<BOUCLE_get_category(MOTS){type=category}{id_article=#ID_ARTICLE}>[(#SET{category,[(#TITRE|textebrut)]})]</BOUCLE_get_category>
+						<div class="category"[ data-category="(#GET{category})"]>
+							<B_category>
+							<ul class="field_box">
+								<BOUCLE_category(MOTS){type=category}{par num titre}>
+								<li class="select">
+									<button type="button" class="btn select-[(#TITRE|supprimer_numero|textebrut)]" name="select-[(#TITRE|supprimer_numero|textebrut)]" value="[(#TITRE|supprimer_numero|textebrut)]" data-n="#COMPTEUR_BOUCLE"></button>
+									<label for="select-[(#TITRE|supprimer_numero|textebrut)]">[(#LOGO_MOT|image_reduire{44})]<span>[(#DESCRIPTIF|textebrut)]</span></label>
+								</li>
+							</BOUCLE_category>
+							</ul>
+							</B_category>
+						</div><!-- category -->
+						
 						<div class="modules scroll">
 							<BOUCLE_modules(ARTICLES){id_article=#GET{article}}>[(#SET{modules,#TEXTE})]</BOUCLE_modules>[(#GET{modules}|extraire_formulaire_module)]
 							[(#TEXTE|=={''}|oui)<div class="block_modules audiovisuel" data-type="audiovisuel" data-tgl="on">

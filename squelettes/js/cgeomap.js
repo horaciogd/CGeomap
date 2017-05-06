@@ -18,6 +18,9 @@ var cgeomap;
 // Vhplab Interface
 //***********
 function VhplabInterface() {
+	this.state = '';
+	this.navigationListActive = false;
+	this.navigationListOrder = '';
 	this.url_site = '';
 	this.url_article = '';
 	this.url_user = '';

@@ -4,6 +4,9 @@
 (#REM) JSON header
 ][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
 
+(#REM) Acces Control header
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})][
+
 (#REM) offset + limit to load markers in several batchs
 ][(#SET{offset,[(#ENV{offset}|sinon{0})]})][(#SET{limit,[(#ENV{limit}|sinon{50})]})][
 

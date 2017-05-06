@@ -8,6 +8,12 @@
 #navigation hgroup .gps { position: absolute; top: -8px; left: 10px; }
 #navigation hgroup .bkmrk { position: absolute; top: -8px; right: 10px; }
 
+ /* --------------------
+   Block User
+-------------------- */
+
+#block { z-index: 20; position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; display: none; }
+
 /* --------------------
    Content
 -------------------- */

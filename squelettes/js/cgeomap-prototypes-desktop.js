@@ -723,6 +723,8 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _force, _callback)
 				console.log('recalcul = '+ recalcul);
 				*/
 				if (this.form.geo) this.form.toggleGeo();
+				cgeomap.map.typeControl.changeTypeTo('street');
+				$('.leaflet-control-type').hide();
 				hide = "#formulaire";
 				break;
 			case 'editer':
@@ -733,6 +735,8 @@ VhplabInterface.prototype.toggleUtilities = function(_target, _force, _callback)
 				console.log('recalcul = '+ recalcul);
 				*/
 				if (this.form.geo) this.form.toggleGeo();
+				cgeomap.map.typeControl.changeTypeTo('street');
+				$('.leaflet-control-type').hide();
 				hide = "#formulaire";
 				break;
 			case 'embed':
@@ -923,6 +927,9 @@ VhplabContribuerFrom.prototype.bindActions = function() {
     
     /* visibility */
     $("#formulaire .visibility .btn").click(function(){ cgeomap.form.toggleVisible(this); });
+    
+    /* category */
+    $("#formulaire .category li").click(function(){ cgeomap.form.toggleCategory(this); });
     
     /* modules */
     $(".module_button").click(function(){ cgeomap.form.createNewModule(this); });
@@ -1143,7 +1150,7 @@ VhplabContribuerFrom.prototype.bindMediaModuleActions = function(_context, _clas
         },
         submit: function (e, data) {
         	$.each(data.files, function (index, file) {
-        		cgeomap.form.checkExtension(file, _class, _context);
+        		cgeomap.form.checkExtension(file, _class, _context +" .field_box");
     		});
 		},
         progressall: function (e, data) {
@@ -1563,6 +1570,8 @@ VhplabContribuerFrom.prototype.initData = function() {
 	$("#formulaire .wrap_subtitle").data('ok', true);
 	/* visibility */
 	this.toggleVisible($("#formulaire .visibility .select-"+ $("#formulaire .visibility").data('visibility')));
+	this.toggleCategory($("#formulaire .category li").has(".select-"+ $("#formulaire .category").data('category')));
+	
 	/* modules */
 	this.bindModuleHeaderActions("#formulaire .modules");
 	this.bindEachModuleActions('audiovisuel');
@@ -1600,7 +1609,9 @@ VhplabContribuerFrom.prototype.load = function(_url) {
 			cgeomap.form.initData();
 			cgeomap.form.bindActions();
 			$("#formulaire").slideDown("slow",function(){
-			
+				// cgeomap.map.setSatelliteLayer();
+				$('.leaflet-control-type').show();
+				cgeomap.map.typeControl.changeTypeTo('satellite');
 			});
 		});
 	// contribuer
@@ -1616,7 +1627,9 @@ VhplabContribuerFrom.prototype.load = function(_url) {
 			cgeomap.form.resetData();
 			cgeomap.form.bindActions();
 			$("#formulaire").slideDown("slow",function(){
-			
+				// cgeomap.map.setSatelliteLayer();
+				$('.leaflet-control-type').show();
+				cgeomap.map.typeControl.changeTypeTo('satellite');
 			});
 		});
 	}
@@ -1663,8 +1676,9 @@ VhplabContribuerFrom.prototype.setIcon = function(_n) {
 		for (var i=0; i<icons.length; i++) {
 			var icon = icons[i].split(" ");
 			var new_icon = {};
-			$(new_icon).data('id', icon[0]);
-			$(new_icon).data('src', icon[1]);
+			$(new_icon).data('category', icon[0]);
+			$(new_icon).data('id', icon[1]);
+			$(new_icon).data('src', icon[2]);
 			this.icons.push(new_icon);
 		}
 	}
@@ -1718,6 +1732,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 	var subtitle = $("#formulaire .wrap_subtitle").data('ok');
 	/* options */
 	var visibility = $("#formulaire .visibility").data('ok');
+	var category = $("#formulaire .category").data('ok');
 	/* modules */
 	var audiovisuel_modules = this.getModulesData(".audiovisuel");
 	var delete_media = false;
@@ -1725,7 +1740,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 	/* cartography */
 	var cartography = $("#formulaire .wrap_cartography").data('ok');
 	// alert($(audiovisuel_modules).toSource());
-	if ((title)&&(subtitle)&&(visibility)&&($(audiovisuel_modules).data('num')>0)&&($(audiovisuel_modules).data('modules'))&&(cartography)) {
+	if ((title)&&(subtitle)&&(visibility)&&(category)&&($(audiovisuel_modules).data('num')>0)&&($(audiovisuel_modules).data('modules'))&&(cartography)) {
 		$("body").prepend('<div id="sending_data"><div></div></div>');
 		$(".submit .btn").hide();
 		var id_article = 'new';
@@ -1751,6 +1766,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 				title: $("#formulaire .wrap_title .value").text(),
 				subtitle: $("#formulaire .wrap_subtitle .value").text(),
 				visibility: $("#formulaire .visibility").data('visibility'),
+				category: $("#formulaire .category").data('category'),
 				icon: $("#formulaire header .icon").data("id_icon"),
 				latitude: $("#formulaire .latitude").val(),
 				longitude: $("#formulaire .longitude").val(),
@@ -1773,7 +1789,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 					var text = response[0].message_ok.split(":");
 					var updateURL = response[0].update +'&id_article='+ text[2] +'&var_mode=recalcul';
 					cgeomap.map.open = text[2];
-					// get URL via alert(updateURL);
+					console.log('updateURL:'+ updateURL);
 					$("#formulaire").load(updateURL, function() {
 						$("#formulaire").empty();
 					});
@@ -1817,10 +1833,26 @@ VhplabContribuerFrom.prototype.toggleVisible = function(_me) {
 	$(_me).addClass("selected");
 	$("#formulaire .visibility").data('ok', true);
 	$("#formulaire .visibility").data('visibility', $(_me).val());
+	var n_visibility = $(_me).data('n') - 1;
+	var n_category = $("#formulaire .category .selected .btn").data('n');
+	if (typeof n_category == "undefined") n_category = 1;
+	var n = (n_category-1)*3 + n_visibility;
+	console.log('toggleVisible n_visibility: '+ n_visibility +', n_category: '+ n_category);
 	//$("#formulaire .block_modules").show();
 	//cgeomap.form.toggleModule(".wrap_content .audiovisuel .toggle");
 	this.check();
-	this.setIcon($(_me).data('n')-1);
+	this.setIcon(n);
+};
+VhplabContribuerFrom.prototype.toggleCategory = function(_me) {
+	$(".category li").removeClass("selected");
+	$(_me).addClass("selected");
+	$("#formulaire .category").data('ok', true);
+	$("#formulaire .category").data('category', $(".btn", _me).val());
+	var n_visibility = $("#formulaire .visibility .selected").data('n') - 1;
+	var n_category = $(".btn", _me).data('n');
+	var n = (n_category-1)*3 + n_visibility;
+	this.check();
+	this.setIcon(n);
 };
 VhplabContribuerFrom.prototype.toggleVideoChannel = function(_me) {
 	console.log('toggleVideoChannel();');

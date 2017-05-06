@@ -256,6 +256,15 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 .visibility .field_box .btn:hover, .field_box .btn:focus,.field_box .btn:active { background-color: [(#GET{bright-bg})]; }
 .visibility .field_box .selected { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/cgeomap-check-@2x.png})],[(#CHEMIN{images/grey/pix/cgeomap-check-@2x.png})]})]'); }
 
+/* category */
+.category { padding: 0; margin-top: 6px; margin-right: -16px; height: 212px; overflow: hidden; }
+.category .field_box { text-align: left; margin-bottom: 8px; }
+.category .field_box li { overflow: hidden; display: inline-block; position: relative; width: 110px; height: 44px; vertical-align: middle; border: 2px solid transparent; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; margin: 0 2px 6px 0; }
+.category .field_box li:hover, .category .field_box li.selected { cursor: pointer; border-color: [(#GET{grey-dark})]; /*background-color: [(#GET{alpha-bright-bg})];*/ }
+.category .field_box li img { position: absolute; top: 0px; left: 0px; }
+.category .field_box li span { display: block; position: absolute; top: 4px; right: 0px; width: 66px; float: right; text-align: left; line-height: 18px;  font-weight: bold; }
+.category .field_box li img:hover, .category .field_box li span:hover  { cursor: pointer; }
+
 /* modules */
 .module_button { position: absolute; right: -109px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-module-buttons-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-module-buttons-@2x.png})]})]'); background-size: 202px 355px; background-repeat: no-repeat; width: 94px; height: 62px; cursor: pointer; }
 #add_media_module { background-position: 0px 0px; top: 260px; }
@@ -305,7 +314,7 @@ form .link ul { margin-bottom: 20px; }
 .module .progress-bar { float: left; width: 0; height: 100%; line-height: 20px; background-color: [(#GET{medium-bg})]; -webkit-box-shadow: inset 0 -1px 0 [(#GET{alpha-soft-shadow})]; box-shadow: inset 0 -1px 0 [(#GET{alpha-soft-shadow})]; -webkit-transition: width .6s ease;  transition: width .6s ease; }
 
 /* video */
-.video fieldset { position: relative; /* width: 100%;*/ }
+.video fieldset, .media .field_box, .audio .field_box { display: block; position: relative; /* width: 100%;*/ min-height: 25px; }
 
 .video .url_video { position: absolute; left: 0; top: 24px; }
 

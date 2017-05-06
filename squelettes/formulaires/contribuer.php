@@ -11,6 +11,8 @@ function formulaires_contribuer_charger_dist($id_article='new', $retour='', $aja
 	$valeurs['subtitle'] = $subtitle;
 	/* visibility */
 	$valeurs['visibility'] = $options;
+	/* category */
+	$valeurs['category'] = $options;
 	/* icon */
 	$valeurs['icon'] = $icon;
 	/* modules */
@@ -40,6 +42,8 @@ function formulaires_contribuer_verifier_dist($id_article='new', $retour='', $aj
 	if ((!_request('subtitle'))||(_request('subtitle')=='')) $erreurs['subtitle'] = _T('cgeomap:required_subtitle');
 	/* visibility */
 	if (!_request('visibility')) $erreurs['visibility'] = _T('cgeomap:required_visibility');
+	/* category */
+	if (!_request('category')) $erreurs['category'] = _T('cgeomap:required_category');
 	/* icon */
 	if (!_request('icon')) $erreurs['icon'] = _T('cgeomap:required_icon');
 	/* modules */
@@ -67,6 +71,8 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	$subtitle = _request('subtitle');
 	/* visibility */
 	$visibility = _request('visibility');
+	/* category */
+	$category = _request('category');
 	/* icon */
 	$icon = _request('icon');
 	/* modules */
@@ -84,7 +90,8 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	// otra informacion
 	$id_auteur = $GLOBALS['visiteur_session']['id_auteur'];
 	$rubrique = 1;
-	
+	$visibility_id = 1;
+	$category_id = 8;
 	// 1 creamos un articulo vacio si se trata de una entrada nueva
 	if (($article=='new')||($article==0)) {
 		$id_article = insert_article($rubrique);
@@ -117,9 +124,39 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 		sql_delete("spip_mots_liens", "id_objet='".intval($id_article)."' AND objet='article'");
 		
 		// 5 asociamos las palabras clave al articulo
-		if ($visibility == 'default') sql_insertq('spip_mots_liens', array( 'id_mot' => 1, 'id_objet' => intval($id_article), 'objet' => 'article'));
-		if ($visibility == 'qr') sql_insertq('spip_mots_liens', array( 'id_mot' => 2, 'id_objet' => intval($id_article), 'objet' => 'article'));
-		if ($visibility == 'proximity') sql_insertq('spip_mots_liens', array( 'id_mot' => 3, 'id_objet' => intval($id_article), 'objet' => 'article'));
+		switch ($visibility) {
+    		case "default";
+				$visibility_id = 1;
+        		break;
+    		case "qr";
+				$visibility_id = 2;
+        		break;
+    		case "proximity";
+				$visibility_id = 3;
+        		break;
+		}
+		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($visibility_id), 'id_objet' => intval($id_article), 'objet' => 'article'));
+		switch ($category) {
+    		case "category_00";
+				$category_id = 8;
+        		break;
+    		case "category_01";
+				$category_id = 9;
+        		break;
+    		case "category_02";
+				$category_id = 10;
+        		break;
+    		case "category_03";
+				$category_id = 11;
+        		break;
+    		case "category_04";
+				$category_id = 12;
+        		break;
+    		case "category_05";
+				$category_id = 13;
+        		break;
+		}
+		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($category_id), 'id_objet' => intval($id_article), 'objet' => 'article'));
 		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($icon), 'id_objet' => intval($id_article), 'objet' => 'article'));
 		
 		// 7 procesamos los módulos y actualizamos el texto del artículo

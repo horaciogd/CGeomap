@@ -168,6 +168,10 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.zoomControl.setParent(this);
 	this.map.addControl(this.zoomControl);
 	
+	this.typeControl = new vhplabTypeControl();
+	this.typeControl.setParent(this);
+	this.map.addControl(this.typeControl);
+
 	// Geocoder
 	this.geocoder = new L.Control.GeoSearch({
         provider: new L.GeoSearch.Provider.OpenStreetMap()

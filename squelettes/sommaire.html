@@ -5,4 +5,4 @@
 (#REM) get a different inclure depending on device 
 ][(#SET{index,inclure/sommaire-[(#SESSION|device)]})][
 (#REM) get author from parameter or session
-][(#ENV{author}|oui)[(#SET{auteur,[(#ENV{author})]})]]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}}{login=#ENV{login}}{color=#ENV{color}} />
+][(#ENV{author}|oui)[(#SET{auteur,[(#ENV{author})]})]]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}}{login=#ENV{login}}{color=true} />

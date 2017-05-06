@@ -89,6 +89,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'recent_articles' => 'Últimas aportaciones',
 	'required_article' => 'No se recibió ninguna id para la entrada',
 	'required_title' => 'No se recibió ningún título para la entrada',
+	'required_category' => 'No se recibió ninguna indicación acerca de la categoría',
 	'required_subtitle' => 'No se recibió ningún subtítulo para la entrada',
 	'required_visibility' => 'No se recibió ninguna indicación acerca de la visibilidad',
 	'required_icon' => 'No se recibió ningún icono para la entrada',

@@ -1,10 +1,11 @@
-<B_icon><BOUCLE_icon(MOTS){id_article}{type=marker_icon}{0,1}>"icon": {
-				["url": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{src})"][,
-				"width": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{width})"][,
-				"height": "(#LOGO_MOT|image_reduire{120}|extraire_attribut{height})"]
-			}</BOUCLE_icon></B_icon>[
+<B_category_icons>
+			"icon": {<BOUCLE_category_icons(MOTS){id_article}{type=category}><BOUCLE_marker_icons(MOTS){id_article}{type=marker_icon}{par num titre}{0,1}>[
+				"url": "(#_category_icons:LOGO_MOT|image_masque{[(#LOGO_MOT|extraire_attribut{src}|url_absolue)],mode=normal}|image_reduire{120}|extraire_attribut{src})"][,
+				"width": "(#_category_icons:LOGO_MOT|image_masque{[(#LOGO_MOT|extraire_attribut{src}|url_absolue)],mode=normal}|image_reduire{120}|extraire_attribut{width})"][,
+				"height": "(#_category_icons:LOGO_MOT|image_masque{[(#LOGO_MOT|extraire_attribut{src}|url_absolue)],mode=normal}|image_reduire{120}|extraire_attribut{height})"]</BOUCLE_marker_icons></BOUCLE_category_icons>
+			}</B_category_icons>[
 			"icon": {
 				"url": "(#CHEMIN{images/icons/default_icon.png})", 
 				"width": "120", 
 				"height": "120"
-			}]<//B_icon>
+			}]<//B_category_icons>

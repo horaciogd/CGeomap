@@ -4,6 +4,9 @@
 (#REM) JSON header
 ][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
 
+(#REM) Acces Control header
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})][
+
 (#REM) JSONP callback
 ][(#ENV{callback}|oui)[(#ENV{callback})(]][{
 	"marker": [<BOUCLE_article(ARTICLES){id_article}>{[
