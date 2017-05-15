@@ -63,6 +63,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'mensaje_error_login' => 'Usuario o clave incorrectos!',
 	'message_extension_1' => 'jpeg and png images allowed',
 	'message_extension_2' => 'ogg and mp3 sound files allowed',
+	'message_geocoder' => 'No se ha encontrado la dirección indicada',
 	'message_min_1' => 'Debes escribir',
 	'message_min_2' => 'caracteres como mínimo!',
 	'message_not_allowed' => 'No está autorizado para editar esta entrada',

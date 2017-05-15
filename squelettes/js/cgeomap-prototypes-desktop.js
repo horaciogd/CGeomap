@@ -922,7 +922,7 @@ VhplabContribuerFrom.prototype.bindActions = function() {
 		cgeomap.form.updateInputField(this);
 		cgeomap.form.status = 'editer';
     });
-    $("#formulaire .wrap_title input").attr('maxlength', 20);
+    $("#formulaire .wrap_title input").attr('maxlength', 25);
     $("#formulaire .wrap_subtitle input").attr('maxlength', 45);
     
     /* visibility */

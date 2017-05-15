@@ -117,7 +117,7 @@ INSERT INTO `spip_mots_liens` (`id_mot`, `id_objet`, `objet`) VALUES
 (1, 3, 'article'),
 (5, 1, 'article'),
 (5, 2, 'article'),
-(5, 3, 'article')
+(5, 3, 'article'),
 (8, 1, 'article'),
 (8, 2, 'article'),
 (8, 3, 'article');

@@ -20,13 +20,14 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _lat, _lng, _callback) 
 	target.reset();
 	// Count markers
 	var count = $(_data.markers).length - 1;
+	var num = 0; 
 	// console.log('Total Markers = '+ $(_data.markers).length);
 	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, _marker) {
 			// console.log('Looping through each marker: i = '+ i +', count = '+ count);
-			cgeomap.map.createMarker(_data.link, _marker, i, target, _lat, _lng);
+			if (cgeomap.map.createMarker(_data.link, _marker, num, target, _lat, _lng)) num ++;
 			// Finish when all markers are looped
 			if(i==count) {
 				// console.log('Looping finished i == count');
@@ -49,10 +50,10 @@ VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
 	_layer.markerList.push(_marker.id);
 	var visible = 'default';
 	if (($(_marker.data).data('visibility')=='qr')||($(_marker.data).data('visibility')=='proximity')) {
-		console.log('Check if added marker has just been found!');
-		console.log('cgeomap.visibleNodes.indexOf('+ parseInt(_marker.id) +') = '+ cgeomap.visibleNodes.indexOf(parseInt(_marker.id)));
+		// console.log('Check if added marker has just been found!');
+		// console.log('cgeomap.visibleNodes.indexOf('+ parseInt(_marker.id) +') = '+ cgeomap.visibleNodes.indexOf(parseInt(_marker.id)));
 		if (cgeomap.visibleNodes.indexOf(parseInt(_marker.id)) != -1) {  
-			console.log('Marker found!');
+			// console.log('Marker found!');
 			visible = 'found';
 			// Add marker to leaflet layer
 			_layer.layer.addLayer(_marker.marker);
@@ -123,10 +124,18 @@ VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer, _l
 	marker.initialize(_path, _markerData, this);
 	// Set marker distance to map center
 	marker.setDistance(_lat, _lng);
-	// Save marker as jQuery data
-	$(this.markers).data('marker_'+ marker.id, marker);
-	// Add marker to vhpLayer
-	this.addMarkerToLayer(marker, _num, _layer);
+	console.log('marker.distance: '+ marker.distance);
+	// If marker is within reach
+	if (marker.distance<=50000) {
+		console.log('marker is within reach');
+		// Save marker as jQuery data
+		$(this.markers).data('marker_'+ marker.id, marker);
+		// Add marker to vhpLayer
+		this.addMarkerToLayer(marker, _num, _layer);
+		return true;
+	} else {
+		return false;
+	}
 };
 VhplabMap.prototype.contineousGetCurrentPosition = function() {
 	// console.log('/* phone prototypes */ cgeomap.map.contineousGetCurrentPosition();');
@@ -218,16 +227,16 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.locationCircle1 = L.circle([0, 0], 2000, {
 		color: '#2EA8E0',
 		weight: 1,
-		opacity: 1,
+		opacity: 0,
 		fillColor: '#2EA8E0',
-		fillOpacity: 0.1
+		fillOpacity: 0.0
 	}).addTo(this.map);
 	this.locationCircle2 = L.circle([0, 0], 500, {
 		color: '#2EA8E0',
 		weight: 2,
-		opacity: 1,
+		opacity: 0,
 		fillColor: '#2EA8E0',
-		fillOpacity: 0.2
+		fillOpacity: 0.0
 	}).addTo(this.map);
 	this.locationCircle3 = L.circle([0, 0], 10, {
 		color: '#2EA8E0',
@@ -246,7 +255,7 @@ VhplabMap.prototype.loadMarkers = function() {
 	//if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	// Get URL via log 
-	console.log('Markers URL: '+ url);
+	// console.log('Markers URL: '+ url);
 	// Get geolocation position
 	this.getPosition(function(_lat, _lng) {
 		// Update Map position
@@ -325,7 +334,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 				oldList.push(id[1]);
 		 	});
 		 	cgeomap.navigationListOrder = oldList.toString();
-		 	console.log('cgeomap.navigationListOrder = '+ oldList.toString());
+		 	// console.log('cgeomap.navigationListOrder = '+ oldList.toString());
 		}
 		// Set marker distances
 		$.each($(this.markers).data(), function(name, marker) {
@@ -335,7 +344,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		this.sortMarkersByDistance();
 		// Get new list
 		var newList = cgeomap.map.mapLayer.markerList.toString();
-		console.log('newList = '+ cgeomap.map.mapLayer.markerList.toString());
+		// console.log('newList = '+ cgeomap.map.mapLayer.markerList.toString());
 		// Return true if new list is different from the old list
 		if (oldList!=newList) {
 			// Navigation list needs to be shorted
@@ -344,7 +353,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 			// console.log(' ');
 			cgeomap.sortNavigationList();
 		} else {
-			console.log('everything in order only check autoplay');
+			// console.log('everything in order only check autoplay');
 			// only check autoplay if not detaching
 			// console.log('cgeomap.player.playing: '+cgeomap.player.playing);
 			// Check autoplay if nothing is being played
@@ -707,16 +716,16 @@ VhplabMarker.prototype.updateDistance = function(_refLat, _refLng) {
 		// console.log('distance is very big! '+ parseInt((this.distance - this.distance%1000)/1000));
 	}
 	if ($(this.data).data('visibility')=='proximity') {
-		if ((this.distance>200)&&(this.autoplay==false)) {
-			// console.log('/* proximity */ marker is far');
-			this.autoplay = true;
-		} else if ((this.distance<100)&&(this.vibrate)) {
+		if ((this.distance<100)&&(this.vibrate)) {
 			// console.log('/* proximity */ marker "'+ $(this.data).data('titre') +'" is near');
 			// console.log('autoplay: '+ this.autoplay);
 			cgeomap.addToVisibleNodes(this.id, false);
-			$(this.data).data('visibility','default');
+			// $(this.data).data('visibility','default');
 			this.vibrate = false;
 			navigator.vibrate(500);
+		} else if ((this.distance>40)&&(this.autoplay==false)) {
+			// console.log('/* proximity */ marker is far');
+			this.autoplay = true;
 		}
 	}
 };

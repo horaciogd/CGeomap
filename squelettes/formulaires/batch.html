@@ -1,0 +1,23 @@
+#HTTP_HEADER{"Cache-Control: no-store, no-cache, must-revalidate"}
+#HTTP_HEADER{"Pragma: no-cache"}
+				
+				[<!-- formulaire markers batch -->
+				<div class='constructor formulario'>
+					(#ENV{editable})
+					<form id='markers_batch' method='post' action='#ENV{action}'>
+					#ACTION_FORMULAIRE{#ENV{action}}
+						<fieldset>
+							[(#ENV**{markers})]
+							[(#ENV**{message})]
+							<ul>
+								<li>
+									<label for="markers"><:cgeomap:markers:></label>
+									<textarea class='form-control' name='markers' id='markers' rows="4" cols="50"></textarea>
+								</li>
+								<li class="submit">
+									<input class="btn" type="submit" name="constructor" id="constructor" value="<:cgeomap:submit:>" />
+								</li>
+							</ul>
+						</fieldset>
+					</form>
+				</div>]

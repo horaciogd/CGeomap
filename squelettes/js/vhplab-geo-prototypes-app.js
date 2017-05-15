@@ -20,13 +20,14 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _lat, _lng, _callback) 
 	target.reset();
 	// Count markers
 	var count = $(_data.markers).length - 1;
+	var num = 0; 
 	// remoteLog('Total Markers = '+ $(_data.markers).length);
 	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, _marker) {
 			// remoteLog('Looping through each marker: i = '+ i +', count = '+ count);
-			cgeomap.map.createMarker(_data.link, _marker, i, target, _lat, _lng);
+			if (cgeomap.map.createMarker(_data.link, _marker, num, target, _lat, _lng)) num ++;
 			// Finish when all markers are looped
 			if(i==count) {
 				// remoteLog('Looping finished i == count');
@@ -111,10 +112,18 @@ VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer, _l
 	marker.initialize(_path, _markerData, this);
 	// Set marker distance to map center
 	marker.setDistance(_lat, _lng);
-	// Save marker as jQuery data
-	$(this.markers).data('marker_'+ marker.id, marker);
-	// Add marker to vhpLayer
-	this.addMarkerToLayer(marker, _num, _layer);
+	// remoteLog('marker.distance: '+ marker.distance);
+	// If marker is within reach
+	if (marker.distance<=50000) {
+		// remoteLog('marker is within reach');
+		// Save marker as jQuery data
+		$(this.markers).data('marker_'+ marker.id, marker);
+		// Add marker to vhpLayer
+		this.addMarkerToLayer(marker, _num, _layer);
+		return true;
+	} else {
+		return false;
+	}
 };
 VhplabMap.prototype.contineousGetCurrentPosition = function() {
 	// remoteLog('/* app prototypes */ cgeomap.map.contineousGetCurrentPosition();');
@@ -206,16 +215,16 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 	this.locationCircle1 = L.circle([0, 0], 2000, {
 		color: '#2EA8E0',
 		weight: 1,
-		opacity: 1,
+		opacity: 0,
 		fillColor: '#2EA8E0',
-		fillOpacity: 0.1
+		fillOpacity: 0.0
 	}).addTo(this.map);
 	this.locationCircle2 = L.circle([0, 0], 500, {
 		color: '#2EA8E0',
 		weight: 2,
-		opacity: 1,
+		opacity: 0,
 		fillColor: '#2EA8E0',
-		fillOpacity: 0.2
+		fillOpacity: 0.0
 	}).addTo(this.map);
 	this.locationCircle3 = L.circle([0, 0], 10, {
 		color: '#2EA8E0',
@@ -332,7 +341,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 			// remoteLog(' ');
 			cgeomap.sortNavigationList();
 		} else {
-			remoteLog('everything in order only check autoplay');
+			// remoteLog('everything in order only check autoplay');
 			// only check autoplay if not detaching
 			// remoteLog('cgeomap.player.playing: '+cgeomap.player.playing);
 			// Check autoplay if nothing is being played
@@ -473,8 +482,9 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 VhplabMarker.prototype.checkAutoplay = function() {
 	// remoteLog('/* app prototypes */ marker.checkAutoplay();');
 	if ((this.distance<=15)&&(this.autoplay)){
-		remoteLog('trigger #article_'+ this.id +' header click in cgeomap.marker.checkAutoplay()');
-		$("#article_"+ this.id +" header").trigger("click");
+		// remoteLog('trigger #article_'+ this.id +' header click in cgeomap.marker.checkAutoplay()');
+		//$("#article_"+ this.id +" header").trigger("click");
+		cgeomap.toggleArticle("#article_"+ this.id +" header", true);
 		//this.autoplay = false;
 		return true;
 	} else {
@@ -695,16 +705,16 @@ VhplabMarker.prototype.updateDistance = function(_refLat, _refLng) {
 		// remoteLog('distance is very big! '+ parseInt((this.distance - this.distance%1000)/1000));
 	}
 	if ($(this.data).data('visibility')=='proximity') {
-		if ((this.distance>200)&&(this.autoplay==false)) {
-			// remoteLog('/* proximity */ marker is far');
-			this.autoplay = true;
-		} else if ((this.distance<100)&&(this.vibrate)) {
+		if ((this.distance<100)&&(this.vibrate)) {
 			// remoteLog('/* proximity */ marker "'+ $(this.data).data('titre') +'" is near');
 			// remoteLog('autoplay: '+ this.autoplay);
 			cgeomap.addToVisibleNodes(this.id, false);
-			$(this.data).data('visibility','default');
+			// $(this.data).data('visibility','default');
 			this.vibrate = false;
 			navigator.vibrate(500);
+		} else if ((this.distance>40)&&(this.autoplay==false)) {
+			// remoteLog('/* proximity */ marker is far');
+			this.autoplay = true;
 		}
 	}
 };

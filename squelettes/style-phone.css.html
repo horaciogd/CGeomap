@@ -19,7 +19,9 @@
 ][(#ENV{color}|?{[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})],[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})]})
 ][(#ENV{color}|?{[(#SET{alpha-bright-bg,rgba(145, 250, 213, 0.4)})],[(#SET{alpha-bright-bg,rgba(229, 230, 231, 0.4)})]})
 ][(#ENV{color}|?{[(#SET{alpha-medium-bg,rgba(71, 185, 188, 0.4)})],[(#SET{alpha-medium-bg,rgba(122, 123, 124, 0.4)})]})
+][(#ENV{color}|?{[(#SET{transparent-bright-bg,rgba(145, 250, 213, 0)})],[(#SET{transparent-bright-bg,rgba(229, 230, 231, 0)})]})
 ][(#ENV{color}|?{[(#SET{transparent-medium-bg,rgba(71, 185, 188, 0)})],[(#SET{transparent-medium-bg,rgba(122, 123, 124, 0)})]})
+][(#ENV{color}|?{[(#SET{full-bright-bg,rgba(145, 250, 213, 1)})],[(#SET{full-bright-bg,rgba(229, 230, 231, 0)})]})
 ][(#ENV{color}|?{[(#SET{full-medium-bg,rgba(71, 185, 188, 1)})],[(#SET{full-medium-bg,rgba(122, 123, 124, 0)})]})
 ][(#ENV{color}|?{[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})],[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})]})]
 
@@ -124,12 +126,12 @@ background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(24,
 #content .listado_nodos .header hgroup:active .info { 
 /* para hacer este active haria falta un color extra o cambiar algo*/
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
-background: -moz-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%, [(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%, [(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/), color-stop(30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/), color-stop(100%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* IE10+ */
-background: linear-gradient(to right, [(#GET{transparent-bright-bg})] /*rgba(11,222,201,0)*/ 0%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 30%,[(#GET{full-bright-bg})] /*rgba(11,222,201,1)*/ 100%); /* W3C */
+background: -moz-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-bright-bg})]), color-stop(30%,[(#GET{full-bright-bg})]), color-stop(100%,[(#GET{full-bright-bg})])); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* W3C */
 }
 #content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: [(#GET{white})]; }
 #content .listado_nodos .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-bird-@2x.png})]})]'); background-size: 26px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }

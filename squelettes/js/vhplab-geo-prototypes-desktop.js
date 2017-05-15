@@ -177,8 +177,13 @@ VhplabMap.prototype.initMapElements = function(_opts) {
         provider: new L.GeoSearch.Provider.OpenStreetMap()
     });
     this.geocoder._processResults = function(results, qry) {
-    	cgeomap.map.updateClickableMarker(results[0].Y, results[0].X);
-		cgeomap.form.check();
+    	console.log(results.toSource());
+    	if (typeof results[0] != "undefined") {
+    		cgeomap.map.updateClickableMarker(results[0].Y, results[0].X);
+			cgeomap.form.check();
+		} else {
+			alert(_T.message_geocoder);
+		}
     }
 	
 	// Clickable Marker

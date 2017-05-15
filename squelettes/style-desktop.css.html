@@ -19,7 +19,9 @@
 ][(#ENV{color}|?{[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})],[(#SET{alpha-soft-shadow,rgba(0, 0, 0, 0.1)})]})
 ][(#ENV{color}|?{[(#SET{alpha-bright-bg,rgba(145, 250, 213, 0.4)})],[(#SET{alpha-bright-bg,rgba(229, 230, 231, 0.4)})]})
 ][(#ENV{color}|?{[(#SET{alpha-medium-bg,rgba(71, 185, 188, 0.4)})],[(#SET{alpha-medium-bg,rgba(122, 123, 124, 0.4)})]})
+][(#ENV{color}|?{[(#SET{transparent-bright-bg,rgba(145, 250, 213, 0)})],[(#SET{transparent-bright-bg,rgba(229, 230, 231, 0)})]})
 ][(#ENV{color}|?{[(#SET{transparent-medium-bg,rgba(71, 185, 188, 0)})],[(#SET{transparent-medium-bg,rgba(122, 123, 124, 0)})]})
+][(#ENV{color}|?{[(#SET{full-bright-bg,rgba(145, 250, 213, 1)})],[(#SET{full-bright-bg,rgba(229, 230, 231, 0)})]})
 ][(#ENV{color}|?{[(#SET{full-medium-bg,rgba(71, 185, 188, 1)})],[(#SET{full-medium-bg,rgba(122, 123, 124, 0)})]})
 ][(#ENV{color}|?{[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})],[(#SET{alpha-bright-e,rgba(239, 65, 35, 0.6)})]})]
 /* --------------------
@@ -148,18 +150,19 @@
 /* contributions  */
 #contributions { padding-top: 6px; border-top: 1px solid [(#GET{grey-bright})]; }
 #contributions ol { }
-#contributions ol li { position: relative; margin-bottom: 8px; }
-#contributions ol li h3 { font-size: 0.8em; font-weight: 500; line-height: 18px; padding: 2px 0 0 26px; }
+#contributions ol li { position: relative; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dotted [(#GET{grey-bright})]; }
+#contributions ol li h3 { font-size: 0.8em; font-weight: 500; line-height: 18px; padding: 2px 0 0 6px; }
+#contributions ol li a:hover { cursor: pointer; }
 #contributions ol li img { position: absolute; left: 0; top: 0; }
-
-#contributions ol li .delete { opacity: 0.7; position: absolute; top: 1px; right: 0; color: [(#GET{grey-dark})]; background-color: [(#GET{grey-bright})]; border-color: [(#GET{grey-dark})]; }
+#contributions ol li p { font-size: 0.8em; font-style: italic; padding: 2px 0 0 6px; }
+#contributions ol li .delete { opacity: 0.7; position: absolute; top: 9px; right: 0; color: [(#GET{grey-dark})]; background-color: [(#GET{grey-bright})]; border-color: [(#GET{grey-dark})]; }
 #contributions ol li .delete:hover { opacity: 1; color: [(#GET{white})]; background-color: [(#GET{bright-e})]; }
 
 /* header  */
 .header { height: 60px; }
 .header img { position: absolute; top: 0px; left: 0; }
 .header .titre, .header .soustitre { margin-left: 60px; }
-.header .titre { line-height: 38px; height: 38px; font-size: 26px; margin-top: 6px; }
+.header .titre { line-height: 38px; height: 38px; font-size: 22px; margin-top: 6px; }
 .header .soustitre { line-height: 16px; height: 16px; font-size: 12px; }
 
 .header .editer { position: absolute; top: -4px; right: -6px;  background-color: [(#GET{grey-medium})]; border-color: [(#GET{grey-dark})]; -webkit-box-shadow: 1px 1px 3px [(#GET{alpha-shadow})]; -moz-box-shadow: 1px 1px 3px [(#GET{alpha-shadow})]; box-shadow: 1px 1px 3px [(#GET{alpha-shadow})]; }
