@@ -177,7 +177,7 @@ VhplabMap.prototype.initMapElements = function(_opts) {
         provider: new L.GeoSearch.Provider.OpenStreetMap()
     });
     this.geocoder._processResults = function(results, qry) {
-    	console.log(results.toSource());
+    	// console.log(results.toSource());
     	if (typeof results[0] != "undefined") {
     		cgeomap.map.updateClickableMarker(results[0].Y, results[0].X);
 			cgeomap.form.check();
@@ -441,22 +441,24 @@ VhplabMarker.prototype.appendContent = function() {
 					var nodo = '';
 					var data = url.slice(cgeomap.url_site.length);
 					var clean_data = data.split('?');
-					var parameters = clean_data[1].split('&');
-					for (var i = 0; i < parameters.length; i++) {
-						var p = parameters[i].split('=');
-						if (p[0]=='author') author = p[1];
-						if (p[0]=='nodo') nodo = p[1];
-					}
-					$(this).attr('target','_self');
-					$(this).click(function(){
-						var marker = $(cgeomap.map.markers).data('marker_'+nodo);
-						if (typeof marker != "undefined") {
-							marker.click();
-							return false;
-						} else {
-							return true;
+					if (clean_data.lenght>=2) {
+						var parameters = clean_data[1].split('&');
+						for (var i = 0; i < parameters.length; i++) {
+							var p = parameters[i].split('=');
+							if (p[0]=='author') author = p[1];
+							if (p[0]=='nodo') nodo = p[1];
 						}
-					});
+						$(this).attr('target','_self');
+						$(this).click(function(){
+							var marker = $(cgeomap.map.markers).data('marker_'+nodo);
+							if (typeof marker != "undefined") {
+								marker.click();
+								return false;
+							} else {
+								return true;
+							}
+						});
+					}
 				}
 			});
 		});

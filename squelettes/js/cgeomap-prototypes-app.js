@@ -30,6 +30,7 @@ VhplabInterface.prototype.addToVisibleNodes= function(_nodo, _open) {
 	// remoteLog('show article header #article_'+ _nodo);
 	// Add marker to leaflet layer
 	var marker = $(this.map.markers).data('marker_'+ _nodo);
+	marker.autoplay = true;
 	// remoteLog('titre: '+ $(marker.data).data('titre'));
 	this.map.mapLayer.layer.addLayer(marker.marker);
 	// remoteLog('layer.length: '+ this.map.mapLayer.layer.getLayers().length);
@@ -38,8 +39,10 @@ VhplabInterface.prototype.addToVisibleNodes= function(_nodo, _open) {
 		$("#article_"+ _nodo).show("fast", function(){
 			// remoteLog('add new class');
   			$("#article_"+ _nodo +" header h2").addClass('new');
-  			if (_open) $("#article_"+ _nodo +" header").trigger( "click" );
+  			if (_open) cgeomap.toggleArticle("#article_"+ _nodo +" header", true);
 		});
+	} else {
+		if (_open) cgeomap.toggleArticle("#article_"+ _nodo +" header", true);
 	}
   	/*
 	var sound = $('#article_'+ _nodo +' header').data('sound');
@@ -74,22 +77,24 @@ VhplabInterface.prototype.bindModulesActions = function(_context) {
 				var nodo = '';
 				var data = url.slice(cgeomap.url_site.length);
 				var clean_data = data.split('?');
-				var parameters = clean_data[1].split('&');
-				for (var i = 0; i < parameters.length; i++) {
-					var p = parameters[i].split('=');
-					if (p[0]=='author') author = p[1];
-					if (p[0]=='nodo') nodo = p[1];
-				}
-				$(this).attr('target','_self');
-				$(this).click(function(){
-					var marker = $(cgeomap.map.markers).data('marker_'+nodo);
-					if (typeof marker != "undefined") {
-						$("#article_"+ nodo +" .header").trigger('click');
-						return false;
-					} else {
-						return true;
+				if (clean_data.lenght>=2) {
+					var parameters = clean_data[1].split('&');
+					for (var i = 0; i < parameters.length; i++) {
+						var p = parameters[i].split('=');
+						if (p[0]=='author') author = p[1];
+						if (p[0]=='nodo') nodo = p[1];
 					}
-				});
+					$(this).attr('target','_self');
+					$(this).click(function(){
+						var marker = $(cgeomap.map.markers).data('marker_'+nodo);
+						if (typeof marker != "undefined") {
+							$("#article_"+ nodo +" .header").trigger('click');
+							return false;
+						} else {
+							return true;
+						}
+					});
+				}
 			}
 		});
 	});	
@@ -151,7 +156,6 @@ VhplabInterface.prototype.continueInitialize = function(_opts) {
 		// remoteLog.log('/* app prototypes */ .location_reload.click();');
 		$('footer .loading').show();
 		cgeomap.map.myLocation(function(_location) {
-			cgeomap.map.map.setZoom(17);
 			$('footer .loading').hide();
 		});
 	});
@@ -350,8 +354,7 @@ VhplabInterface.prototype.scannQr = function() {
 				$('section').show();
 				$('footer').show();
 				$('nav').show();	
-						
-				/* ojo se esta añadiendo sin revisar */
+				
 				cgeomap.addToVisibleNodes(data[1], true);
 					
 				/*

@@ -463,7 +463,9 @@ VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
 		// Fit bounds to layer
 		if (_fitBounds) {
 			this.map.fitBounds(target.layer.getBounds());
-			this.map.setZoom(this.map.getZoom()-2);
+			var zoom = this.map.getZoom()-2;
+			if (zoom<=3) zoom = 3;
+			this.map.setZoom(zoom);
 		}
 	}
 };

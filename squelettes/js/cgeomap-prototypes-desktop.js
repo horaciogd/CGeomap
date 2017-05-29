@@ -521,6 +521,7 @@ VhplabInterface.prototype.ready = function(_opts) {
 		zoomTag: (typeof _opts.zoomTag != "undefined") ? _opts.zoomTag : '.cartography .zoom'
 	});
 	this.bindToggleContent();
+	this.bindNavigationButtons();
 };
 VhplabInterface.prototype.removeRecherche = function(_me, _container) {
 	$('.value_box', '#embed .wrap_recherche').empty();
@@ -1198,7 +1199,10 @@ VhplabContribuerFrom.prototype.bindUploadedFrameActions = function(_data, _class
 	$('fieldset:first .field_box', _container).hide();
 	$(_container).data('frame', true);
 	var link = $(_container).data('link');
-	if (link) $(_container).data('ok', true);
+	if (link) {
+		$(_container).data('ok', true);
+		$(_container).removeClass('wrong-module');
+	}
 	this.check();
 	$(_container).data(_class, _data); 	
 	var del = _data.deleteUrl;
@@ -1210,6 +1214,7 @@ VhplabContribuerFrom.prototype.bindUploadedFrameActions = function(_data, _class
 		$('fieldset:first .field_box', _container).show();
 		$.ajax({url: del, type: 'DELETE'});
 		$(_container).data('ok', false);
+		$(_container).addClass('wrong-module');
 		$(_container).data(_class, '');
 		$(".submit .btn").css('opacity','0.4');
 	});
@@ -1233,6 +1238,7 @@ VhplabContribuerFrom.prototype.bindUploadedMediaActions = function(_data, _class
 	$('.value_box', _container).show();
 	$('.field_box', _container).hide();
 	$(_container).data('ok', true);
+	$(_container).removeClass('wrong-module');
 	this.check();
 	$(_container).data(_class, _data); 	
 	var del = _data.deleteUrl;
@@ -1244,6 +1250,7 @@ VhplabContribuerFrom.prototype.bindUploadedMediaActions = function(_data, _class
 		$('.field_box', _container).show();
 		$.ajax({url: del, type: 'DELETE'});
 		$(_container).data('ok', false);
+		$(_container).addClass('wrong-module');
 		$(_container).data(_class, '');
 		$(".submit .btn").css('opacity','0.4');
 	});
@@ -1556,6 +1563,8 @@ VhplabContribuerFrom.prototype.getModulesData = function(_wrapper) {
 				default:
 					alert(type);
 			}
+		} else {
+			$(this).addClass('wrong-module');
 		}
 	});
 	$(return_data).data('num', num);
@@ -1570,8 +1579,8 @@ VhplabContribuerFrom.prototype.initData = function() {
 	$("#formulaire .wrap_subtitle").data('ok', true);
 	/* visibility */
 	this.toggleVisible($("#formulaire .visibility .select-"+ $("#formulaire .visibility").data('visibility')));
+	/* category */
 	this.toggleCategory($("#formulaire .category li").has(".select-"+ $("#formulaire .category").data('category')));
-	
 	/* modules */
 	this.bindModuleHeaderActions("#formulaire .modules");
 	this.bindEachModuleActions('audiovisuel');
@@ -1644,6 +1653,8 @@ VhplabContribuerFrom.prototype.resetData = function() {
 	$("#formulaire .wrap_subtitle").data('ok', false);
 	/* visibility */
 	this.toggleVisible($("#formulaire .visibility .select-default"));
+	/* category */
+	this.toggleCategory($("#formulaire .category li").has(".select-category_00"));
 	/* modules */
 	$("#add_link_module").data('n_audiovisuel', 0);
 	$("#add_text_module").data('n_audiovisuel', 0);
@@ -1812,6 +1823,8 @@ VhplabContribuerFrom.prototype.submit = function() {
 	} else {
 		//alert('incorrecto');
 		// alert('title: '+ title +', subtitle: '+ subtitle +', visibility:'+ visibility +', audiovisuel_modules: '+ $(audiovisuel_modules).data('modules') +' '+ $(audiovisuel_modules).data('num') + ', cartography: '+cartography);
+		if (title==false) $(".value_box .value", "#formulaire .wrap_title").addClass("wrong");
+		if (subtitle==false) $(".value_box .value", "#formulaire .wrap_subtitle").addClass("wrong");
 	}
 	return false;
 };
@@ -1889,6 +1902,7 @@ VhplabContribuerFrom.prototype.updateInputField = function(_me) {
 	if ((typeof(value)!='undefined')&&(value != "")&&(value!=old)) {
     	$(".value_box .value", container).text(value);
     	$(".value_box .value", container).attr("class","value new");
+		$(".value_box .value", container).removeClass("wrong");
 		$(".field_box", container).hide();
 		$(".value_box .new", container).show();
 		$(".value_box", container).show("slow");
@@ -1897,6 +1911,7 @@ VhplabContribuerFrom.prototype.updateInputField = function(_me) {
 	} else if ((value != "")&&(value==old)) {
 		$(".field_box", container).hide();
 		$(".value_box .new", container).show();
+		$(".value_box .value", container).removeClass("wrong");
 		$(".value_box", container).show("slow");
 		$(container).data('ok', true);
 		this.check();
@@ -1919,7 +1934,7 @@ VhplabContribuerFrom.prototype.updateLinkField = function(_me) {
 			'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
 			'(\\#[-a-z\\d_]*)?$','i');
 		if (!pattern.test(url)) {
-			url = 'http://' + url;
+			url = 'https://' + url;
 			if (pattern.test(url)) {
 				$(".field_box .url_link", container).attr('value', url);
 			} else {
@@ -1941,6 +1956,7 @@ VhplabContribuerFrom.prototype.updateLinkField = function(_me) {
 		$(".value_box", container).show("slow");
 		$(".add", $(container).parent()).show("slow");
 		$(container).parent().parent().parent().data('ok',true);
+		$(container).parent().parent().parent().removeClass("wrong-module");
 		this.check();
 	}
 };
@@ -1965,7 +1981,11 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
 		$(module).data('channel', 'youtube');
 		$(module).data('link', true);
 		var frame = $(module).data('frame');
-		if (frame) $(module).data('ok', true);
+		if (frame) {
+			$(module).data('ok', true);
+			$(module).removeClass("wrong-module");
+			alert('ok');
+		}
 		$(module).data('id',data[1]);
 		$(module).data('channel','youtube');
 		this.check();
@@ -1985,7 +2005,11 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
 			$(module).data('channel', 'vimeo');
 			$(module).data('link', true);
 			var frame = $(module).data('frame');
-			if (frame) $(module).data('ok', true);
+			if (frame) {
+				$(module).data('ok', true);
+				$(module).removeClass("wrong-module");
+				alert('ok');
+			}
 			$(module).data('id',data[1]);
 			$(module).data('channel','vimeo');
 			this.check();
@@ -1993,6 +2017,7 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
     		$(fieldset).append('<span class="erreur_message">La dirección es incorrecta</span>');
 			$(module).data('link', false);
 			$(module).data('ok', false);
+			$(module).addClass("wrong-module");
     	}
     }
     
@@ -2036,6 +2061,8 @@ VhplabContribuerFrom.prototype.updateTextField = function(_me, _check) {
 			$(".value_box .new", container).show();
 			$(".value_box", container).show("slow");
 			$(container).data('ok', true);
+			$(container).removeClass("wrong-module");
+			
 			/* Check del formulario global */
 			// El check se recibe de la variable para poder utilizar el campo en distintos formularios
 			_check();
@@ -2044,6 +2071,7 @@ VhplabContribuerFrom.prototype.updateTextField = function(_me, _check) {
 		$(".field_box", container).hide();
 		$(".value_box .new", container).show();
 		$(".value_box", container).show("slow");
+		$(container).removeClass("wrong-module");
 	}
 };
 

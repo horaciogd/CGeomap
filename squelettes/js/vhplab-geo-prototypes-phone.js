@@ -126,7 +126,7 @@ VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer, _l
 	marker.setDistance(_lat, _lng);
 	console.log('marker.distance: '+ marker.distance);
 	// If marker is within reach
-	if (marker.distance<=50000) {
+	if ((marker.distance<=50000)||(_num<=50)) {
 		console.log('marker is within reach');
 		// Save marker as jQuery data
 		$(this.markers).data('marker_'+ marker.id, marker);
@@ -201,6 +201,7 @@ VhplabMap.prototype.initialize = function(_opts) {
 	this.createMap(_opts);
 	this.initMapElements(_opts);
 	if (this.markersURL != '') this.loadMarkers();
+	this.locationControl = 0;
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
 	
@@ -320,6 +321,7 @@ VhplabMap.prototype.sortMarkersByDistance = function() {
 	});
 };
 VhplabMap.prototype.updateDistances = function(_lat, _lng) {
+	this.locationControl++;
 	// console.log('/* phone prototypes */ cgeomap.map.updateDistances();');
 	if (cgeomap.state == '') {
 		cgeomap.state = 'shorting';
@@ -327,14 +329,14 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		// Get marker order
 		// var oldList = cgeomap.map.mapLayer.markerList.toString();
 		if (cgeomap.navigationListOrder == '') {
-			var oldList = new Array();
+			var oList = new Array();
 			$("#content .listado_nodos .article").each(function(){
 				var entryId = $(this).attr('id');
 				var id = entryId.split("_"); 
-				oldList.push(id[1]);
+				oList.push(id[1]);
 		 	});
-		 	cgeomap.navigationListOrder = oldList.toString();
-		 	// console.log('cgeomap.navigationListOrder = '+ oldList.toString());
+		 	cgeomap.navigationListOrder = oList.toString();
+		 	// console.log('cgeomap.navigationListOrder = '+ oList.toString());
 		}
 		// Set marker distances
 		$.each($(this.markers).data(), function(name, marker) {
@@ -346,14 +348,13 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		var newList = cgeomap.map.mapLayer.markerList.toString();
 		// console.log('newList = '+ cgeomap.map.mapLayer.markerList.toString());
 		// Return true if new list is different from the old list
-		if (oldList!=newList) {
+		if ((cgeomap.navigationListOrder!=newList)&&(this.locationControl==1)) {
 			// Navigation list needs to be shorted
-			// console.log(' ');
 			// console.log('cgeomap.map.updateDistances - navigation list needs to be shorted');
-			// console.log(' ');
 			cgeomap.sortNavigationList();
 		} else {
 			// console.log('everything in order only check autoplay');
+			this.locationControl = 0;
 			// only check autoplay if not detaching
 			// console.log('cgeomap.player.playing: '+cgeomap.player.playing);
 			// Check autoplay if nothing is being played
@@ -362,6 +363,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 			if (cgeomap.player.playing=='') {
 				for (var i=0; i<this.mapLayer.markerList.length; i++) {
 					var marker = $(this.markers).data('marker_'+ this.mapLayer.markerList[i]);
+					//console.log('marker_'+ this.mapLayer.markerList[i]);
 					if (marker.checkAutoplay()) break;
 				}
 			}
@@ -379,7 +381,10 @@ VhplabMap.prototype.updateMap = function(_lat, _lng, _pan) {
 	this.locationCircle1.setLatLng([_lat, _lng]);
 	this.locationCircle2.setLatLng([_lat, _lng]);
 	this.locationCircle3.setLatLng([_lat, _lng]);
-	if (_pan) this.map.panTo(L.latLng(_lat, _lng));
+	if (_pan) {
+		this.map.setZoom(17);
+		this.map.panTo(L.latLng(_lat, _lng));
+	}
 	//this.updateDistances(_lat, _lng);
 };
 VhplabMap.prototype.updateMarker = function(_path, _data, _n, _layer) {
@@ -493,9 +498,9 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 };
 VhplabMarker.prototype.checkAutoplay = function() {
 	// console.log('/* phone prototypes */ marker.checkAutoplay();');
-	if ((this.distance<=15)&&(this.autoplay)){
-		// console.log('trigger #article_'+ this.id +' header click in cgeomap.marker.checkAutoplay()');
-		$("#article_"+ this.id +" header").trigger("click");
+	if ((this.distance<=25)&&(this.autoplay)) {
+		// console.log('cgeomap.toggleArticle("#article_"+ this.id +" header", true)');
+		cgeomap.toggleArticle("#article_"+ this.id +" header", true);
 		//this.autoplay = false;
 		return true;
 	} else {
