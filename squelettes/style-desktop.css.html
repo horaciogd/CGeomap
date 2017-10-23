@@ -174,15 +174,15 @@
 /* scroll  */
 .mCSB_inside > .mCSB_container { margin-right: 8px !important;  }
 article .content.mCustomScrollbar { right: -16px; }
-#contributions.mCustomScrollbar { right: 0px; }
 #formulaire .scroll.mCustomScrollbar { right: -16px; }
+#contributions.mCustomScrollbar { right: 0px; }
 
-article .content.mCS_no_scrollbar { right: -8px; }
-#formulaire .scroll.mCS_no_scrollbar { right: -8px; }
+article .content.mCS_no_scrollbar { right: -16px; }
+#formulaire .scroll.mCS_no_scrollbar { right: -16px; }
 #contributions.mCS_no_scrollbar { right: 15px; }
 
 /* Margin to scroll when scrolling */
-article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol, #formulaire .scroll.mCustomScrollbar .block_modules { margin-right: 8px; }
+article .content.mCustomScrollbar .texte p, #contributions.mCustomScrollbar ol, #formulaire .scroll.mCustomScrollbar .block_modules, article .content.mCustomScrollbar .module, article .content.mCustomScrollbar .block_category { margin-right: 8px; }
 
 /* No margin when no scroll */
 article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, #formulaire .scroll.mCS_no_scrollbar .block_modules { margin-right: 0px; }
@@ -190,6 +190,16 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 /* Texte  */
 .texte p { font-size: 0.9em; text-align: justify; }
 .texte img { margin: 1em 0; }
+
+/* Category */
+.modules .block_category { padding: 4px; margin-bottom: 4px; text-align: center; font-size: .6em; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; }
+.modules .block_category p { color: [(#GET{grey-bright})]; font-style: italic; }
+.modules .category_00 { background-color: [(#GET{bright-e})] !important; }
+.modules .category_01 { background-color: [(#GET{bright-e})] !important; }
+.modules .category_02 { background-color: [(#GET{bright-e})] !important; }
+.modules .category_03 { background-color: [(#GET{bright-e})] !important; }
+.modules .category_04 { background-color: [(#GET{bright-e})] !important; }
+.modules .category_05 { background-color: [(#GET{bright-e})] !important; }
 
 /* Modules  */
 .audiovisuel header.block, .audiovisuel .trash, .audiovisuel .margin { display: none; }
@@ -268,8 +278,10 @@ article .content.mCS_no_scrollbar .texte p, #contributions.mCS_no_scrollbar ol, 
 .category .field_box { text-align: left; margin-bottom: 8px; }
 .category .field_box li { overflow: hidden; display: inline-block; position: relative; width: 110px; height: 44px; vertical-align: middle; border: 2px solid transparent; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; margin: 0 2px 6px 0; }
 .category .field_box li:hover, .category .field_box li.selected { cursor: pointer; border-color: [(#GET{grey-dark})]; /*background-color: [(#GET{alpha-bright-bg})];*/ }
-.category .field_box li img { position: absolute; top: 0px; left: 0px; }
-.category .field_box li span { display: block; position: absolute; top: 4px; right: 0px; width: 66px; float: right; text-align: left; line-height: 18px;  font-weight: bold; }
+.category .field_box li img { position: absolute; top: 0px; left: -2px; }
+.category .field_box li span { display: block; position: absolute; top: 4px; right: 2px; width: 62px; float: right; text-align: left; font-size: 11px; line-height: 18px;  font-weight: bold; -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto; }
 .category .field_box li img:hover, .category .field_box li span:hover  { cursor: pointer; }
 
 /* modules */

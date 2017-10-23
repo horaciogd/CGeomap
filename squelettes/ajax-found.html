@@ -1,0 +1,11 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
+			<div class="wrapper">
+				<BOUCLE_found(BREVES){titre=found}>#TEXTE</BOUCLE_found>
+			</div>
+			<div class="welcome">
+				<span class="btn go">go</span>
+			</div>

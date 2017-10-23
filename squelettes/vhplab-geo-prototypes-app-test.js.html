@@ -1,0 +1,14 @@
+[(#REM) 24h cache
+][(#CACHE{10*24*3600})][
+
+(#REM) Javascript header
+][(#HTTP_HEADER{Content-type:text/javascript; charset=#CHARSET})][
+
+(#REM) Acces Control header
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})][
+
+(#REM) Inclure js
+][(#INCLURE{js/vhplab-geo-prototypes-app-test.js})][
+
+(#REM) Compacte if desired
+][(#CONFIG{auto_compress_js}|=={oui}|oui)#FILTRE{compacte}]

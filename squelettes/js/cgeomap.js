@@ -32,9 +32,9 @@ function VhplabInterface() {
 	this.form = new VhplabContribuerFrom();
 };
 VhplabInterface.prototype.appendNavigationList = function(html, pagination, pages) {
-	console.log('cgeomap.appendNavigationList();');
-	console.log('html: '+ html);
-	console.log('pagination: '+ pagination);
+	// console.log('cgeomap.appendNavigationList();');
+	// console.log('html: '+ html);
+	// console.log('pagination: '+ pagination);
 	$('#navigation .menu .list').slideUp("fast", function(){
 		$('#navigation .menu .list').empty();
 		$('#navigation .menu .list').append(html);
@@ -69,6 +69,7 @@ VhplabInterface.prototype.bindNavigationListActions = function() {
 	$('#loading').delay(1000).fadeOut(1000);
 };
 VhplabInterface.prototype.bindNavigationButtons = function() {
+	// console.log('/* cgeomap.bindNavigationButtons(); */');
 	/* toggleLogin */
 	$('#navigation .user .login').data("tgl","of");
 	$('#navigation .user .login').click(function() { 
@@ -80,7 +81,7 @@ VhplabInterface.prototype.bindNavigationButtons = function() {
 		var url = this.url_site + 'spip.php?page=ajax-phone-iframe';
 		$('#navigation .preview').on('click', function(){
 			$.fancybox({
-				'wrapCSS'			: 'fancybox-transparent',
+				'wrapCSS': 'fancybox-transparent',
     	   		href: url,
     	    	type: 'ajax',
 				beforeShow : function() {
@@ -97,8 +98,9 @@ VhplabInterface.prototype.bindNavigationButtons = function() {
 	}
 };
 VhplabInterface.prototype.bindToggleContent = function() {
-	var self = this;
-	$('#toggle_content').click(function(){ self.toggleContent(); });
+	$('#toggle_content').click(function(){ 
+		cgeomap.toggleContent();
+	});
 };
 VhplabInterface.prototype.createNavigationElement = function(_tab, _pagination, _id, _titre, _soustitre) {
 	return _tab +'<li class="group_'+ _pagination +'"><h3><a class="article" name="article_'+ _id +'">'+ _titre +'</a></h3><span>'+ _soustitre +'</span></li>\n';
@@ -164,6 +166,45 @@ VhplabInterface.prototype.initContent = function() {
 	this.toggleContentDist = $("#content").width() + position.left + this.toggleContentOffset;
 	$('#content').css({ left: "-="+this.toggleContentDist });
 	$("#content").data('visible', false);
+};
+VhplabInterface.prototype.internalizeLink = function(_this){
+	// console.log('/* internal link */');
+	var url = $(_this).attr('href');
+	var base = url.substr(0, cgeomap.url_site.length);
+	// console.log('url: ' + url);
+	// console.log('url_site: ' + cgeomap.url_site);
+	// console.log('base: ' + base);
+	if (base==cgeomap.url_site) {
+		// console.log('/* TRUE */');
+		var author = '';
+		var nodo = '';
+		var data = url.slice(cgeomap.url_site.length);
+		// console.log('data: ' + data);
+		var clean_data = data.split('?');
+		// console.log('clean_data: ' + clean_data);
+		if (clean_data.length>=2) {
+			// console.log('/* HAS DATA */');
+			var parameters = clean_data[1].split('&');
+			// console.log('parameters: ' + parameters);
+			for (var i = 0; i < parameters.length; i++) {
+				var p = parameters[i].split('=');
+				if (p[0]=='author') author = p[1];
+				if (p[0]=='nodo') nodo = p[1];
+			}
+			// console.log('author: ' + author);
+			// console.log('nodo: ' + nodo);
+			$(_this).attr('target','_self');
+			$(_this).click(function(){
+				var marker = $(cgeomap.map.markers).data('marker_'+ nodo);
+				if (typeof marker != "undefined") {
+					marker.click();
+					return false;
+				} else {
+					return true;
+				}
+			});
+		}
+	}
 };
 VhplabInterface.prototype.loadMap = function(_force, _callback) {
 	
@@ -265,6 +306,8 @@ VhplabInterface.prototype.slideContent = function(_how, _callback) {
 };
 VhplabInterface.prototype.toggleContent = function() {
 	var visible = $("#content").data('visible');
+	console.log('visible: '+ visible);
+	console.log('toggleContentDist: '+ this.toggleContentDist);
 	if (visible) {
 		$('#content').animate({
 			left: "-="+this.toggleContentDist,
@@ -295,4 +338,116 @@ function VhplabContribuerFrom() {
 	this.trash = false;
 	this.geo = false;
 	this.icons;
+};
+
+//***********
+// Vhplab Player
+//***********
+function VhplabPlayer() {
+	this.sound;
+	this.soundURL;
+	this.selector;
+	this.id;
+	this.volume = 50;
+};
+VhplabPlayer.prototype.appendTo = function(_container) {
+	$(_container).append('<div class="vhplab_player" id="'+ this.selector +'"></div>');
+	$('#'+ this.selector).append('<ul></ul>');
+	$('#'+ this.selector +' ul').append('<li class="play" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="pause" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="position" >00:00</li>');
+	$('#'+ this.selector +' ul').append('<li class="duration" >00:00</li>');
+	$('#'+ this.selector +' ul').append('<li class="volume" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="progress_bar" ><span></span></li>');
+    this.bindActions();
+};
+VhplabPlayer.prototype.bindActions = function() {
+	var self = this;
+	$('#'+ this.selector +' .play').click(function(){
+		self.play();
+	});
+	$('#'+ this.selector +' .pause').click(function(){
+      	self.pause();
+	});
+	$('#'+ this.selector +' .progress_bar').click(function(e){
+      	var w = $(this).width();
+		var x = e.clientX - $(this).offset().left;
+		if (self.sound.playState) self.sound.setPosition(x*self.sound.duration/w);
+	});
+	$('#'+ this.selector +' .volume').click(function(){
+		self.setVolume();
+	});
+	$('#'+ this.selector +' .pause').hide();
+};
+VhplabPlayer.prototype.init = function(_opts) {
+	typeof _opts.id != "undefined" ? this.id = _opts.id : this.id = 0;
+	typeof _opts.url != "undefined" ? this.soundURL = _opts.url : this.soundURL = '';
+	typeof _opts.selector != "undefined" ? this.selector = _opts.selector : this.selector = 'player_' + this.id;
+	// create sound
+	var self = this;
+    this.sound = soundManager.createSound({
+		id:'exilioSound_' + (self.id),
+		url: self.soundURL,
+		onload: function() {
+			$('#'+ self.selector +' .duration').text(self.milToTime(this.duration));
+		},
+		onplay: function() {
+		},
+		onresume: function() {
+		},
+		onpause: function() {
+		},
+		onfinish: function() {
+			$('#'+ self.selector +' .play').show();
+			$('#'+ self.selector +' .pause').hide();
+			$('#'+ self.selector +" .progress_bar span").css('width', 0 +'%');
+			$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
+		},
+		whileplaying: function() {
+			$('#'+ self.selector +' .position').text(self.milToTime(this.position));
+			var percent = this.position / this.duration * 100;
+			$('#'+ self.selector +" .progress_bar span").css('width', percent +'%');
+		}
+	});
+};
+VhplabPlayer.prototype.pause = function() {
+	this.sound.pause();
+	$('#'+ this.selector +' .play').show();
+	$('#'+ this.selector +' .pause').hide();
+	$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
+};
+VhplabPlayer.prototype.play = function() {
+	this.sound.play();
+	$('#'+ this.selector +' .play').hide();
+	$('#'+ this.selector +' .pause').show();
+	$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
+};
+VhplabPlayer.prototype.setVolume = function() {
+	this.volume += 25;
+	if (this.volume>100) this.volume = 0;
+	this.sound.setVolume(this.volume);
+	switch (this.volume) {
+		case 0:
+			$('#'+ this.selector +' .volume').css("background-position", "-111px 0");
+			break;
+		case 25:
+			$('#'+ this.selector +' .volume').css("background-position", "-129px 0");
+			break;
+		case 50:
+			$('#'+ this.selector +' .volume').css("background-position", "-150px 0");
+			break;
+		case 75:
+			$('#'+ this.selector +' .volume').css("background-position", "-171px 0");
+			break;
+		case 100:
+			$('#'+ this.selector +' .volume').css("background-position", "-193px 0");
+			break;
+	}
+};
+VhplabPlayer.prototype.milToTime = function(_mil) {
+	var seconds = Math.floor((_mil / 1000) % 60);
+	if (seconds<10) seconds = '0'+ seconds;
+	var minutes = Math.floor((_mil / (60 * 1000)) % 60);
+	if (minutes<10) minutes = '0'+ minutes;
+	return minutes + ":" + seconds;
 };

@@ -14,27 +14,27 @@
 // Vhplab Map
 //***********
 VhplabMap.prototype.addMarkers = function(_data, _layer, _lat, _lng, _callback) {
-	// console.log('/* phone prototypes */ cgeomap.map.addMarkers();');
+	// remoteLog('/* app prototypes */ cgeomap.map.addMarkers();');
 	// Empty none layer
 	var target = this.getLayer(_layer);
 	target.reset();
 	// Count markers
 	var count = $(_data.markers).length - 1;
 	var num = 0; 
-	// console.log('Total Markers = '+ $(_data.markers).length);
+	// remoteLog('Total Markers = '+ $(_data.markers).length);
 	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, _marker) {
-			// console.log('Looping through each marker: i = '+ i +', count = '+ count);
+			// remoteLog('Looping through each marker: i = '+ i +', count = '+ count);
 			if (cgeomap.map.createMarker(_data.link, _marker, num, target, _lat, _lng)) num ++;
 			// Finish when all markers are looped
 			if(i==count) {
-				// console.log('Looping finished i == count');
+				// remoteLog('Looping finished i == count');
 				// Short markers by distance
 				cgeomap.map.sortMarkersByDistance();
-				// console.log('markerList: '+ target.markerList.toString());
-				// console.log('layer.length: '+ target.layer.getLayers().length);
+				// remoteLog('markerList: '+ target.markerList.toString());
+				// remoteLog('layer.length: '+ target.layer.getLayers().length);
 				if (_callback) _callback();
 			}
 		});
@@ -44,22 +44,22 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _lat, _lng, _callback) 
 	}
 };
 VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
-	// console.log('/* phone prototypes */ cgeomap.map.addMarkerToLayer();');
-	// console.log('Add Marker: "'+ _marker.id +'" to layer');
+	// remoteLog('/* app prototypes */ cgeomap.map.addMarkerToLayer();');
+	// remoteLog('Add Marker: "'+ _marker.id +'" to layer');
 	// Add marker to marker's list
 	_layer.markerList.push(_marker.id);
 	var visible = 'default';
 	if (($(_marker.data).data('visibility')=='qr')||($(_marker.data).data('visibility')=='proximity')) {
-		// console.log('Check if added marker has just been found!');
-		// console.log('cgeomap.visibleNodes.indexOf('+ parseInt(_marker.id) +') = '+ cgeomap.visibleNodes.indexOf(parseInt(_marker.id)));
+		// remoteLog('Check if added marker has just been found!');
+		// remoteLog('cgeomap.visibleNodes.indexOf('+ parseInt(_marker.id) +') = '+ cgeomap.visibleNodes.indexOf(parseInt(_marker.id)));
 		if (cgeomap.visibleNodes.indexOf(parseInt(_marker.id)) != -1) {  
-			// console.log('Marker found!');
+			// remoteLog('Marker found!');
 			visible = 'found';
 			// Add marker to leaflet layer
 			_layer.layer.addLayer(_marker.marker);
 		} else {
 			visible = 'hidden';
-			// console.log('marker '+ _marker.id +' is hidden');
+			// remoteLog('marker '+ _marker.id +' is hidden');
 		}
 	} else {
 		// Add marker to leaflet layer
@@ -69,7 +69,7 @@ VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
 	_layer.addToNavigationHtml(cgeomap.createNavigationElement('\t\t\t\t',  _marker.id, $(_marker.data).data('titre'), $(_marker.data).data('soustitre'), _marker.distance, $(_marker.data).data('enclosure'), visible, $(_marker.data).data('category')));		
 };
 VhplabMap.prototype.bindActions = function() {
-	// console.log('/* app prototypes */ cgeomap.map.bindActions();');
+	// remoteLog('/* app prototypes */ cgeomap.map.bindActions();');
 	// Show map 
 	this.map.addLayer(this.mapLayer.layer);
 	// Screen width ???
@@ -77,28 +77,19 @@ VhplabMap.prototype.bindActions = function() {
 	if (width>674) width = 674;
 	// Bind button actions
 	$("#navigation .bkmrk").click(function(){
-		if ($("#navigation .bkmrk").data('loaded')!=true) {
-			var url = cgeomap.url_site +"spip.php?page=ajax-bookmark-ios&width="+ (width*2 - 82);
-			if (/Android/i.test(navigator.userAgent)) url = cgeomap.url_site +"spip.php?page=ajax-bookmark-android&width="+ (width*2 - 82);
-			$("#bookmark").load(url, function(){
-				$("#navigation .bkmrk").data('loaded', true);
-				$("#navigation .bkmrk").fadeOut();
-				$("#bookmark .wrapper").slideDown();
-				$("#bookmark .hide").click(function(){
-					$("#bookmark .wrapper").slideUp();
-					$("#navigation .bkmrk").fadeIn();
-				});
-			});
-		} else {
-			$("#navigation .bkmrk").fadeOut();
-			$("#bookmark .wrapper").slideDown();
-		}
+		$('section').hide();
+		$('footer').hide();
+		$('nav').hide();
+		cgeomap.scannQr();
 	});
-	/* Just reload page
-	$("#navigation h1 a").click(function(){
-		cgeomap.reload();
+	var initialHref = window.location.href;
+	$("#reload").click(function(){
+		// reset markers and reload cgeomap
+		// cgeomap.reload();
+		// Reload original app url (ie your index.html file)
+  		window.location = initialHref;
 		return false;
-	}); */
+	});
 	// Apppend navigation list
 	cgeomap.appendNavigationList();
 	// Sort content and start contineous geopositioning
@@ -118,17 +109,17 @@ VhplabMap.prototype.clickListener = function(_e) {
 	//if (!$('.cgeomap .leaflet-popup-content-wrapper').is(":hover")) self.closeOpenMarker();
 };
 VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer, _lat, _lng) {
-	// console.log('/* phone prototypes */ cgeomap.map.createMarker();');
+	// remoteLog('/* app prototypes */ cgeomap.map.createMarker();');
 	// create Marker
-	// console.log('Create Marker: "'+ _markerData.id);
+	// remoteLog('Create Marker: "'+ _markerData.id);
 	var marker = new VhplabMarker();
 	marker.initialize(_path, _markerData, this);
 	// Set marker distance to map center
 	marker.setDistance(_lat, _lng);
-	console.log('marker.distance: '+ marker.distance);
+	// remoteLog('marker.distance: '+ marker.distance);
 	// If marker is within reach
 	if ((marker.distance<=50000)||(_num<=50)) {
-		console.log('marker is within reach');
+		// remoteLog('marker is within reach');
 		// Save marker as jQuery data
 		$(this.markers).data('marker_'+ marker.id, marker);
 		// Add marker to vhpLayer
@@ -139,11 +130,11 @@ VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer, _l
 	}
 };
 VhplabMap.prototype.contineousGetCurrentPosition = function() {
-	// console.log('/* phone prototypes */ cgeomap.map.contineousGetCurrentPosition();');
+	// remoteLog('/* app prototypes */ cgeomap.map.contineousGetCurrentPosition();');
 	if(navigator.geolocation) {
 		cgeomap.map.locationWatch = navigator.geolocation.watchPosition(function(position) {
 			// Geolocation success
-			// console.log('Geolocation success');
+			// remoteLog('Geolocation success');
 			// Geolocation succes UI feddback /* USAR CSS3 */
 			$("#navigation hgroup .gps span").css('background-color', '#0bdec9');
 			setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', 'rgba(255,255,255,0.8)'); }, 300);
@@ -160,11 +151,11 @@ VhplabMap.prototype.contineousGetCurrentPosition = function() {
 	}
 };
 VhplabMap.prototype.getPosition = function(_callback) {
-	// console.log('/* phone prototypes */ cgeomap.map.getPosition();');
+	// remoteLog('/* app prototypes */ cgeomap.map.getPosition();');
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			// Geolocation success
-			// console.log('getPosition success');
+			// remoteLog('getPosition success');
 			// Geolocation succes UI feddback /* USAR CSS3 */
 			$("#navigation hgroup .gps span").css('background-color', '#0bdec9');
 			setTimeout(function(){ $("#navigation hgroup .gps span").css('background-color', 'rgba(255,255,255,0.8)'); }, 300);
@@ -172,8 +163,8 @@ VhplabMap.prototype.getPosition = function(_callback) {
 			if (_callback) _callback(position.coords.latitude, position.coords.longitude);
 		}, function(err) {
 			// Geolocation error
-			// console.log('getPosition error');
-			// console.log('ERROR(' + err.code + '): ' + err.message);
+			// remoteLog('getPosition error');
+			// remoteLog('ERROR(' + err.code + '): ' + err.message);
 			var center = cgeomap.map.map.getCenter();
 			// Callback to bind actiosn after getting geolocation position
 			if (_callback) _callback(center.lat, center.lng);
@@ -252,26 +243,26 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 };
 VhplabMap.prototype.loadMarkers = function() {
 	// Load markers data
-	// console.log('/* phone prototypes */ cgeomap.map.loadMarkers();');
+	// remoteLog('/* app prototypes */ cgeomap.map.loadMarkers();');
 	var url = this.markersURL;
 	//if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	// Get URL via log 
-	// console.log('Markers URL: '+ url);
+	// remoteLog('Markers URL: '+ url);
 	// Get geolocation position
 	this.getPosition(function(_lat, _lng) {
 		// Update Map position
 		cgeomap.map.updateMap(_lat, _lng, true);
 		// Get Markers
 		$.getJSON(url, function(_data){
-			// console.log('Markers loaded via $.getJSON!');
+			// remoteLog('Markers loaded via $.getJSON!');
 			cgeomap.map.addMarkers(_data[0],'map', _lat, _lng, function() {
 				cgeomap.map.bindActions();
 				if (cgeomap.map.open!='') {
 					var marker = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
 					if (typeof marker != "undefined") {
 						marker.autoplay = true;
-						cgeomap.toggleArticle("#article_"+ cgeomap.map.open +" header", true);
+						$("#article_"+ cgeomap.map.open +" header").trigger("click");
 					}
 				}
 			});
@@ -279,7 +270,7 @@ VhplabMap.prototype.loadMarkers = function() {
 	});	
 };
 VhplabMap.prototype.myLocation = function(_callback) {
-	// console.log('/* phone prototypes */ cgeomap.map.myLocation();');
+	// remoteLog('/* app prototypes */ cgeomap.map.myLocation();');
 	var self = this;
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(_position) {
@@ -311,7 +302,7 @@ VhplabMap.prototype.openMarker = function(_autoplay) {
 	}
 };
 VhplabMap.prototype.sortMarkersByDistance = function() {
-	// console.log('/* phone prototypes */ cgeomap.map.sortMarkersByDistance();');
+	// remoteLog('/* app prototypes */ cgeomap.map.sortMarkersByDistance();');
 	// Short markers by distance
 	this.mapLayer.markerList.sort(function(a,b) {
 		var ma = $(cgeomap.map.markers).data('marker_'+a);
@@ -323,7 +314,7 @@ VhplabMap.prototype.sortMarkersByDistance = function() {
 };
 VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 	this.locationControl++;
-	// console.log('/* phone prototypes */ cgeomap.map.updateDistances();');
+	// remoteLog('/* app prototypes */ cgeomap.map.updateDistances();');
 	if (cgeomap.state == '') {
 		cgeomap.state = 'shorting';
 		$('#block').show();
@@ -337,7 +328,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 				oList.push(id[1]);
 		 	});
 		 	cgeomap.navigationListOrder = oList.toString();
-		 	// console.log('cgeomap.navigationListOrder = '+ oList.toString());
+		 	// remoteLog('cgeomap.navigationListOrder = '+ oList.toString());
 		}
 		// Set marker distances
 		$.each($(this.markers).data(), function(name, marker) {
@@ -347,38 +338,37 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 		this.sortMarkersByDistance();
 		// Get new list
 		var newList = cgeomap.map.mapLayer.markerList.toString();
-		// console.log('newList = '+ cgeomap.map.mapLayer.markerList.toString());
+		// remoteLog('newList = '+ cgeomap.map.mapLayer.markerList.toString());
 		// Return true if new list is different from the old list
 		if ((cgeomap.navigationListOrder!=newList)&&(this.locationControl==1)) {
 			// Navigation list needs to be shorted
-			// console.log('cgeomap.map.updateDistances - navigation list needs to be shorted');
+			// remoteLog('cgeomap.map.updateDistances - navigation list needs to be shorted');
 			cgeomap.sortNavigationList();
 		} else {
-			// console.log('everything in order only check autoplay');
 			this.locationControl = 0;
+			// remoteLog('everything in order only check autoplay');
 			// only check autoplay if not detaching
-			// console.log('cgeomap.player.playing: '+cgeomap.player.playing);
+			// remoteLog('cgeomap.player.playing: '+cgeomap.player.playing);
 			// Check autoplay if nothing is being played
 			$('#block').hide();
 			cgeomap.state = '';
 			if (cgeomap.player.playing=='') {
 				for (var i=0; i<this.mapLayer.markerList.length; i++) {
 					var marker = $(this.markers).data('marker_'+ this.mapLayer.markerList[i]);
-					//console.log('marker_'+ this.mapLayer.markerList[i]);
 					if (marker.checkAutoplay()) break;
 				}
 			}
 		}
-		// console.log('markerList: '+ cgeomap.map.mapLayer.markerList.toString());
-		// console.log(' ');
+		// remoteLog('markerList: '+ cgeomap.map.mapLayer.markerList.toString());
+		// remoteLog(' ');
 	} else {
 		$('#block').hide();
 		cgeomap.state = '';
 	}
 };
 VhplabMap.prototype.updateMap = function(_lat, _lng, _pan) {
-	// console.log('/* phone prototypes */ cgeomap.map.updateMap();');
-	// console.log('Position: '+ _lat +' , '+ _lng +'.');
+	// remoteLog('/* app prototypes */ cgeomap.map.updateMap();');
+	// remoteLog('Position: '+ _lat +' , '+ _lng +'.');
 	this.locationCircle1.setLatLng([_lat, _lng]);
 	this.locationCircle2.setLatLng([_lat, _lng]);
 	this.locationCircle3.setLatLng([_lat, _lng]);
@@ -389,7 +379,7 @@ VhplabMap.prototype.updateMap = function(_lat, _lng, _pan) {
 	//this.updateDistances(_lat, _lng);
 };
 VhplabMap.prototype.updateMarker = function(_path, _data, _n, _layer) {
-	// console.log('/* phone prototypes */ cgeomap.map.updateMarker();');
+	// remoteLog('/* app prototypes */ cgeomap.map.updateMarker();');
 	var marker = $(this.markers).data('marker_'+_data.id);
 	if (typeof marker == "undefined") {
 		marker = new VhplabMarker();
@@ -405,24 +395,24 @@ VhplabMap.prototype.updateMarker = function(_path, _data, _n, _layer) {
 	}
 };
 VhplabMap.prototype.updateMarkers = function(_data, _layer, _callback) {
-	// console.log('/* phone prototypes */ cgeomap.map.addMarkers();');
+	// remoteLog('/* app prototypes */ cgeomap.map.addMarkers();');
 	// Empty none layer
 	var target = this.getLayer(_layer);
 	target.reset();
 	// Count markers
 	var count = $(_data.markers).length - 1;
-	// console.log('Total Markers = '+ $(_data.markers).length);
+	// remoteLog('Total Markers = '+ $(_data.markers).length);
 	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, marker) {
-			// console.log('Looping through each marker: i = '+ i +', count = '+ count);
+			// remoteLog('Looping through each marker: i = '+ i +', count = '+ count);
 			cgeomap.map.updateMarker(_data.link, marker, i, target);
 			// Finish when all markers are looped
 			if(i==count) {
 				// Paginate only if needed
-				// console.log('markerList: '+ target.markerList.toString());
-				// console.log('layer.length: '+ target.layer.getLayers().length);
+				// remoteLog('markerList: '+ target.markerList.toString());
+				// remoteLog('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
 				if (_callback) _callback();
 			}
@@ -433,7 +423,7 @@ VhplabMap.prototype.updateMarkers = function(_data, _layer, _callback) {
 	}
 };
 VhplabMap.prototype.reloadMarkers = function(_callback) {
-	// console.log('/* phone prototypes */ cgeomap.map.reloadMarkers();');
+	// remoteLog('/* app prototypes */ cgeomap.map.reloadMarkers();');
 	this.closeOpenMarker();
 	/*
 	this.hideMarkers();
@@ -450,9 +440,9 @@ VhplabMap.prototype.reloadMarkers = function(_callback) {
 	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?';
 	// Get URL via log
-	// console.log('Markers URL: '+ url);
+	// remoteLog('Markers URL: '+ url);
 	$.getJSON(url, function(data){
-		// console.log('Markers reloaded!');
+		// remoteLog('Markers reloaded!');
 		self.updateMarkers(data[0], 'map', function(){
 			if (_callback) _callback();
 		});
@@ -464,8 +454,12 @@ VhplabMap.prototype.reloadMarkers = function(_callback) {
 // ************ //
 VhplabMarker.prototype.appendContent = function() {
 	$('#article_'+ this.id +' .wrap_article').empty();
-	var category = $(this.data).data('category');
-	$('#article_'+ this.id +' .wrap_article').append('<div class="block_category">'+ category.nom +'</div><!-- category -->'+ $(this.data).data('texte'));
+	$('#article_'+ this.id +' .wrap_article').append($(this.data).data('texte'));	
+	$('#article_'+ this.id +' .wrap_article a.fancybox').fancybox();
+	$('#article_'+ this.id +' .wrap_article .vimeo').each(function(i){
+		$(this).empty();
+		$(this).append("<iframe src='"+ $(this).attr("href") +"' width='"+ $(this).data('w') +"' height='"+ $(this).data('h') +"' frameborder='0' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>");
+	});
 	$('#article_'+ this.id +' .header h2').removeClass('empty');
 };
 VhplabMarker.prototype.bindContentActions = function(_content) {
@@ -492,15 +486,12 @@ VhplabMarker.prototype.bindPopupActions = function(_content) {
 		var id_article = $(this).data('id_article');
 		$('#article_'+ id_article +' .header .player').trigger('click');
 	});
-	
-	$('.toggle_content', _content).click(function(){
-		cgeomap.toggleContent();
-	});
 };
 VhplabMarker.prototype.checkAutoplay = function() {
-	// console.log('/* phone prototypes */ marker.checkAutoplay();');
+	// remoteLog('/* app prototypes */ marker.checkAutoplay();');
 	if ((this.distance<=25)&&(this.autoplay)) {
-		// console.log('cgeomap.toggleArticle("#article_"+ this.id +" header", true)');
+		// remoteLog('trigger #article_'+ this.id +' header click in cgeomap.marker.checkAutoplay()');
+		//$("#article_"+ this.id +" header").trigger("click");
 		cgeomap.toggleArticle("#article_"+ this.id +" header", true);
 		//this.autoplay = false;
 		return true;
@@ -512,13 +503,7 @@ VhplabMarker.prototype.click = function() {
 	if (!this.open) {
 		var self = this;
 		if (this.loadded) {
-			var visible = $('#content .listado_nodos').data('visible');
-			if (visible!='none') {
-				$('#article_'+ visible +' .wrap_article').hide();
-				$('header', '#article_'+ visible).removeClass('open');
-			}
 			$('#content .wrapper').scrollTo('#article_'+ this.id);
-			this.showArticleHeaderActions();
 			this.openInfoWindow();
 		} else {
 			$('footer .loading').show();
@@ -526,11 +511,6 @@ VhplabMarker.prototype.click = function() {
 			var sound = $('#article_'+ this.id +' header').data('sound');
 			if ((typeof sound!="undefined")&&(this.autoplay)) cgeomap.play(sound, $('#article_'+ this.id +' .player'));
 			this.getData(function(){
-				var visible = $('#content .listado_nodos').data('visible');
-				if (visible!='none') {
-					$('#article_'+ visible +' .wrap_article').hide();
-					$('header', '#article_'+ visible).removeClass('open');
-				}
 				self.appendContent();
 				self.bindContentActions();
 				self.openInfoWindow();
@@ -568,21 +548,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	typeof _opts.lesauteurs != "undefined" ? $(this.data).data('lesauteurs', _opts.lesauteurs) : $(this.data).data('lesauteurs', "");
 	typeof _opts.soustitre != "undefined" ? $(this.data).data('soustitre', _opts.soustitre) : $(this.data).data('soustitre', "");
 	typeof _opts.visibility != "undefined" ? $(this.data).data('visibility', _opts.visibility) : $(this.data).data('visibility', "default");
-	if (typeof _opts.category != "undefined") {
-		var category_id, category_nom;
-		typeof _opts.category.id != "undefined" ? category_id = _opts.category.id : category_id =  'category_00';
-		typeof _opts.category.nom != "undefined" ? category_nom = _opts.category.nom : category_nom = 'default';
-		$(this.data).data('category', {
-			id: category_id,
-			nom: category_nom,
-		});
-	} else {
-		$(this.data).data('category', {
-			id: 'category_00',
-			nom: 'default',
-		});
-	}
-	//typeof _opts.category != "undefined" ? $(this.data).data('category', _opts.category) : $(this.data).data('category', "category_00");
+	typeof _opts.category != "undefined" ? $(this.data).data('category', _opts.category) : $(this.data).data('category', "category_00");
 	this.vibrate = false;
 	this.autoplay = false;
 	if ($(this.data).data('visibility')=='proximity') {
@@ -592,7 +558,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	if (typeof _opts.enclosure != "undefined") {
 		var enclosureIds = new Array();
 		$.each(_opts.enclosure, function(u, enclosure) {
-			// console.log('/* phone prototypes */ enclosure: '+ enclosure.id);
+			// remoteLog('/* app prototypes */ enclosure: '+ enclosure.id);
 			cgeomap.player.addTrack(enclosure);
 			enclosureIds.push(enclosure.id);
 		});
@@ -607,15 +573,11 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 		minWidth: width,
 		offset: [0, -8]
 	});
-                    
+	
 	this.marker.setLatLng([this.lat, this.lng]);
 	this.infoWindow.setContent('');
 	this.infoWindow.setLatLng([this.lat, this.lng]);
-	/* este evento no parece funcionar la idea era utilizarlo para controlar el cierre del popup cuando pulsas en otra parte del mapa
-	this.infoWindow.on('popupclose', function(e) {
-		console.log('infoWindow popupclose event!');
-	});
-	*/
+	
 	if (typeof _opts.icon != "undefined") {
 		var width, height, url;
 		typeof _opts.icon.width != "undefined" ? width = parseInt(_opts.icon.width) : width = 60;
@@ -675,7 +637,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 			$.each(_data.enclosure, function(u, enclosure) {
 				// Si el enclosure no existe todavia hay que crearlo
 				if (enclosureIds.indexOf(enclosure.id) == -1) {  
-					// console.log('// phone prototypes // enclosure: '+ enclosure.id);
+					// remoteLog('// app prototypes // enclosure: '+ enclosure.id);
 					cgeomap.player.addTrack(enclosure);
 					enclosureIds.push(enclosure.id);
 				// Si el enclosure ya existe todo ok
@@ -688,7 +650,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 		} else {
 			enclosureIds = new Array();
 			$.each(_data.enclosure, function(u, enclosure) {
-				// console.log('// phone prototypes // enclosure: '+ enclosure.id);
+				// remoteLog('// app prototypes // enclosure: '+ enclosure.id);
 				cgeomap.player.addTrack(enclosure);
 				enclosureIds.push(enclosure.id);
 			});
@@ -727,10 +689,10 @@ VhplabMarker.prototype.openInfoWindow = function() {
 	$('#navigation .user .facebook').attr('href', base_fb_url + '/?nodo=' + this.id);
 };
 VhplabMarker.prototype.setDistance = function(_refLat, _refLng) {
-	// console.log('/* phone prototypes */ marker.setDistance();');
+	// remoteLog('/* app prototypes */ marker.setDistance();');
 	this.distance = L.latLng([this.lat, this.lng]).distanceTo([_refLat, _refLng]);
 	this.dist = parseInt(this.distance/5);
-	// console.log('distance: '+ this.distance);
+	// remoteLog('distance: '+ this.distance);
 };
 VhplabMarker.prototype.showArticleHeaderActions = function() {
 	$('#article_'+ this.id +' .header').parent().parent().data('visible', this.id);
@@ -742,25 +704,25 @@ VhplabMarker.prototype.showArticleHeaderActions = function() {
 	});	
 };
 VhplabMarker.prototype.updateDistance = function(_refLat, _refLng) {
-	// console.log('/* phone prototypes */ marker.updateDistance();');
+	// remoteLog('/* app prototypes */ marker.updateDistance();');
 	this.setDistance(_refLat, _refLng);
 	if (this.distance<1000) {
 		$('#article_'+ this.id +' header .info .distance').html(parseInt(this.distance) + ' m');
 	} else if (this.hasDistance == false) {
 		$('#article_'+ this.id +' header .info .distance').html(parseInt((this.distance - this.distance%1000)/1000) + ' km');
 		this.hasDistance = true;
-		// console.log('distance is very big! '+ parseInt((this.distance - this.distance%1000)/1000));
+		// remoteLog('distance is very big! '+ parseInt((this.distance - this.distance%1000)/1000));
 	}
 	if ($(this.data).data('visibility')=='proximity') {
 		if ((this.distance<100)&&(this.vibrate)) {
-			// console.log('/* proximity */ marker "'+ $(this.data).data('titre') +'" is near');
-			// console.log('autoplay: '+ this.autoplay);
+			// remoteLog('/* proximity */ marker "'+ $(this.data).data('titre') +'" is near');
+			// remoteLog('autoplay: '+ this.autoplay);
 			cgeomap.addToVisibleNodes(this.id, false);
 			// $(this.data).data('visibility','default');
 			this.vibrate = false;
 			navigator.vibrate(500);
 		} else if ((this.distance>40)&&(this.autoplay==false)) {
-			// console.log('/* proximity */ marker is far');
+			// remoteLog('/* proximity */ marker is far');
 			this.autoplay = true;
 		}
 	}

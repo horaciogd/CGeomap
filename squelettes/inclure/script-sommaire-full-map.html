@@ -51,12 +51,12 @@
 			var wprop = $(window).width() / $(window).height();
 			(bgprop>=wprop) ? $("#loading .wrapper").css("background-size", "auto 100%") : $("#loading .wrapper").css("background-size", "100% auto");
 			$('#loading hgroup').fadeIn();
-			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-map.js'}|url_absolue)]", function(data) {
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-full-map.js'}|url_absolue)]", function(data) {
 				cgeomap = new VhplabInterface();
 				cgeomap.initialize({[
 					url_site: '(#URL_SITE_SPIP|url_absolue)'][,
 					url_article: '(#URL_PAGE{ajax-content-squelette}|url_absolue)'][,
-					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-map.js}|url_absolue)'],
+					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-full-map.js}|url_absolue)'],
 					map_opts: {
 						markers: 'spip.php?page=json-vhplab-geo-recherche-articles'[,
 						recherche: (#ENV{recherche}|?{['(#ENV{recherche})'], false})][,

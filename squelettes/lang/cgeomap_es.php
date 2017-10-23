@@ -31,6 +31,8 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'explorer' => 'Explorer',
 	'eliminar' => 'eliminar',
 	'error_no_markers' => 'No se ha encontarado ninguna entrada con estos parámetros',
+	'error_address' => 'La dirección es incorrecta!',
+	'error_image' => 'Es necesario subir una imagen!',
 	
 	// H
 	'help_auteur' => 'Selecciona un autor de la lista',

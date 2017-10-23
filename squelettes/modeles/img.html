@@ -5,7 +5,10 @@
 [(#SET{h,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{height})]})]
 [(#SET{w,[(#FICHIER|image_reduire{#GET{w},0}|extraire_attribut{width})]})]
 [(#ENV{lien}|?{
-	[<a href="(#ENV{lien})" class="lien"[ alt="(#TITRE|attribut_html)]"[ title="(#TITRE|attribut_html)"] target="_blank">[<img src="(#GET{src})"[ height="(#GET{h}|div{2})"][ width="(#GET{w}|div{2})"] />]</a>],
+	[(#ENV{lien}|=={false}|?{
+		[<img src="(#GET{src})"[ height="(#GET{h}|div{2})"][ width="(#GET{w}|div{2})"] />],
+		[<a href="(#ENV{lien})" class="lien"[ alt="(#TITRE|attribut_html)]"[ title="(#TITRE|attribut_html)"] target="_blank">[<img src="(#GET{src})"[ height="(#GET{h}|div{2})"][ width="(#GET{w}|div{2})"] />]</a>]
+	})],
 	[<a href="(#URL_DOCUMENT|url_absolue)" rel="fancybox" class="fancybox"[ alt="(#TITRE|attribut_html)"][ title="(#TITRE|attribut_html)"]>[<img src="(#GET{src})"[ height="(#GET{h}|div{2})"][ width="(#GET{w}|div{2})"] />]</a>]
 })]
 </BOUCLE_tous>

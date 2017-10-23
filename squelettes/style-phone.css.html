@@ -116,25 +116,43 @@
 }
 #content .listado_nodos .header .info { display: blocK; position: absolute; top: 6px; right: 6px; height: 40px; padding-left: 40px;
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
-background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%, [(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%, [(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/), color-stop(30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/), color-stop(100%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* IE10+ */
-background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* W3C */
+background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, [(#GET{transparent-medium-bg})]), color-stop(30%, [(#GET{full-medium-bg})]), color-stop(100%, [(#GET{full-medium-bg})])); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* W3C */
 }
 #content .listado_nodos .header hgroup:active .info { 
 /* para hacer este active haria falta un color extra o cambiar algo*/
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
 background: -moz-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-bright-bg})]), color-stop(30%,[(#GET{full-bright-bg})]), color-stop(100%,[(#GET{full-bright-bg})])); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* IE10+ */
-background: linear-gradient(to right, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* W3C */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%, [(#GET{transparent-bright-bg})]), color-stop(30%, [(#GET{full-bright-bg})]), color-stop(100%, [(#GET{full-bright-bg})])); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* W3C */
 }
 #content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: [(#GET{white})]; }
-#content .listado_nodos .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-bird-@2x.png})]})]'); background-size: 26px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }
+
+#content .listado_nodos .header .info .distance { background-size: 18px 16px; background-repeat: no-repeat; background-position: right 3px; padding: 20px 10px 0 8px; line-height: 20px; height: 20px;  }
+
+#content .listado_nodos .category_00 .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-category-00-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-category-00-bird-@2x.png})]})]'); }
+#content .listado_nodos .category_01 .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-category-01-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-category-01-bird-@2x.png})]})]'); }
+#content .listado_nodos .category_02 .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-category-02-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-category-02-bird-@2x.png})]})]'); }
+#content .listado_nodos .category_03 .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-category-03-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-category-03-bird-@2x.png})]})]'); }
+#content .listado_nodos .category_04 .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-category-04-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-category-04-bird-@2x.png})]})]'); }
+#content .listado_nodos .category_05 .header .info .distance { background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-category-05-bird-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-category-05-bird-@2x.png})]})]'); }
+
+#content .listado_nodos .block_category { padding: 4px; margin-bottom: 4px; text-align: center; font-size: .6em; }
+#content .listado_nodos .category_00 .block_category { background-color: [(#GET{bright-e})]; }
+#content .listado_nodos .category_01 .block_category { background-color: [(#GET{bright-e})]; }
+#content .listado_nodos .category_02 .block_category { background-color: [(#GET{bright-e})]; }
+#content .listado_nodos .category_03 .block_category { background-color: [(#GET{bright-e})]; }
+#content .listado_nodos .category_04 .block_category { background-color: [(#GET{bright-e})]; }
+#content .listado_nodos .category_05 .block_category { background-color: [(#GET{bright-e})]; }
+#content .listado_nodos .block_category p { color: [(#GET{grey-bright})]; font-style: italic; }
+
 #content .listado_nodos .header .player_icon { width: 20px; line-height: 40px; height: 40px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-player-icon-transparent-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-player-icon-transparent-@2x.png})]})]'); background-size: 44px 44px; background-repeat: no-repeat; background-position: -12px 0; }
 #content .listado_nodos .header .player { width: 20px; line-height: 40px; height: 40px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-player-header-transparent-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-player-header-transparent-@2x.png})]})]'); background-size: 90px 90px; background-repeat: no-repeat; background-position: -14px -1px; }
 #content .listado_nodos .header .player:active { background-position: -14px -47px; }
@@ -186,3 +204,10 @@ footer .toggle_list { left: 0; background-position: -100px -150px; }
 footer .toggle_list:active { background-position: -150px -100px; }
 footer .toggle_map { left: 0; background-position: 0px -150px; }
 footer .toggle_map:active { background-position: -50px -100px; }
+
+/* --------------------
+   Map
+-------------------- */
+
+.cgeomap .leaflet-popup-content-wrapper .toggle_content { display: block !important; }
+.cgeomap a.leaflet-popup-close-button  { display: none; }

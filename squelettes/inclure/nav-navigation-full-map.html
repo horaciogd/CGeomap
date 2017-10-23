@@ -1,0 +1,24 @@
+		<!-- navigation -->
+		<nav id="navigation">
+			<div class="wrapper">
+				<hgroup>
+					<h1>[(#LOGO_SITE_SPIP|?{[<a[ href="(#URL_SITE_SPIP|url_absolue)"]><img class="logo"[ alt="(#NOM_SITE_SPIP)"] src="(#LOGO_SITE_SPIP|image_reduire{440,0}|extraire_attribut{src}|url_absolue)"[ width="(#LOGO_SITE_SPIP|image_reduire{440,0}|extraire_attribut{width}|div{2})"][ height="(#LOGO_SITE_SPIP|image_reduire{440,0}|extraire_attribut{height}|div{2})"] /></a>],[(#NOM_SITE_SPIP)]})]</h1>
+					<BOUCLE_info(BREVES){titre=Infolink}{0,1}>[<a class="info" href="(#URL_SITE)"></a>]</BOUCLE_info>
+				</hgroup><BOUCLE_get_map(RUBRIQUES){titre=mapa}>[(#SET{mapa,#ID_RUBRIQUE})]</BOUCLE_get_map>
+				<div class="menu articles">
+					<h2><:cgeomap:recent_articles:></h2>
+					<p class="pagination"><span class="btn next"></span><span class="btn prev"></span><p/>
+					<ol class="list">
+					</ol>
+				</div>
+				<aside class="user">
+					<ul class="buttons"><BOUCLE_contact(BREVES){titre=contact}{0,1}>
+						<li><a class="btn contact"[ href="(#URL_SITE)[(#TEXTE|attribut_html|url_encode)]"] target="_top">#NOM_SITE</a></li></BOUCLE_contact><BOUCLE_press_kit(BREVES){titre=presskit}{0,1}><BOUCLE_atachment(DOCUMENTS){id_breve}>[
+						<li><a class="btn presskit" href="(#URL_DOCUMENT|url_absolue)" target="_blank">#TEXTE</a></li>]</BOUCLE_atachment></BOUCLE_press_kit><BOUCLE_twitter(BREVES){titre=twitter}{0,1}>
+						<li><a class="btn twitter"[ href="(#URL_SITE)[(#TEXTE|attribut_html|url_encode)]"] target="_blank">#NOM_SITE</a></li></BOUCLE_twitter><BOUCLE_facebook(BREVES){titre=facebook}{0,1}>
+						<li><a class="btn facebook"[ href="(#URL_SITE)[(#URL_SITE_SPIP|url_absolue)]"][ data-base_href="(#URL_SITE)"] target="_blank">#NOM_SITE</a></li></BOUCLE_facebook>
+					</ul>
+				</aside>
+			</div>
+			<div class="toggle_wrapper"><span class="toggle_button"></span></div>
+		</nav>

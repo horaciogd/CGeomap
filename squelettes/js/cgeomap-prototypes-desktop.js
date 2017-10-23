@@ -212,7 +212,8 @@ VhplabInterface.prototype.initialize = function(_opts) {
 };
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 	console.log('cgeomap.loadArticleTemplate()');
-	// get URL via alert(this.url_article);
+	// Get URL via log
+	// console.log('Article Template URL: '+ this.url_article);
  	$("#content .wrapper").load(this.url_article, function() {
  		/* Article */
  		$('#article').hide();
@@ -234,8 +235,8 @@ VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
 		/* Embed */
 		$('#embed').hide();
 		$("#embed").data('loaded', false);
-		/* User */
- 		cgeomap.loadUser(_callback);
+		/* Callback */
+		if(_callback) _callback();
 	});
 };
 VhplabInterface.prototype.loadContributions = function() {
@@ -521,7 +522,6 @@ VhplabInterface.prototype.ready = function(_opts) {
 		zoomTag: (typeof _opts.zoomTag != "undefined") ? _opts.zoomTag : '.cartography .zoom'
 	});
 	this.bindToggleContent();
-	this.bindNavigationButtons();
 };
 VhplabInterface.prototype.removeRecherche = function(_me, _container) {
 	$('.value_box', '#embed .wrap_recherche').empty();
@@ -874,7 +874,7 @@ VhplabInterface.prototype.urlEmbed = function(_reload) {
 	if (_reload) cgeomap.updateEmbedMap(url_markers);
 	var visible = $("#embed .wrap_iframe").data('visible');
 	if(!visible) $("#embed .wrap_iframe").slideDown();
-};	
+};
 
 //***********
 // Vhplab Contribuer Formulary
@@ -1059,7 +1059,7 @@ VhplabContribuerFrom.prototype.bindEachModuleActions = function(_block) {
 				$(".channel .value", c).text('https://www.youtube.com/watch?v='+ id);
     			$(".channel .value", c).attr('href', 'https://www.youtube.com/watch?v='+ id);
     			$(".channel input", c).val('https://www.youtube.com/watch?v='+ id);
-				console.log('it is a youtuve link '+ id);
+				console.log('it is a youtube link '+ id);
        			$(".btn", c).removeClass("selected");
 				$("button[name='select-youtube']", c).addClass("selected");
 				$(c).data('channel','youtube');
@@ -1202,6 +1202,7 @@ VhplabContribuerFrom.prototype.bindUploadedFrameActions = function(_data, _class
 	if (link) {
 		$(_container).data('ok', true);
 		$(_container).removeClass('wrong-module');
+		$(".erreur_message", _container).remove();
 	}
 	this.check();
 	$(_container).data(_class, _data); 	
@@ -1970,7 +1971,7 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
 	if (url.match(p)){
 		/* youtube */
 		var data = url.split('watch?v=');
-       	console.log('it is a youtuve link '+ data[1]);
+       	console.log('it is a youtube link '+ data[1]);
     	$(".value", fieldset).text('https://www.youtube.com/watch?v='+ data[1]);
     	$(".value", fieldset).attr('href', url);
     	$(".value", fieldset).attr("class","value new");
@@ -1980,11 +1981,14 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
 		$("button[name='select-youtube']", fieldset).addClass("selected");
 		$(module).data('channel', 'youtube');
 		$(module).data('link', true);
+		$(".erreur_message", fieldset).remove();
 		var frame = $(module).data('frame');
 		if (frame) {
 			$(module).data('ok', true);
 			$(module).removeClass("wrong-module");
-			alert('ok');
+			//alert('ok');
+		} else {
+    		$(fieldset).append('<span class="erreur_message">'+ _T.error_image +'</span>');
 		}
 		$(module).data('id',data[1]);
 		$(module).data('channel','youtube');
@@ -2004,17 +2008,21 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
 			$("button[name='select-vimeo']", fieldset).addClass("selected");
 			$(module).data('channel', 'vimeo');
 			$(module).data('link', true);
+			$(".erreur_message", fieldset).remove();
 			var frame = $(module).data('frame');
 			if (frame) {
 				$(module).data('ok', true);
 				$(module).removeClass("wrong-module");
-				alert('ok');
+				//alert('ok');
+			} else {
+    			$(fieldset).append('<span class="erreur_message">'+ _T.error_image +'</span>');
 			}
 			$(module).data('id',data[1]);
 			$(module).data('channel','vimeo');
 			this.check();
        	} else {
-    		$(fieldset).append('<span class="erreur_message">La dirección es incorrecta</span>');
+			$(".erreur_message", fieldset).remove();
+    		$(fieldset).append('<span class="erreur_message">'+ _T.error_address +'</span>');
 			$(module).data('link', false);
 			$(module).data('ok', false);
 			$(module).addClass("wrong-module");
@@ -2073,116 +2081,4 @@ VhplabContribuerFrom.prototype.updateTextField = function(_me, _check) {
 		$(".value_box", container).show("slow");
 		$(container).removeClass("wrong-module");
 	}
-};
-
-//***********
-// Vhplab Player
-//***********
-function VhplabPlayer() {
-	this.sound;
-	this.soundURL;
-	this.selector;
-	this.id;
-	this.volume = 50;
-};
-VhplabPlayer.prototype.appendTo = function(_container) {
-	$(_container).append('<div class="vhplab_player" id="'+ this.selector +'"></div>');
-	$('#'+ this.selector).append('<ul></ul>');
-	$('#'+ this.selector +' ul').append('<li class="play" ></li>');
-	$('#'+ this.selector +' ul').append('<li class="pause" ></li>');
-	$('#'+ this.selector +' ul').append('<li class="position" >00:00</li>');
-	$('#'+ this.selector +' ul').append('<li class="duration" >00:00</li>');
-	$('#'+ this.selector +' ul').append('<li class="volume" ></li>');
-	$('#'+ this.selector +' ul').append('<li class="progress_bar" ><span></span></li>');
-    this.bindActions();
-};
-VhplabPlayer.prototype.bindActions = function() {
-	var self = this;
-	$('#'+ this.selector +' .play').click(function(){
-		self.play();
-	});
-	$('#'+ this.selector +' .pause').click(function(){
-      	self.pause();
-	});
-	$('#'+ this.selector +' .progress_bar').click(function(e){
-      	var w = $(this).width();
-		var x = e.clientX - $(this).offset().left;
-		if (self.sound.playState) self.sound.setPosition(x*self.sound.duration/w);
-	});
-	$('#'+ this.selector +' .volume').click(function(){
-		self.setVolume();
-	});
-	$('#'+ this.selector +' .pause').hide();
-};
-VhplabPlayer.prototype.init = function(_opts) {
-	typeof _opts.id != "undefined" ? this.id = _opts.id : this.id = 0;
-	typeof _opts.url != "undefined" ? this.soundURL = _opts.url : this.soundURL = '';
-	typeof _opts.selector != "undefined" ? this.selector = _opts.selector : this.selector = 'player_' + this.id;
-	// create sound
-	var self = this;
-    this.sound = soundManager.createSound({
-		id:'exilioSound_' + (self.id),
-		url: self.soundURL,
-		onload: function() {
-			$('#'+ self.selector +' .duration').text(self.milToTime(this.duration));
-		},
-		onplay: function() {
-		},
-		onresume: function() {
-		},
-		onpause: function() {
-		},
-		onfinish: function() {
-			$('#'+ self.selector +' .play').show();
-			$('#'+ self.selector +' .pause').hide();
-			$('#'+ self.selector +" .progress_bar span").css('width', 0 +'%');
-			$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
-		},
-		whileplaying: function() {
-			$('#'+ self.selector +' .position').text(self.milToTime(this.position));
-			var percent = this.position / this.duration * 100;
-			$('#'+ self.selector +" .progress_bar span").css('width', percent +'%');
-		}
-	});
-};
-VhplabPlayer.prototype.pause = function() {
-	this.sound.pause();
-	$('#'+ this.selector +' .play').show();
-	$('#'+ this.selector +' .pause').hide();
-	$('.cgeomap .leaflet-popup-content-wrapper .player').removeClass('active');
-};
-VhplabPlayer.prototype.play = function() {
-	this.sound.play();
-	$('#'+ this.selector +' .play').hide();
-	$('#'+ this.selector +' .pause').show();
-	$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
-};
-VhplabPlayer.prototype.setVolume = function() {
-	this.volume += 25;
-	if (this.volume>100) this.volume = 0;
-	this.sound.setVolume(this.volume);
-	switch (this.volume) {
-		case 0:
-			$('#'+ this.selector +' .volume').css("background-position", "-111px 0");
-			break;
-		case 25:
-			$('#'+ this.selector +' .volume').css("background-position", "-129px 0");
-			break;
-		case 50:
-			$('#'+ this.selector +' .volume').css("background-position", "-150px 0");
-			break;
-		case 75:
-			$('#'+ this.selector +' .volume').css("background-position", "-171px 0");
-			break;
-		case 100:
-			$('#'+ this.selector +' .volume').css("background-position", "-193px 0");
-			break;
-	}
-};
-VhplabPlayer.prototype.milToTime = function(_mil) {
-	var seconds = Math.floor((_mil / 1000) % 60);
-	if (seconds<10) seconds = '0'+ seconds;
-	var minutes = Math.floor((_mil / (60 * 1000)) % 60);
-	if (minutes<10) minutes = '0'+ minutes;
-	return minutes + ":" + seconds;
 };

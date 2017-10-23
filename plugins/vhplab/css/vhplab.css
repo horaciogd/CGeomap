@@ -20,10 +20,10 @@
 .cgeomap .leaflet-popup-content-wrapper h2 { margin-right: 37px; text-align: left; }
 .cgeomap .leaflet-popup-content-wrapper h3 { margin-right: 37px; text-align: left; }
 
-.cgeomap .leaflet-popup-content-wrapper .toggle_content { display: none; position: absolute;  bottom: 22px; right: 6px; background: url('../images/icons/cgeomap-window-buttons-@2x.png') no-repeat -220px 0px; background-size: 343px 249px; width: 21px; height: 37px; cursor: pointer; margin: 2px; }
-.cgeomap .leaflet-popup-content-wrapper .toggle_content:hover { background-position: -220px -128px; }
-.cgeomap .leaflet-popup-content-wrapper .closed { background-position: -220px -64px !important; }
-.cgeomap .leaflet-popup-content-wrapper .closed:hover { background-position: -220px -192px !important; }
+.cgeomap .leaflet-popup-content-wrapper .toggle_content { display: none; position: absolute; bottom: 18px; right: 6px; background: url('../images/icons/cgeomap-window-buttons-@2x.png') no-repeat -266px 0px; background-size: 343px 249px; width: 40px; height: 50px; cursor: pointer; margin: 2px; }
+.cgeomap .leaflet-popup-content-wrapper .toggle_content:hover { background-position: -266px -128px; }
+.cgeomap .leaflet-popup-content-wrapper .closed { background-position: -266px -64px !important; }
+.cgeomap .leaflet-popup-content-wrapper .closed:hover { background-position: -266px -192px !important; }
 
 .cgeomap .leaflet-popup-content-wrapper .player { display: inline-block; width: 22px; height: 22px; height: 22px; background-image: url('../images/icons/cgeomap-player-popup-transparent-@2x.png'); background-size: 45px 45px; background-repeat: no-repeat; background-position: -4px 0px; }
 .cgeomap .leaflet-popup-content-wrapper .player:active { background-position: -4px -23px; }
@@ -49,6 +49,7 @@
 .leaflet-container .leaflet-control-attribution  { background: transparent; }
 
 /* tile filters */
+
 .cgeomap .leaflet-tile-container img {
 	-webkit-filter: brightness(1) contrast(1.3) hue-rotate(335deg) saturate(3);
     filter: brightness(1) contrast(1.3) hue-rotate(335deg) saturate(3);

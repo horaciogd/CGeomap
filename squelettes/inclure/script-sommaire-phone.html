@@ -64,7 +64,28 @@
 					timeout : 17000
 			}); 
 			*/
-				
+			
+			[(#ENV{author}|?{#SET{auteur,#ENV{author}},#SET{auteur,1}})]
+			<B_initial_article>
+			<BOUCLE_initial_article(ARTICLES){id_auteur=#GET{auteur}}{titre_mot=open}>
+				[(#SET{initial,#ID_ARTICLE})]
+			</BOUCLE_initial_article>
+			</B_initial_article>
+				<B_admin_article>
+				<BOUCLE_admin_article(ARTICLES){id_auteur=1}{titre_mot=open}>
+					[(#SET{initial,#ID_ARTICLE})]
+				</BOUCLE_admin_article>
+				</B_admin_article>
+					<B_other_article>
+					<BOUCLE_other_article(ARTICLES){titre_mot=open}>
+						[(#SET{initial,#ID_ARTICLE})]
+					</BOUCLE_other_article>
+					</B_other_article>
+						[(#SET{initial,1})]
+					<//B_other_article>
+				<//B_admin_article>
+			<//B_initial_article>
+			
 			var margin = parseInt(($(window).height() - 424)/2);
 			$("#loading").css("padding-top", margin+"px");
 			
@@ -78,6 +99,7 @@
 				cgeomap = new VhplabInterface();
 				cgeomap.initialize({[
 					url_site: '(#URL_SITE_SPIP|url_absolue)',][
+					initial_article: (#GET{initial}),][
 					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-phone.js}|url_absolue)',]
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
 						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE'</BOUCLE_get_map>[,

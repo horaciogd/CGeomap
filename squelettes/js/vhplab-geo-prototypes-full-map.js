@@ -102,6 +102,8 @@ VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
 		// Hide previous layer & and new one to leaflet map
 		this.hideActiveLayer();
 		this.map.addLayer(target.layer);
+		// append navigation html
+		cgeomap.appendNavigationList(target.navigationHtml, target.pagination, target.pages);
 		// Store actual layer name
 		this.activeLayer = _name;
 		// Fit bounds to layer
