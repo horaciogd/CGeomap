@@ -1,0 +1,17 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})]<!DOCTYPE html>
+<html dir="#LANG_DIR" lang="#LANG">
+	<head>
+		<INCLURE{fond=inclure/head-site} />
+		
+		<INCLURE{fond=inclure/head-desktop}{absolue=true} />
+		
+		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}}{author=#ENV{author}} />
+		
+		<INCLURE{fond=inclure/script-intro-desktop}{nodo=#ENV{nodo}}{author=#ENV{author}}{login=#ENV{login}} />
+		
+	</head>
+	<body class="intro-desktop desktop">
+		<INCLURE{fond=inclure/section-loading-intro-desktop} />
+	</body>
+</html>

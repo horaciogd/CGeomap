@@ -1,0 +1,42 @@
+		<INCLURE{fond=inclure/script-site} />[
+		<!-- jQuery mCustomScrollbar -->
+		<script src="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.js}|url_absolue)"></script>][
+		<script src="(#CHEMIN{js/jquery.mousewheel.min.js}|url_absolue)"></script>][
+		<link rel="stylesheet" href="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.css}|url_absolue)" type="text/css" />][
+		<!-- CGeomap -->
+		<script src="(#CHEMIN{js/vhplab_geo.js})" type="text/javascript"></script>][
+		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>][
+		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|direction_css)" />]
+		<script type="text/javascript">
+		//<![CDATA[
+		var cgeomap;
+		$(document).ready(function() {
+			var bgprop = 3840/2160;
+			var wprop = $(window).width() / $(window).height();
+			(bgprop>=wprop) ? $("#loading .wrapper").css("background-size", "auto 100%") : $("#loading .wrapper").css("background-size", "100% auto");
+			$('#loading hgroup').fadeIn();
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-full-map.js'}|url_absolue)]", function(data) {
+				cgeomap = new VhplabInterface();
+				cgeomap.initialize({[
+					url_site: '(#URL_SITE_SPIP|url_absolue)'],
+					url_article: 'ajax-content-squelette.html',
+					custom_map_prototypes: '[(#URL_PAGE{'vhplab-geo-prototypes-full-map.js'}|url_absolue)]',
+					map_opts: {
+						markers: 'spip.php?page=json-vhplab-geo-submap-articles&map=monumenta&offset=0&limit=300',
+						recherche: false,
+						auteur: false,
+						categoria: false,
+						tag: false,
+						meta_tag: false,
+						id: 'cgeomap'[,
+						zoom: (#CONFIG{vhplab/default_zoom})][,
+						latitude: (#CONFIG{vhplab/default_latitude})][,
+						longitude: (#CONFIG{vhplab/default_longitude})][,
+						open: (#GET{open})],
+						custom: true
+					}
+				});
+			});
+		});
+		//]]>
+		</script>

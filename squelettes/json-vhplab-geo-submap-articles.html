@@ -1,0 +1,40 @@
+[(#REM) 24h cache
+][(#CACHE{0})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) Acces Control header
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})][
+
+(#REM) offset + limit to load markers in several batchs
+][(#SET{offset,[(#ENV{offset}|sinon{0})]})][(#SET{limit,[(#ENV{limit}|sinon{50})]})][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)jsonArticles(]{[
+	"title": "(#NOM_SITE_SPIP|extraire_br)",][
+	"link": "(#URL_SITE_SPIP)/",][
+	"description": "(#DESCRIPTIF_SITE_SPIP|extraire_br)",]	
+	"markers": [[
+	
+		(#REM) get the submap mot
+		][(#ENV{map}|==true|?{[(#SET{submap,#ENV{map}})],[(#SET{submap,basemap})]})
+		]<BOUCLE_submap(MOTS){type=submap}{titre=#GET{submap}}{0,1}>[
+		
+			(#REM) get all the auteurs with the submap mot
+			]<BOUCLE_auteur(AUTEURS){id_mot=#ID_MOT}>[
+			
+				(#REM) get the articles of each auteur
+				]<BOUCLE_articles_auteur(ARTICLES){id_rubrique=1}{id_auteur=#ID_AUTEUR}{doublons A}></BOUCLE_articles_auteur>[
+				(#REM)
+			]</BOUCLE_auteur>[
+				(#REM)
+		]</BOUCLE_submap>[
+		
+		(#REM) RESULT(default): all articles that are present in the previous A bloucles
+		]<BOUCLE_recherche(ARTICLES){id_rubrique=1}{!doublons A}{par date}{inverse}{#GET{offset}, #GET{limit}}{", "}>{
+			<INCLURE{fond=inclure/json-article}{id_article}{enclosure=#ENV{enclosure}}/>
+			
+		}</BOUCLE_recherche>
+	]
+}[);(#ENV{callback}|oui)]

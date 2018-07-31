@@ -1,0 +1,26 @@
+[(#REM) 24h cache
+][(#CACHE{1*24*3600})]<!DOCTYPE html>
+<html dir="#LANG_DIR" lang="#LANG">
+	<head>
+		<INCLURE{fond=inclure/head-site} />
+		
+		<INCLURE{fond=inclure/head-desktop}{absolue=false} />
+		
+		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}}{author=#ENV{author}}{absolue=false}{self=https://debug.cgeomap.eu/submapa} />
+		
+		<INCLURE{fond=inclure/script-submap-template-desktop}{nodo=#ENV{nodo}}{author=#ENV{author}}{login=#ENV{login}} />
+		
+	</head>
+	<body class="sommaire desktop">
+		<INCLURE{fond=inclure/section-loading-desktop} />
+		
+		<INCLURE{fond=inclure/nav-navigation-desktop} />
+		
+		<INCLURE{fond=inclure/section-content-desktop} />
+		
+		<INCLURE{fond=inclure/section-map} />
+		
+		<INCLURE{fond=inclure/footer-desktop} />
+		
+	</body>
+</html>

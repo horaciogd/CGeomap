@@ -194,6 +194,7 @@ function get_audio_form_module($text, $name, $t, $n_audio) {
 	$return = "\n";
 	$return .= $t."<li class=\"audio audio_".$n_audio." module\">\n";
 	$return .= $t."\t<header>\n";
+	$return .= $t."\t\t<span></span>\n";
 	$return .= $t."\t\t<h5>".$name."</h5>\n";
 	$return .= $t."\t\t<input name=\"header_field\" class=\"hidden\" value=\"".$name."\" type=\"text\">\n";
 	$return .= $t."\t</header>\n";
@@ -223,6 +224,7 @@ function get_video_form_module($text, $name, $t, $n_video) {
 	$return = "\n";
 	$return .= $t."<li class=\"video video_".$n_video." module\">\n";
 	$return .= $t."\t<header title=\""._T('cgeomap:help_handler')."\">\n";
+	$return .= $t."\t\t<span></span>\n";
 	$return .= $t."\t\t<h5  title=\""._T('cgeomap:help_video_image')."\">".$name."</h5>\n";
 	
 	$return .= $t."\t\t<input name=\"header_field\" class=\"hidden\" value=\"".$name."\" type=\"text\">\n";
@@ -303,6 +305,7 @@ function get_link_form_module($text, $name, $t, $n_link) {
 	$return = "\n";
 	$return .= $t."<li class=\"link link_".$n_link." module\">\n";
 	$return .= $t."\t<header>\n";
+	$return .= $t."\t\t<span></span>\n";
 	$return .= $t."\t\t<h5>".$name."</h5>\n";
 	$return .= $t."\t\t<input name=\"header_field\" class=\"hidden\" value=\"".$name."\" type=\"text\">\n";
 	$return .= $t."\t</header>\n";
@@ -371,6 +374,7 @@ function get_media_form_module($text, $name, $t, $n_image) {
 	$return = "\n";
 	$return .= $t."<li class=\"media media_".$n_image." module\">\n";
 	$return .= $t."\t<header>\n";
+	$return .= $t."\t\t<span></span>\n";
 	$return .= $t."\t\t<h5>".$name."</h5>\n";
 	$return .= $t."\t\t<input name=\"header_field\" class=\"hidden\" value=\"".$name."\" type=\"text\">\n";
 	$return .= $t."\t</header>\n";
@@ -434,6 +438,7 @@ function get_text_form_module($text, $name, $t, $n_text) {
 	$return = "\n";
 	$return .= $t."<li class=\"text text_".$n_text." module\">\n";
 	$return .= $t."\t<header>\n";
+	$return .= $t."\t\t<span></span>\n";
 	$return .= $t."\t\t<h5>".$name."</h5>\n";
 	$return .= $t."\t\t<input name=\"header_field\" class=\"hidden\" value=\"".$name."\" type=\"text\">\n";
 	$return .= $t."\t</header>\n";

@@ -57,7 +57,7 @@ VhplabMap.prototype.addClickableMarker = function(_latitude, _longitude, _zoom) 
 	this.emptyLayer.layer.addLayer(this.clickableMarker);
 };
 VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
-	console.log('/* Original prototype */ cgeomap.map.addMarkers();');
+	// console.log('/* Original prototype */ cgeomap.map.addMarkers();');
 	// Empty none layer
 	var target = this.getLayer(_layer);
 	target.reset();
@@ -156,11 +156,13 @@ VhplabMap.prototype.createMap = function(_opts) {
 	this.lng = _opts.longitude;
 	this.zoom = _opts.zoom;
 	this.map = L.map(_opts.id, { zoomControl: false }).setView([_opts.latitude, _opts.longitude], _opts.zoom);
-	/* openstreetmap-tiles */
-	this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	/* stamen-tiles */
+	this.tileLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
+		attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+		subdomains: 'abcd',
 		minZoom: 0,
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		maxZoom: 20,
+		ext: 'png'
 	});
 	this.satelliteLayer = L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/{type}/{mapID}/hybrid.day/{z}/{x}/{y}/{size}/{format}?app_id={app_id}&app_code={app_code}&lg={language}', {
 		attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
@@ -740,7 +742,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 VhplabMarker.prototype.openInfoWindow = function() {
 	if(this.parent.open) {
 		var open = $(this.parent.markers).data('marker_'+this.parent.open);
-		open.closeInfoWindow();
+		if (typeof open != "undefined") open.closeInfoWindow();
 	}
 	this.parent.map.setView([this.lat, this.lng], this.zoom);
 	this.infoWindow.openOn(this.parent.map);

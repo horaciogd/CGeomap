@@ -11,8 +11,8 @@
 ][(#SET{offset,[(#ENV{offset}|sinon{0})]})][(#SET{limit,[(#ENV{limit}|sinon{50})]})][
 
 (#REM) JSONP callback
-][(#ENV{callback}|oui)[(#ENV{callback})(]][{
-	["title": "(#NOM_SITE_SPIP|replace{\n, })",][
+][(#ENV{callback}|oui)jsonArticles(]{[
+	"title": "(#NOM_SITE_SPIP|extraire_br)",][
 	"link": "(#URL_SITE_SPIP)/",][
 	"description": "(#DESCRIPTIF_SITE_SPIP|replace{\n, })",]
 	<B_json>"markers": [
@@ -21,4 +21,4 @@
 		
 		}</BOUCLE_json>
 	]</B_json>
-}][);(#ENV{callback}|oui)]
+}[);(#ENV{callback}|oui)]

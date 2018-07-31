@@ -170,18 +170,43 @@ VhplabMap.prototype.forceCache = function() {
 	// Set URL
 	var cache_auteur_url = this.markersURL +'&id_auteur='+ $("#user .data").data("auteur") +'&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?'
 	var cache_url = this.markersURL + '&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?'	
+	
 	// Load cache_auteur_url to renew cache
 	// Get URL via LOG
 	console.log('Force cache_auteur_url: '+ cache_auteur_url);
-	$.getJSON(cache_auteur_url, function(data){
-		console.log('cache_auteur_url renewed');
+	$.ajax({
+		type: 'GET',
+		url: cache_auteur_url,
+		async: false,
+		crossDomain: true,
+		jsonpCallback: 'jsonArticles',
+		contentType: "application/json",
+		dataType: 'jsonp',
+		success: function(_data, _textStatus, _jqXHR) {
+			console.log('cache_auteur_url renewed');
+			
+			// Load cache_url to renew cache
+			// Get URL via LOG
+			console.log('Force cache_url: '+ cache_url);
+			$.ajax({
+				type: 'GET',
+				url: cache_url,
+				async: false,
+				crossDomain: true,
+				jsonpCallback: 'jsonArticles',
+				contentType: "application/json",
+				dataType: 'jsonp',
+				success: function(_data, _textStatus, _jqXHR) {
+					console.log('cache_url renewed');
+				},error: function (_xhr, _ajaxOptions, _thrownError) {
+					console.log('cache_url error:'+_thrownError);
+				}
+			});
+	
+		},error: function (_xhr, _ajaxOptions, _thrownError) {
+			console.log('cache_auteur_url error:'+_thrownError);
+		}
 	});
-	// Load cache_url to renew cache
-	// Get URL via LOG
-	console.log('Force cache_url: '+ cache_url);
-	$.getJSON(cache_url, function(data){
-		console.log('cache_url renewed');
-	});	
 };
 VhplabMap.prototype.initMapElements = function(_opts) {
 	// Marker Layers
@@ -225,25 +250,37 @@ VhplabMap.prototype.loadEditorMarkers = function(_url, _callback) {
 };
 VhplabMap.prototype.loadMarkers = function() {
 	// Load markers data
-	console.log('cgeomap.map.loadMarkers();');
+	console.log('/* desktop prototypes */ cgeomap.map.loadMarkers();');
 	var url = this.markersURL;
 	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	/* Load article template */
-	cgeomap.loadArticleTemplate(function(){
+	//cgeomap.loadArticleTemplate(function(){
 		/* Load user */
- 		cgeomap.loadUser(function(){
+ 		//cgeomap.loadUser(function(){
+			
 			// Get URL via log
 			console.log('Markers URL: '+ url);
-			/* Load Markers */
-			$.getJSON(url, function(data){
-				cgeomap.map.addMarkers(data[0], 'map', function(){
-					/* Bind Actions */
-					cgeomap.map.bindActions();
-				});
+			$.ajax({
+				type: 'GET',
+				url: url,
+				async: false,
+				crossDomain: true,
+				jsonpCallback: 'jsonArticles',
+				contentType: "application/json",
+				dataType: 'jsonp',
+				success: function(_data, _textStatus, _jqXHR) {
+					// Get _data via log
+					// console.log('_data: '+  JSON.stringify(_data) );
+					cgeomap.map.addMarkers(_data, 'map', function(){
+						/* Bind Actions */
+						cgeomap.map.bindActions();
+					});
+				},error: function (xhr, ajaxOptions, thrownError) {
+				}
 			});
- 		});
-	});
+ 		// });
+	// });
 };
 VhplabMap.prototype.loadNewMarkers = function(_url, _callback) {
 	var self = this;
@@ -259,19 +296,29 @@ VhplabMap.prototype.reloadMarkers = function(_id, _callback) {
 	// Load markers data
 	// Get URL via LOG
 	console.log('Load new_marker: '+ new_marker_url);
-	$.getJSON(new_marker_url, function(data){
-		var count = $(data[0].markers).length - 1;
-		console.log('Updating '+ $(data[0].markers).length +' markers');
-		$.each(data[0].markers, function(i, marker) {
-			console.log('updateMarker('+ data[0].link +', '+ marker +', '+ i +');');
-			cgeomap.map.updateMarker(data[0].link, marker, i);
-			if(i==count) {
-				console.log('Updating finished ready to callback()');
-				if (_callback) _callback();
-			}
-		});
+	$.ajax({
+		type: 'GET',
+		url: new_marker_url,
+		async: false,
+		crossDomain: true,
+		jsonpCallback: 'jsonArticles',
+		contentType: "application/json",
+		dataType: 'jsonp',
+		success: function(_data, _textStatus, _jqXHR) {
+			var count = $(_data.markers).length - 1;
+			console.log('Updating '+ $(_data.markers).length +' markers');
+			$.each(_data.markers, function(i, marker) {
+				console.log('updateMarker('+ _data.link +', '+ marker +', '+ i +');');
+				cgeomap.map.updateMarker(_data.link, marker, i);
+				if(i==count) {
+					console.log('Updating finished ready to callback()');
+					if (_callback) _callback();
+					cgeomap.map.forceCache();
+				}
+			});
+		},error: function (xhr, ajaxOptions, thrownError) {
+		}
 	});
-	this.forceCache();
 };
 VhplabMap.prototype.showMarkerJson = function(_url, _markers) {
 	this.emptyLayer.reset();
@@ -487,6 +534,9 @@ VhplabMarker.prototype.appendContent = function() {
 		});
 		console.log('/* fancybox */');
 		$("#article .modules_list .vimeo").fancybox({
+			beforeLoad: function () {
+				this.href += '?autoplay=1'
+    		},
 			'width'				: $("#article .modules_list .vimeo").data('width'),
 			'height'			: $("#article .modules_list .vimeo").data('height'),
         	'arrows'     		: false,

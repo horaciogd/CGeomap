@@ -9,6 +9,8 @@ function formulaires_contribuer_charger_dist($id_article='new', $retour='', $aja
 	/* title & subtitle */
 	$valeurs['title'] = $title;
 	$valeurs['subtitle'] = $subtitle;
+	/* submap */
+	$valeurs['submap'] = $submap;
 	/* visibility */
 	$valeurs['visibility'] = $options;
 	/* category */
@@ -38,8 +40,10 @@ function formulaires_contribuer_verifier_dist($id_article='new', $retour='', $aj
 	/* article */
 	if (!_request('article')) $erreurs['article'] = _T('cgeomap:required_article');
 	/* title & subtitle */
-	if ((!_request('title'))||(_request('title')=='')) $erreurs['title'] = _T('cgeomap:title');
+	if ((!_request('title'))||(_request('title')=='')) $erreurs['title'] = _T('cgeomap:required_title');
 	if ((!_request('subtitle'))||(_request('subtitle')=='')) $erreurs['subtitle'] = _T('cgeomap:required_subtitle');
+	/* submap */
+	if ((!_request('submap'))||(_request('submap')=='')) $erreurs['submap'] = _T('cgeomap:required_submap');
 	/* visibility */
 	if (!_request('visibility')) $erreurs['visibility'] = _T('cgeomap:required_visibility');
 	/* category */
@@ -71,6 +75,8 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	$subtitle = _request('subtitle');
 	/* visibility */
 	$visibility = _request('visibility');
+	/* submap */
+	$submap = _request('submap');
 	/* category */
 	$category = _request('category');
 	/* icon */
@@ -136,6 +142,22 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
         		break;
 		}
 		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($visibility_id), 'id_objet' => intval($id_article), 'objet' => 'article'));
+		
+		$category_list = array();
+		// selection
+		if ($result = sql_select('*', 'spip_mots', 'type='.sql_quote($submap))) {
+    		// boucler sur les resultats
+    		while ($row = sql_fetch($result)) {
+        		// utiliser les resultats
+        		$category_list[$row['titre']]=$row['id_mot'];
+    		}
+		}
+		if (isset($category_list[$category])) {
+			$category_id = $category_list[$category];
+		} else {				
+			$category_id = 8;
+		}
+		/*
 		switch ($category) {
     		case "category_00";
 				$category_id = 8;
@@ -156,6 +178,7 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 				$category_id = 13;
         		break;
 		}
+		*/
 		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($category_id), 'id_objet' => intval($id_article), 'objet' => 'article'));
 		sql_insertq('spip_mots_liens', array( 'id_mot' => intval($icon), 'id_objet' => intval($id_article), 'objet' => 'article'));
 		

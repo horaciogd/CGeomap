@@ -1,5 +1,11 @@
 #CACHE{24*3600}
 [(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
 <div class="iframe_wrapper">
-	<iframe[ src="(#URL_SITE_SPIP|url_absolue)/spip.php?page=sommaire-phone"]></iframe>
+	<B_auteur_map><BOUCLE_auteur_map(AUTEURS){id_auteur=#SESSION{id_auteur}}><B_submap><BOUCLE_submap(MOTS){id_auteur}{0,1}>[
+	<iframe src="(#DESCRIPTIF|textebrut)/phone.html"></iframe>
+	]</BOUCLE_submap></B_submap>[
+	<iframe src="(#URL_SITE_SPIP|url_absolue)/spip.php?page=editar-phone"></iframe>
+	]<//B_submap></BOUCLE_auteur_map></B_auteur_map>[
+	<iframe src="(#URL_SITE_SPIP|url_absolue)/spip.php?page=editar-phone"></iframe>
+	]<//B_auteur_map>			
 </div>

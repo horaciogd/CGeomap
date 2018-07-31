@@ -1,69 +1,14 @@
-		<!-- google analytics -->
-		<script>
- 		 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
- 		 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
- 		 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-		  ga('create', 'UA-76989730-1', 'auto');
-		  ga('send', 'pageview');
-
-		</script>
-		[<!-- jQuery -->
-		<script type="text/javascript" src="(#CHEMIN{js/jquery-3.1.1.min.js})"></script>][
-		<script type="text/javascript" src="(#CHEMIN{js/jquery-ui-1.12.1.min.js})"></script>][
-		<!-- Fancybox -->
-		<script type="text/javascript" src="(#CHEMIN{js/fancybox/jquery.fancybox-2.1.5.pack.js})"></script>]
-		[<link rel="stylesheet" href="(#CHEMIN{js/fancybox/jquery.fancybox-2.1.5.css})" type="text/css" />][
-		<!-- Leaflet -->
-		<script type="text/javascript" src="(#CHEMIN{js/leaflet/leaflet-1.0.2.js})"></script>][
-		<script type="text/javascript" src="(#CHEMIN{js/leaflet/l.control.geosearch.js})"></script>][
-		<script type="text/javascript" src="(#CHEMIN{js/leaflet/l.geosearch.provider.openstreetmap.js})"></script>][
-		<link rel="stylesheet" href="(#CHEMIN{js/leaflet/leaflet-1.0.2.css}|direction_css)" />][
-		<!-- Soundmanager 2 -->
-		<script type="text/javascript" src="(#CHEMIN{js/soundmanager2/soundmanager2-jsmin.js})"></script>]
-		<INCLURE{fond=inclure/script-traduire} />
-		[
+		<INCLURE{fond=inclure/script-site} />[
 		<!-- CGeomap -->
-		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|url_absolue|direction_css)" />][
 		<script src="(#CHEMIN{js/vhplab_geo.js}|url_absolue)" type="text/javascript"></script>][
-		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>]
+		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>][
+		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|url_absolue|direction_css)" />]
 		<script type="text/javascript">
 		//<![CDATA[
 		var cgeomap;
 		$(document).ready(function() {
 			
 			console.log('$(document).ready();');
-			
-			/*
-			navigator.geolocation.getCurrentPosition(function(position) {
-				// geolocation success
-				console.log('geolocation current position is ', position.coords);
-				// position.coords.latitude, position.coords.longitude
-				
-			}, function(error) {
-				// geolocation error can be:
-    			//   0: unknown error
-    			//   1: permission denied
-    			//   2: position unavailable (error response from location provider)
-    			//   3: timed out
-				console.log('THERE HAS BEEN AN ERROR', error.code);  
-				if (error.code == error.PERMISSION_DENIED) {
-        			// pop up dialog asking for location
-        			navigator.permissions.query({name:'geolocation'})
-  						.then(function(permissionStatus) {  
-    						console.log('geolocation permission state is ', permissionStatus.state);
-							permissionStatus.onchange = function() {  
-								console.log('geolocation permission state has changed to ', this.state);
-							};
- 					});
-    			}
-   			}, {
- 					enableHighAccuracy: true, 
-					maximumAge : 20000, 
-					timeout : 17000
-			}); 
-			*/
 			
 			[(#ENV{author}|?{#SET{auteur,#ENV{author}},#SET{auteur,1}})]
 			<B_initial_article>
@@ -109,7 +54,8 @@
 						zoom: (#CONFIG{vhplab/default_zoom}),][
 						latitude: (#CONFIG{vhplab/default_latitude}),][
 						longitude: (#CONFIG{vhplab/default_longitude})][,
-						open: (#ENV{nodo})]
+						open: (#ENV{nodo})],
+						custom: true
 					}
 				});
 			});

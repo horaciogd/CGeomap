@@ -1,0 +1,31 @@
+[(#REM) 24h cache
+][(#CACHE{0})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) Acces Control header
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})][
+
+(#REM) offset + limit to load markers in several batchs
+][(#SET{offset,[(#ENV{offset}|sinon{0})]})][(#SET{limit,[(#ENV{limit}|sinon{50})]})][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)jsonCGeomapCluster(]{[
+	"title": "(#NOM_SITE_SPIP|extraire_br)",][
+	"link": "(#URL_SITE_SPIP)/",][
+	"description": "(#DESCRIPTIF_SITE_SPIP|extraire_br)",][
+	
+	(#REM) get submap mots]
+	"submaps": [<BOUCLE_submap(MOTS){type=submap}{", "}>{[
+		"id": "(#ID_MOT)",][
+		"titre": "(#TITRE|supprimer_numero|texte_backend)",][
+	
+		(#REM) get submap categories]
+		"categories": [<BOUCLE_categories(MOTS){type=#TITRE}{", "}>{[
+			"id": "(#ID_MOT)"][,
+			"titre": "(#TITRE|supprimer_numero|texte_backend)"][,
+			"descriptif": "(#DESCRIPTIF|supprimer_numero|texte_backend)"]
+		}</BOUCLE_categories>]
+	}</BOUCLE_submap>]
+}[);(#ENV{callback}|oui)]

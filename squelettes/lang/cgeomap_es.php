@@ -25,6 +25,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	
 	// D
 	'download_qr' => 'Descargar el Qr',
+	'default_category' => 'predeterminado',
 	
 	// E
 	'editar' => 'Editar',
@@ -33,6 +34,9 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'error_no_markers' => 'No se ha encontarado ninguna entrada con estos parámetros',
 	'error_address' => 'La dirección es incorrecta!',
 	'error_image' => 'Es necesario subir una imagen!',
+	
+	// E
+	'go' => 'Entrar',
 	
 	// H
 	'help_auteur' => 'Selecciona un autor de la lista',
@@ -88,11 +92,16 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	// P
 	'password' => 'clave',
 	
+	// Q
+	'qr_is_wrong' => 'Lo sentimos, no existe ninguna<br />entrada con este QR',
+	'qr_is_right' => '!Nueva entrada encontrada<br />a través del QR!',
+	
 	// R
 	'recent_articles' => 'Últimas aportaciones',
 	'required_article' => 'No se recibió ninguna id para la entrada',
 	'required_title' => 'No se recibió ningún título para la entrada',
 	'required_category' => 'No se recibió ninguna indicación acerca de la categoría',
+	'required_submap' => 'No se recibió ningún submapa para la entrada',
 	'required_subtitle' => 'No se recibió ningún subtítulo para la entrada',
 	'required_visibility' => 'No se recibió ninguna indicación acerca de la visibilidad',
 	'required_icon' => 'No se recibió ningún icono para la entrada',
@@ -104,6 +113,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'required_zoom' => 'No se recibió ningún zoom para la entrada',
 	
 	// S
+	'editores' => 'Quiero editar',
 	'seleciona_imagen' => 'Escoge una imagen',
 	'seleciona_audio' => 'Escoge un sonido',
 	'selector_any' => 'Cualquiera de los editores o las editoras',

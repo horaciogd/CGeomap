@@ -188,6 +188,7 @@ VhplabMap.prototype.getPosition = function(_callback) {
 	}
 };
 VhplabMap.prototype.initialize = function(_opts) {
+	console.log('/* phone prototypes */ cgeomap.map.initialize();');
 	if (typeof _opts.offset != "undefined") this.offset = _opts.offset;
 	if (typeof _opts.limit != "undefined") this.limit = _opts.limit;
 	if (typeof _opts.url != "undefined") this.baseURL = _opts.url;
@@ -257,24 +258,38 @@ VhplabMap.prototype.loadMarkers = function() {
 	//if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&enclosure=true&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	// Get URL via log 
-	// console.log('Markers URL: '+ url);
+	// 
+	console.log('Markers URL: '+ url);
 	// Get geolocation position
 	this.getPosition(function(_lat, _lng) {
 		// Update Map position
 		cgeomap.map.updateMap(_lat, _lng, true);
 		// Get Markers
-		$.getJSON(url, function(_data){
-			// console.log('Markers loaded via $.getJSON!');
-			cgeomap.map.addMarkers(_data[0],'map', _lat, _lng, function() {
-				cgeomap.map.bindActions();
-				if (cgeomap.map.open!='') {
-					var marker = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
-					if (typeof marker != "undefined") {
-						marker.autoplay = true;
-						cgeomap.toggleArticle("#article_"+ cgeomap.map.open +" header", true);
+		$.ajax({
+			type: 'GET',
+			url: url,
+			async: false,
+			crossDomain: true,
+			jsonpCallback: 'jsonArticles',
+			contentType: "application/json",
+			dataType: 'jsonp',
+			success: function(_data, _textStatus, _jqXHR) {
+				// console.log('Markers loaded via $.ajax!');
+				// Get _data via log 
+				// console.log('_data: '+  JSON.stringify(_data) );
+				cgeomap.map.addMarkers(_data,'map', _lat, _lng, function() {
+					cgeomap.map.bindActions();
+					if (cgeomap.map.open!='') {
+						var marker = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
+						if (typeof marker != "undefined") {
+							marker.autoplay = true;
+							cgeomap.toggleArticle("#article_"+ cgeomap.map.open +" header", true);
+						}
 					}
-				}
-			});
+				});
+			}, error: function (_xhr, _ajaxOptions, _thrownError) {
+			
+			}
 		});
 	});	
 };

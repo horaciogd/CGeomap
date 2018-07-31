@@ -38,6 +38,18 @@
 #loading hgroup .loading { margin: 70px auto 10px auto; text-align: center; display: block; width: 60px; height: 60px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-loading-bg-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-loading-bg-@2x.png})]})]'); background-size: 60px 60px; background-repeat: no-repeat; position: relative; }
 #loading hgroup .loading img { width: 40px; height: 40px; position: absolute; top: 10px; left: 10px; }
 
+/* intro */
+.intro-phone #loading hgroup { background-image: none; }
+.intro-phone #loading .intro { height: 100%; /*border: 1px solid #000;*/ overflow-y: auto; }
+.intro-phone #loading .intro li { position: relative; display: block; margin-top: 36px; }
+.intro-phone #loading .intro li.blank { opacity: .5; margin-top: 18px; }
+.intro-phone #loading .intro li div { display: block; position: absolute; width: 100%; }
+.intro-phone #loading .intro li div { margin-top: 210px; }
+.intro-phone #loading .intro li.blank div { margin-top: 105px; }
+.intro-phone #loading .intro li div p { font-size: 26px; line-height: 26px; padding-bottom: 12px; }
+.intro-phone #loading .intro li.blank div p { font-size: 13px; line-height: 13px; padding-bottom: 6px; }
+.intro-phone #loading .intro li div p small { font-size: 11px; }
+.intro-phone #loading .data { display: none; }
 
  /* --------------------
    Select
@@ -45,6 +57,8 @@
 
 #select .wrapper { top: 8px; bottom: 70px; right: 8px; left: 8px; padding: 6px; background: [(#GET{white})]; 
 -webkit-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ -moz-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ }
+#select .notfound {  background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/not_found.png})],[(#CHEMIN{images/grey/pix/not_found.png})]})]');  background-repeat: no-repeat; background-size: 250px 250px; background-position: center center; }
+#select .found {  background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/pix/encontrado.png})],[(#CHEMIN{images/grey/pix/encontrado.png})]})]');  background-repeat: no-repeat; background-size: 250px 250px; background-position: center center; }
 #select ul li { display: block; }
 #select ul li h2 { position: relative; height: 40px; padding: 6px; margin: 0 0 6px 0; background: [(#GET{bright-bg})];/*#18c2b1*/ font-weight: bold; font-size: 18px; line-height: 40px; vertical-align: middle; color: [(#GET{white})]; white-space: nowrap; }
 #select h1.center { text-align: center; margin-top: 40px; font-weight: bold; font-size: 28px; line-height: 40px; vertical-align: middle; white-space: nowrap; }
@@ -53,7 +67,8 @@
 .welcome { position: absolute; bottom: 8px; right: 8px; left: 8px; height: 30px; padding: 16px 28px; background-color: [(#GET{medium-bg})]; }
 .welcome span { text-align: center; display: block; cursor: pointer;  background-color: [(#GET{dark-bg})]; color: [(#GET{white})]; padding: 0 0 3px 0; border-radius: 6px; font-size: 18px; font-weight: 500; vertical-align: middle; line-height: 30px; border: transparent solid 1px; white-space: nowrap; }
 .welcome span:active { background-color: [(#GET{bright-bg})]; }
-
+.bigw { height: 46px; }
+.bigw span { border-radius: 8px; }
 
 /* --------------------
    Navigation
@@ -70,7 +85,7 @@
 #bookmark p:last-child { text-align: right; }
 #bookmark .hide { display: inline-block; width: 32px; height: 32px; background-image: url('[(#ENV{color}|?{[(#CHEMIN{images/color/icons/cgeomap-bookmark-up-rollover-@2x.png})],[(#CHEMIN{images/grey/icons/cgeomap-bookmark-up-rollover-@2x.png})]})]'); background-size: 64px 32px; background-repeat: no-repeat; background-position: 0px 0px; }
 #bookmark .hide:active { background-position: -32px 0px; }
-#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 14px; line-height: 14px; background-color: [(#GET{dark-bg})];/*#00adab*/ color: [(#GET{alpha-white})];/*rgba(255,255,255,0.8)*/ padding: 4px 6px; margin-top: 8px; border-radius: 9px; border: [(#GET{medium-bg})]/*#18c2b1*/ solid 1px; }
+#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 16px; line-height: 16px; background-color: [(#GET{dark-bg})];/*#00adab*/ color: [(#GET{alpha-white})];/*rgba(255,255,255,0.8)*/ padding: 6px 8px; margin-top: 8px; border-radius: 10px; border: [(#GET{medium-bg})]/*#18c2b1*/ solid 1px; }
 #navigation hgroup .bkmrk { -webkit-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ -moz-box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ box-shadow: 0px 2px 4px 0px [(#GET{alpha-shadow})];/*rgba(0,0,0,0.3)*/ }
 #navigation hgroup .bkmrk:active { border-color: [(#GET{bright-bg})];/*#0bdec9*/  background-color: [(#GET{bright-bg})];/*#0bdec9*/ color: [(#GET{white})]; /*rgba(255,255,255,1)*/ }
 #navigation hgroup .gps span { background-color: [(#GET{alpha-white})];/*rgba(255,255,255,0.8)*/ width: 8px; height: 8px; margin: 0 6px 2px 0; display: inline-block; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
@@ -116,22 +131,22 @@
 }
 #content .listado_nodos .header .info { display: blocK; position: absolute; top: 6px; right: 6px; height: 40px; padding-left: 40px;
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
-background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, [(#GET{transparent-medium-bg})]), color-stop(30%, [(#GET{full-medium-bg})]), color-stop(100%, [(#GET{full-medium-bg})])); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* IE10+ */
-background: linear-gradient(to right, [(#GET{transparent-medium-bg})] 0%, [(#GET{full-medium-bg})] 30%, [(#GET{full-medium-bg})] 100%); /* W3C */
+background: -moz-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%, [(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%, [(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/), color-stop(30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/), color-stop(100%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-medium-bg})] /*rgba(24,194,177,0)*/ 0%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 30%,[(#GET{full-medium-bg})] /*rgba(24,194,177,1)*/ 100%); /* W3C */
 }
 #content .listado_nodos .header hgroup:active .info { 
 /* para hacer este active haria falta un color extra o cambiar algo*/
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#18c2b1+0,ffffff+37&1+0,0+100 */
 background: -moz-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, [(#GET{transparent-bright-bg})]), color-stop(30%, [(#GET{full-bright-bg})]), color-stop(100%, [(#GET{full-bright-bg})])); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* IE10+ */
-background: linear-gradient(to right, [(#GET{transparent-bright-bg})] 0%, [(#GET{full-bright-bg})] 30%, [(#GET{full-bright-bg})] 100%); /* W3C */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,[(#GET{transparent-bright-bg})]), color-stop(30%,[(#GET{full-bright-bg})]), color-stop(100%,[(#GET{full-bright-bg})])); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* IE10+ */
+background: linear-gradient(to right, [(#GET{transparent-bright-bg})] 0%,[(#GET{full-bright-bg})] 30%,[(#GET{full-bright-bg})] 100%); /* W3C */
 }
 #content .listado_nodos .header .info span { display: inline-block; font-weight: bold; font-size: 14px; vertical-align: middle; color: [(#GET{white})]; }
 

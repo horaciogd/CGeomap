@@ -1,0 +1,45 @@
+		<INCLURE{fond=inclure/script-site} />[
+		<!-- CGeomap -->
+		<script src="(#CHEMIN{js/vhplab_geo.js})" type="text/javascript"></script>][
+		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>][
+		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|direction_css)" />]
+		<script type="text/javascript">
+		//<![CDATA[
+		var cgeomap;
+		$(document).ready(function() {
+			
+			console.log('$(document).ready();');
+			
+			var margin = parseInt(($(window).height() - 424)/2);
+			$("#loading").css("padding-top", margin+"px");
+			
+			$("#select").hide();
+			document.addEventListener("touchstart", function() {},false);
+			
+			$('#loading hgroup').fadeIn();
+			
+			console.log('$.getScript("[(#URL_PAGE{'cgeomap-prototypes-phone.js'}|url_absolue)]");');
+			$.getScript("[(#URL_PAGE{'cgeomap-prototypes-phone.js'}|url_absolue)]", function(data) {
+				cgeomap = new VhplabInterface();
+				cgeomap.initialize({[
+					url_site: '(#URL_SITE_SPIP|url_absolue)',]
+					initial_article: 8,
+					custom_map_prototypes: '[(#URL_PAGE{'vhplab-geo-prototypes-phone.js'}|url_absolue)]',
+					map_opts: {
+						markers: 'spip.php?page=json-vhplab-geo-submap-articles&map=monumenta',
+						recherche: false,
+						auteur: false,
+						categoria: false,
+						tag: false,
+						meta_tag: false,
+						id: 'cgeomap',[
+						zoom: (#CONFIG{vhplab/default_zoom}),][
+						latitude: (#CONFIG{vhplab/default_latitude}),][
+						longitude: (#CONFIG{vhplab/default_longitude})],
+						custom: true
+					}
+				});
+			});
+		});
+		//]]>
+		</script>

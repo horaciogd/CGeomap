@@ -1,0 +1,20 @@
+		<!-- Site info -->
+		[<title>(#NOM_SITE_SPIP|textebrut)[ - (#SLOGAN_SITE_SPIP|textebrut)]</title>]<BOUCLE_keywords(BREVES){titre=keywords}{0,1}>
+		<meta name="keywords" content="[(#TEXTE||attribut_html)]"></BOUCLE_keywords>[
+		<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
+		<meta name="author" content="una sinergia de VHPlab y GPS Museum" />
+		<!-- Basic metas -->
+		<meta name="robots" content="index, follow" />
+		<meta name="generator" content="SPIP[ (#SPIP_VERSION)]" />[
+		<meta name="encoding" charset="(#CHARSET)" />][
+		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://www.googletagmanager.com[ https://*.(#URL_SITE_SPIP|replace{https://,''})/][ https://(#URL_SITE_SPIP|replace{https://,''})/] https://www.google-analytics.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src *; frame-src 'self'[ https://*.(#URL_SITE_SPIP|replace{https://,''})/][ https://(#URL_SITE_SPIP|replace{https://,''})/] https://vimeo.com/ https://youtube.com/ https://*.vimeo.com/ https://*.youtube.com/;">-->
+       	<link rel="alternate" type="application/rss+xml" title="<:syndiquer_site:>" href="(#URL_PAGE{backend})" />]
+		<!-- favicon -->[
+		<link rel="shortcut icon" href="(#CHEMIN{images/favicon.ico})" />][
+		<link rel="icon" type="image/svg+xml" href="(#CHEMIN{images/favicon.svg})" sizes="any" />][
+		<link rel="icon" type="image/png" href="(#CHEMIN{images/favicon-192x192.png})" sizes="192x192" />]
+		<!-- Apple touch icon -->[
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-120x120.png})" sizes="120x120" />][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-180x180.png})" sizes="180x180"/>][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-152x152.png})" sizes="152x152"/>][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-167x167.png})" sizes="167x167"/>]

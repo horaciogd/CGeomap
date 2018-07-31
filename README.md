@@ -1,4 +1,4 @@
-CGeomap for Leaflet 0.12
+CGeomap for Leaflet 1.0.2
 ========================
 
 
@@ -8,12 +8,13 @@ CGEOMAP nace de una larga trayectoria de colaboración entre varios colectivos a
 
 En este repositorio encontrarás el plugin y los esqueletos de Spip que utilizamos de base para crear nuestros proyectos publicados bajo licencia GNU GENERAL PUBLIC LICENSE. Encontrarás toda la documentación acerca de como utilizarlo y un ejemplo de su uso aquí: http://www.vhplab.net/cgeomap/
 
-Date: Mon Mar 28 2016
+Version: 1.1.0
+Date: Wen Aug 1 2018
 
 Enjoy the code and drop me a line for comments and questions!
 horaciogd at vhplab dot net
 
-Third Part components: SPIP 3.0 - *Arnaud Martin, Antoine Pitrou, Philippe Riviere, Emmanuel Saint-James*, jQuery v1.11.3 | jQuery UI v1.11.4 - *jQuery Foundation*, Leaflet JavaScript library for mobile-friendly interactive maps - *CloudMade, Vladimir Agafonkin*, SoundManager 2 - *Scott Schiller*, FancyBox v2.1.5 - *Janis Skarnelis*, jQuery File Upload - *Sebastian Tschan*, phpqrcode - *Dominik Dzienia*, jQuery custom scrollbar plugin v3.0.8 - *malihu*, jQuery mousewheel - *Brandon Aaron*
+Third Part components: SPIP 3.2 - *Arnaud Martin, Antoine Pitrou, Philippe Riviere, Emmanuel Saint-James*, jQuery v3.1.1 | jQuery UI v1.12.1 - *jQuery Foundation*, Leaflet JavaScript library for mobile-friendly interactive maps - *CloudMade, Vladimir Agafonkin*, SoundManager 2 - *Scott Schiller*, FancyBox v2.1.7 - *Janis Skarnelis*, jQuery File Upload - *Sebastian Tschan*, phpqrcode - *Dominik Dzienia*, jQuery custom scrollbar plugin v3.1.5 - *malihu*, jQuery mousewheel - *Brandon Aaron*
  
 
 

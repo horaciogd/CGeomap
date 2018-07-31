@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+ @font-face {
+  font-family: 'fontello';
+  src: url('../font/fontello.eot?64768520');
+  src: url('../font/fontello.eot?64768520#iefix') format('embedded-opentype'),
+       url('../font/fontello.woff2?64768520') format('woff2'),
+       url('../font/fontello.woff?64768520') format('woff'),
+       url('../font/fontello.ttf?64768520') format('truetype'),
+       url('../font/fontello.svg?64768520#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?64768520#fontello') format('svg');
+  }
+}
+*/
+ 
+ [class^="cgeomap-"]:before, [class*=" cgeomap-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.cgeomap-arrow-buttons-down:before { content: '\e801'; } /* '' */
+.cgeomap-arrow-buttons-up:before { content: '\e802'; } /* '' */
+.cgeomap-btn-info-video:before { content: '\e803'; } /* '' */
+.cgeomap-close:before { content: '\e804'; } /* '' */
+.cgeomap-map-buttons-location:before { content: '\e805'; } /* '' */
+.cgeomap-map-buttons-reload:before { content: '\e806'; } /* '' */
+.cgeomap-map-buttons-slideout:before { content: '\e807'; } /* '' */
+.cgeomap-map-buttons-slidein:before { content: '\e808'; } /* '' */
+.cgeomap-pagination-buttons-left:before { content: '\e809'; } /* '' */
+.cgeomap-pagination-buttons-right:before { content: '\e810'; } /* '' */
+.cgeomap-pagination-buttons-circle:before { content: '\e811'; } /* '' */
+.cgeomap-toggle-button-left:before { content: '\e812'; } /* '' */
+.cgeomap-toggle-button-right:before { content: '\e813'; } /* '' */
+.cgeomap-user-buttons-contact:before { content: '\e814'; } /* '' */
+.cgeomap-user-buttons-facebook:before { content: '\e815'; } /* '' */
+.cgeomap-user-buttons-twitter:before { content: '\e816'; } /* '' */
+.cgeomap-module-buttons-text:before { content: '\e817'; } /* '' */
+.cgeomap-module-buttons-image:before { content: '\e818'; } /* '' */
+.cgeomap-module-buttons-video:before { content: '\e819'; } /* '' */
+.cgeomap-user-buttons-user:before { content: '\e81f'; } /* '' */
+.cgeomap-module-buttons-link:before { content: '\e820'; } /* '' */
+.cgeomap-module-buttons-audio:before { content: '\e821'; } /* '' */
+.cgeomap-switcher-box:before { content: '\e822'; } /* '' */
+.cgeomap-switcher-box-phone:before { content: '\e823'; } /* '' */
+.cgeomap-switcher-box-desktop:before { content: '\e824'; } /* '' */
+.cgeomap-switcher-desktop:before { content: '\e825'; } /* '' */
+.cgeomap-switcher-phone:before { content: '\e826'; } /* '' */
+.cgeomap-player-buttons-backwards-a:before { content: '\e833'; } /* '' */
+.cgeomap-player-buttons-backwards:before { content: '\e834'; } /* '' */
+.cgeomap-player-buttons-forward-a:before { content: '\e835'; } /* '' */
+.cgeomap-player-buttons-forward:before { content: '\e836'; } /* '' */
+.cgeomap-player-buttons-info-a:before { content: '\e837'; } /* '' */
+.cgeomap-player-buttons-info:before { content: '\e838'; } /* '' */
+.cgeomap-player-buttons-pause-a:before { content: '\e839'; } /* '' */
+.cgeomap-player-buttons-pause:before { content: '\e83a'; } /* '' */
+.cgeomap-player-buttons-play-a:before { content: '\e83b'; } /* '' */
+.cgeomap-player-buttons-play:before { content: '\e83c'; } /* '' */
+.cgeomap-player-buttons-stop-a:before { content: '\e83d'; } /* '' */
+.cgeomap-player-buttons-stop:before { content: '\e83e'; } /* '' */
+.cgeomap-player-buttons-volume-0-a:before { content: '\e83f'; } /* '' */
+.cgeomap-player-buttons-volume-0:before { content: '\e840'; } /* '' */
+.cgeomap-player-buttons-volume-1-a:before { content: '\e841'; } /* '' */
+.cgeomap-player-buttons-volume-1:before { content: '\e842'; } /* '' */
+.cgeomap-player-buttons-volume-2-a:before { content: '\e843'; } /* '' */
+.cgeomap-player-buttons-volume-2:before { content: '\e844'; } /* '' */
+.cgeomap-player-buttons-volume-3-a:before { content: '\e845'; } /* '' */
+.cgeomap-player-buttons-volume-3:before { content: '\e846'; } /* '' */
+.cgeomap-player-buttons-volume-4-a:before { content: '\e847'; } /* '' */
+.cgeomap-player-buttons-volume-4:before { content: '\e848'; } /* '' */
+.cgeomap-player-icon-transparent:before { content: '\e849'; } /* '' */
+.cgeomap-check:before { content: '\e84a'; } /* '' */
+.cgeomap-globe-a:before { content: '\e84c'; } /* '' */
+.cgeomap-globe:before { content: '\e84d'; } /* '' */
+.cgeomap-handler:before { content: '\e84e'; } /* '' */
+.cgeomap-arrow-buttons-down-a:before { content: '󨀚'; } /* '\e801a' */
+.cgeomap-arrow-buttons-up-a:before { content: '󨀪'; } /* '\e802a' */
+.cgeomap-btn-info-video-a:before { content: '󨀺'; } /* '\e803a' */
+.cgeomap-close-a:before { content: '󨁊'; } /* '\e804a' */
+.cgeomap-map-buttons-location-a:before { content: '󨁚'; } /* '\e805a' */
+.cgeomap-map-buttons-reload-a:before { content: '󨁪'; } /* '\e806a' */
+.cgeomap-map-buttons-slideout-a:before { content: '󨁺'; } /* '\e807a' */
+.cgeomap-map-buttons-slidein-a:before { content: '󨂊'; } /* '\e808a' */
+.cgeomap-pagination-buttons-left-a:before { content: '󨂚'; } /* '\e809a' */
+.cgeomap-pagination-buttons-right-a:before { content: '󨄊'; } /* '\e810a' */
+.cgeomap-user-buttons-contact-a:before { content: '󨅊'; } /* '\e814a' */
+.cgeomap-user-buttons-facebook-a:before { content: '󨅚'; } /* '\e815a' */
+.cgeomap-user-buttons-twitter-a:before { content: '󨅪'; } /* '\e816a' */
+.cgeomap-module-buttons-text-a:before { content: '󨅺'; } /* '\e817a' */
+.cgeomap-module-buttons-image-a:before { content: '󨆊'; } /* '\e818a' */
+.cgeomap-module-buttons-video-a:before { content: '󨆚'; } /* '\e819a' */
+.cgeomap-module-buttons-link-a:before { content: '󨈊'; } /* '\e820a' */
+.cgeomap-module-buttons-audio-a:before { content: '󨈚'; } /* '\e821a' */
+.cgeomap-switcher-box-a:before { content: '󨈪'; } /* '\e822a' */
+.cgeomap-switcher-desktop-a:before { content: '󨉚'; } /* '\e825a' */
+.cgeomap-switcher-phone-a:before { content: '󨉪'; } /* '\e826a' */

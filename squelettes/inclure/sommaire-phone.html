@@ -2,13 +2,11 @@
 ][(#CACHE{1*24*3600})]<!DOCTYPE html>
 <html dir="#LANG_DIR" lang="#LANG">
 	<head>
-		[<title>(#NOM_SITE_SPIP|textebrut)[ - (#SLOGAN_SITE_SPIP|textebrut)]</title>]<BOUCLE_keywords(BREVES){titre=keywords}{0,1}>
-		<meta name="keywords" content="[(#TEXTE||attribut_html)]"></BOUCLE_keywords>[
-		<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|attribut_html)" />]
-		<meta name="robots" content="index, follow" />
-		<INCLURE{fond=inclure/head-phone}{color=#ENV{color}} />
+		<INCLURE{fond=inclure/head-site} />
 		
-		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}} />
+		<INCLURE{fond=inclure/head-phone}{absolue=true} />
+		
+		<INCLURE{fond=inclure/facebook-metas}{nodo=#ENV{nodo}}{absolue=true} />
 		
 		<INCLURE{fond=inclure/script-sommaire-phone}{nodo=#ENV{nodo}}{author=#ENV{author}} />
 		
@@ -19,7 +17,7 @@
 		
 		<INCLURE{fond=inclure/section-block-user} />
 		
-		<INCLURE{fond=inclure/section-loading-phone}{color=#ENV{color}} />
+		<INCLURE{fond=inclure/section-loading-phone} />
 		
 		<INCLURE{fond=inclure/nav-navigation-phone} />
 		

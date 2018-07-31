@@ -30,6 +30,7 @@ function VhplabInterface() {
   	this.toggleContentDist = 0;
   	this.toggleContentOffset = -12;
 	this.form = new VhplabContribuerFrom();
+	this.dragging = false;
 };
 VhplabInterface.prototype.appendNavigationList = function(html, pagination, pages) {
 	// console.log('cgeomap.appendNavigationList();');
@@ -53,16 +54,20 @@ VhplabInterface.prototype.appendNavigationList = function(html, pagination, page
 	});
 };
 VhplabInterface.prototype.bindNavigationListActions = function() {
-	$("#navigation .menu .list a.article").click(function(){
+	$("#navigation .menu .list a.article").on("click touchend", function(e){
+		e.preventDefault();
+		if (cgeomap.dragging) return;	
 		var name = $(this).attr('name');
 		var id = name.split('_');
 		var marker = $(cgeomap.map.markers).data('marker_'+id[1]);
 		marker.click();
 	});
-	$("#navigation .pagination .next").click(function(){
+	$("#navigation .pagination .next").on("click touchend", function(e){
+		e.preventDefault();
 		cgeomap.paginateNavigation('next');
 	});
-	$("#navigation .pagination .prev").click(function(){
+	$("#navigation .pagination .prev").on("click touchend", function(e){
+		e.preventDefault();
 		cgeomap.paginateNavigation('prev');
 	});
 	/* loading */
@@ -72,7 +77,8 @@ VhplabInterface.prototype.bindNavigationButtons = function() {
 	// console.log('/* cgeomap.bindNavigationButtons(); */');
 	/* toggleLogin */
 	$('#navigation .user .login').data("tgl","of");
-	$('#navigation .user .login').click(function() { 
+	$('#navigation .user .login').on("click touchend", function(e) { 
+		e.preventDefault();
 		cgeomap.toggleLogin(this);
 		return false;
 	});
@@ -98,7 +104,8 @@ VhplabInterface.prototype.bindNavigationButtons = function() {
 	}
 };
 VhplabInterface.prototype.bindToggleContent = function() {
-	$('#toggle_content').click(function(){ 
+	$('#toggle_content').on("click touchend", function(e){ 
+		e.preventDefault();
 		cgeomap.toggleContent();
 	});
 };
@@ -194,7 +201,8 @@ VhplabInterface.prototype.internalizeLink = function(_this){
 			// console.log('author: ' + author);
 			// console.log('nodo: ' + nodo);
 			$(_this).attr('target','_self');
-			$(_this).click(function(){
+			$(_this).on("click touchend", function(e){
+				e.preventDefault();
 				var marker = $(cgeomap.map.markers).data('marker_'+ nodo);
 				if (typeof marker != "undefined") {
 					marker.click();
@@ -333,6 +341,7 @@ VhplabInterface.prototype.toggleContent = function() {
 function VhplabContribuerFrom() {
 	this.url_form = '';
 	this.url_upload = '';
+	this.scrollTo = '';
 	this.data = {};
 	this.status = 'editer';
 	this.trash = false;
@@ -357,24 +366,28 @@ VhplabPlayer.prototype.appendTo = function(_container) {
 	$('#'+ this.selector +' ul').append('<li class="pause" ></li>');
 	$('#'+ this.selector +' ul').append('<li class="position" >00:00</li>');
 	$('#'+ this.selector +' ul').append('<li class="duration" >00:00</li>');
-	$('#'+ this.selector +' ul').append('<li class="volume" ></li>');
+	$('#'+ this.selector +' ul').append('<li class="volume volume-50" ></li>');
 	$('#'+ this.selector +' ul').append('<li class="progress_bar" ><span></span></li>');
     this.bindActions();
 };
 VhplabPlayer.prototype.bindActions = function() {
 	var self = this;
-	$('#'+ this.selector +' .play').click(function(){
+	$('#'+ this.selector +' .play').on("click touchend", function(e){
+		e.preventDefault();
 		self.play();
 	});
-	$('#'+ this.selector +' .pause').click(function(){
+	$('#'+ this.selector +' .pause').on("click touchend", function(e){
+      	e.preventDefault();
       	self.pause();
 	});
-	$('#'+ this.selector +' .progress_bar').click(function(e){
+	$('#'+ this.selector +' .progress_bar').on("click touchend", function(e){
+      	e.preventDefault();
       	var w = $(this).width();
 		var x = e.clientX - $(this).offset().left;
 		if (self.sound.playState) self.sound.setPosition(x*self.sound.duration/w);
 	});
-	$('#'+ this.selector +' .volume').click(function(){
+	$('#'+ this.selector +' .volume').on("click touchend", function(e){
+		e.preventDefault();
 		self.setVolume();
 	});
 	$('#'+ this.selector +' .pause').hide();
@@ -423,26 +436,11 @@ VhplabPlayer.prototype.play = function() {
 	$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');
 };
 VhplabPlayer.prototype.setVolume = function() {
+	$('#'+ this.selector +' .volume').removeClass("volume-"+this.volume);
 	this.volume += 25;
 	if (this.volume>100) this.volume = 0;
 	this.sound.setVolume(this.volume);
-	switch (this.volume) {
-		case 0:
-			$('#'+ this.selector +' .volume').css("background-position", "-111px 0");
-			break;
-		case 25:
-			$('#'+ this.selector +' .volume').css("background-position", "-129px 0");
-			break;
-		case 50:
-			$('#'+ this.selector +' .volume').css("background-position", "-150px 0");
-			break;
-		case 75:
-			$('#'+ this.selector +' .volume').css("background-position", "-171px 0");
-			break;
-		case 100:
-			$('#'+ this.selector +' .volume').css("background-position", "-193px 0");
-			break;
-	}
+	$('#'+ this.selector +' .volume').addClass("volume-"+this.volume);
 };
 VhplabPlayer.prototype.milToTime = function(_mil) {
 	var seconds = Math.floor((_mil / 1000) % 60);

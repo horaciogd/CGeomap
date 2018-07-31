@@ -3,4 +3,4 @@
 (#REM) Avoid spip admin buttons
 ][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][
 (#REM) get a different inclure depending on device 
-][(#SET{index,inclure/sommaire-phone})][(#ENV{author}|oui)[(#SET{auteur,[(#ENV{author})]})]]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}}{color=true} />
+][(#SET{index,inclure/intro-phone})][(#ENV{author}|oui)[(#SET{auteur,[(#ENV{author})]})]]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}} />

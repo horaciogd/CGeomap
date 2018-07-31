@@ -76,14 +76,16 @@ VhplabMap.prototype.bindActions = function() {
 	var width = parseInt(cgeomap.windowWidth);
 	if (width>674) width = 674;
 	// Bind button actions
-	$("#navigation .bkmrk").click(function(){
+	$("#navigation .bkmrk").on("click touchend", function(e){
+		e.preventDefault();
 		$('section').hide();
 		$('footer').hide();
 		$('nav').hide();
 		cgeomap.scannQr();
 	});
 	var initialHref = window.location.href;
-	$("#reload").click(function(){
+	$("#reload").on("click touchend", function(e){
+		e.preventDefault();
 		// reset markers and reload cgeomap
 		// cgeomap.reload();
 		// Reload original app url (ie your index.html file)
@@ -473,18 +475,21 @@ VhplabMarker.prototype.bindContentActions = function(_content) {
 };
 VhplabMarker.prototype.bindPopupActions = function(_content) {
 	/*
-	$('a.fancybox', _content).click(function(){
+	$('a.fancybox', _content).on("click touchend", function(e){
+		e.preventDefault();
 		var img = $(this).attr('href');
 		$.fancybox({ 'href' : img });
 		return false;
 	});
 	*/
-	$('.player', _content).click(function(){
+	$('.player', _content).on("click touchend", function(e){
+		e.preventDefault();
 		var id_article = $(this).data('id_article');
 		$('#article_'+ id_article +' .header .player').trigger('click');
 	});
 	
-	$('.toggle_content', _content).click(function(){
+	$('.toggle_content', _content).on("click touchend", function(e){
+		e.preventDefault();
 		cgeomap.toggleContent();
 	});
 };

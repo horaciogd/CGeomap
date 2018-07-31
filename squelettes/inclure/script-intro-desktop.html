@@ -1,0 +1,134 @@
+		<INCLURE{fond=inclure/script-site}{absolue=true} />
+		<script type="text/javascript">
+		//<![CDATA[
+		$(document).ready(function() {
+			var bgprop = 3840/2160;
+			var wprop = $(window).width() / $(window).height();
+			(bgprop>=wprop) ? $("#loading .wrapper").css("background-size", "auto 100%") : $("#loading .wrapper").css("background-size", "100% auto");
+			$('#loading .intro').css("top", parseInt(($(window).height() - 346)/3)+"px");
+			$('#loading hgroup').fadeIn();
+			function reduce(_me) {
+				$(_me).animate({
+    				opacity: ".5",
+  				}, 200);
+				/*
+  				$("#loading .intro").animate({
+  					marginTop: "+=287",
+  				}, 100);
+  				*/
+  				$(".bg", _me).animate({
+    				width: "-=117",
+    				height: "-=173",
+  				}, {
+  					duration: 200,
+					progress: function() {
+						var size = 0;
+						$("#loading .intro li").each(function(i) {
+							if ($(this).height()>=size) size = $(this).height();
+						});
+						size -= 173;
+						$("#loading .intro").css("margin-top", (173-size)+"px");
+						$(".data").html(size);
+					},
+					complete: function() {
+						// Animation complete.
+						$(_me).data("dock", true);
+  					}
+				});
+  				$("p", _me).animate({
+    				fontSize: "-=13",
+    				lineHeight: "-=13",
+    				marginTop: "-=105",
+    				paddingBottom: "-=6",
+  				}, 200);
+  				$("small", _me).animate({
+    				fontSize: "-=11",
+  				}, 200);
+  				$(".logo", _me).animate({
+    				width: "-=79",
+    				height: "-=30",
+  				}, 200);
+			};
+			function amplia(_me) {
+				$(_me).animate({
+    				opacity: "1",
+  				}, 200);
+				/*
+  				$("#loading .intro").animate({
+  					marginTop: "-=287",
+  				}, 100);
+  				*/
+  				$(".bg", _me).animate({
+    				width: "+=117",
+    				height: "+=173",
+  				}, {
+  					duration: 200,
+					progress: function() {
+						var size = 0;
+						$("#loading .intro li").each(function(i) {
+							if ($(this).height()>=size) size = $(this).height();
+						});
+						size -= 173;
+						$("#loading .intro").css("margin-top", (173-size)+"px");
+						$(".data").html(size);
+					},
+					complete: function() {
+						// Animation complete.
+						$(_me).data("dock", true);
+  					}
+				});
+  				$("p", _me).animate({
+    				fontSize: "+=13",
+    				lineHeight: "+=13",
+    				marginTop: "+=105",
+    				paddingBottom: "+=6",
+  				}, 200);
+  				$("small", _me).animate({
+    				fontSize: "+=11",
+  				}, 200);
+  				$(".logo", _me).animate({
+    				width: "+=79",
+    				height: "+=30",
+  				}, 200);
+			};
+			function dock(_me) {
+				if ($(_me).data("dock")==true) {
+					reduce(_me);
+				} else {
+					amplia(_me);
+				}
+			}
+			function go(_url) {
+        		window.location = _url;
+			}
+			$("#loading .intro li").hover(function(){
+				amplia(this);
+			}, function(){
+				reduce(this);
+			});
+			$("#loading .intro li").click(function(e){
+        		e.preventDefault();
+        		var image_a = $(".bg", this).attr('src');
+				var image_b = $(".hover", this).data('src');
+				// console.log('image_a: '+ image_a);
+				// console.log('image_b: '+ image_b);
+				$(".bg", this).attr('src', image_b).delay(100).queue(function(next) { $(this).attr('src', image_a); next(); });
+				var id = $(this).attr('id');
+				// console.log('id: '+ id);
+				var url = $(this).data("url");
+				// console.log('url: '+ url);
+        		if(typeof $(this).data("url") != "undefined") {
+        			setTimeout(function() {
+        				go(url);
+        			}, 100);
+        		}
+			});
+			var images = new Array()
+			$(".hover").each(function(i) {
+  				images[i] = new Image()
+				images[i].src = $(".hover").data('src');
+			});
+		});
+		
+		//]]>
+		</script>

@@ -1,0 +1,40 @@
+		<INCLURE{fond=inclure/script-site}{absolue=true} />
+		<script type="text/javascript">
+		//<![CDATA[
+		$(document).ready(function() {
+			function go(_url) {
+        		window.location = _url;
+			}
+			var height = parseInt($(window).height());
+			$("#loading hgroup").css("height", height+"px");
+			$("#select").hide();
+			document.addEventListener("touchstart", function() {},false);
+			$('#loading hgroup').fadeIn();
+			/*
+			$('#loading .intro').animate({
+    			scrollTop: ($('#li_210').offset().top - 35)
+			},500);
+			*/
+			$("#loading .intro li").click(function(e){
+        		e.preventDefault();
+        		var image_a = $(".bg", this).attr('src');
+				var image_b = $(".hover", this).data('src');
+				// console.log('image_a: '+ image_a);
+				// console.log('image_b: '+ image_b);
+				$(".bg", this).attr('src', image_b).delay(100).queue(function(next) { $(this).attr('src', image_a); next(); });
+				if (typeof $(this).data("url") != "undefined") {
+        			var url = $(this).data("url");
+        			setTimeout(function() {
+        				go(url);
+        			}, 100);
+        			
+        		}
+			});
+			var images = new Array()
+			$(".hover").each(function(i) {
+  				images[i] = new Image()
+				images[i].src = $(".hover").data('src');
+			});
+		});
+		//]]>
+		</script>

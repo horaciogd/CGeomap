@@ -84,6 +84,7 @@ function formulaires_constructor_traiter_dist($id_auteur='new', $retour='', $aja
 				// 5 asociamos las palabras clave al articulo
 				sql_insertq('spip_mots_liens', array( 'id_mot' => 1, 'id_objet' => intval($id_article), 'objet' => 'article'));
 				sql_insertq('spip_mots_liens', array( 'id_mot' => 5, 'id_objet' => intval($id_article), 'objet' => 'article'));
+				sql_insertq('spip_mots_liens', array( 'id_mot' => 8, 'id_objet' => intval($id_article), 'objet' => 'article'));
 				// 6 hacemos una copia de la imagen inicial
 				$file = array('name' => 'cgeomap_explorer_banner_1100x591.jpg', 'tmp_name' => $image);
 				$id_document = $ajouter_documents('new', array(0 => $file), 'article', intval($id_article), 'image');

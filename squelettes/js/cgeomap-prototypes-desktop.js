@@ -188,7 +188,16 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	// load custom map prototypes console.log('load custom map prototypes');
 	if (typeof _opts.custom_map_prototypes != "undefined") {
 		$.getScript(_opts.custom_map_prototypes, function(data) {
-			cgeomap.ready(_opts.map_opts);
+		
+			// Load article template
+			cgeomap.loadArticleTemplate(function(){
+				// Load user
+ 				cgeomap.loadUser(function(){
+ 					// Initialize map	
+					cgeomap.ready(_opts.map_opts);
+				});
+			});
+		
 		});
 	// Use standard prototypes
 	} else {
@@ -211,7 +220,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	this.initContent();
 };
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
-	console.log('cgeomap.loadArticleTemplate()');
+	console.log('/* Desktop prototypes */ cgeomap.loadArticleTemplate()');
 	// Get URL via log
 	// console.log('Article Template URL: '+ this.url_article);
  	$("#content .wrapper").load(this.url_article, function() {
@@ -486,23 +495,30 @@ VhplabInterface.prototype.loadUtilities = function(_target, _force, _callback) {
 	}
 };
 VhplabInterface.prototype.loadUser = function(_callback) {
-	// get URL via alert(this.url_user);
-	$("#user").load(this.url_user, function() {
+	console.log('/* Desktop prototypes */ cgeomap.loadUser()');
+	// get URL via log
+	console.log('url_user: '+ this.url_user);
+	$.get(this.url_user, function(_html) {
+		$("body").prepend('<div id="sending_login"></div>');
+		$("#sending_login").html(_html);
 		/* Session & Admin */
-		if ($("#user .data").data("session") == "ok") {
+		if ($("#sending_login .data").data("session") == "ok") {
 			cgeomap.session = true;
 			console.log('cgeomap.session = true;');
+			var content = $( "#sending_login" ).html();
+			$( "#sending_login" ).remove();
+			$("#user").html(content);
+			if ($("#user .data").data("admin") == "ok") cgeomap.admin = true;
+			/* Login */
+			$('#user .login').hide();
+			/* Utilities  */
+			$("#user .utilities a").click(function() { 
+				cgeomap.toggleUtilities($(this).attr('name'), true);
+			});
+			if(_callback) _callback();
 		} else {
-			$( "#article" ).css('top', 19);
+			$('#loading').fadeOut(500);
 		}
-		if ($("#user .data").data("admin") == "ok") cgeomap.admin = true;
-		/* Login */
-		$('#user .login').hide();
-		/* Utilities  */
-		$("#user .utilities a").click(function() { 
-			cgeomap.toggleUtilities($(this).attr('name'), true);
-		});
-		if(_callback) _callback();
 	});
 };
 VhplabInterface.prototype.ready = function(_opts) {
@@ -936,7 +952,7 @@ VhplabContribuerFrom.prototype.bindActions = function() {
     $(".module_button").click(function(){ cgeomap.form.createNewModule(this); });
     $( "#formulaire .audiovisuel ul").sortable({
     	axis: "y",
-    	handle: "h5",
+    	handle: "span",
     	// connectWith: ".trash",
     	change: function(event, ui) { cgeomap.form.sortableChange(ui.item, "#formulaire .audiovisuel"); },
     	start: function(event, ui) { cgeomap.form.sortableStart(ui.item, "#formulaire .audiovisuel"); },
@@ -946,7 +962,13 @@ VhplabContribuerFrom.prototype.bindActions = function() {
      /* scroll */
     $("#formulaire .scroll").mCustomScrollbar({
 		scrollInertia: 150,
-		theme: "dark-thick"
+		theme: "dark-thick",
+		callbacks:{
+    		onUpdate:function(){
+      			console.log("Scrollbars updated");
+      			cgeomap.form.scrollContent();
+    		}
+    	}
 	});
 
     /* cartography */
@@ -1163,13 +1185,15 @@ VhplabContribuerFrom.prototype.bindModuleHeaderActions = function(_context) {
 	$(_context +" header h5").dblclick( function(){
 	 	cgeomap.form.editName(this);
 	});
-	$(_context +" header h5" ).hover(
+	/*
+	$(_context +" header span" ).hover(
 		function() {
-			$(this).parent().addClass("hover");
+			$(this).addClass("hover");
 		}, function() {
-			$(this).parent().removeClass("hover");
+			$(this).removeClass("hover");
 		}
 	);
+	*/
 	$(_context +" header input").blur( function(){
 		cgeomap.form.updateHeaderField(this, "h5");
     });
@@ -1435,12 +1459,13 @@ VhplabContribuerFrom.prototype.createVideoModule = function(_container, _type, _
 	console.log('createVideoModule(); '+ _container +' '+ _type +' '+ _n);
 	$(_container +" .modules_list").append(this.createModule(_type, _T.module_label_video_image, _n, '', _T.help_video_image));
 	$(_container +" ."+ _type +"_"+ _n +" .content").append('\t\t\t\t<fieldset>\n'+ this.createField('\t\t\t\t', '', this.createMediaInput('', _T.seleciona_imagen)) +'\t\t\t\t</fieldset>\n');
-	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createVideoLink(_type, '_url', '_text','\t\t\t\t'));
+	$(_container +" ."+ _type +"_"+ _n +" .content").append(this.createVideoLink(_type, '_url', '','\t\t\t\t'));
 	this.bindVideoModuleActions(_container +" ."+ _type +"_"+ _n, _type, _n);
 };
 VhplabContribuerFrom.prototype.createModule = function(_class, _text, _n, _tab, _help) {
 	var html = '\t<li class="'+ _class +' '+ _class +'_'+ _n +' module">\n';
 	html +=	_tab +'\t\t<header title="'+ _T.help_handler +'">\n';
+	html +=	_tab +'\t\t<span></span>\n';
 	html += _tab +'\t\t\t<h5 title="'+ _help +'">'+ _text +'</h5>\n';
 	html += _tab +'\t\t\t<input name="header_field" class="hidden" value="'+ _text +'" type="text">\n';
 	html +=	_tab +'\t\t</header>\n';
@@ -1477,8 +1502,8 @@ VhplabContribuerFrom.prototype.createNewModule = function(_me) {
 		$(container +" ."+ type +"_"+ n).data('ok', false);
 		$(".submit .btn").css('opacity','0.4');
 		$(_me).data('n_audiovisuel', n+1);
+		this.scrollTo = 'bottom';
 		$("#formulaire .scroll").mCustomScrollbar("update");
-		$("#formulaire .scroll").mCustomScrollbar("scrollTo","bottom");
 	}
 };
 VhplabContribuerFrom.prototype.createTextModule = function(_container, _type, _n) {
@@ -1606,11 +1631,12 @@ VhplabContribuerFrom.prototype.initialize = function(_opts) {
 	}
 };
 VhplabContribuerFrom.prototype.load = function(_url) {
+	console.log('/* Desktop prototype */ cgeomap.load(_url);');
 	$("#formulaire").empty();
 	// new
 	if (_url) {
-		// get url via alert('url: '+ _url);
-		console.log('_url: ' + _url);
+		// get url via log
+		console.log('url: '+ _url);
 		$("#formulaire").load(_url, function() {
 			if(cgeomap.map.open) {
 				var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
@@ -1626,9 +1652,8 @@ VhplabContribuerFrom.prototype.load = function(_url) {
 		});
 	// contribuer
 	} else {
-		// get url via alert('url: '+ this.url_form);
+		// get url via log
 		console.log('this.url_form: ' + this.url_form);
-		
 		$("#formulaire").load(this.url_form, function() {
 			if(cgeomap.map.open) {
 				var open = $(cgeomap.map.markers).data('marker_'+cgeomap.map.open);
@@ -1679,6 +1704,15 @@ VhplabContribuerFrom.prototype.resizeFields = function(_me, _p1, _p2) {
 	// alert(width +' '+ parseInt((width-ofset)*_p1) +' '+ parseInt((width-ofset)*_p2));
 	$(_me).css("width", parseInt((width-ofset)*_p1) +"px");
 	$(_me).siblings().css("width", parseInt((width-ofset)*_p2) +"px");
+};
+VhplabContribuerFrom.prototype.scrollContent = function() {
+	if (this.scrollTo != '') {
+		$("#formulaire .scroll").mCustomScrollbar("scrollTo", this.scrollTo, { 
+			scrollInertia: 600,
+			scrollEasing:"easeOut"
+		});
+		this.scrollTo = '';
+	}
 };
 VhplabContribuerFrom.prototype.setIcon = function(_n) {
 	if (typeof this.icons == "undefined") {
@@ -1767,9 +1801,10 @@ VhplabContribuerFrom.prototype.submit = function() {
 		if ((typeof audiovisuel == "undefined")||($(audiovisuel).length == 0)) audiovisuel = false;
 		var self = this;
 		// get URL via log
-		console.log('url_json:'+ this.url_json);
+		console.log('get url_json:'+ this.url_json);
 		$.getJSON(this.url_json, function(data){
-			// alert($(data).toSource());
+			// 
+			console.log('json data: '+  JSON.stringify(data) );
 			var formData = {
 				page:'json-contribuer',
 				formulaire_action:'contribuer',
@@ -1777,6 +1812,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 				article: id_article,
 				title: $("#formulaire .wrap_title .value").text(),
 				subtitle: $("#formulaire .wrap_subtitle .value").text(),
+				submap: $("#formulaire .submap").val(),
 				visibility: $("#formulaire .visibility").data('visibility'),
 				category: $("#formulaire .category").data('category'),
 				icon: $("#formulaire header .icon").data("id_icon"),
@@ -1791,10 +1827,12 @@ VhplabContribuerFrom.prototype.submit = function() {
 				delete_audio: delete_audio
 			};
 			// get URL via log
-			console.log('url_form:'+ cgeomap.form.url_form);
-			// alert($(formData).toSource());
+			// console.log('url_form:'+ cgeomap.form.url_form);
+			// Get formData via log
+			console.log('formData: '+  JSON.stringify(formData) );
 			$.getJSON(cgeomap.form.url_form, formData, function(response){
-				// alert($(response).toSource());
+				// Get response via log
+				// console.log('response: '+  JSON.stringify(response) );
 				if (typeof(response[0].message_ok)!="undefined") {
 					cgeomap.form.cleanUploads($(audiovisuel_modules).data('clean_uploads'));
 					$("#formulaire").empty();
@@ -1817,7 +1855,8 @@ VhplabContribuerFrom.prototype.submit = function() {
 					});
 				} else {
 					alert(response[0].message_erreur);
-					window.location.href = cgeomap.form.url_base;
+					// console.log('url_base:'+ cgeomap.form.url_base);
+					window.location.href = cgeomap.url_site + "spip.php?page=editar";
 				}
 			});
 		});
@@ -1994,7 +2033,7 @@ VhplabContribuerFrom.prototype.updateVideoChannelField = function(_me) {
 		$(module).data('channel','youtube');
 		this.check();
 	} else {
-		p = /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
+		p = /^(https\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
 		if (url.match(p)){
 			/* vimeo */
        		var data = url.split('vimeo.com/');

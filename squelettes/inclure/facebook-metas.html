@@ -3,8 +3,9 @@
 		<meta property="og:description" content="(#TEXTE|extraire_module_sumary|couper{150}|attribut_html)" />]
 		<meta property="og:type" content="website" />[
 		<meta property="og:site_name" content="(#NOM_SITE_SPIP|attribut_html)" />][
-		<meta property="og:url" content="(#URL_SITE_SPIP|url_absolue)/spip.php?[author=(#ENV{author})&]nodo=#ENV{nodo}"/>]<BOUCLE_qr(DOCUMENTS){id_article}{extension==png}{descriptif==qr}{0,1}{doublons}></BOUCLE_qr><B_image><BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,5}{doublons}>[
-		<meta property="og:image" content="(#URL_DOCUMENT|url_absolue)" />][
+		<meta property="og:url" content="(#URL_SITE_SPIP|url_absolue)/spip.php?[author=(#ENV{author})&]nodo=#ENV{nodo}"/>]<BOUCLE_qr(DOCUMENTS){id_article}{extension==png}{descriptif==qr}{0,1}{doublons}></BOUCLE_qr><B_image><BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,5}{doublons}>[(#ENV{absolue}|=={true}|?{[
+		<meta property="og:image" content="(#URL_DOCUMENT|url_absolue)" />],[
+		<meta property="og:image" content="(#URL_DOCUMENT)" />]})][
 		<meta property="og:image:type" content="image/(#EXTENSION)" />][
 		<meta property="og:image:width" content="(#LARGEUR)" />][
 		<meta property="og:image:height" content="(#HAUTEUR)" />]</BOUCLE_image></B_image><B_mp3><!--<BOUCLE_mp3(DOCUMENTS){id_article}{extension=mp3}>[
@@ -13,9 +14,11 @@
 		<meta property="og:title" content="(#NOM_SITE_SPIP|supprimer_numero|textebrut|texte_script)" />][
 		<meta property="og:description" content="(#DESCRIPTIF_SITE_SPIP|textebrut|texte_script)" />]
 		<meta property="og:type" content="website" />[
-		<meta property="og:site_name" content="(#NOM_SITE_SPIP|textebrut)"/>][
-		<meta property="og:url" content="(#SELF|url_absolue)" />]<BOUCLE_screenshot(BREVES){titre=screenshot}{0,1}><BOUCLE_base_image(DOCUMENTS){id_breve}{extension==jpg|png|gif}{0,5}>[
-		<meta property="og:image" content="(#URL_DOCUMENT|url_absolue)" />][
+		<meta property="og:site_name" content="(#NOM_SITE_SPIP|textebrut)"/>][(#ENV{self}|?{[
+		<meta property="og:url" content="(#ENV{self})" />],[
+		<meta property="og:url" content="(#SELF|url_absolue)" />]})]<BOUCLE_screenshot(BREVES){titre=screenshot}{0,1}><BOUCLE_base_image(DOCUMENTS){id_breve}{extension==jpg|png|gif}{0,5}>[(#ENV{absolue}|=={true}|?{[
+		<meta property="og:image" content="(#URL_DOCUMENT|url_absolue)" />],[
+		<meta property="og:image" content="(#URL_DOCUMENT)" />]})][
 		<meta property="og:image:type" content="image/(#EXTENSION)" />][
 		<meta property="og:image:width" content="(#LARGEUR)" />][
 		<meta property="og:image:height" content="(#HAUTEUR)" />]</BOUCLE_base_image><BOUCLE_base_mp3(DOCUMENTS){id_breve}{extension=mp3}{0,5}>[

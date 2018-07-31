@@ -3,7 +3,7 @@
 				<BOUCLE_android_image(DOCUMENTS){id_breve}{0,1}>
 				<div class="wrapper android">
 					#TEXTE
-					<img class="spip_logos" alt="#NOM_SITE_SPIP" src="[(#FICHIER|image_reduire{#ENV{width},0}|extraire_attribut{src})]" width="[(#FICHIER|image_reduire{#ENV{width},0}|extraire_attribut{width}|div{2})]" height="[(#FICHIER|image_reduire{#ENV{width},0}|extraire_attribut{height}|div{2})]" />
+					<img class="spip_logos" alt="#NOM_SITE_SPIP" src="[(#FICHIER|image_reduire{#ENV{width},0}|extraire_attribut{src}|url_absolue)]" width="[(#FICHIER|image_reduire{#ENV{width},0}|extraire_attribut{width}|div{2})]" height="[(#FICHIER|image_reduire{#ENV{width},0}|extraire_attribut{height}|div{2})]" />
 					<p><span class="hide btm"></span></p>
 				</div>
 				</BOUCLE_android_image>

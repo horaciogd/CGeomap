@@ -117,12 +117,13 @@ VhplabInterface.prototype.bindToggleContent = function() {
 	});
 };
 VhplabInterface.prototype.continueInitialize = function(_opts) {
-	// console.log('/* phone prototypes */ cgeomap.continueInitialize();');
+	console.log('/* phone prototypes */ cgeomap.continueInitialize();');
 	// Map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
 	// Load custom map prototypes
 	if (typeof _opts.custom_map_prototypes != "undefined") {
-		// console.log('$.getScript('+ _opts.custom_map_prototypes +');');
+		// 
+		console.log('$.getScript('+ _opts.custom_map_prototypes +');');
 		$.getScript(_opts.custom_map_prototypes, function(data) {
 			cgeomap.ready(_opts.map_opts);
 		});
@@ -277,7 +278,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 				$.each(marker.enclosure, function(u, enclosure) {
 					cgeomap.player.addTrack(enclosure);
 				});
-				$('#select').append('<div class="welcome"><span class="btn go">go</span></div>');
+				$('#select').append('<div class="welcome"><span class="btn go">'+_T.go+'</span></div>');
 				$("#select").slideDown('fast', function(){
 					$("#select .welcome .btn").click(function(){
 						soundManager.stopAll();
@@ -299,11 +300,14 @@ VhplabInterface.prototype.initContent = function() {
 	$("#content").data('visible', false);
 };
 VhplabInterface.prototype.play = function(_sound, _button) {
+	// console.log('/* phone prototypes */ cgeomap.play(_sound, _button);');
+	// console.log(JSON.stringify(_sound));
 	if (typeof _sound == "number") {
 		this.player.toggle(_sound, _button);
 	} else if (typeof _sound == "string"){
-		var list = sound.split(",");
-		this.player.toggleList(_sound, _button);
+		// console.log('sound is a string');
+		var list = _sound.split(",");
+		this.player.toggleList(list, _button);
 	}
 };
 VhplabInterface.prototype.reload = function() {
@@ -332,7 +336,7 @@ VhplabInterface.prototype.setCookie = function(_opts) {
     document.cookie = "nodes="+ _opts.nodes +"; " + expires;
 };
 VhplabInterface.prototype.setVisibleNodes= function() {
-	// console.log('/* phone prototypes */ cgeomap.setVisibleNodes();');
+	console.log('/* phone prototypes */ cgeomap.setVisibleNodes();');
 	var found = '';
 	this.visibleNodes = new Array();
 	if (this.map.open) {
@@ -543,7 +547,7 @@ VhplabInterface.prototype.internalizeLink = function(_this){
 			$(_this).click(function(){
 				var marker = $(cgeomap.map.markers).data('marker_'+ nodo);
 				if (typeof marker != "undefined") {
-					cgeomap.toggleArticle("#article_"+ _nodo +" header", true);
+					cgeomap.toggleArticle("#article_"+ nodo +" header", true);
 					return false;
 				} else {
 					return true;
@@ -688,6 +692,8 @@ VhplabTransparentPlayer.prototype.toggle = function(_sound, _button) {
 	}
 };
 VhplabTransparentPlayer.prototype.toggleList = function(_list, _button) {
+	// console.log('/* phone prototypes */ cgeomap.player.play(_list, _button);');
+	// console.log(JSON.stringify(_list));
 	if (this.playing=='') {
 		$(_button).addClass('active');
 		$('.cgeomap .leaflet-popup-content-wrapper .player').addClass('active');

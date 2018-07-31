@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="es">
+	<head>
+		<!-- Site info -->
+		<title>submap CGeomap</title>
+		<meta name="keywords" content="geolocation, spatial narrative, activism, open source, mapping, gps museum, escoitar, vhpalab, locative web app">
+		<meta name="author" content="una sinergia de VHPlab y GPS Museum" />
+		<!-- Basic metas -->
+		<meta name="robots" content="index, follow" />
+		<meta name="generator" content="SPIP 3.2.1" />
+		<meta name="encoding" charset="utf-8" />
+		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://www.googletagmanager.com https://*.debug.cgeomap.eu/ https://cgeomap.eu/ https://www.google-analytics.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src *; frame-src 'self' https://*.debug.cgeomap.eu/ https://cgeomap.eu/ https://vimeo.com/ https://youtube.com/ https://*.vimeo.com/ https://*.youtube.com/;">-->
+       	<link rel="alternate" type="application/rss+xml" title="Sindicar el sitio completo" href="spip.php?page=backend" />
+		<!-- favicon -->
+		<link rel="shortcut icon" href="squelettes/images/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href="squelettes/images/favicon.svg" sizes="any" />
+		<link rel="icon" type="image/png" href="squelettes/images/favicon-192x192.png" sizes="192x192" />
+		<!-- Apple touch icon -->
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-120x120.png" sizes="120x120" />
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-180x180.png" sizes="180x180"/>
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-152x152.png" sizes="152x152"/>
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-167x167.png" sizes="167x167"/>		
+		<!-- Phone metas -->
+		<meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+       	<!-- Styles -->
+		<link rel="stylesheet" href="squelettes/css/layout.css" />
+		<link rel="stylesheet" href="squelettes/css/style.css" />
+		<link rel="stylesheet" href="squelettes/css/layout-phone.css" />
+		<link rel="stylesheet" href="squelettes/css/style-phone.css" />		
+		<link rel="stylesheet" href="squelettes/css/fontello.css" /><!-- berio -->
+		<!-- Facebook Share Metas -->
+		<meta property="og:title" content="submap CGeomap" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="debug CGeomap"/>
+		<meta property="og:url" content="https://cgeomap.eu/submap" />
+		<meta property="og:image" content="IMG/png/screenshot.png" />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:width" content="1920" />
+		<meta property="og:image:height" content="1071" />		
+		<!-- google analytics -->
+		<script>
+ 		 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ 		 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ 		 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-76989730-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
+		<!-- jQuery -->
+		<script type="text/javascript" src="https://cgeomap.eu/squelettes/js/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="https://cgeomap.eu/squelettes/js/jquery-ui-1.12.1.min.js"></script>
+		<!-- Fancybox -->
+		<script type="text/javascript" src="https://cgeomap.eu/squelettes/js/fancybox/jquery.fancybox.pack.js"></script>
+		<link rel="stylesheet" href="https://cgeomap.eu/squelettes/js/fancybox/jquery.fancybox.css" type="text/css" />
+		<!-- Soundmanager 2 -->
+		<script type="text/javascript" src="https://cgeomap.eu/squelettes/js/soundmanager2/soundmanager2-jsmin.js"></script>
+		<!-- Leaflet -->
+		<script type="text/javascript" src="https://cgeomap.eu/plugins/vhplab/js/leaflet/leaflet-1.0.2.js"></script>
+		<script type="text/javascript" src="https://cgeomap.eu/plugins/vhplab/js/leaflet/l.control.geosearch.js"></script>
+		<script type="text/javascript" src="https://cgeomap.eu/plugins/vhplab/js/leaflet/l.geosearch.provider.openstreetmap.js"></script>
+		<link rel="stylesheet" href="https://cgeomap.eu/plugins/vhplab/js/leaflet/leaflet-1.0.2.css" />
+		<!-- Spip Lang from Javascript -->
+		<script src="https://cgeomap.eu/spip.php?page=cgeomap_es.js" type="text/javascript"></script>
+		<script type="text/javascript">
+		//<![CDATA[
+			var _T;
+			$(document).ready(function(){
+				_T = new Lang_ES();
+			});
+		//]]>
+		</script>		
+		<!-- CGeomap -->
+		<script src="plugins/vhplab/js/vhplab_geo.js" type="text/javascript"></script>
+		<script src="https://cgeomap.eu/squelettes/js/cgeomap.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="plugins/vhplab/css/vhplab.css" />
+		<script type="text/javascript">
+		//<![CDATA[
+		var cgeomap;
+		$(document).ready(function() {
+			
+			console.log('$(document).ready();');
+			
+			var margin = parseInt(($(window).height() - 424)/2);
+			$("#loading").css("padding-top", margin+"px");
+			
+			$("#select").hide();
+			document.addEventListener("touchstart", function() {},false);
+			
+			$('#loading hgroup').fadeIn();
+			
+			console.log('$.getScript("https://cgeomap.eu/spip.php?page=cgeomap-prototypes-phone.js");');
+			$.getScript("https://cgeomap.eu/spip.php?page=cgeomap-prototypes-phone.js", function(data) {
+				cgeomap = new VhplabInterface();
+				cgeomap.initialize({
+					url_site: 'https://cgeomap.eu/',
+					initial_article: 1,
+					custom_map_prototypes: 'https://cgeomap.eu/spip.php?page=vhplab-geo-prototypes-phone.js',
+					map_opts: {
+						markers: 'spip.php?page=json-vhplab-geo-submap-articles&map=submap',
+						recherche: false,
+						auteur: false,
+						categoria: false,
+						tag: false,
+						meta_tag: false,
+						id: 'cgeomap',
+						zoom: 10,
+						latitude: 42.86884350907664,
+						longitude: -8.55113983154297,
+						custom: true
+					}
+				});
+			});
+		});
+		//]]>
+		</script>		
+	</head>
+	<body class="sommaire phone">
+		
+		<!-- select -->
+		<section id="select">
+			
+		</section>		
+		<!-- block -->
+		<section id="block">
+		
+		</section>		
+		<!-- loading -->
+		<section id="loading">
+			<div class="wrapper">
+				<hgroup>
+				<h1><a href="https://cgeomap.eu/submap">CGeomap</a></h1>
+				<h2>Explorer</h2>
+				<span class="loading btn"><img src="squelettes/images/pix/cgeomap-loader.gif" widt="40px" height="40px"></span>
+				<h3>Cargando...</h3>
+				</hgroup>
+			</div>
+		</section>		
+		<!-- navigation -->
+		<nav id="navigation">
+			<div class="wrapper">
+				<div id="bookmark">
+			
+				</div>
+				<hgroup>
+					<div class="gps btm"><span></span>GPS</div>
+					<div class="bkmrk btn">bkmrk!</div>
+					<h1><a href="https://cgeomap.eu/submap"><img class="logo" alt="debug CGeomap" src="IMG/siteon0.png?1484650300" width="32" height="32" /></a></h1>
+				</hgroup>
+			</div>
+		</nav>		
+		<!-- content -->
+		<section id="content">
+			<div class="wrapper">
+				<ul class="listado_nodos" id="listado_nodos"></ul>
+				<div class="bottom"></div>
+			</div>
+		</section>		
+		<!-- cgeomap -->
+		<section id="cgeomap" class="cgeomap"></section>		
+		<!-- footer -->
+		<footer>
+			<div class="wrapper">
+				<div class="toggle">
+					<span class="toggle_map btn"></span>
+				</div>
+				<div class="location">
+					<span class="location_reload btn"></span>
+					<span class="loading"></span>
+				</div>
+			</div>
+		</footer>		
+	</body>
+</html>

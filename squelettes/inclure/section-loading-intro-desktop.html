@@ -1,0 +1,22 @@
+		<!-- loading -->
+		<section id="loading">
+			<div class="logo"></div>
+			<div class="wrapper">
+				<a class="btn editores" href="#URL_SITE_SPIP/spip.php?page=editar"><:cgeomap:editores:></a>
+				<hgroup>
+					<ul class="intro">
+					<BOUCLE_site(ARTICLES){id_rubrique=3}>
+						<li id="li_#ID_ARTICLE" data-dock="false"[ data-url="(#URL_SITE)"]>
+							<div>
+								#TEXTE
+								<BOUCLE_logo(DOCUMENTS){id_article}{extension IN png,jpg}{titre=logo} {0,1}>[<img class="logo" src="(#URL_DOCUMENT|url_absolue)"[ widt="(#LARGEUR|div{4})px"][ height="(#HAUTEUR|div{4})px"]>]</BOUCLE_logo>	
+							</div>
+							<BOUCLE_bg_image(DOCUMENTS){id_article}{extension IN png,jpg}{titre=bg} {0,1}>[<img class="bg" src="(#URL_DOCUMENT|url_absolue)"[ widt="(#LARGEUR|div{4})px"][ height="(#HAUTEUR|div{4})px"]>]</BOUCLE_bg_image>
+							<BOUCLE_rollover_image(DOCUMENTS){id_article}{extension IN png,jpg}{titre=hover} {0,1}>[<span class="hover" data-src="(#URL_DOCUMENT|url_absolue)"></span>]</BOUCLE_rollover_image>		
+						</li>
+					</BOUCLE_site>
+					</ul>
+					<div class="data"></div>
+				</hgroup>
+			</div>
+		</section>
