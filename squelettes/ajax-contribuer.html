@@ -3,7 +3,7 @@
 
 (#REM) Avoid spip admin buttons
 ][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
-				[(#SET{submap,default})]<BOUCLE_submap(MOTS){id_auteur=#SESSION{id_auteur}}>[(#SET{submap,[(#TITRE)]})]</BOUCLE_submap>
+				[(#SET{submap,default})]<BOUCLE_submap(MOTS){id_auteur=#SESSION{id_auteur}}>[(#SET{submap,[(#TITRE)]})][(#SET{submap_url,[(#DESCRIPTIF|supprimer_tags|extraire_br|texte_backend)]})]</BOUCLE_submap>
 				<div class="module_button" id="add_text_module" data-type="text"></div>
 				<div class="module_button" id="add_link_module" data-type="link"></div>
 				<div class="module_button" id="add_media_module" data-type="media"></div>
@@ -32,6 +32,7 @@
 							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/">
 							<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
 							[<input type="hidden" name="submap" class="submap" value="(#GET{submap})">]
+							[<input type="hidden" name="submap_url" class="submap_url" value="(#GET{submap_url})">]
 						</hgroup>
 					</header>
 					<div class="content">

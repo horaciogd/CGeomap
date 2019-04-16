@@ -85,7 +85,7 @@
 #bookmark .hide:hover:after {
     color:var(--white);
 }
-#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 16px; line-height: 16px; background-color: var(--icons);/*#00adab*/ color: var(--alpha-white);/*rgba(255,255,255,0.8)*/ padding: 6px 8px; margin-top: 8px; border-radius: 10px; border: var(--medium-bg)/*#18c2b1*/ solid 1px; }
+#navigation hgroup .bkmrk, #navigation hgroup .gps{ font-size: 16px; line-height: 16px; background-color: var(--medium-bg);/*#00adab*/ color: var(--alpha-white);/*rgba(255,255,255,0.8)*/ padding: 6px 8px; margin-top: 8px; border-radius: 10px; border: var(--medium-bg)/*#18c2b1*/ solid 1px; }
 #navigation hgroup .bkmrk { -webkit-box-shadow: 0px 2px 4px 0px var(--alpha-shadow);/*rgba(0,0,0,0.3)*/ -moz-box-shadow: 0px 2px 4px 0px var(--alpha-shadow);/*rgba(0,0,0,0.3)*/ box-shadow: 0px 2px 4px 0px var(--alpha-shadow);/*rgba(0,0,0,0.3)*/ }
 #navigation hgroup .bkmrk:active { border-color: var(--bright-bg);/*#0bdec9*/  background-color: var(--bright-bg);/*#0bdec9*/ color: var(--white); /*rgba(255,255,255,1)*/ }
 #navigation hgroup .gps span { background-color: var(--alpha-white);/*rgba(255,255,255,0.8)*/ width: 8px; height: 8px; margin: 0 6px 2px 0; display: inline-block; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
@@ -160,12 +160,12 @@ background: linear-gradient(to right, var(--transparent-bright-bg) 0%,var(--full
 #content .listado_nodos .category_05 .header .info .distance { background-image: url('../images/icons/cgeomap-category-05-bird-@2x.png'); }
 
 #content .listado_nodos .block_category { padding: 4px; margin-bottom: 4px; text-align: center; font-size: .6em; }
-#content .listado_nodos .category_00 .block_category { background-color: #6f1902; }
-#content .listado_nodos .category_01 .block_category { background-color: #1b8602; }
-#content .listado_nodos .category_02 .block_category { background-color: #0079b3; }
-#content .listado_nodos .category_03 .block_category { background-color: #e8032a; }
-#content .listado_nodos .category_04 .block_category { background-color: #b81965; }
-#content .listado_nodos .category_05 .block_category { background-color: #ff7000; }
+#content .listado_nodos .category_00 .block_category { background-color: var(--category-00); }
+#content .listado_nodos .category_01 .block_category { background-color: var(--category-01); }
+#content .listado_nodos .category_02 .block_category { background-color: var(--category-02); }
+#content .listado_nodos .category_03 .block_category { background-color: var(--category-03); }
+#content .listado_nodos .category_04 .block_category { background-color: var(--category-04); }
+#content .listado_nodos .category_05 .block_category { background-color: var(--category-05); }
 #content .listado_nodos .block_category p { color: var(--bright-bg); font-style: italic; }
 
 #content .listado_nodos .header .player, #content .listado_nodos .header .player_icon {
@@ -234,6 +234,33 @@ background: linear-gradient(to right, var(--transparent-bright-bg) 0%,var(--full
 .module .content .wrap { font-size: 0.8em; }
 .module img { border-radius: 4px; }
 .media .content, .video .content { text-align: center; }
+
+.link li a { display: block; position: relative; margin: 4px; padding: 6px 14px 10px 14px; background-color: var(--icons); -webkit-border-radius: 16px; -moz-border-radius: 16px; border-radius: 16px; }
+.link li a:hover, .link li a:active {
+	background-color: var(--acid-blue);
+}
+.link li a:after { 
+	font-family: "fontello";
+	color: var(--white);
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	font-size: 22px !important;
+}
+.link li.internal a:after {
+	content: '\E830';
+}
+.link li.external a:after {
+	content: '\E84B';
+}
+.link li.submap a:after {
+	content: '\E831';
+}
+.link li.iframe a:after {
+	content: '\E832';
+}
+
+.link a { font-size: 12px; line-height: 16px; color: var(--white); }
 
 /* Player  */
 .vhplab_player { text-align: center; }
@@ -314,7 +341,7 @@ footer .location_reload:active:after {
 footer .location_button:active:after { 
     content: '\E805A';
 }
-footer .loading { right: 0; top: 4px; background-image: url('../images/pix/cgeomap-loader-grey.gif') !important; background-size: 40px 40px !important; background-position: 5px 5px; background-repeat: no-repeat;}
+footer .loading { right: 0; top: 4px; background-image: url('../images/pix/cgeomap-loader.gif') !important; background-size: 40px 40px !important; background-position: 5px 5px; background-repeat: no-repeat;}
 footer .toggle_list, footer .toggle_map { 
 	left: 0;
 }

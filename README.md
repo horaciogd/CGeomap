@@ -1,4 +1,4 @@
-CGeomap for Leaflet 1.0.2
+CGeomap for Leaflet 1.1.1
 ========================
 
 
@@ -8,8 +8,8 @@ CGEOMAP nace de una larga trayectoria de colaboración entre varios colectivos a
 
 En este repositorio encontrarás el plugin y los esqueletos de Spip que utilizamos de base para crear nuestros proyectos publicados bajo licencia GNU GENERAL PUBLIC LICENSE. Encontrarás toda la documentación acerca de como utilizarlo y un ejemplo de su uso aquí: http://www.vhplab.net/cgeomap/
 
-Version: 1.1.0
-Date: Wen Aug 1 2018
+Version: 1.1.1
+Date: Tue Apr 16 2019
 
 Enjoy the code and drop me a line for comments and questions!
 horaciogd at vhplab dot net

@@ -14,6 +14,15 @@
 //***********
 VhplabInterface.prototype.ready = function(_opts) {
 	this.map = new VhplabMap();
+	
+	var open;
+	var parametros = cgeomap.parseURL();
+	if ((typeof parametros != "undefined")&&(typeof parametros.nodo != "undefined")) {
+		open = parametros.nodo;
+	} else {
+		(typeof _opts.open != "undefined") ? open = _opts.open : open = false;
+	}
+	
 	this.map.initialize({
 		url: this.url_site,
 		markers: (typeof _opts.markers != "undefined") ? _opts.markers : '',
@@ -26,7 +35,7 @@ VhplabInterface.prototype.ready = function(_opts) {
 		zoom: (typeof _opts.zoom != "undefined") ? _opts.zoom : 10,
 		latitude: (typeof _opts.latitude != "undefined") ? _opts.latitude : 0.0,
 		longitude: (typeof _opts.longitude != "undefined") ? _opts.longitude : 0.0,
-		open: (typeof _opts.open != "undefined") ? _opts.open : false
+		open: open
 	});
 	this.bindToggleContent();
 };
@@ -46,9 +55,15 @@ VhplabInterface.prototype.initialize = function(_opts) {
 		cgeomap.toggleMapNavigation();
 	});
 	
+	$('#navigation .user .facebook').click(function(){
+		cgeomap.shareOverrideOGMeta();
+		return false;
+	});	
+	
 	// Map options
 	if (typeof _opts.map_opts == "undefined") _opts.map_opts = { };
-	// load custom map prototypes console.log('load custom map prototypes');
+	// load custom map prototypes 
+	// console.log('load custom map prototypes');
 	if (typeof _opts.custom_map_prototypes != "undefined") {
 		$.getScript(_opts.custom_map_prototypes, function(data) {
 			cgeomap.ready(_opts.map_opts);
@@ -75,9 +90,9 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	
 };
 VhplabInterface.prototype.loadArticleTemplate = function(_callback) {
-	console.log('/* Map prototype */ cgeomap.loadArticleTemplate()');
+	// console.log('/* Map prototype */ cgeomap.loadArticleTemplate()');
 	// Get URL via log
-	console.log('Article Template URL: '+ this.url_article);
+	// console.log('Article Template URL: '+ this.url_article);
 	$("#content .wrapper").load(this.url_article, function() {
  		/* Editer */
  		$('#article .header .editer').remove();

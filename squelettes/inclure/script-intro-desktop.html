@@ -1,7 +1,43 @@
 		<INCLURE{fond=inclure/script-site}{absolue=true} />
+		<style>
+		:root{
+			--bright-bg: #91fad5;
+			--medium-bg: #47b9bc;
+			--dark-bg: #00a7aa;
+		}
+		</style>
 		<script type="text/javascript">
 		//<![CDATA[
 		$(document).ready(function() {
+			
+			/* Get old node URL to redirect to user's submap */
+			var params = {};
+			var URLarams = window.location.href.split('?');
+			if (typeof URLarams[1] != "undefined")  {
+				var param_array = URLarams[1].split('&');
+    			for(var i in param_array){
+        			x = param_array[i].split('=');
+        			params[x[0]] = x[1];
+    			}
+    			//console.log(JSON.stringify(params));
+    			maps = new Array();
+    			<BOUCLE_submap(MOTS){type=submap}>
+				maps.push({ 
+					["name":"(#TITRE)"][,
+					"url":"(#DESCRIPTIF|supprimer_tags|extraire_br|texte_backend)"],
+					"auteurs":"<BOUCLE_auteur(AUTEURS){id_mot=#ID_MOT}{","}>#ID_AUTEUR</BOUCLE_auteur>"
+				});
+				</BOUCLE_submap>
+    			//console.log(JSON.stringify(maps));
+    			$.each(maps, function(i, map) {
+    				var auteurs = map.auteurs.split(",");
+    				if ((typeof params.author != "undefined")&&($.inArray(params.author, auteurs) != "-1")) {
+    					window.location.assign(map.url+"/?"+URLarams[1]);
+    					//alert(map.url+"/?"+URLarams[1]);
+    				}
+    			});
+    		}
+    		
 			var bgprop = 3840/2160;
 			var wprop = $(window).width() / $(window).height();
 			(bgprop>=wprop) ? $("#loading .wrapper").css("background-size", "auto 100%") : $("#loading .wrapper").css("background-size", "100% auto");

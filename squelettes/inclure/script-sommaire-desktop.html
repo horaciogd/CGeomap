@@ -6,11 +6,34 @@
 		<!-- jQuery mCustomScrollbar -->
 		<script src="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.js})"></script>][
 		<script src="(#CHEMIN{js/jquery.mousewheel.min.js})"></script>][
-		<link rel="stylesheet" href="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.css})" type="text/css" />-->][
+		<link rel="stylesheet" href="(#CHEMIN{js/mCustomScrollbar/jquery.mCustomScrollbar.css})" type="text/css" />][
 		<!-- CGeomap -->
 		<script src="(#CHEMIN{js/vhplab_geo.js}|url_absolue)" type="text/javascript"></script>][
 		<script src="(#CHEMIN{js/cgeomap.js}|url_absolue)" type="text/javascript"></script>][
 		<link rel="stylesheet" href="(#CHEMIN{css/vhplab.css}|url_absolue|direction_css)" />]
+		<!-- FaceBook API -->
+		<script type="text/javascript">
+		//<![CDATA[
+			/* http://drib.tech/programming/dynamically-change-facebook-open-graph-meta-data-javascript */
+			/* https://developers.facebook.com/docs/apps */
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId : '2172562092820673',
+					xfbml : true,
+      				version : 'v3.2'
+				});
+				FB.AppEvents.logPageView();
+  			};
+			(function(d, s, id){
+     			var js, fjs = d.getElementsByTagName(s)[0];
+     			if (d.getElementById(id)) {return;}
+     			js = d.createElement(s); js.id = id;
+     			js.src = "https://connect.facebook.net/en_US/sdk.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+			
+   		//]]>
+		</script>
 		<script type="text/javascript">
 		//<![CDATA[
 		var cgeomap;

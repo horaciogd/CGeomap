@@ -24,6 +24,7 @@ function formulaires_contribuer_charger_dist($id_article='new', $retour='', $aja
 	/* qr */
 	$valeurs['base_url'] = $base_url;
 	$valeurs['qr_url'] = $qr_url;
+	$valeurs['submap_url'] = $submap_url;
 	/* cartography */
 	$valeurs['latitude'] = $latitude;
 	$valeurs['longitude'] = $longitude;
@@ -88,6 +89,7 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 	/* qr */
 	$base_url = _request('base_url');
 	$qr_url = _request('qr_url');
+	$submap_url = _request('submap_url');
 	/* cartography */
 	$latitude = _request('latitude');
 	$longitude = _request('longitude');
@@ -197,10 +199,10 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 			}
 		}
 		$ajouter_documents = charger_fonction('ajouter_documents', 'action');
-		$file = array('name' => 'article_'.$id_article.'_qr.png', 'tmp_name' => $qr_url.urlencode($base_url.'spip.php?author='.$id_auteur.'&nodo='.$id_article));
+		$file = array('name' => 'article_'.$id_article.'_qr.png', 'tmp_name' => $qr_url.urlencode($submap_url.'?author='.$id_auteur.'&nodo='.$id_article));
 		$descriptif = "qr";
 		if ($id_qr!='') {
-			$url = $qr_url.urlencode($base_url.'spip.php?author='.$id_auteur.'&nodo='.$id_article);
+			$url = $qr_url.urlencode($submap_url.'?author='.$id_auteur.'&nodo='.$id_article);
 			$img = 'IMG/png/'.'article_'.$id_article.'_qr.png';
 			file_put_contents($img, file_get_contents($url));
 		} else {
@@ -242,7 +244,7 @@ function formulaires_contribuer_traiter_dist($id_article='new', $retour='', $aja
 		// message
     	return array(
         	"editable" => true,
-        	"message_ok" => _T('cgeomap:message_thanks').':'._T('cgeomap:message_ok').':'.$id_article
+        	"message_ok" => _T('cgeomap:message_thanks').':'._T('cgeomap:message_ok').':'.$id_article.':'.$qr_url.urlencode($submap_url.'?author='.$id_auteur.'&nodo='.$id_article)
 		);
     
 	} else {

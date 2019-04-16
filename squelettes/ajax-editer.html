@@ -3,7 +3,7 @@
 
 (#REM) Avoid spip admin buttons
 ][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][(#HTTP_HEADER{Access-Control-Allow-Origin: *})]
-				<BOUCLE_autoriser(AUTEURS){id_article}>[(#SESSION{id_auteur}|=={#ID_AUTEUR}|?{#SET{autorise,oui}, #SET{autorise,non}})][(#SET{submap,default})]<BOUCLE_submap(MOTS){id_auteur}>[(#SET{submap,[(#TITRE)]})]</BOUCLE_submap></BOUCLE_autoriser>
+				<BOUCLE_autoriser(AUTEURS){id_article}>[(#SESSION{id_auteur}|=={#ID_AUTEUR}|?{#SET{autorise,oui}, #SET{autorise,non}})][(#SET{submap,default})][(#SET{submap_url,[(#URL_SITE_SPIP)/default]})]<BOUCLE_submap(MOTS){id_auteur}>[(#SET{submap,[(#TITRE)]})][(#SET{submap_url,[(#DESCRIPTIF|supprimer_tags|extraire_br|texte_backend)]})]</BOUCLE_submap></BOUCLE_autoriser>
 				[(#SESSION{statut}|=={0minirezo}|?{#SET{autorise,oui}})][(#GET{autorise}|=={oui}|?{[(#SET{article,#ID_ARTICLE})],[(#SET{article,0})]})]
 				<BOUCLE_article(ARTICLES){id_article=#GET{article}}>
 				<div class="module_button" id="add_text_module" data-type="text"></div>
@@ -34,6 +34,7 @@
 							<input type="hidden" name="base_url" class="base_url" value="#URL_SITE_SPIP/">
 							<input type="hidden" name="qr_url" class="qr_url" value="#URL_SITE_SPIP/phpqrcode/myQr.php?data=">
 							[<input type="hidden" name="submap" class="submap" value="(#GET{submap})">]
+							[<input type="hidden" name="submap_url" class="submap_url" value="(#GET{submap_url})">]
 						</hgroup>
 					</header>
 					<div class="content">

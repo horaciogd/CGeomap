@@ -13,6 +13,7 @@
 (#REM) JSONP callback
 ][(#ENV{callback}|oui)jsonArticles(]{[
 	"title": "(#NOM_SITE_SPIP|extraire_br)",][
+	"submap": "(#ENV{map}|==true|?{#ENV{map},basemap})",][
 	"link": "(#URL_SITE_SPIP)/",][
 	"description": "(#DESCRIPTIF_SITE_SPIP|extraire_br)",]	
 	"markers": [[

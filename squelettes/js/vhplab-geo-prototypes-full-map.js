@@ -14,17 +14,17 @@
 // Vhplab Map
 //***********
 VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
-	console.log('/* Map prototype */ cgeomap.addMarkerToLayer();');
+	// console.log('/* Map prototype */ cgeomap.addMarkerToLayer();');
 	// Add marker to marker's list
 	_layer.markerList.push(_marker.id);
 	// Check visibility
-	if ($(_marker.data).data('visibility')=='qr') {
+	if (($(_marker.data).data('visibility')=='qr')&&(cgeomap.visibleNodes.indexOf(parseInt(_marker.id)) < 0)){
 		// QR Marker will be hidden
-		console.log('Marker: '+ _marker.id +'" is qr');
+		// console.log('Marker: '+ _marker.id +'" is qr');
 		return false;
 	} else {
 		// Add marker to leaflet layer
-		console.log('Add Marker: "'+ _marker.id +'" to layer');
+		// console.log('Add Marker: "'+ _marker.id +'" to layer');
 		_layer.layer.addLayer(_marker.marker);
 		// Update navigation html
 		_layer.addToNavigationHtml(cgeomap.createNavigationElement('\t\t\t\t', (_num - _num % 6) / 6, _marker.id, $(_marker.data).data('titre'), $(_marker.data).data('lesauteurs')));		
@@ -32,7 +32,7 @@ VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
 	}
 };
 VhplabMap.prototype.bindActions = function() {
-	console.log('/* Map prototype */ cgeomap.map.bindActions();');
+	// console.log('/* Map prototype */ cgeomap.map.bindActions();');
 	$('#loading_content').fadeOut();
 	$('#loading').fadeOut();
 	cgeomap.map.showLayer('map', false);
@@ -47,6 +47,8 @@ VhplabMap.prototype.initialize = function(_opts) {
 	if ((typeof _opts.tag != "undefined")&&(_opts.tag != false)) this.markersURL +=  '&tag=' + _opts.tag;
 	if ((typeof _opts.meta_tag != "undefined")&&(_opts.meta_tag != false)) this.markersURL +=  '&meta_tag=' + _opts.meta_tag;
 	if (typeof _opts.open != "undefined") this.open = _opts.open;
+	// Visibility settings for qr nodes
+	cgeomap.setVisibleNodes();
 	this.createMap(_opts);
 	this.initMapElements(_opts);
 	if (this.markersURL != '') this.loadMarkers();
@@ -68,12 +70,12 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 
 };
 VhplabMap.prototype.loadMarkers = function() {
-	console.log('/* Map prototype */ cgeomap.map.loadMarkers();');
+	// console.log('/* Map prototype */ cgeomap.map.loadMarkers();');
 	var url = this.markersURL +'&callback=?';
 	/* Load article template */
 	cgeomap.loadArticleTemplate(function(){
 		// Get URL via log
-		console.log('Markers URL: '+ url);
+		// console.log('Markers URL: '+ url);
 		$.ajax({
 			type: 'GET',
 			url: url,
@@ -84,7 +86,8 @@ VhplabMap.prototype.loadMarkers = function() {
 			dataType: 'jsonp',
 			success: function(_data, _textStatus, _jqXHR) {
 				// Get _data via log // toSource no EXISTE !!!! //
-				/// console.log('_data: '+ _data.toSource());
+				// console.log('_data: '+ _data.toSource());
+				cgeomap.map.submap = _data.submap;
 				cgeomap.map.addMarkers(_data, 'map', function(){
 					cgeomap.map.bindActions();
 				});
@@ -95,7 +98,7 @@ VhplabMap.prototype.loadMarkers = function() {
 	});
 };
 VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
-	console.log('/* Map prototype */ cgeomap.map.showLayer("'+ _name +'");');
+	// console.log('/* Map prototype */ cgeomap.map.showLayer("'+ _name +'");');
 	if (this.activeLayer != _name) {
 		// Get layer
 		var target = this.getLayer(_name);
@@ -148,7 +151,8 @@ VhplabMarker.prototype.appendContent = function() {
 		
 	/* modules */
 	} else {
-		$('#article .modules').append($(this.data).data('texte'));
+		var category = $(this.data).data('category');
+		$('#article .modules').append('<div class="block_category '+ category.id +'">'+ category.nom +'</div><!-- category -->'+ $(this.data).data('texte'));
 		$("#article .modules_list header").hover(function() {
     			$('.toggle', this).addClass('hover');
   			}, function() {
@@ -172,8 +176,11 @@ VhplabMarker.prototype.appendContent = function() {
 				cgeomap.internalizeLink(this);
 			});
 		});
-		console.log('/* fancybox */');
+		// console.log('/* fancybox */');
 		$("#article .modules_list .vimeo").fancybox({
+			beforeLoad: function () {
+				this.href += '?autoplay=1'
+    		},
 			'width'				: $("#article .modules_list .vimeo").data('width'),
 			'height'			: $("#article .modules_list .vimeo").data('height'),
         	'arrows'     		: false,
@@ -217,13 +224,13 @@ VhplabMarker.prototype.click = function(_callback) {
 		if (!this.infoWindow._isOpen) this.infoWindow.openOn(this.parent.map);
 	}
 	*/
-	console.log('Marker click();');
-	console.log('marker.id = '+ this.id);
+	// console.log('Marker click();');
+	// console.log('marker.id = '+ this.id);
 	if (!this.open) {
-		console.log('marker.open = false');
+		// console.log('marker.open = false');
 		var self = this;
 		if (this.loadded) {
-			console.log('marker.loadded = true');
+			// console.log('marker.loadded = true');
 			cgeomap.slideContent('hide', function() {
 				self.appendContent();
 				cgeomap.slideContent('show', function() {
@@ -234,18 +241,18 @@ VhplabMarker.prototype.click = function(_callback) {
 				self.openInfoWindow();
 			});
 		} else {
-			console.log('marker.loadded = false');
+			// console.log('marker.loadded = false');
 			$('#loading_content').fadeIn();
 			cgeomap.slideContent('hide', function() {
 				// image size for automatic processing
 				var width = 330;
 				var height = 120;
 				// Get URL via log
-				console.log('Marker json URL: '+ self.json +'&width='+ width +'&height='+ height);
+				// console.log('Marker json URL: '+ self.json +'&width='+ width +'&height='+ height);
 				$.getJSON(self.json +'&width='+ width +'&height='+ height, function(data) {
 					$('#loading_content').fadeOut();
 					$.each(data[0].marker, function(i, marker){
-						console.log('Each loop: '+ i +' marker id'+ marker.id);
+						// console.log('Each loop: '+ i +' marker id '+ marker.id_article);
 						self.loadWindowData(marker);
 						self.appendContent();
 						cgeomap.slideContent('show', function() {
@@ -259,7 +266,7 @@ VhplabMarker.prototype.click = function(_callback) {
 			});
 		}
 	} else {
-		console.log('marker.open = true');
+		// console.log('marker.open = true');
 		if (!this.infoWindow._isOpen) this.infoWindow.openOn(this.parent.map);
 		if (_callback) _callback();
 	}

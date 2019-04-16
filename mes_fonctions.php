@@ -64,6 +64,12 @@ function extraire_br($baliza) {
 	$return = str_replace("\"", "'", $return);
 	return $return;
 }
+function normalize_url($baliza) {
+	$l = substr($baliza, -1);
+	$return = $baliza;
+	if ($l != "/") $return .= "/";
+	return $return;
+}
 function extraire_formulaire_module($baliza) {
 	$baliza = str_replace("<br class='autobr' />", "", $baliza);
 	$block_list = explode('</block>', $baliza);
@@ -184,6 +190,32 @@ function extraire_module_sumary($baliza){
 			}
 		}
 		return $return;
+	} else {
+		return $baliza;
+	}
+}
+function extraire_module_image($baliza){
+	if (strpos($baliza,'</block>')) {
+		$baliza = str_replace("<br class='autobr' />", "", $baliza);
+		$block_list = explode('</block>', $baliza);
+		$images = "";
+		for ($i=0; $i<count($block_list)-1; $i++) {
+			$block = get_block($block_list[$i]);
+			// $return .= '('.$i.') '.$block['class'];
+			$modules = get_modules($block['content']);
+			// $return .= ' - num modules:'.count($modules).' ';
+			for ($u=0; $u<count($modules); $u++) {
+				// $return .= $modules[$u]['class'].' ';
+				switch ($modules[$u]['class']) {
+					case "media":
+						$image = explode(' ', $modules[$u]['content']);
+						$images .= $image[1].' ';
+						break;
+				}
+			}
+		}
+		$return = explode(' ', $images);
+		return $return[0];
 	} else {
 		return $baliza;
 	}
@@ -324,11 +356,11 @@ function get_link_form_module($text, $name, $t, $n_link) {
 			$content = substr($this_link[1], 0, -3);
 			$return .= $t."\t\t\t<li>\n";
 			$return .= $t."\t\t\t\t<div class=\"value_box\">\n";
-			$return .= $t."\t\t\t\t\t<a href=\"".$url."\" class=\"value\" target=\"_blank\">".$content."</a><span class=\"remove btn\">-</span>\n";
+			$return .= $t."\t\t\t\t\t<a href=\"".htmlspecialchars_decode ($url)."\" class=\"value\" target=\"_blank\">".$content."</a><span class=\"remove btn\">-</span>\n";
 			$return .= $t."\t\t\t\t</div>\n";
 			$return .= $t."\t\t\t\t<div style=\"display: none;\" class=\"field_box\">\n";
 			$return .= $t."\t\t\t\t\t<fieldset>\n";
-			$return .= $t."\t\t\t\t\t\t<input value=\"".$url."\" class=\"form-control url_link\" name=\"url_link\" placeholder=\"Dirección\" type=\"text\">\n";
+			$return .= $t."\t\t\t\t\t\t<input value=\"".htmlspecialchars_decode($url)."\" class=\"form-control url_link\" name=\"url_link\" placeholder=\"Dirección\" type=\"text\">\n";
 			$return .= $t."\t\t\t\t\t\t<input value=\"".$content."\" class=\"form-control text_link\" name=\"text_link\" placeholder=\"Texto\" type=\"text\">\n";
 			$return .= $t."\t\t\t\t\t</fieldset>\n";
 			$return .= $t."\t\t\t\t</div>\n";
@@ -359,7 +391,7 @@ function get_link_module($text, $name, $t) {
 			$this_link = explode('>', $this_link[1]);
 			$content = substr($this_link[1], 0, -3);
 			$return .= $t."\t\t\t<li>\n";
-			$return .= $t."\t\t\t\t<a href=\"".$url."\" class=\"value\" target=\"_blank\">".$content."</a>\n";
+			$return .= $t."\t\t\t\t<a href=\"".htmlspecialchars_decode ($url)."\" class=\"value\" target=\"_blank\">".$content."</a>\n";
 			$return .= $t."\t\t\t</li>\n";
 		}
 	}

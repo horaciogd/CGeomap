@@ -9,7 +9,7 @@
 					<!-- login -->][<!-- ajax loadded user -->(#SESSION{id_auteur}|oui)
 					<div class='login data' data-auteur="[(#SESSION{id_auteur})]" data-session="ok"[(#SESSION{statut}|=={0minirezo}|oui) data-admin="ok"]>
 						<span>[(#SESSION{id_auteur}|?{#SESSION{nom}})]</span>
-						<a class="btn" name="logout" id="logout" href="[(#URL_LOGOUT{#URL_PAGE{editar}})]"><:cgeomap:submit_logout:></a>
+						<a class="btn" name="logout" id="logout" href="[(#URL_LOGOUT{#URL_PAGE{sommaire}})]"><:cgeomap:submit_logout:></a>
 					</div><!-- login -->
 					<ul class="utilities">
 						<li><a class="btn carte" name="carte"><:cgeomap:mapa:></a></li>

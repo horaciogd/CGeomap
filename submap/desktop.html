@@ -2,7 +2,7 @@
 <html dir="ltr" lang="es">
 	<head>
 		<!-- Site info -->
-		<title>demos CGeomap</title>
+		<title>submap CGeomap</title>
 		<meta name="keywords" content="geolocation, spatial narrative, activism, open source, mapping, gps museum, escoitar, vhpalab, locative web app">
 		<meta name="author" content="una sinergia de VHPlab y GPS Museum" />
 		<!-- Basic metas -->
@@ -12,14 +12,28 @@
 		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://www.googletagmanager.com https://*.debug.cgeomap.eu/ https://cgeomap.eu/ https://www.google-analytics.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src *; frame-src 'self' https://*.debug.cgeomap.eu/ https://cgeomap.eu/ https://vimeo.com/ https://youtube.com/ https://*.vimeo.com/ https://*.youtube.com/;">-->
        	<link rel="alternate" type="application/rss+xml" title="Sindicar el sitio completo" href="spip.php?page=backend" />
 		<!-- favicon -->
-		<link rel="shortcut icon" href="squelettes/images/favicon.ico" />
-		<link rel="icon" type="image/svg+xml" href="squelettes/images/favicon.svg" sizes="any" />
-		<link rel="icon" type="image/png" href="squelettes/images/favicon-192x192.png" sizes="192x192" />
+		<link rel="shortcut icon" type="image/x-icon" href="squelettes/images/icons/favicon.ico" />
+		<link rel="icon" type="image/png" href="squelettes/images/icons/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="squelettes/images/icons/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/svg+xml" href="squelettes/images/icons/favicon.svg" sizes="any" />
 		<!-- Apple touch icon -->
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-120x120.png" sizes="120x120" />
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-180x180.png" sizes="180x180"/>
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-152x152.png" sizes="152x152"/>
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-167x167.png" sizes="167x167"/>		
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-57x57.png" sizes="57x57">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-60x60.png" sizes="60x60">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-72x72.png" sizes="72x72">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-76x76.png" sizes="76x76">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-114x114.png" sizes="114x114">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-120x120.png" sizes="120x120">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-144x144.png" sizes="144x144">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-152x152.png" sizes="152x152">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-180x180.png" sizes="180x180">
+		<!-- Android Chrome-->
+		<link rel="manifest" href="squelettes/images/icons/site.webmanifest">
+		<!-- macOS Safari-->
+		<link rel="mask-icon" href="squelettes/images/icons/safari-pinned-tab.svg" color="#e5322b">
+		<!-- IE 12 -->
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-config" content="squelettes/images/icons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
 		<!-- Desktop metas -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Styles -->
@@ -29,11 +43,11 @@
 		<link rel="stylesheet" href="squelettes/css/layout-desktop.css" />
 		<link rel="stylesheet" href="squelettes/css/style-desktop.css" />
 		<!-- Facebook Share Metas -->
-		<meta property="og:title" content="demos CGeomap" />
+		<meta property="og:title" content="submap CGeomap" />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="submapa debug CGeomap"/>
-		<meta property="og:url" content="https://cgeomap.eu/demos" />
-		<meta property="og:image" content="IMG/png/screenshot.png" />
+		<meta property="og:url" content="https://cgeomap.eu/submap" />
+		<meta property="og:image" content="https://cgeomap.eu/submap/IMG/png/screenshot.png" />
 		<meta property="og:image:type" content="image/png" />
 		<meta property="og:image:width" content="1920" />
 		<meta property="og:image:height" content="1071" />		
@@ -78,6 +92,29 @@
 		<script src="plugins/vhplab/js/vhplab_geo.js" type="text/javascript"></script>
 		<script src="https://cgeomap.eu/squelettes/js/cgeomap.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="plugins/vhplab/css/vhplab.css" />
+		<!-- FaceBook API -->
+		<script type="text/javascript">
+		//<![CDATA[
+			/* http://drib.tech/programming/dynamically-change-facebook-open-graph-meta-data-javascript */
+			/* https://developers.facebook.com/docs/apps */
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId : '2172562092820673',
+					xfbml : true,
+      				version : 'v3.2'
+				});
+				FB.AppEvents.logPageView();
+  			};
+			(function(d, s, id){
+     			var js, fjs = d.getElementsByTagName(s)[0];
+     			if (d.getElementById(id)) {return;}
+     			js = d.createElement(s); js.id = id;
+     			js.src = "https://connect.facebook.net/en_US/sdk.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+			
+   		//]]>
+		</script>
 		<script type="text/javascript">
 		//<![CDATA[
 		var cgeomap;
@@ -93,7 +130,7 @@
 					url_article: 'ajax-content-squelette.html',
 					custom_map_prototypes: 'https://cgeomap.eu/spip.php?page=vhplab-geo-prototypes-full-map.js',
 					map_opts: {
-						markers: 'spip.php?page=json-vhplab-geo-submap-articles&map=demos&offset=0&limit=300',
+						markers: 'spip.php?page=json-vhplab-geo-submap-articles&map=submap&offset=0&limit=300',
 						recherche: false,
 						auteur: false,
 						categoria: false,
@@ -126,7 +163,7 @@
 		<nav id="navigation">
 			<div class="wrapper">
 				<hgroup>
-					<h1><a href="https://cgeomap.eu/demos"><img class="logo" alt="debug CGeomap" src="logo.png" width="220" height="220" /></a></h1>
+					<h1><a href="https://cgeomap.eu/submap"><img class="logo" alt="debug CGeomap" src="logo.png" width="220" height="220" /></a></h1>
 					<a class="info" href="http://info.cgeomap.eu/"></a>
 				</hgroup>
 				<div class="menu articles">

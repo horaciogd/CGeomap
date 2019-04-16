@@ -46,6 +46,8 @@
 					url_site: '(#URL_SITE_SPIP|url_absolue)',][
 					initial_article: (#GET{initial}),][
 					custom_map_prototypes: '(#URL_PAGE{vhplab-geo-prototypes-phone.js}|url_absolue)',]
+					proximity_distance: 50,
+					autoplay_distance: 20,
 					map_opts: {<BOUCLE_get_map(RUBRIQUES){titre=mapa}>
 						markers: 'spip.php?page=json-vhplab-geo-articles&id_rubrique=#ID_RUBRIQUE'</BOUCLE_get_map>[,
 						auteur: (#ENV{author}|?{#ENV{author},"'none'"})],

@@ -28,14 +28,15 @@
 		"visites": "(#VISITES)"][,
 		"popularite": "(#POPULARITE)"][,
 		"lang": "(#LANG)"]<B_autores>,
-		<BOUCLE_autores(AUTEURS){id_article}{0,1}>"auteur": {["nom": "(#NOM|supprimer_numero|texte_json|texte_backend)"][, "creator": "(#LESAUTEURS|texte_json|texte_backend)"][, "url_auteur": "(#URL_AUTEUR|url_absolue)"]}[(#SESSION{id_auteur}|=={#ID_AUTEUR}|?{#SET{autorise,oui}, #SET{autorise,non}})]</BOUCLE_autores></B_autores>[(#SESSION{statut}|=={0minirezo}|?{#SET{autorise,oui}})][,
-		"autorise": "(#GET{autorise})"][,
+		<BOUCLE_autores(AUTEURS){id_article}{0,1}>"auteur": {["nom": "(#NOM|supprimer_numero|texte_json|texte_backend)"][, "creator": "(#LESAUTEURS|texte_json|texte_backend)"][, "url_auteur": "(#URL_AUTEUR|url_absolue)"]}[(#SESSION{id_auteur}|=={#ID_AUTEUR}|?{#SET{autorise,oui}, #SET{autorise,non}})][(#SESSION{statut}|=={0minirezo}|?{#SET{autorise,oui}})][,
+		"autorise": "(#GET{autorise})",]
+		"submap": [(#SET{submap,default})][(#SET{submap_url,[(#URL_SITE_SPIP)]})]<BOUCLE_submap(MOTS){id_auteur}>[(#SET{submap,[(#TITRE)]})][(#SET{submap_url,[(#DESCRIPTIF|supprimer_tags)]})]</BOUCLE_submap>{["id": "(#GET{submap})"][, "url": "(#GET{submap_url})"]}</BOUCLE_autores></B_autores>[,
 		"url_article": "(#URL_SITE_SPIP)/spip.php?nodo=#ID_ARTICLE"][,
 		"url_editer": "(#URL_PAGE{ajax-editer}|url_absolue)[&id_article=(#ID_ARTICLE)][&id_rubrique=(#ID_RUBRIQUE)]&var_mode=recalcul"]<BOUCLE_gis(VHPLAB_GIS){id_article}>[,
 		"lat": "(#LATITUDE)"][,
 		"lng": "(#LONGITUDE)"][,
 		"zoom": "(#ZOOM)"]</BOUCLE_gis>,
-		"category":<B_category><BOUCLE_category(MOTS){id_article}{type=category}> {["id": "(#TITRE|supprimer_numero|texte_json|texte_backend)"][, "nom": "(#DESCRIPTIF|extraire_br)"]}</BOUCLE_category></B_category>{"id": "category_00", "nom": "<p>Categor&iacute;a 01</p>"}<//B_category>[,
+		"category":<B_category><BOUCLE_category(MOTS){id_article}{type=#GET{submap}}> {["id": "(#TITRE|supprimer_numero|texte_json|texte_backend)"][, "nom": "(#DESCRIPTIF|extraire_br)"]}</BOUCLE_category></B_category><B_alternative_category><BOUCLE_alternative_category(MOTS){id_article}{type=default}>{["id": "(#TITRE|supprimer_numero|texte_json|texte_backend)"][, "nom": "(#DESCRIPTIF|extraire_br)"]}</BOUCLE_alternative_category></B_alternative_category>{"id": "default_category", "nom": "<p><:cgeomap:default_category:></p>"}<//B_alternative_category><//B_category>[,
 		(#MODELE{icon}{id_article})]<BOUCLE_qr(DOCUMENTS){id_article}{extension==png}{descriptif==qr}{0,1}{doublons}>[,
 		"url_qr": "(#URL_DOCUMENT|url_absolue)"]</BOUCLE_qr><B_image>,
 		<BOUCLE_image(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,1}{doublons}>"image": {[

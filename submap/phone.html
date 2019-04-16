@@ -12,14 +12,28 @@
 		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://www.googletagmanager.com https://*.debug.cgeomap.eu/ https://cgeomap.eu/ https://www.google-analytics.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src *; frame-src 'self' https://*.debug.cgeomap.eu/ https://cgeomap.eu/ https://vimeo.com/ https://youtube.com/ https://*.vimeo.com/ https://*.youtube.com/;">-->
        	<link rel="alternate" type="application/rss+xml" title="Sindicar el sitio completo" href="spip.php?page=backend" />
 		<!-- favicon -->
-		<link rel="shortcut icon" href="squelettes/images/favicon.ico" />
-		<link rel="icon" type="image/svg+xml" href="squelettes/images/favicon.svg" sizes="any" />
-		<link rel="icon" type="image/png" href="squelettes/images/favicon-192x192.png" sizes="192x192" />
+		<link rel="shortcut icon" type="image/x-icon" href="squelettes/images/icons/favicon.ico" />
+		<link rel="icon" type="image/png" href="squelettes/images/icons/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="squelettes/images/icons/favicon-32x32.png" sizes="32x32" />
+		<link rel="icon" type="image/svg+xml" href="squelettes/images/icons/favicon.svg" sizes="any" />
 		<!-- Apple touch icon -->
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-120x120.png" sizes="120x120" />
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-180x180.png" sizes="180x180"/>
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-152x152.png" sizes="152x152"/>
-		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/apple-touch-icon-167x167.png" sizes="167x167"/>		
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-57x57.png" sizes="57x57">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-60x60.png" sizes="60x60">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-72x72.png" sizes="72x72">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-76x76.png" sizes="76x76">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-114x114.png" sizes="114x114">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-120x120.png" sizes="120x120">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-144x144.png" sizes="144x144">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-152x152.png" sizes="152x152">
+		<link rel="apple-touch-icon" type="image/png" href="squelettes/images/icons/apple-touch-icon-180x180.png" sizes="180x180">
+		<!-- Android Chrome-->
+		<link rel="manifest" href="squelettes/images/icons/site.webmanifest">
+		<!-- macOS Safari-->
+		<link rel="mask-icon" href="squelettes/images/icons/safari-pinned-tab.svg" color="#e5322b">
+		<!-- IE 12 -->
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-config" content="squelettes/images/icons/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">			
 		<!-- Phone metas -->
 		<meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -35,7 +49,7 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="debug CGeomap"/>
 		<meta property="og:url" content="https://cgeomap.eu/submap" />
-		<meta property="og:image" content="IMG/png/screenshot.png" />
+		<meta property="og:image" content="https://cgeomap.eu/submap/IMG/png/screenshot.png" />
 		<meta property="og:image:type" content="image/png" />
 		<meta property="og:image:width" content="1920" />
 		<meta property="og:image:height" content="1071" />		
@@ -98,6 +112,8 @@
 					url_site: 'https://cgeomap.eu/',
 					initial_article: 1,
 					custom_map_prototypes: 'https://cgeomap.eu/spip.php?page=vhplab-geo-prototypes-phone.js',
+					proximity_distance: 100,
+					autoplay_distance: 20,
 					map_opts: {
 						markers: 'spip.php?page=json-vhplab-geo-submap-articles&map=submap',
 						recherche: false,

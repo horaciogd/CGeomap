@@ -8,13 +8,29 @@
 		<meta name="generator" content="SPIP[ (#SPIP_VERSION)]" />[
 		<meta name="encoding" charset="(#CHARSET)" />][
 		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://www.googletagmanager.com[ https://*.(#URL_SITE_SPIP|replace{https://,''})/][ https://(#URL_SITE_SPIP|replace{https://,''})/] https://www.google-analytics.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src *; frame-src 'self'[ https://*.(#URL_SITE_SPIP|replace{https://,''})/][ https://(#URL_SITE_SPIP|replace{https://,''})/] https://vimeo.com/ https://youtube.com/ https://*.vimeo.com/ https://*.youtube.com/;">-->
-       	<link rel="alternate" type="application/rss+xml" title="<:syndiquer_site:>" href="(#URL_PAGE{backend})" />]
-		<!-- favicon -->[
-		<link rel="shortcut icon" href="(#CHEMIN{images/favicon.ico})" />][
-		<link rel="icon" type="image/svg+xml" href="(#CHEMIN{images/favicon.svg})" sizes="any" />][
-		<link rel="icon" type="image/png" href="(#CHEMIN{images/favicon-192x192.png})" sizes="192x192" />]
+		<link rel="alternate" type="application/rss+xml" title="<:syndiquer_site:>" href="(#URL_PAGE{backend})" />][
+       	(#REM) favicon -> https://realfavicongenerator.net/]
+       	<!-- favicon -->[
+		<link rel="shortcut icon" type="image/x-icon" href="(#CHEMIN{images/icons/favicon.ico})" />][
+		<link rel="icon" type="image/png" href="(#CHEMIN{images/icons/favicon-16x16.png})" sizes="16x16" />][
+		<link rel="icon" type="image/png" href="(#CHEMIN{images/icons/favicon-32x32.png})" sizes="32x32" />][
+		<link rel="icon" type="image/svg+xml" href="(#CHEMIN{images/icons/favicon.svg})" sizes="any" />]
 		<!-- Apple touch icon -->[
-		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-120x120.png})" sizes="120x120" />][
-		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-180x180.png})" sizes="180x180"/>][
-		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-152x152.png})" sizes="152x152"/>][
-		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/apple-touch-icon-167x167.png})" sizes="167x167"/>]
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-57x57.png})" sizes="57x57">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-60x60.png})" sizes="60x60">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-72x72.png})" sizes="72x72">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-76x76.png})" sizes="76x76">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-114x114.png})" sizes="114x114">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-120x120.png})" sizes="120x120">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-144x144.png})" sizes="144x144">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-152x152.png})" sizes="152x152">][
+		<link rel="apple-touch-icon" type="image/png" href="(#CHEMIN{images/icons/apple-touch-icon-180x180.png})" sizes="180x180">]
+		<!-- Android Chrome-->[
+		<link rel="manifest" href="(#CHEMIN{images/icons/site.webmanifest})">]
+		<!-- macOS Safari-->[
+		<link rel="mask-icon" href="(#CHEMIN{images/icons/safari-pinned-tab.svg})" color="#47babd">]
+		<!-- IE 12 -->[
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-config" content="(#CHEMIN{images/icons/browserconfig.xml})">
+		<meta name="theme-color" content="#ffffff">]
+		

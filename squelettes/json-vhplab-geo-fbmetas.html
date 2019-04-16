@@ -1,0 +1,25 @@
+[(#REM) 24h cache
+][(#CACHE{24*3600})][
+
+(#REM) JSON header
+][(#HTTP_HEADER{Content-Type: application/json[; charset=(#CHARSET)]})][
+
+(#REM) Acces Control header
+][(#HTTP_HEADER{Access-Control-Allow-Origin: *})][
+
+(#REM) JSONP callback
+][(#ENV{callback}|oui)[(#ENV{callback})(]][{
+	"marker": [<B_unique_url><BOUCLE_unique_url(ARTICLES){id_article=#ENV{nodo}}{0,1}>{[
+		"title": "(#TITRE|supprimer_numero|texte_script)[ - (#SOUSTITRE|supprimer_numero|texte_script)]"][,
+		"description": "(#TEXTE|extraire_module_sumary|couper{150}|extraire_br|texte_script)",]
+		"type": "website"[,
+		"site_name": "(#NOM_SITE_SPIP|attribut_html)"]<BOUCLE_autores(AUTEURS){id_article}{0,1}><BOUCLE_submap(MOTS){id_auteur}>[,
+		"url": "(#DESCRIPTIF|supprimer_tags|extraire_br|texte_backend|normalize_url)?nodo=#ENV{nodo}"]</BOUCLE_submap></BOUCLE_autores><BOUCLE_qr(DOCUMENTS){id_article}{extension==png}{descriptif==qr}{0,1}{doublons}></BOUCLE_qr><BOUCLE_image_id(DOCUMENTS){id_article}{extension==jpg|png|gif}{0,1}{doublons}>[(#SET{image,#ID_DOCUMENT})]</BOUCLE_image_id>[(#TEXTE|extraire_module_image|oui)[(#SET{image,[(#TEXTE|extraire_module_image)]})]]<BOUCLE_image(DOCUMENTS){id_document=#GET{image}}{extension==jpg|png|gif}{0,1}>[,
+		"image": "(#FICHIER|image_reduire{0,630}|image_recadre{1200,630,'top center'}|extraire_attribut{src}|url_absolue)"][,
+		"image_type": "image/(#EXTENSION)"][,
+		"width": "(#FICHIER|image_reduire{0,630}|image_recadre{1200,630,'top center'}|extraire_attribut{width})"][,
+		"height": "(#FICHIER|image_reduire{0,630}|image_recadre{1200,630,'top center'}|extraire_attribut{height})"]</BOUCLE_image><B_mp3><BOUCLE_mp3(DOCUMENTS){id_article}{extension=mp3}{0,1}>[,
+		"audio": "(#URL_DOCUMENT|url_absolue)"],
+		"audio_type": "audio/vnd.facebook.bridge"</BOUCLE_mp3></B_mp3>
+	}</BOUCLE_unique_url>]
+}][);(#ENV{callback}|oui)]

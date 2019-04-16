@@ -40,6 +40,7 @@ function VhplabMap() {
 	this.baseURL = ''; 
 	this.markersURL = '';
 	this.auteur = 'none';
+	this.submap = '';
 	this.offset = 0;
 	this.limit = 200;
 	this.latitudeTag = "#vhplab_latitude";
@@ -63,22 +64,22 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
 	target.reset();
 	// Count markers
 	var count = $(_data.markers).length - 1;
-	console.log('Total Markers = '+ $(_data.markers).length);
+	// console.log('Total Markers = '+ $(_data.markers).length);
 	var num = 0; 
 	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, marker) {
-			console.log('Looping through each marker: i = '+ i +', count = '+ count);
+			// console.log('Looping through each marker: i = '+ i +', count = '+ count);
 			if (cgeomap.map.createMarker(_data.link, marker, num, target)) num ++;
 			// Finish when all markers are looped
 			if(i==count) {
 				// Paginate only if needed
 				(num>6) ? target.pagination = true : target.pagination = false;
 				target.pages =  (num - num % 6) / 6;
-				console.log('markerList: '+ target.markerList.toString());
+				// console.log('markerList: '+ target.markerList.toString());
 				// Esto no puede estar funcionando bien ???
-				console.log('layer.length: '+ target.layer.getLayers().length);
+				// console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
 				if (_callback) _callback();
 			}
@@ -89,18 +90,18 @@ VhplabMap.prototype.addMarkers = function(_data, _layer, _callback) {
 	}
 };
 VhplabMap.prototype.addMarkersToEditorLayer = function() {
-	console.log('cgeomap.map.addMarkersToEditorLayer();');
+	// console.log('cgeomap.map.addMarkersToEditorLayer();');
 	// Empty layer
 	var target = this.getLayer('editor');
 	target.reset();
 	// Get editor id
 	var auteur = $("#user .data").data("auteur");
-	console.log('Editor id = '+ auteur +', typeof '+ typeof auteur);
+	// console.log('Editor id = '+ auteur +', typeof '+ typeof auteur);
 	// count only editor markers
 	var n = 0;
 	// Add Markers to editor layer
 	$.each($(this.markers).data(), function(i, marker) {
-		console.log('Looping through each marker: i = '+ i +', n = '+ n);
+		// console.log('Looping through each marker: i = '+ i +', n = '+ n);
 		// console.log('Marker: "'+ e.id +'", Auteurs: '+ e.auteurs.toString() +', '+ jQuery.inArray(auteur, e.auteurs) +', typeof '+ typeof e.auteurs[0]);
 		if (jQuery.inArray(auteur, marker.auteurs)>=0)  { 
 			// Add marker to vhpLayer
@@ -110,14 +111,14 @@ VhplabMap.prototype.addMarkersToEditorLayer = function() {
 	});
 	(n>6) ? target.pagination = true : target.pagination = false;
 	target.pages =  (n - n % 6) / 6;
-	console.log('markerList: '+ target.markerList.toString());
-	console.log('layer.length: '+ target.layer.getLayers().length);
-	console.log('target.pagination: '+ target.pagination);
-	console.log('n: '+ n);
+	// console.log('markerList: '+ target.markerList.toString());
+	// console.log('layer.length: '+ target.layer.getLayers().length);
+	// console.log('target.pagination: '+ target.pagination);
+	// console.log('n: '+ n);
 };
 VhplabMap.prototype.addMarkerToLayer = function(_marker, _num, _layer) {
-	console.log('/* Original prototype */ cgeomap.addMarkerToLayer();');
-	console.log('Add Marker: "'+ _marker.id +'" to layer');
+	// console.log('/* Original prototype */ cgeomap.addMarkerToLayer();');
+	// console.log('Add Marker: "'+ _marker.id +'" to layer');
 	// Add marker to marker's list
 	_layer.markerList.push(_marker.id);
 	// Add marker to leaflet layer
@@ -156,14 +157,14 @@ VhplabMap.prototype.createMap = function(_opts) {
 	this.lng = _opts.longitude;
 	this.zoom = _opts.zoom;
 	this.map = L.map(_opts.id, { zoomControl: false }).setView([_opts.latitude, _opts.longitude], _opts.zoom);
-	/* stamen-tiles */
-	this.tileLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
-		attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-		subdomains: 'abcd',
+	/* https://leaflet-extras.github.io/leaflet-providers/preview/ */
+	/* openstreetmap-tiles */
+	this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 0,
-		maxZoom: 20,
-		ext: 'png'
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	});
+	/* HERE.hybridDay */
 	this.satelliteLayer = L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/{type}/{mapID}/hybrid.day/{z}/{x}/{y}/{size}/{format}?app_id={app_id}&app_code={app_code}&lg={language}', {
 		attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
 		subdomains: '1234',
@@ -180,11 +181,11 @@ VhplabMap.prototype.createMap = function(_opts) {
 	this.tileLayer.addTo(this.map);
 };
 VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer) {
-	console.log('/* Original prototype */ cgeomap.map.createMarker();');
+	// console.log('/* Original prototype */ cgeomap.map.createMarker();');
 	// create Marker
 	var marker = new VhplabMarker();
 	marker.initialize(_path, _markerData, this);
-	console.log('Create Marker: "'+ marker.id);
+	// console.log('Create Marker: "'+ marker.id);
 	// Save marker as jQuery data
 	$(this.markers).data('marker_'+ marker.id, marker);
 	// Add marker to vhpLayer
@@ -210,15 +211,15 @@ VhplabMap.prototype.getLayer = function(_name) {
 VhplabMap.prototype.hideActiveLayer = function() {
 	switch (this.activeLayer) {
 		case 'editor':
-			console.log('hide editorLayer();');
+			// console.log('hide editorLayer();');
 			this.map.removeLayer(this.editorLayer.layer);
 			break;
 		case 'map':
-			console.log('hide mapLayer();');
+			// console.log('hide mapLayer();');
 			this.map.removeLayer(this.mapLayer.layer);
 			break;
 		case 'empty':
-			console.log('hide emptyLayer();');
+			// console.log('hide emptyLayer();');
 			this.map.removeLayer(this.emptyLayer.layer);
 			break;
 		case '':
@@ -229,14 +230,14 @@ VhplabMap.prototype.hideMarkers = function(_exception) {
 	/*
 	if (typeof _exception != "undefined") {
 	
-		console.log('map.hideMarkers(); - _exception');
+		// console.log('map.hideMarkers(); - _exception');
 		
 		$.each($(this.markers).data(),function(i, e) {
 			if (jQuery.inArray(e.id, _exception)<0) cgeomap.map.map.removeLayer(e.marker);
 		});
 	} else {
 		
-		console.log('map.hideMarkers();');
+		// console.log('map.hideMarkers();');
 		
 		$.each($(this.markers).data(),function(i, e) {
 			cgeomap.map.map.removeLayer(e.marker);
@@ -246,7 +247,7 @@ VhplabMap.prototype.hideMarkers = function(_exception) {
 	*/
 };
 VhplabMap.prototype.initialize = function(_opts) {
-	console.log('cgeomap.map.initialize();');
+	// console.log('cgeomap.map.initialize();');
 	if (typeof _opts.offset != "undefined") this.offset = _opts.offset;
 	if (typeof _opts.limit != "undefined") this.limit = _opts.limit;
 	if (typeof _opts.url != "undefined") this.baseURL = _opts.url;
@@ -291,12 +292,12 @@ VhplabMap.prototype.initMapElements = function(_opts) {
 };
 VhplabMap.prototype.loadMarkers = function() {
 	// Load markers data
-	console.log('cgeomap.map.loadMarkers();');
+	// console.log('cgeomap.map.loadMarkers();');
 	var url = this.markersURL;
 	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&offset='+ this.offset +'&limit='+ this.limit +'&callback=?';
 	// Get URL via log
-	console.log('Markers URL: '+ url);
+	// console.log('Markers URL: '+ url);
 	$.getJSON(url, function(data){
 		cgeomap.map.addMarkers(data[0], 'map', function(){
 			cgeomap.map.bindActions();
@@ -310,7 +311,7 @@ VhplabMap.prototype.openMarker = function() {
 			marker.click();
 		} else {
 			this.open = this.mapLayer.markerList[0];
-			console.log('Markers 0: marker_'+ this.open);
+			// console.log('Markers 0: marker_'+ this.open);
 			var first = $(this.markers).data('marker_'+ this.open);
 			first.click();
 		}
@@ -320,27 +321,27 @@ VhplabMap.prototype.panOut = function() {
 	this.map.setView([this.lat, this.lng], this.zoom);
 };
 VhplabMap.prototype.rebuildLayer = function(_name) {
-	console.log('cgeomap.map.rebuildLayer("'+ _name +'");');
+	// console.log('cgeomap.map.rebuildLayer("'+ _name +'");');
 	// Store variables
 	var target = this.getLayer(_name);
 	var markerList = Array.from(target.markerList);
-	console.log('layer markerList: '+ target.markerList.toString());
-	console.log('stored markerList: '+ markerList.toString());
+	// console.log('layer markerList: '+ target.markerList.toString());
+	// console.log('stored markerList: '+ markerList.toString());
 	// Empty layer
 	target.reset();
 	// Add Markers to layer
 	$.each(markerList, function(i, id) {
-		console.log('Looping through each marker: i = '+ i +'id = '+ id);
+		// console.log('Looping through each marker: i = '+ i +'id = '+ id);
 		// Add marker to vhpLayer
 		cgeomap.map.addMarkerToLayer($(cgeomap.map.markers).data('marker_'+ id), i, target);
 	});
 	(markerList.length>6) ? target.pagination = true : target.pagination = false;
 	target.pages =  (markerList.length - markerList.length % 6) / 6;
-	console.log('markerList: '+ target.markerList.toString());
-	console.log('layer.length: '+ target.layer.getLayers().length);
+	// console.log('markerList: '+ target.markerList.toString());
+	// console.log('layer.length: '+ target.layer.getLayers().length);
 };
 VhplabMap.prototype.removeFromLayer = function(_id, _name) {
-	console.log('cgeomap.map.removeFromLayer('+ _id +', "'+ _name +'");');
+	// console.log('cgeomap.map.removeFromLayer('+ _id +', "'+ _name +'");');
 	// Store variables
 	var target = this.getLayer(_name);
 	var index = target.markerList.indexOf(_id);
@@ -351,12 +352,12 @@ VhplabMap.prototype.removeFromLayer = function(_id, _name) {
 };
 VhplabMap.prototype.reloadMarkers = function(_callback) {
 	// Reload markers data
-	console.log('cgeomap.map.reloadMarkers();');
+	// console.log('cgeomap.map.reloadMarkers();');
 	var url = this.markersURL;
 	if (this.auteur!='none') url += '&id_auteur='+ this.auteur;
 	url += '&offset='+ this.offset +'&limit='+ this.limit +'&var_mode=recalcul&callback=?';
 	// Get URL via log
-	console.log('Markers URL: '+ url);
+	// console.log('Markers URL: '+ url);
 	$.getJSON(url, function(data){
 		cgeomap.map.updateMarkers(data[0], function(){
 			if (_callback) _callback();
@@ -376,7 +377,7 @@ VhplabMap.prototype.setClickableMarker = function(_opts) {
 	} else {
 		url = this.baseURL + 'plugins/vhplab/images/icons/default_icon.png';
 	}
-	console.log('setClickableMarker({ icon: '+ url +', latitude: '+ _opts.latitude +', longitude: '+ _opts.longitude +', zoom: '+ _opts.zoom +'});');
+	// console.log('setClickableMarker({ icon: '+ url +', latitude: '+ _opts.latitude +', longitude: '+ _opts.longitude +', zoom: '+ _opts.zoom +'});');
 	var icon = L.icon({
 		iconUrl: url,
     	iconRetinaUrl: url,
@@ -390,18 +391,18 @@ VhplabMap.prototype.setClickableMarker = function(_opts) {
 	(typeof _opts.longitude!="undefined") ? longitude = _opts.longitude : longitude = pos.lng;
 	(typeof _opts.zoom!="undefined") ? zoom = _opts.zoom : zoom = this.map.getZoom();
 	if ( ((latitude==0.0)&&(longitude==0.0)&&(navigator.geolocation)) || ((typeof _opts.position!="undefined")&&(_opts.position=="geolocation")) ) {
-		console.log('setting ClickableMarker at geolocation position');
+		// console.log('setting ClickableMarker at geolocation position');
 		navigator.geolocation.getCurrentPosition(function(position) {
 			// success
-			console.log('geolocation success: '+ position.coords.latitude +', '+ position.coords.longitude);
+			// console.log('geolocation success: '+ position.coords.latitude +', '+ position.coords.longitude);
 			cgeomap.map.addClickableMarker(position.coords.latitude, position.coords.longitude, '');
 		}, function() {
 			// error
-			console.log('geolocation error');
+			// console.log('geolocation error');
 			cgeomap.map.addClickableMarker(latitude, longitude, '');
 		});
 	} else {
-		console.log('showing Marker');
+		// console.log('showing Marker');
 		this.addClickableMarker(latitude, longitude, zoom);
 	}
 };
@@ -458,7 +459,7 @@ VhplabMap.prototype.setSatelliteLayer = function() {
 	this.satelliteLayer.addTo(this.map);
 };
 VhplabMap.prototype.showLayer = function(_name, _fitBounds) {
-	console.log('cgeomap.map.showLayer("'+ _name +'");');
+	// console.log('cgeomap.map.showLayer("'+ _name +'");');
 	if (this.activeLayer != _name) {
 		// Get layer
 		var target = this.getLayer(_name);
@@ -505,27 +506,27 @@ VhplabMap.prototype.updateMarker = function(_path, _data, _n, _layer) {
 	}
 };
 VhplabMap.prototype.updateMarkers = function(_data, _layer, _callback) {
-	console.log('cgeomap.map.updateMarkers();');
+	// console.log('cgeomap.map.updateMarkers();');
 	// Empty none layer
 	var target = this.getLayer(_layer);
 	target.reset();
 	// Count markers
 	var count = $(_data.markers).length - 1;
-	console.log('Total Markers = '+ $(_data.markers).length);
+	// console.log('Total Markers = '+ $(_data.markers).length);
 	// If _data has markers
 	if ($(_data.markers).length>=1) {
 		// Loop through each marker data element
 		$.each(_data.markers, function(i, marker) {
-			console.log('Looping through each marker to update: i = '+ i +', count = '+ count);
-			console.log($(marker).toString());
+			// console.log('Looping through each marker to update: i = '+ i +', count = '+ count);
+			// console.log($(marker).toString());
 			cgeomap.map.updateMarker(_data.link, marker, i, target);
 			// Finish when all markers are looped
 			if(i==count) {
 				// Paginate only if needed
 				(i>6) ? target.pagination = true : target.pagination = false;
 				target.pages =  (i - i % 6) / 6;
-				console.log('markerList: '+ target.markerList.toString());
-				console.log('layer.length: '+ target.layer.getLayers().length);
+				// console.log('markerList: '+ target.markerList.toString());
+				// console.log('layer.length: '+ target.layer.getLayers().length);
 				// Callback to bind actiosn after loading and creating markers
 				if (_callback) _callback();
 			}
@@ -707,7 +708,6 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 	typeof _data.tags != "undefined" ? tags = _data.tags.split(",") : tags = false;
 	$(this.data).data('tags', tags);
 	typeof _data.url_qr != "undefined" ? $(this.data).data('url_qr', _data.url_qr) : $(this.data).data('url_qr', '');
-	
 	if (typeof _data.category != "undefined") {
 		var category_id, category_nom;
 		typeof _data.category.id != "undefined" ? category_id = _data.category.id : category_id =  'category_00';
@@ -722,7 +722,21 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 			nom: 'default',
 		});
 	}
-	
+	if (typeof _data.submap != "undefined") {
+		var submap_id, submap_url;
+		typeof _data.submap.id != "undefined" ? submap_id = _data.submap.id : submap_id =  'default';
+		typeof _data.submap.url != "undefined" ? submap_url = _data.submap.url : submap_url = '';
+		if ((submap_url != '')&&(submap_url.slice(-1) != "/")) submap_url += "/";
+		$(this.data).data('submap', {
+			id: submap_id,
+			url: submap_url,
+		});
+	} else {
+		$(this.data).data('submap', {
+			id: 'default',
+			url: '',
+		});
+	}
 	// set window content
 	this.content = document.createElement("div");
     this.content.className = "window_wrapper";
@@ -794,7 +808,7 @@ VhplabMarker.prototype.updateData = function(_path, _data, _parent) {
 	
 	var self = this;
 	// get URL via alert(this.json);
-	console.log('update marker data  URL: '+ this.json);
+	// console.log('update marker data  URL: '+ this.json);
 	$.getJSON(this.json, function(data) {
 		$.each(data[0].marker, function(i, marker){
 			self.loadWindowData(marker);

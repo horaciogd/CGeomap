@@ -1,0 +1,8 @@
+[(#REM) 24h cache
+][(#CACHE{0})][
+(#REM) Avoid spip admin buttons
+][(#HTTP_HEADER{Content-type: text/html[; charset=(#CHARSET)]})][
+(#REM) get a different inclure depending on device 
+][(#SET{index,inclure/sommaire-submap-template-desktop})][
+(#REM) get author from parameter or session
+][(#ENV{author}|oui)[(#SET{auteur,[(#ENV{author})]})]]<INCLURE{fond=#GET{index}}{nodo=#ENV{nodo}}{author=#GET{auteur}}{login=#ENV{login}}{color=#ENV{color}} />
