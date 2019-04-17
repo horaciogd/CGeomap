@@ -49,6 +49,7 @@ VhplabInterface.prototype.initialize = function(_opts) {
 	if (this.url_site.slice(-1)!="/") this.url_site += "/";
 	if (typeof _opts.url_article != "undefined") this.url_article = _opts.url_article;
 	if (typeof _opts.url_user != "undefined") this.url_user = _opts.url_user;
+	if (typeof _opts.url_submap != "undefined") this.url_submap = _opts.url_submap;
 	
 	$("#navigation").data('visible', true);
 	$("#navigation .toggle_button").click(function(){

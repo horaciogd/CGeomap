@@ -126,18 +126,20 @@ VhplabMap.prototype.createMarker = function(_path, _markerData, _num, _layer, _l
 	marker.initialize(_path, _markerData, this);
 	// Set marker distance to map center
 	marker.setDistance(_lat, _lng);
-	console.log('marker.distance: '+ marker.distance);
+	// console.log('marker.distance: '+ marker.distance);
 	// If marker is within reach
-	if ((marker.distance<=50000)||(_num<=50)) {
-		console.log('marker is within reach');
+	/*if ((marker.distance<=50000)||(_num<=50)) {*/
+		// console.log('marker is within reach');
 		// Save marker as jQuery data
 		$(this.markers).data('marker_'+ marker.id, marker);
 		// Add marker to vhpLayer
 		this.addMarkerToLayer(marker, _num, _layer);
 		return true;
+	/*
 	} else {
 		return false;
 	}
+	*/
 };
 VhplabMap.prototype.contineousGetCurrentPosition = function() {
 	// console.log('/* phone prototypes */ cgeomap.map.contineousGetCurrentPosition();');
@@ -289,7 +291,7 @@ VhplabMap.prototype.loadMarkers = function() {
 					}
 				});
 			}, error: function (_xhr, _ajaxOptions, _thrownError) {
-			
+				// console.log('loadMarkers ajax ERROR!');
 			}
 		});
 	});	
@@ -406,7 +408,7 @@ VhplabMap.prototype.updateDistances = function(_lat, _lng) {
 			if (cgeomap.player.playing=='') {
 				for (var i=0; i<this.mapLayer.markerList.length; i++) {
 					var marker = $(this.markers).data('marker_'+ this.mapLayer.markerList[i]);
-					//console.log('marker_'+ this.mapLayer.markerList[i]);
+					// console.log('marker_'+ this.mapLayer.markerList[i]);
 					if (marker.checkAutoplay()) break;
 				}
 			}
@@ -503,9 +505,11 @@ VhplabMap.prototype.reloadMarkers = function(_callback) {
 // Vhplab Marker
 // ************ //
 VhplabMarker.prototype.appendContent = function() {
+	// console.log('/* phone prototype */ marker.appendContent();');
 	$('#article_'+ this.id +' .wrap_article').empty();
 	var category = $(this.data).data('category');
 	$('#article_'+ this.id +' .wrap_article').append('<div class="block_category">'+ category.nom +'</div><!-- category -->'+ $(this.data).data('texte'));
+	// console.log('append: <div class="block_category">'+ category.nom +'</div><!-- category -->'+ $(this.data).data('texte'));
 	$('#article_'+ this.id +' .header h2').removeClass('empty');
 };
 VhplabMarker.prototype.bindContentActions = function(_content) {
@@ -586,13 +590,15 @@ VhplabMarker.prototype.click = function() {
 	}
 };
 VhplabMarker.prototype.getData = function(_callback) {
+	// console.log('/* phone prototype */ marker.getData();');
 	if (this.loadded) {
 		if (_callback) _callback();
 	} else {
 		var self = this;
 		var width = parseInt(cgeomap.windowWidth-34);
 		if (width>=900) width = 900;
-		// get URL via alert(this.json +'&width='+ width +'&link=false');
+		// get URL via log
+		// console.log(this.json +'&width='+ width +'&link=false');
 		$.getJSON(this.json +'&width='+ width +'&link=false', function(data) {
 			$.each(data[0].marker, function(i, marker){
 				self.loadWindowData(marker);
@@ -656,7 +662,7 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	this.infoWindow.setLatLng([this.lat, this.lng]);
 	/* este evento no parece funcionar la idea era utilizarlo para controlar el cierre del popup cuando pulsas en otra parte del mapa
 	this.infoWindow.on('popupclose', function(e) {
-		console.log('infoWindow popupclose event!');
+		// console.log('infoWindow popupclose event!');
 	});
 	*/
 	if (typeof _opts.icon != "undefined") {
@@ -687,7 +693,8 @@ VhplabMarker.prototype.initialize = function(_path, _opts, _parent) {
 	this.hasDistance = false;
 };
 VhplabMarker.prototype.loadWindowData = function(_data) {
-	// alert('loadWindowData: '+ JSON.stringify(_data));
+	// console.log('/* phone prototype */ marker.loadWindowData();');
+	// console.log('loadWindowData: '+ JSON.stringify(_data));
 	typeof _data.texte != "undefined" ? $(this.data).data('texte', _data.texte) : $(this.data).data('texte', "");
 	typeof _data.descriptif != "undefined" ? $(this.data).data('descriptif', _data.descriptif) : $(this.data).data('descriptif', "");
 	typeof _data.chapo != "undefined" ? $(this.data).data('chapo', _data.chapo) : $(this.data).data('chapo', "");
@@ -718,7 +725,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 			$.each(_data.enclosure, function(u, enclosure) {
 				// Si el enclosure no existe todavia hay que crearlo
 				if (enclosureIds.indexOf(enclosure.id) == -1) {  
-					// console.log('// phone prototypes // enclosure: '+ enclosure.id);
+					// console.log('enclosure: '+ enclosure.id);
 					cgeomap.player.addTrack(enclosure);
 					enclosureIds.push(enclosure.id);
 				// Si el enclosure ya existe todo ok
@@ -731,7 +738,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
 		} else {
 			enclosureIds = new Array();
 			$.each(_data.enclosure, function(u, enclosure) {
-				// console.log('// phone prototypes // enclosure: '+ enclosure.id);
+				// console.log('enclosure: '+ enclosure.id);
 				cgeomap.player.addTrack(enclosure);
 				enclosureIds.push(enclosure.id);
 			});
@@ -748,6 +755,7 @@ VhplabMarker.prototype.loadWindowData = function(_data) {
     this.content.className = "window_wrapper";
     this.content.id = "window_"+ this.id;
 	this.content.innerHTML = '<hgroup><span class="toggle_content" data-id_article="'+ this.id +'"></span><h2>'+ player +''+ $(this.data).data('titre') +'</h2><h4>'+ $(this.data).data('soustitre') +'</h4></hgroup><div>'+ $(this.data).data('descriptif') +'</div>';
+	// console.log('content: '+ this.content.innerHTML);
 	this.bindPopupActions(this.content);
 	this.infoWindow.setContent(this.content);
 	

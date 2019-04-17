@@ -1778,6 +1778,7 @@ VhplabContribuerFrom.prototype.sortableStop = function(_me, _container) {
 	}
 };
 VhplabContribuerFrom.prototype.submit = function() {
+	// console.log('/* Desktop prototypes */ cgeomap.form.submit()');
 	/* title & subtitle */
 	var title = $("#formulaire .wrap_title").data('ok');
 	var subtitle = $("#formulaire .wrap_subtitle").data('ok');
@@ -1811,6 +1812,7 @@ VhplabContribuerFrom.prototype.submit = function() {
 		$.getJSON(this.url_json, function(data){
 			// console.log('json data: '+  JSON.stringify(data));
 			var submap_url = $("#formulaire .submap_url").val();
+			// console.log('get submap_url:'+ submap_url);
 			if ((submap_url != '')&&(submap_url.slice(-1) != "/")) submap_url += "/";
 			var formData = {
 				page:'json-contribuer',
